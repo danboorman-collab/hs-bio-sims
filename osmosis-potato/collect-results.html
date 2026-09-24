@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Potato and sugar solution</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,380px);gap:12px;
+  align-items:stretch;margin-bottom:2px}
+@media (max-width:700px){.bench{grid-template-columns:1fr}}
+.results{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+  display:flex;flex-direction:column;justify-content:center}
+.results table{margin-top:0} .results caption{padding-bottom:8px}
+.stage{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stage svg{flex:0 0 auto;max-width:100%;height:auto}
+.readouts{flex:1 1 150px;min-width:146px;display:grid;gap:6px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+    border-bottom:1px dotted var(--line);padding-bottom:4px}
+.ro>span{color:var(--muted);font-size:12px}
+.ro b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:650}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:12px 0 0;padding:10px 12px 12px}
+legend{font-size:12px;font-weight:650;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em;padding:0 5px}
+.hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+.concs{display:flex;gap:6px;flex-wrap:wrap}
+.concs button{flex:1 1 60px;padding:9px 4px;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg);border-radius:8px;font:inherit;font-variant-numeric:tabular-nums;cursor:pointer}
+.concs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);
+  border-color:var(--accent);font-weight:650}
+.concs button .done{display:block;font-size:10px;color:var(--muted);line-height:1.2}
+.concs button[aria-pressed="true"] .done{color:var(--accent-fg);opacity:.85}
+.fixedgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.fixed{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed b{font-size:15px;font-weight:650;color:var(--fg);padding:5px 0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted)}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+th[scope="row"]{text-align:left}
+td.empty{color:var(--muted)}
+tr.active th[scope="row"]{color:var(--accent);font-weight:700}
+td.pc{font-weight:650}
+td.gain{color:var(--good)} td.loss{color:var(--bad)}
+</style>
+</head>
+<body>
+<div class="sim">
+  <h1>Potato and sugar solution</h1>
+  <p class="sub">Put a cylinder of potato in each solution, leave it 30 minutes, and
+    weigh it again. Each concentration can be collected once.</p>
+
+  <div class="bench">
+    <div class="stage">
+<svg viewBox="0 0 250 250" width="250" role="img" aria-label="A test tube in a rack holding
+     sucrose solution, with a cylinder of potato standing in the solution.">
+  <rect x="26" y="150" width="198" height="9" rx="2.5" fill="var(--metal)"
+        stroke="var(--ink)" stroke-width="2"/>
+  <rect x="26" y="214" width="198" height="9" rx="2.5" fill="var(--metal)"
+        stroke="var(--ink)" stroke-width="2"/>
+  <rect x="34" y="159" width="8" height="55" fill="var(--metal)" stroke="var(--ink)" stroke-width="2"/>
+  <rect x="208" y="159" width="8" height="55" fill="var(--metal)" stroke="var(--ink)" stroke-width="2"/>
+  <path d="M100,30 L100,186 A25,25 0 0 0 150,186 L150,30" fill="var(--glass-fill)"
+        stroke="var(--glass)" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M100,76 L100,186 A25,25 0 0 0 150,186 L150,76 Z" fill="var(--water)" opacity="0.9"/>
+  <ellipse cx="125" cy="76" rx="25" ry="5" fill="var(--water)"/>
+  <rect id="spud" x="110" y="130" width="30" height="55" rx="7" fill="var(--potato)"
+        stroke="var(--potatoline)" stroke-width="2"/>
+  <ellipse cx="125" cy="30" rx="25" ry="6" fill="var(--bg)" stroke="var(--glass)" stroke-width="2.6"/>
+  <path d="M105,90 L105,170" stroke="var(--bg)" stroke-width="2.6" stroke-linecap="round"
+        opacity="0.7"/>
+</svg>
+
+      <div class="readouts">
+        <div class="ro"><span>Sucrose</span><b><span id="roC">0</span>%</b></div>
+        <div class="ro"><span>Time</span><b><span id="roT">0</span> min</b></div>
+        <div class="ro"><span>Mass</span><b><span id="roM">4.00</span> g</b></div>
+      </div>
+    </div>
+    <div class="results">
+      <table>
+        <caption>Mass of each potato cylinder, before and after 30 minutes.</caption>
+        <thead><tr><th scope="col">Sucrose (%)</th><th scope="col">Start (g)</th>
+          <th scope="col">End (g)</th><th scope="col">Change (%)</th></tr></thead>
+        <tbody id="tbody"><tr><th scope="row">0</th><td>4.00</td><td class="empty" id="end0">&mdash;</td><td class="empty" id="pc0">&mdash;</td></tr><tr><th scope="row">5</th><td>4.00</td><td class="empty" id="end5">&mdash;</td><td class="empty" id="pc5">&mdash;</td></tr><tr><th scope="row">10</th><td>4.00</td><td class="empty" id="end10">&mdash;</td><td class="empty" id="pc10">&mdash;</td></tr><tr><th scope="row">15</th><td>4.00</td><td class="empty" id="end15">&mdash;</td><td class="empty" id="pc15">&mdash;</td></tr><tr><th scope="row">20</th><td>4.00</td><td class="empty" id="end20">&mdash;</td><td class="empty" id="pc20">&mdash;</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>Independent variable &mdash; what we change</legend>
+    <p class="hint">The concentration of the sucrose solution.</p>
+    <div class="concs" id="concs" role="group" aria-label="Concentration of the sucrose solution"><button type="button" data-c="0" aria-pressed="true">0%<span class="done" data-done="0"></span></button><button type="button" data-c="5" aria-pressed="false">5%<span class="done" data-done="5"></span></button><button type="button" data-c="10" aria-pressed="false">10%<span class="done" data-done="10"></span></button><button type="button" data-c="15" aria-pressed="false">15%<span class="done" data-done="15"></span></button><button type="button" data-c="20" aria-pressed="false">20%<span class="done" data-done="20"></span></button></div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Control variables &mdash; what we keep the same</legend>
+    <p class="hint">The design sets these once and holds them there. Every cylinder is cut from
+      the same potato with the same cork borer, and blotted dry the same way before each weighing.</p>
+    <div class="fixedgrid">
+      <div class="fixed"><span>Mass of each cylinder at the start</span><b>4.00 g</b></div>
+      <div class="fixed"><span>Volume of solution</span><b>20 cm&sup3;</b></div>
+      <div class="fixed"><span>Time in the solution</span><b>30 min</b></div>
+    </div>
+  </fieldset>
+
+  <div class="actions">
+    <button id="run" class="primary" type="button">Collect the result at 0% sucrose</button>
+    <button id="reset" type="button">Start the whole experiment again</button>
+  </div>
+  <p class="msg" id="msg" role="status" aria-live="polite">Choose a concentration, then collect
+    the result.</p>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "bio2-210_osmosis-collect";
+  var DATA = [[0, 4.96], [5, 4.48], [10, 4.04], [15, 3.56], [20, 3.2]], START = 4.0, TMIN = 30;
+  var CONCS = DATA.map(function (d) { return d[0]; });
+  var FINAL = {}; DATA.forEach(function (d) { FINAL[d[0]] = d[1]; });
+  var state = { c: CONCS[0], done: {}, running: false };
+
+  var $ = function (i) { return document.getElementById(i); };
+  var msg = $("msg"), elRun = $("run"), elReset = $("reset"), concs = $("concs");
+  var roC = $("roC"), roT = $("roT"), roM = $("roM"), spud = $("spud");
+  var SPUD_Y = 130, SPUD_H = 55;      // the cylinder's drawn size at its starting mass
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? "msg " + kind : "msg"; }
+  function pct(m) { return Math.round((m - START) / START * 1000) / 10; }
+
+  // A cylinder that takes water in gets longer; one that loses water gets shorter. Drawn in
+  // proportion to its mass, so the picture and the number never disagree.
+  function drawMass(m) {
+    var h = SPUD_H * (m / START);
+    spud.setAttribute("height", h.toFixed(1));
+    spud.setAttribute("y", (SPUD_Y + (SPUD_H - h)).toFixed(1));
+  }
+
+  Array.prototype.forEach.call(concs.children, function (b) {
+    b.addEventListener("click", function () {
+      if (state.running) return;
+      state.c = +b.dataset.c;
+      render();
+      say(state.done[state.c]
+        ? state.c + "% sucrose has already been collected. Its result is in the table."
+        : "Solution set to " + state.c + "% sucrose.");
+    });
+  });
+
+  function collect() {
+    if (state.running || state.done[state.c]) {
+      if (state.done[state.c]) {
+        say(state.c + "% sucrose has already been collected. Choose one that has not, or start "
+            + "the whole experiment again.");
+      }
+      return;
+    }
+    state.running = true;
+    setEnabled(false);
+    var end = FINAL[state.c], c = state.c;
+    var reduced = window.matchMedia &&
+                  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var DUR = reduced ? 250 : 4200;
+    var t0 = Date.now(), timer;
+
+    function tick() {
+      var p = Math.min(1, (Date.now() - t0) / DUR);
+      roT.textContent = Math.round(p * TMIN);
+      var m = START + (end - START) * p;
+      roM.textContent = m.toFixed(2);
+      drawMass(m);
+      if (p >= 1) {
+        clearInterval(timer);
+        state.done[c] = end;
+        state.running = false;
+        setEnabled(true);
+        render();
+        var d = pct(end);
+        say(c + "% sucrose: the cylinder went from " + START.toFixed(2) + " g to "
+            + end.toFixed(2) + " g, a change of " + (d > 0 ? "+" : "") + d + "%."
+            + (Object.keys(state.done).length === CONCS.length
+                ? " Every concentration has now been collected."
+                : " Choose another concentration."),
+            Object.keys(state.done).length === CONCS.length ? "good" : null);
+      }
+    }
+    timer = setInterval(tick, 33);
+    tick();
+  }
+
+  function setEnabled(on) {
+    elRun.disabled = !on; elReset.disabled = !on;
+    Array.prototype.forEach.call(concs.children, function (b) { b.disabled = !on; });
+  }
+
+  function render() {
+    roC.textContent = state.c;
+    Array.prototype.forEach.call(concs.children, function (b) {
+      var c = +b.dataset.c;
+      b.setAttribute("aria-pressed", c === state.c ? "true" : "false");
+      b.querySelector("[data-done]").textContent = state.done[c] ? "collected" : "";
+    });
+    CONCS.forEach(function (c) {
+      var e = $("end" + c), p = $("pc" + c);
+      var tr = e.parentNode;
+      tr.className = (c === state.c) ? "active" : "";
+      if (state.done[c]) {
+        var d = pct(state.done[c]);
+        e.textContent = state.done[c].toFixed(2); e.className = "";
+        p.textContent = (d > 0 ? "+" : "") + d;
+        p.className = "pc " + (d > 0 ? "gain" : (d < 0 ? "loss" : ""));
+      } else {
+        e.textContent = "\u2014"; e.className = "empty";
+        p.textContent = "\u2014"; p.className = "empty";
+      }
+    });
+    elRun.innerHTML = state.done[state.c]
+      ? "Collected at " + state.c + "% sucrose"
+      : "Collect the result at " + state.c + "% sucrose";
+    if (!state.running) elRun.disabled = !!state.done[state.c];
+    elReset.disabled = state.running || Object.keys(state.done).length === 0;
+    if (!state.running) { drawMass(state.done[state.c] || START); }
+    roM.textContent = (state.done[state.c] || START).toFixed(2);
+    roT.textContent = state.done[state.c] ? TMIN : 0;
+    reportHeight();
+  }
+
+  elRun.addEventListener("click", collect);
+  elReset.addEventListener("click", function () {
+    state.done = {}; state.c = CONCS[0];
+    render();
+    say("Everything cleared. Choose a concentration, then collect the result.");
+  });
+
+  render();
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

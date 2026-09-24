@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The temperature experiment</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --glass:#94a3b8; --water:#bfdbfe; --liquid:#e2e8f0; --mercury:#dc2626; --metal:#9ca3af;
+  --bubble:#ffffff;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --glass:#64748b; --water:#1e3a5f; --liquid:#273244; --mercury:#ef4444; --metal:#4b5563;
+    --bubble:#cbd5e1;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--bg); color:var(--fg);
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  padding:14px;
+}
+.sim{max-width:940px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(252px,340px);gap:12px;
+  align-items:stretch;margin-bottom:2px}
+@media (max-width:700px){.bench{grid-template-columns:1fr}}
+.results{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+  display:flex;flex-direction:column;justify-content:center}
+.results table{margin-top:0}
+.results caption{padding-bottom:8px}
+.stage{
+  display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;
+}
+.stage svg{flex:0 0 auto;max-width:100%;height:auto}
+.readouts{flex:1 1 150px;min-width:140px;display:grid;gap:6px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+    border-bottom:1px dotted var(--line);padding-bottom:4px}
+.ro>span{color:var(--muted);font-size:12px}
+.ro b{font-size:20px;font-variant-numeric:tabular-nums;font-weight:650}
+
+fieldset{border:1px solid var(--line);border-radius:10px;margin:12px 0 0;padding:10px 12px 12px}
+legend{font-size:12px;font-weight:650;color:var(--muted);text-transform:uppercase;
+       letter-spacing:.04em;padding:0 5px}
+.hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+
+.temps{display:flex;gap:6px;flex-wrap:wrap}
+.temps button{
+  flex:1 1 56px;padding:9px 4px;border:1px solid var(--line);background:var(--bg);color:var(--fg);
+  border-radius:8px;font:inherit;font-variant-numeric:tabular-nums;cursor:pointer;
+}
+.temps button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);
+  border-color:var(--accent);font-weight:650}
+.temps button .done{display:block;font-size:10px;color:var(--muted);line-height:1.2}
+.temps button[aria-pressed="true"] .done{color:var(--accent-fg);opacity:.85}
+
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.controls label{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed b{font-size:15px;font-weight:650;color:var(--fg);padding:7px 0}
+.controls select{
+  font:inherit;padding:7px 8px;border:1px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);width:100%;
+}
+.controls select.changed{border-color:var(--warn-line);background:var(--warn-bg);color:var(--warn)}
+.controls select:disabled{opacity:.6}
+
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.actions button{
+  padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg);
+}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+
+.msg{margin-top:10px;font-size:13px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+
+table{border-collapse:collapse;width:100%;margin-top:12px;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--card);font-weight:650}
+th[scope="row"]{text-align:left}
+td.empty{color:var(--muted)}
+td.flag{color:var(--warn);background:var(--warn-bg)}
+tr.active th[scope="row"]{color:var(--accent);font-weight:700}
+td.mean{font-weight:650}
+td.mean.bad{font-weight:500;color:var(--warn);font-size:12px}
+</style>
+</head>
+<body>
+<div class="sim">
+  <h1>The temperature experiment</h1>
+  <p class="sub">Set the temperature and collect the results. Each temperature is counted three
+    times, and each temperature can be collected once.</p>
+
+  <div class="bench">
+    <div class="stage">
+    <svg id="rig" viewBox="0 0 300 240" width="300" role="img"
+         aria-label="A test tube of hydrogen peroxide and enzyme standing in a water bath on a hotplate, with a thermometer in the water.">
+      <rect x="52" y="200" width="196" height="16" rx="4" fill="var(--metal)"/>
+      <rect x="66" y="216" width="14" height="10" rx="2" fill="var(--metal)"/>
+      <rect x="220" y="216" width="14" height="10" rx="2" fill="var(--metal)"/>
+      <rect id="bathwater" x="78" y="124" width="144" height="75" fill="var(--water)"/>
+      <path d="M76,92 L76,200 L224,200 L224,92" fill="none" stroke="var(--glass)"
+            stroke-width="2.5" stroke-linejoin="round"/>
+      <rect x="98" y="60" width="9" height="118" rx="4.5" fill="var(--bg)" stroke="var(--glass)" stroke-width="1.5"/>
+      <rect id="mercury" x="100" y="150" width="5" height="30" fill="var(--mercury)"/>
+      <circle cx="102.5" cy="182" r="8" fill="var(--mercury)"/>
+      <clipPath id="tubeclip">
+        <path d="M158,54 L158,170 A20,20 0 0 0 198,170 L198,54 Z"/>
+      </clipPath>
+      <g clip-path="url(#tubeclip)">
+        <rect x="156" y="134" width="44" height="58" fill="var(--liquid)"/>
+        <g id="bubbles"></g>
+      </g>
+      <path d="M158,54 L158,170 A20,20 0 0 0 198,170 L198,54" fill="none"
+            stroke="var(--glass)" stroke-width="2.5"/>
+    </svg>
+
+    <div class="readouts">
+      <div class="ro"><span>Temperature</span><b><span id="roTemp">10</span> &deg;C</b></div>
+      <div class="ro"><span>Run</span><b id="roRun">&mdash;</b></div>
+      <div class="ro"><span>Time</span><b><span id="roTime">0</span> s</b></div>
+      <div class="ro"><span>Bubbles</span><b id="roCount">0</b></div>
+    </div>
+    </div>
+    <div class="results">
+    <table>
+      <caption>Bubbles counted in one minute, three runs at each temperature.</caption>
+      <thead>
+        <tr><th scope="col">Temperature (&deg;C)</th><th scope="col">Run 1</th>
+            <th scope="col">Run 2</th><th scope="col">Run 3</th><th scope="col">Mean</th></tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>Independent variable &mdash; what we change</legend>
+    <p class="hint">The temperature of the water bath.</p>
+    <div class="temps" id="temps" role="group" aria-label="Temperature of the water bath"></div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Control variables &mdash; what we keep the same</legend>
+    <p class="hint">The design sets these once and holds them there. The container is the same test
+      tube every time.</p>
+    <div class="controls">
+      <div class="fixed">
+        <span>Concentration of enzyme solution</span><b>2%</b>
+      </div>
+      <div class="fixed">
+        <span>Volume of hydrogen peroxide</span><b>20 cm&sup3;</b>
+      </div>
+      <div class="fixed">
+        <span>Time counted</span><b>60 s</b>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="actions">
+    <button id="run" class="primary" type="button">Collect the results at 10 &deg;C</button>
+    <button id="reset" type="button">Start the whole experiment again</button>
+  </div>
+
+  <p class="msg" id="msg" role="status" aria-live="polite">Choose a temperature, then collect the
+    results.</p>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // The five means this produces are the means printed in BIO1-260 and plotted in BIO1-270.
+  // If either lesson's data is edited, these three runs per temperature must follow.
+  var DATA = { 10:[5,4,6], 20:[11,9,10], 30:[17,19,18], 40:[24,26,25], 50:[8,6,7] };
+  var TEMPS = [10, 20, 30, 40, 50];
+  var DESIGN = { conc:2, vol:20, time:60 };
+  var LABEL = { conc:"the concentration of the enzyme solution",
+                vol:"the volume of hydrogen peroxide",
+                time:"the one-minute timing" };
+
+  var state = { temp:10, results:{}, running:false };
+  TEMPS.forEach(function (t) { state.results[t] = []; });
+
+  var $ = function (id) { return document.getElementById(id); };
+  var elTemps = $("temps"), elBody = $("tbody"), elMsg = $("msg");
+  var elRun = $("run"), elReset = $("reset");
+  var roTemp = $("roTemp"), roRun = $("roRun"), roTime = $("roTime"), roCount = $("roCount");
+  var mercury = $("mercury"), bubbles = $("bubbles");
+
+  // Every control variable is fixed by the design and shown read-only. A control a student
+  // can only use to spoil a run is a trap rather than a lesson, and why a control variable has
+  // to be held the same is tested in the questions at the end of the practical instead.
+  function settings() {
+    return { conc:DESIGN.conc, vol:DESIGN.vol, time:DESIGN.time };
+  }
+  function changedControls() {
+    return [];          // nothing can be altered, so nothing can be out of step
+  }
+  function collected(t) { return state.results[t].length === 3; }
+  function anyCollected() {
+    return TEMPS.some(function (t) { return collected(t); });
+  }
+
+  TEMPS.forEach(function (t) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("aria-pressed", t === state.temp ? "true" : "false");
+    b.dataset.temp = t;
+    b.innerHTML = t + " &deg;C<span class=\"done\" data-done=\"" + t + "\"></span>";
+    b.addEventListener("click", function () {
+      if (state.running) return;
+      state.temp = t;
+      render();
+      say(collected(t)
+          ? t + " °C has already been collected. Its readings are in the table."
+          : "Temperature set to " + t + " degrees Celsius.");
+    });
+    elTemps.appendChild(b);
+  });
+
+  function say(text, warn) {
+    elMsg.textContent = text;
+    elMsg.className = warn ? "msg warn" : "msg";
+  }
+
+  function count(temp, nth, s) {
+    var base = DATA[temp][nth];
+    var factor = (s.conc / DESIGN.conc) * (s.vol / DESIGN.vol) * (s.time / DESIGN.time);
+    return Math.round(base * factor);
+  }
+
+  // One collection per temperature: the three repeats run back to back, and once they are
+  // in the table that temperature is finished. Starting the whole experiment again is the
+  // only way back, so a spoiled reading costs the student the whole run, as it would.
+  function collect() {
+    if (state.running) return;
+    if (collected(state.temp)) {
+      say(state.temp + " °C has already been collected. Choose a temperature that has not, "
+          + "or start the whole experiment again.");
+      return;
+    }
+    var s = settings(), changed = changedControls(), runs = state.results[state.temp];
+    state.running = true;
+    setEnabled(false);
+    runNumber(0, s, changed, runs);
+  }
+
+  function runNumber(nth, s, changed, runs) {
+    var target = count(state.temp, nth, s);
+    var ok = changed.length === 0;
+    var reduced = window.matchMedia &&
+                  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var DURATION = reduced ? 200 : 2200;   // real milliseconds for one counted period
+    var started = Date.now(), shown = 0, live = [], timer;
+
+    roRun.textContent = (nth + 1) + " of 3";
+    roCount.textContent = "0";
+    roTime.textContent = "0";
+    bubbles.innerHTML = "";
+
+    function endRun() {
+      clearInterval(timer);
+      live = [];
+      bubbles.innerHTML = "";
+      roCount.textContent = target;
+      roTime.textContent = s.time;
+      runs.push({ value:target, ok:ok });
+      render();
+      if (nth < 2) {
+        say("Run " + (nth + 1) + " at " + state.temp + " °C: " + target + " bubbles in "
+            + s.time + " s.");
+        setTimeout(function () { runNumber(nth + 1, s, changed, runs); }, 500);
+        return;
+      }
+      roRun.textContent = "—";
+      state.running = false;
+      setEnabled(true);
+      render();
+      if (!ok) {
+        say("The three runs at " + state.temp + " °C gave "
+            + runs.map(function (r) { return r.value; }).join(", ") + " bubbles — but "
+            + changed.map(function (k) { return LABEL[k]; }).join(" and ")
+            + " was changed, so they cannot be compared with the other temperatures. This "
+            + "temperature has had its one collection. To put it right, start the whole "
+            + "experiment again.", true);
+      } else {
+        say("The three runs at " + state.temp + " °C gave "
+            + runs.map(function (r) { return r.value; }).join(", ") + " bubbles, mean "
+            + mean(runs) + " bubbles in one minute."
+            + (anyAllCollected() ? " Every temperature has now been collected."
+                                 : " Choose another temperature."));
+      }
+    }
+
+    // A timer on the wall clock, not an animation-frame loop, which a browser freezes while
+    // the tab is in the background: a run started before the student switches away would
+    // never finish, and every button would stay disabled.
+    function tick() {
+      var p = Math.min(1, (Date.now() - started) / DURATION);
+      roTime.textContent = Math.round(p * s.time);
+      var want = Math.floor(p * target);
+      while (shown < want) {
+        shown++;
+        live.push({ x: 164 + Math.random() * 32, y: 184 - Math.random() * 6,
+                    r: 1.6 + Math.random() * 1.8, drift: (Math.random() - 0.5) * 0.25 });
+      }
+      roCount.textContent = shown;
+      for (var i = live.length - 1; i >= 0; i--) {
+        live[i].y -= 3;
+        live[i].x += live[i].drift;
+        if (live[i].y < 138) live.splice(i, 1);
+      }
+      bubbles.innerHTML = live.map(function (b) {
+        return '<circle cx="' + b.x.toFixed(1) + '" cy="' + b.y.toFixed(1) + '" r="'
+             + b.r.toFixed(1) + '" fill="var(--bubble)" opacity="0.85"/>';
+      }).join("");
+      // The run ends when the counted time ends. Waiting for the last bubbles to clear
+      // would stretch it out whenever the browser throttles the timer.
+      if (p >= 1) endRun();
+    }
+    timer = setInterval(tick, 33);
+    tick();
+  }
+
+  function anyAllCollected() {
+    return TEMPS.every(function (t) { return collected(t); });
+  }
+
+  function mean(runs) {
+    var sum = runs.reduce(function (a, r) { return a + r.value; }, 0);
+    return Math.round(sum / runs.length * 10) / 10;
+  }
+
+  function setEnabled(on) {
+    elRun.disabled = !on; elReset.disabled = !on;
+    Array.prototype.forEach.call(elTemps.children, function (b) { b.disabled = !on; });
+  }
+
+  function render() {
+    var s = settings();
+    roTemp.textContent = state.temp;
+    // mercury column: 10 degrees C sits low in the stem, 50 degrees C near the top
+    var h = 22 + (state.temp - 10) / 40 * 84;
+    mercury.setAttribute("y", String(180 - h));
+    mercury.setAttribute("height", String(h));
+
+    Array.prototype.forEach.call(elTemps.children, function (b) {
+      var t = +b.dataset.temp;
+      b.setAttribute("aria-pressed", t === state.temp ? "true" : "false");
+      b.querySelector("[data-done]").textContent = collected(t) ? "collected" : "";
+    });
+
+    elRun.innerHTML = collected(state.temp)
+      ? "Collected at " + state.temp + " &deg;C"
+      : "Collect the results at " + state.temp + " &deg;C";
+    if (!state.running) elRun.disabled = collected(state.temp);
+    elReset.disabled = state.running || !anyCollected();
+
+    elBody.innerHTML = TEMPS.map(function (t) {
+      var runs = state.results[t];
+      var cells = [0, 1, 2].map(function (i) {
+        var r = runs[i];
+        if (!r) return '<td class="empty">&mdash;</td>';
+        return '<td class="' + (r.ok ? "" : "flag") + '">' + r.value
+             + (r.ok ? "" : ' <abbr title="a control variable was changed">*</abbr>') + "</td>";
+      }).join("");
+      var m;
+      if (runs.length < 3) {
+        m = '<td class="empty">&mdash;</td>';
+      } else if (runs.every(function (r) { return r.ok; })) {
+        m = '<td class="mean">' + mean(runs) + "</td>";
+      } else {
+        m = '<td class="mean bad">not comparable</td>';
+      }
+      return '<tr class="' + (t === state.temp ? "active" : "") + '">'
+           + '<th scope="row">' + t + "</th>" + cells + m + "</tr>";
+    }).join("");
+
+    reportHeight();
+  }
+
+  elRun.addEventListener("click", collect);
+  elReset.addEventListener("click", function () {
+    TEMPS.forEach(function (t) { state.results[t] = []; });
+    roCount.textContent = "0"; roTime.textContent = "0"; roRun.textContent = "—";
+    render();
+    say("Everything cleared. Choose a temperature, then collect the results.");
+  });
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink. Measure the content itself.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try {
+      parent.postMessage({ type:"sim-height", sim:"bio1-260_enzyme-temperature", height:h }, "*");
+    } catch (e) { /* standalone, or a parent that does not listen */ }
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  // The frame can be laid out at one width and settle at another without a window resize
+  // event, and the height a lesson needs depends on that width.
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+  render();
+}());
+</script>
+</body>
+</html>

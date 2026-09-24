@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plot the results</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.stage{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.stage[hidden]{display:none}
+.stage h2{font-size:13px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.choices{display:grid;gap:8px}
+.choice{display:flex;gap:10px;align-items:center;text-align:left;padding:10px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;cursor:pointer;width:100%}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice svg{flex:0 0 auto;width:104px;height:auto;border:1px solid var(--line);
+  border-radius:5px;background:var(--bg)}
+.paper{background:var(--bg);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.paper svg{width:100%;height:auto;display:block;touch-action:manipulation}
+.tick{font-size:11px;fill:var(--muted);font-family:inherit}
+.axis-t{font-size:12px;fill:var(--fg);font-family:inherit;font-weight:600}
+svg text{user-select:none}
+.col{fill:transparent;cursor:crosshair}
+.col:focus{outline:none;fill:var(--accent);fill-opacity:.07}
+table{border-collapse:collapse;width:100%;margin-top:10px;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:5px}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+td.done{color:var(--good);font-weight:650}
+</style>
+</head>
+<body>
+<div class="sim">
+  <h1>Plot the results</h1>
+  <p class="sub">Some of these values are below zero, so this graph is built a little
+    differently from one where everything is positive.</p>
+
+  <div class="stage" id="s1">
+    <h2>Step 1 &mdash; where does the horizontal axis go?</h2>
+    <div class="choices">
+      <button type="button" class="choice" data-ax="a">Across the middle of the paper, so there
+        is room for the values below zero as well as the ones above it.</button>
+      <button type="button" class="choice" data-ax="b">Along the bottom of the paper, as it
+        would be if every value were above zero.</button>
+    </div>
+  </div>
+
+  <div class="stage" id="s2" hidden>
+    <h2>Step 2 &mdash; plot the five results</h2>
+    <p class="sub" style="margin:0 0 8px">Click the graph at the height of each result. Or use
+      the Tab key to reach a concentration, the arrow keys to move, and Enter to plot.</p>
+    <div class="paper">
+      <svg id="paper" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg"
+           role="application" aria-label="Graph paper. Sucrose concentration across, percentage
+           change in mass up, with zero across the middle.">
+        <g><path d="M56,298.0 L356,298.0" stroke="var(--grid)" stroke-width="1.1"/><path d="M56,292.8 L356,292.8" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,287.6 L356,287.6" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,282.4 L356,282.4" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,277.2 L356,277.2" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,272.0 L356,272.0" stroke="var(--grid)" stroke-width="1.1"/><path d="M56,266.8 L356,266.8" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,261.6 L356,261.6" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,256.4 L356,256.4" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,251.2 L356,251.2" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,246.0 L356,246.0" stroke="var(--grid)" stroke-width="1.1"/><path d="M56,240.8 L356,240.8" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,235.6 L356,235.6" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,230.4 L356,230.4" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,225.2 L356,225.2" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,220.0 L356,220.0" stroke="var(--grid)" stroke-width="1.1"/><path d="M56,214.8 L356,214.8" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,209.6 L356,209.6" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,204.4 L356,204.4" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,199.2 L356,199.2" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,194.0 L356,194.0" stroke="var(--grid)" stroke-width="1.1"/><path d="M56,188.8 L356,188.8" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,183.6 L356,183.6" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,178.4 L356,178.4" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,173.2 L356,173.2" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,168.0 L356,168.0" stroke="var(--grid)" stroke-width="1.1"/><path d="M56,162.8 L356,162.8" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,157.6 L356,157.6" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,152.4 L356,152.4" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,147.2 L356,147.2" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,142.0 L356,142.0" stroke="var(--grid)" stroke-width="1.1"/><path d="M56,136.8 L356,136.8" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,131.6 L356,131.6" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,126.4 L356,126.4" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,121.2 L356,121.2" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,116.0 L356,116.0" stroke="var(--grid)" stroke-width="1.1"/><path d="M56,110.8 L356,110.8" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,105.6 L356,105.6" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,100.4 L356,100.4" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,95.2 L356,95.2" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,90.0 L356,90.0" stroke="var(--grid)" stroke-width="1.1"/><path d="M56,84.8 L356,84.8" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,79.6 L356,79.6" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,74.4 L356,74.4" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,69.2 L356,69.2" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,64.0 L356,64.0" stroke="var(--grid)" stroke-width="1.1"/><path d="M56,58.8 L356,58.8" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,53.6 L356,53.6" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,48.4 L356,48.4" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,43.2 L356,43.2" stroke="var(--grid)" stroke-width="0.5"/><path d="M56,38.0 L356,38.0" stroke="var(--grid)" stroke-width="1.1"/><path d="M56.0,38 L56.0,298" stroke="var(--grid)" stroke-width="1.1"/><path d="M68.0,38 L68.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M80.0,38 L80.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M92.0,38 L92.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M104.0,38 L104.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M116.0,38 L116.0,298" stroke="var(--grid)" stroke-width="1.1"/><path d="M128.0,38 L128.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M140.0,38 L140.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M152.0,38 L152.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M164.0,38 L164.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M176.0,38 L176.0,298" stroke="var(--grid)" stroke-width="1.1"/><path d="M188.0,38 L188.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M200.0,38 L200.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M212.0,38 L212.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M224.0,38 L224.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M236.0,38 L236.0,298" stroke="var(--grid)" stroke-width="1.1"/><path d="M248.0,38 L248.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M260.0,38 L260.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M272.0,38 L272.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M284.0,38 L284.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M296.0,38 L296.0,298" stroke="var(--grid)" stroke-width="1.1"/><path d="M308.0,38 L308.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M320.0,38 L320.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M332.0,38 L332.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M344.0,38 L344.0,298" stroke="var(--grid)" stroke-width="0.5"/><path d="M356.0,38 L356.0,298" stroke="var(--grid)" stroke-width="1.1"/><text x="56.0" y="314" class="tick" text-anchor="middle">0</text><text x="116.0" y="314" class="tick" text-anchor="middle">5</text><text x="176.0" y="314" class="tick" text-anchor="middle">10</text><text x="236.0" y="314" class="tick" text-anchor="middle">15</text><text x="296.0" y="314" class="tick" text-anchor="middle">20</text><text x="356.0" y="314" class="tick" text-anchor="middle">25</text><text x="48" y="302.0" class="tick" text-anchor="end">-25</text><text x="48" y="276.0" class="tick" text-anchor="end">-20</text><text x="48" y="250.0" class="tick" text-anchor="end">-15</text><text x="48" y="224.0" class="tick" text-anchor="end">-10</text><text x="48" y="198.0" class="tick" text-anchor="end">-5</text><text x="48" y="146.0" class="tick" text-anchor="end">+5</text><text x="48" y="120.0" class="tick" text-anchor="end">+10</text><text x="48" y="94.0" class="tick" text-anchor="end">+15</text><text x="48" y="68.0" class="tick" text-anchor="end">+20</text><text x="48" y="42.0" class="tick" text-anchor="end">+25</text><text x="48" y="172.0" class="tick" text-anchor="end">0</text></g>
+        <path d="M56,38 L56,298" fill="none" stroke="var(--fg)"
+              stroke-width="2.2"/>
+        <path d="M56,168 L356,168" fill="none" stroke="var(--fg)"
+              stroke-width="2.2"/>
+        <text x="206" y="336" class="axis-t" text-anchor="middle">Sucrose concentration (%)</text>
+        <text x="14" y="168" class="axis-t" text-anchor="middle"
+              transform="rotate(-90 14 168)">Change in mass (%)</text>
+        <g id="marks"></g><g id="line"></g><g id="cross"></g><g id="cols"></g>
+      </svg>
+    </div>
+    <table>
+      <caption>The results you collected.</caption>
+      <thead><tr><th scope="col">Sucrose (%)</th><th scope="col">Change in mass (%)</th>
+        <th scope="col">On the graph</th></tr></thead>
+      <tbody><tr><th scope="row">0</th><td>+24</td><td id="s0">not plotted</td></tr><tr><th scope="row">5</th><td>+12</td><td id="s5">not plotted</td></tr><tr><th scope="row">10</th><td>+1</td><td id="s10">not plotted</td></tr><tr><th scope="row">15</th><td>-11</td><td id="s15">not plotted</td></tr><tr><th scope="row">20</th><td>-20</td><td id="s20">not plotted</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="stage" id="s3" hidden>
+    <h2>Step 3 &mdash; which line goes through the points?</h2>
+    <div class="choices">
+      <button type="button" class="choice" data-ln="fit"><svg viewBox="40 20 330 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M56,38.0 L56,298.0 M56,168.0 L356.0,168.0" fill="none" stroke="var(--muted)" stroke-width="2"/><path d="M56.0,46.3 L317.6,298.0" fill="none" stroke="var(--accent)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M52.0,39.2 l8,8 M60.0,39.2 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M112.0,101.6 l8,8 M120.0,101.6 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M172.0,158.8 l8,8 M180.0,158.8 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M232.0,221.2 l8,8 M240.0,221.2 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M292.0,268.0 l8,8 M300.0,268.0 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <span>One straight ruled line of best fit through the points.</span></button>
+      <button type="button" class="choice" data-ln="curve"><svg viewBox="40 20 330 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M56,38.0 L56,298.0 M56,168.0 L356.0,168.0" fill="none" stroke="var(--muted)" stroke-width="2"/><path d="M56.0,43.2 C65.0,52.6 98.0,87.7 116.0,105.6 C134.0,123.5 158.0,144.9 176.0,162.8 C194.0,180.7 218.0,208.8 236.0,225.2 C254.0,241.6 287.0,265.0 296.0,272.0" fill="none" stroke="var(--accent)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M52.0,39.2 l8,8 M60.0,39.2 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M112.0,101.6 l8,8 M120.0,101.6 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M172.0,158.8 l8,8 M180.0,158.8 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M232.0,221.2 l8,8 M240.0,221.2 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M292.0,268.0 l8,8 M300.0,268.0 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <span>One smooth curve bending through every point.</span></button>
+      <button type="button" class="choice" data-ln="dots"><svg viewBox="40 20 330 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M56,38.0 L56,298.0 M56,168.0 L356.0,168.0" fill="none" stroke="var(--muted)" stroke-width="2"/><path d="M56.0,43.2 L116.0,105.6 L176.0,162.8 L236.0,225.2 L296.0,272.0" fill="none" stroke="var(--accent)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M52.0,39.2 l8,8 M60.0,39.2 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M112.0,101.6 l8,8 M120.0,101.6 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M172.0,158.8 l8,8 M180.0,158.8 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M232.0,221.2 l8,8 M240.0,221.2 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/><path d="M292.0,268.0 l8,8 M300.0,268.0 l-8,8" stroke="var(--fg)" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <span>Straight lines joining each point to the next one.</span></button>
+    </div>
+  </div>
+
+  <div class="stage" id="s4" hidden>
+    <h2>Step 4 &mdash; where does the line cross zero?</h2>
+    <p class="sub" style="margin:0 0 8px">Click the graph where your line crosses the horizontal
+      axis. At that concentration the potato neither gains nor loses water.</p>
+  </div>
+
+  <p class="msg" id="msg" role="status" aria-live="polite">Start with the axes.</p>
+  <div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "bio2-210_osmosis-plot";
+  var PCTS = [[0, 24.0], [5, 12.0], [10, 1.0], [15, -11.0], [20, -20.0]], FIT = "M56.0,46.3 L317.6,298.0", CROSSING = 10.5;
+  var X0 = 56, YMID = 168, PX = 12.0, PY = 5.2, YMAX = 25, XMAX = 25;
+  var msg = document.getElementById("msg");
+  var marks = document.getElementById("marks"), lineG = document.getElementById("line");
+  var crossG = document.getElementById("cross"), cols = document.getElementById("cols");
+  var paper = document.getElementById("paper");
+  var plotted = {}, pending = {}, stage = 1;
+
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+  function sx(c) { return X0 + c * PX; }
+  function sy(v) { return YMID - v * PY; }
+  function cross(x, y, w, col) {
+    return '<path d="M' + (x-5) + ',' + (y-5) + ' l10,10 M' + (x+5) + ',' + (y-5) +
+           ' l-10,10" stroke="' + col + '" stroke-width="' + w +
+           '" stroke-linecap="round"/>';
+  }
+
+  PCTS.forEach(function (d) {
+    var r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    r.setAttribute("x", sx(d[0]) - 2.5 * PX); r.setAttribute("y", sy(YMAX));
+    r.setAttribute("width", 5 * PX); r.setAttribute("height", sy(-YMAX) - sy(YMAX));
+    r.setAttribute("class", "col"); r.setAttribute("tabindex", "0");
+    r.setAttribute("role", "spinbutton");
+    r.setAttribute("aria-label", d[0] + " percent sucrose");
+    r.dataset.c = d[0];
+    pending[d[0]] = 0;
+    r.addEventListener("keydown", function (e) {
+      var step = (e.key === "ArrowUp") ? 1 : (e.key === "ArrowDown") ? -1 : 0;
+      if (step) {
+        e.preventDefault();
+        pending[d[0]] = Math.max(-YMAX, Math.min(YMAX, pending[d[0]] + step));
+        r.setAttribute("aria-valuenow", String(pending[d[0]]));
+        ghost(d[0], pending[d[0]]);
+        say(d[0] + "% sucrose: " + pending[d[0]] + "% change. Press Enter to plot it.");
+      } else if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault(); place(d[0], pending[d[0]]);
+      }
+    });
+    cols.appendChild(r);
+  });
+
+  function svgPoint(e) {
+    var pt = paper.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+    return pt.matrixTransform(paper.getScreenCTM().inverse());
+  }
+
+  paper.addEventListener("pointerdown", function (e) {
+    var p = svgPoint(e);
+    if (stage === 2) {
+      var best = null, bd = 1e9;
+      PCTS.forEach(function (d) {
+        var dist = Math.abs(p.x - sx(d[0]));
+        if (dist < bd) { bd = dist; best = d[0]; }
+      });
+      if (bd > 2.5 * PX) { say("Click above one of the five concentrations."); return; }
+      place(best, Math.max(-YMAX, Math.min(YMAX, Math.round((YMID - p.y) / PY))));
+    } else if (stage === 4) {
+      var c = Math.round(((p.x - X0) / PX) * 2) / 2;
+      if (Math.abs(p.y - sy(0)) > 3.2 * PY) {
+        say("Click on the horizontal axis itself, where your line crosses it.");
+        return;
+      }
+      readCrossing(c);
+    }
+  });
+
+  function ghost(c, v) {
+    var id = "g" + c, old = document.getElementById(id);
+    if (old) old.remove();
+    var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("id", id);
+    g.innerHTML = cross(sx(c), sy(v), 2, "var(--muted)");
+    g.setAttribute("opacity", "0.55");
+    marks.appendChild(g);
+  }
+
+  function place(c, v) {
+    if (stage !== 2 || plotted[c] !== undefined) return;
+    var want = null;
+    PCTS.forEach(function (d) { if (d[0] === c) want = d[1]; });
+    if (v !== want) {
+      say("The change in mass at " + c + "% sucrose is not " + v + "%. Read that row of your "
+          + "table again, then plot it.", "warn");
+      return;
+    }
+    var old = document.getElementById("g" + c); if (old) old.remove();
+    plotted[c] = v;
+    var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.innerHTML = cross(sx(c), sy(v), 2.6, "var(--fg)");
+    marks.appendChild(g);
+    var cell = document.getElementById("s" + c);
+    cell.textContent = "plotted"; cell.className = "done";
+    var n = Object.keys(plotted).length;
+    if (n === PCTS.length) {
+      stage = 3;
+      document.getElementById("s3").hidden = false;
+      say("All five are plotted. Now choose the line that goes through them.", "good");
+      reportHeight();
+    } else {
+      say(c + "% sucrose plotted at " + (v > 0 ? "+" : "") + v + "%. " + (PCTS.length - n)
+          + " to go.");
+    }
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-ax]"), function (b) {
+    b.addEventListener("click", function () {
+      if (stage !== 1) return;
+      var ok = b.dataset.ax === "a";
+      Array.prototype.forEach.call(document.querySelectorAll("[data-ax]"), function (o) {
+        o.disabled = true;
+      });
+      b.classList.add(ok ? "right" : "wrong");
+      if (!ok) document.querySelector('[data-ax="a"]').classList.add("right");
+      stage = 2;
+      document.getElementById("s2").hidden = false;
+      say(ok ? "Right. Two of the five results are below zero, so the horizontal axis goes "
+             + "across the middle and the vertical axis runs from minus 25 to plus 25."
+             : "Not this one. Two results are below zero, and an axis along the bottom leaves "
+             + "nowhere to put them. It goes across the middle.", ok ? "good" : "warn");
+      reportHeight();
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-ln]"), function (b) {
+    b.addEventListener("click", function () {
+      if (stage !== 3) return;
+      var kind = b.dataset.ln, ok = kind === "fit";
+      Array.prototype.forEach.call(document.querySelectorAll("[data-ln]"), function (o) {
+        o.disabled = true;
+      });
+      b.classList.add(ok ? "right" : "wrong");
+      if (!ok) document.querySelector('[data-ln="fit"]').classList.add("right");
+      var p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      p.setAttribute("d", FIT); p.setAttribute("fill", "none");
+      p.setAttribute("stroke", "var(--accent)"); p.setAttribute("stroke-width", "2.6");
+      p.setAttribute("stroke-linecap", "round");
+      lineG.appendChild(p);
+      stage = 4;
+      document.getElementById("s4").hidden = false;
+      say(ok ? "Right. These points fall close to a straight line, so one ruled line of best "
+             + "fit describes them. Now read off where it crosses zero."
+             : (kind === "curve"
+                 ? "Not this one. A curve bent through every point treats each reading as exact, "
+                 + "and they are not. A straight line of best fit fits these points."
+                 : "Not this one. Joining point to point says the change jumps at each reading. "
+                 + "A straight line of best fit fits these points."),
+          ok ? "good" : "warn");
+      reportHeight();
+    });
+  });
+
+  function readCrossing(c) {
+    if (stage !== 4) return;
+    if (Math.abs(c - CROSSING) > 1.0) {
+      say("Not quite. Follow your line down to the horizontal axis and click where it meets it.",
+          "warn");
+      return;
+    }
+    stage = 5;
+    var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.innerHTML = '<circle cx="' + sx(CROSSING) + '" cy="' + sy(0) +
+                  '" r="6" fill="none" stroke="var(--accent)" stroke-width="2.4"/>';
+    crossG.appendChild(g);
+    say("That is it: about " + CROSSING + "% sucrose. At that concentration the solution outside "
+        + "the potato matches the solution inside its cells, so water moves into the cells and "
+        + "out of them at the same rate and the mass does not change.", "good");
+    reportHeight();
+  }
+
+  document.getElementById("reset").addEventListener("click", function () { location.reload(); });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

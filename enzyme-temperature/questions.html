@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enzymes and temperature — questions</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.q h2{font-size:12px;margin:0 0 6px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.q .stem{margin:0 0 10px;font-weight:500}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;text-align:left;padding:9px 11px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;cursor:pointer;width:100%}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.fb{margin-top:8px;font-size:13.5px;padding:8px 10px;border-radius:8px;display:none}
+.fb.on{display:block;background:var(--bg);border:1px solid var(--line)}
+.score{margin-top:14px;font-weight:650}
+</style>
+</head>
+<body>
+<div class="sim"><h1>Enzymes and temperature</h1><p class="sub">Eight questions on the practical and on what its results show.</p><div class="q" data-qn="1"><h2>Question 1 of 8</h2><div class="stem"><p>A student sets a water bath to 10, 20, 30, 40 and 50 &deg;C in turn and counts the bubbles released in one minute at each one. Which variable belongs on the horizontal axis of the graph?</p></div><div class="opts"><button type="button" class="opt" data-q="1" data-o="a" data-ok="1"><span class="ltr">A</span><span>Temperature, because it is the variable the student changed.</span></button><button type="button" class="opt" data-q="1" data-o="b" data-ok="0"><span class="ltr">B</span><span>The number of bubbles, because it is the variable the student counted.</span></button><button type="button" class="opt" data-q="1" data-o="c" data-ok="0"><span class="ltr">C</span><span>The volume of hydrogen peroxide, because it was held the same every time.</span></button><button type="button" class="opt" data-q="1" data-o="d" data-ok="0"><span class="ltr">D</span><span>The length of time counted, because every reading lasted the same one minute.</span></button></div><div class="fb" id="fb1"></div></div><div class="q" data-qn="2"><h2>Question 2 of 8</h2><div class="stem"><p>In this practical the same volume of hydrogen peroxide is used at every temperature. Why does that volume have to be the same each time?</p></div><div class="opts"><button type="button" class="opt" data-q="2" data-o="a" data-ok="1"><span class="ltr">A</span><span>If it changed as well, it could explain the change in rate instead of the temperature.</span></button><button type="button" class="opt" data-q="2" data-o="b" data-ok="0"><span class="ltr">B</span><span>If it changed as well, the enzyme would be used up before the minute had finished.</span></button><button type="button" class="opt" data-q="2" data-o="c" data-ok="0"><span class="ltr">C</span><span>If it changed as well, the water bath would take longer to reach each temperature.</span></button><button type="button" class="opt" data-q="2" data-o="d" data-ok="0"><span class="ltr">D</span><span>If it changed as well, the bubbles would be too small for the student to count.</span></button></div><div class="fb" id="fb2"></div></div><div class="q" data-qn="3"><h2>Question 3 of 8</h2><div class="stem"><p>The bubbles are counted three times at every temperature and a mean is worked out. What does taking three readings achieve that one reading would not?</p></div><div class="opts"><button type="button" class="opt" data-q="3" data-o="a" data-ok="1"><span class="ltr">A</span><span>A single reading that is wrong has much less effect on the result.</span></button><button type="button" class="opt" data-q="3" data-o="b" data-ok="0"><span class="ltr">B</span><span>A single reading is spread over longer, so more bubbles are released.</span></button><button type="button" class="opt" data-q="3" data-o="c" data-ok="0"><span class="ltr">C</span><span>A single reading gives the enzyme less time to reach the water bath temperature.</span></button><button type="button" class="opt" data-q="3" data-o="d" data-ok="0"><span class="ltr">D</span><span>A single reading is taken before the reaction has settled to a steady rate.</span></button></div><div class="fb" id="fb3"></div></div><div class="q" data-qn="4"><h2>Question 4 of 8</h2><div class="stem"><p>An enzyme breaks hydrogen peroxide down, and the reaction is followed by counting the bubbles that come off. What are those bubbles made of?</p></div><div class="opts"><button type="button" class="opt" data-q="4" data-o="a" data-ok="1"><span class="ltr">A</span><span>Oxygen, which is released as the hydrogen peroxide is broken down.</span></button><button type="button" class="opt" data-q="4" data-o="b" data-ok="0"><span class="ltr">B</span><span>Hydrogen, which is released as the hydrogen peroxide is broken down.</span></button><button type="button" class="opt" data-q="4" data-o="c" data-ok="0"><span class="ltr">C</span><span>Water vapor, which forms as the water bath warms the mixture through.</span></button><button type="button" class="opt" data-q="4" data-o="d" data-ok="0"><span class="ltr">D</span><span>Air, which is driven out of the test tube as the mixture warms through.</span></button></div><div class="fb" id="fb4"></div></div><div class="q" data-qn="5"><h2>Question 5 of 8</h2><div class="stem"><p>A graph of the results climbs from 10 &deg;C to a highest point at 40 &deg;C and then falls steeply. What does the temperature at that highest point tell you about the enzyme?</p></div><div class="opts"><button type="button" class="opt" data-q="5" data-o="a" data-ok="1"><span class="ltr">A</span><span>It is the optimum, the temperature at which this enzyme works fastest.</span></button><button type="button" class="opt" data-q="5" data-o="b" data-ok="0"><span class="ltr">B</span><span>It is the lowest temperature at which this enzyme is able to work.</span></button><button type="button" class="opt" data-q="5" data-o="c" data-ok="0"><span class="ltr">C</span><span>It is the temperature at which the enzyme has denatured and stopped working.</span></button><button type="button" class="opt" data-q="5" data-o="d" data-ok="0"><span class="ltr">D</span><span>It is the temperature at which the hydrogen peroxide has been used up.</span></button></div><div class="fb" id="fb5"></div></div><div class="q" data-qn="6"><h2>Question 6 of 8</h2><div class="stem"><p>Above 40 &deg;C the rate does not level off but falls steeply. What is happening to the enzyme over that part of the curve?</p></div><div class="opts"><button type="button" class="opt" data-q="6" data-o="a" data-ok="1"><span class="ltr">A</span><span>Its molecules are losing their folded shape, so their active sites are gone.</span></button><button type="button" class="opt" data-q="6" data-o="b" data-ok="0"><span class="ltr">B</span><span>Its molecules are moving so fast that the substrate can no longer reach them.</span></button><button type="button" class="opt" data-q="6" data-o="c" data-ok="0"><span class="ltr">C</span><span>Its molecules are being broken apart into the amino acids they are built from.</span></button><button type="button" class="opt" data-q="6" data-o="d" data-ok="0"><span class="ltr">D</span><span>Its molecules are being used up faster than the cell is able to replace them.</span></button></div><div class="fb" id="fb6"></div></div><div class="q" data-qn="7"><h2>Question 7 of 8</h2><div class="stem"><p>A student heats the mixture to 60 &deg;C, then cools it back to 40 &deg;C and counts again. The rate stays very low. Why does cooling not bring it back up?</p></div><div class="opts"><button type="button" class="opt" data-q="7" data-o="a" data-ok="1"><span class="ltr">A</span><span>The enzyme molecules do not fold back into the shape they had.</span></button><button type="button" class="opt" data-q="7" data-o="b" data-ok="0"><span class="ltr">B</span><span>The enzyme molecules take far longer than one minute to cool through.</span></button><button type="button" class="opt" data-q="7" data-o="c" data-ok="0"><span class="ltr">C</span><span>The hydrogen peroxide was broken down by the heat rather than by the enzyme.</span></button><button type="button" class="opt" data-q="7" data-o="d" data-ok="0"><span class="ltr">D</span><span>The water bath cannot be brought back down once it has been heated.</span></button></div><div class="fb" id="fb7"></div></div><div class="q" data-qn="8"><h2>Question 8 of 8</h2><div class="stem"><p>The test tube stands in a beaker of water rather than being warmed on the hotplate itself. What does the water around the tube do?</p></div><div class="opts"><button type="button" class="opt" data-q="8" data-o="a" data-ok="1"><span class="ltr">A</span><span>It holds the mixture at one steady temperature the whole minute through.</span></button><button type="button" class="opt" data-q="8" data-o="b" data-ok="0"><span class="ltr">B</span><span>It stops the hydrogen peroxide evaporating out of the open test tube.</span></button><button type="button" class="opt" data-q="8" data-o="c" data-ok="0"><span class="ltr">C</span><span>It keeps the bubbles small enough for them to be counted one at a time.</span></button><button type="button" class="opt" data-q="8" data-o="d" data-ok="0"><span class="ltr">D</span><span>It lets the enzyme be added without any of the mixture splashing out.</span></button></div><div class="fb" id="fb8"></div></div><p class="score" id="score" role="status" aria-live="polite"></p><div class="actions"><button id="reset" type="button">Start again</button></div></div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "bio1-260_practical-questions";
+  var EXPL = {"1": "The variable you deliberately change is the independent variable, and it goes on the horizontal axis. Here that is the temperature.", "2": "If two things change at once, the result cannot tell you which one caused it. Everything except the temperature has to be held the same.", "3": "Any one measurement can be wrong, through a misread count or a stray draft. Repeating each temperature and taking a mean is what makes the pattern trustworthy.", "4": "Hydrogen peroxide breaks down into water and oxygen. The oxygen is the gas that comes off, so counting bubbles measures how fast the reaction is going.", "5": "The optimum is the temperature at which an enzyme works fastest. Read it off the horizontal axis directly beneath the peak.", "6": "Above the optimum, enzyme molecules denature. The active site is a hollow in the folded shape, so once the shape is lost there is nothing for the substrate to fit into.", "7": "Denaturing cannot be undone. The rise in the curve can be reversed by cooling; the fall cannot, because each molecule that denatures is out of action for good.", "8": "Water heats and cools evenly and holds its temperature, so the mixture sits at the temperature being tested for the whole of the minute rather than drifting."}, ERR = {"1": {"a": "", "b": "that is the dependent variable, and it goes on the vertical axis", "c": "a control variable is not plotted at all", "d": "the timing was held the same, so it is a control variable"}, "2": {"a": "", "b": "an enzyme is not used up by the reaction it speeds up", "c": "the volume in the tube does not set how fast the water bath heats", "d": "the size of a bubble is not what a second change would spoil"}, "3": {"a": "", "b": "each run still lasts one minute, however many runs are done", "c": "the mixture reaches the temperature before any run begins", "d": "repeating does not change when within the run the counting starts"}, "4": {"a": "", "b": "the hydrogen leaves in the water, not as a gas", "c": "the mixture is nowhere near hot enough to boil", "d": "bubbles appear at 10 &deg;C as well, where nothing is being warmed"}, "5": {"a": "", "b": "the enzyme is already working at every lower temperature on the graph", "c": "at the peak the enzyme is working faster than anywhere else", "d": "the peak is about the rate, not about the reaction finishing"}, "6": {"a": "", "b": "faster movement makes meetings more likely, not less", "c": "the chain stays whole in a denatured protein; what is lost is the arrangement", "d": "an enzyme is not used up, and there is no cell in the test tube"}, "7": {"a": "", "b": "the water bath brings the mixture to temperature before counting starts", "c": "if that were so there would have been bubbles while it was hot", "d": "the question says it was cooled back to 40 &deg;C"}, "8": {"a": "", "b": "an open tube loses the same either way; the water does not seal it", "c": "the water outside the tube does not set the size of a bubble inside it", "d": "the water is around the tube, not a lid on it"}}, TOTAL = 8;
+  var done = {}, right = 0;
+  var score = document.getElementById("score");
+
+  Array.prototype.forEach.call(document.querySelectorAll(".opt"), function (b) {
+    b.addEventListener("click", function () {
+      var qn = b.dataset.q;
+      if (done[qn]) return;
+      done[qn] = true;
+      var ok = b.dataset.ok === "1";
+      if (ok) right++;
+      var q = document.querySelector('.q[data-qn="' + qn + '"]');
+      Array.prototype.forEach.call(q.querySelectorAll(".opt"), function (o) {
+        o.disabled = true;
+        if (o.dataset.ok === "1") o.classList.add("right");
+      });
+      if (!ok) b.classList.add("wrong");
+      var fb = document.getElementById("fb" + qn);
+      fb.className = "fb on";
+      fb.innerHTML = (ok ? "" : "<b>" + ERR[qn][b.dataset.o] + ".</b> ") + EXPL[qn];
+      var n = Object.keys(done).length;
+      score.textContent = n + " of " + TOTAL + " answered, " + right + " right.";
+      reportHeight();
+    });
+  });
+  document.getElementById("reset").addEventListener("click", function () { location.reload(); });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

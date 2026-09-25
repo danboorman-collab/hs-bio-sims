@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Osmosis — questions</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.q h2{font-size:12px;margin:0 0 6px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.q .stem{margin:0 0 10px;font-weight:500}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;text-align:left;padding:9px 11px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;cursor:pointer;width:100%}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.fb{margin-top:8px;font-size:13.5px;padding:8px 10px;border-radius:8px;display:none}
+.fb.on{display:block;background:var(--bg);border:1px solid var(--line)}
+.score{margin-top:14px;font-weight:650}
+</style>
+</head>
+<body>
+<div class="sim"><h1>Osmosis: potato and sugar solution</h1><p class="sub">Eight questions on the practical and on what its results show.</p><div class="q" data-qn="1"><h2>Question 1 of 8</h2><div class="stem"><p>A student leaves a cylinder of potato in each of five sucrose solutions for 30 minutes and works out how much mass each one gained or lost. Which variable belongs on the horizontal axis of the graph?</p></div><div class="opts"><button type="button" class="opt" data-q="1" data-o="a" data-ok="1"><span class="ltr">A</span><span>The concentration of the solution, because it is the one the student changed.</span></button><button type="button" class="opt" data-q="1" data-o="b" data-ok="0"><span class="ltr">B</span><span>The change in mass of the cylinder, because it is what the student worked out.</span></button><button type="button" class="opt" data-q="1" data-o="c" data-ok="0"><span class="ltr">C</span><span>The time each cylinder spent in its solution, because it was the same for all five.</span></button><button type="button" class="opt" data-q="1" data-o="d" data-ok="0"><span class="ltr">D</span><span>The mass of each cylinder at the start, because every one began at the same mass.</span></button></div><div class="fb" id="fb1"></div></div><div class="q" data-qn="2"><h2>Question 2 of 8</h2><div class="stem"><p>Every cylinder is blotted dry on a paper towel before it is weighed, both at the start and at the end. Why does that matter?</p></div><div class="opts"><button type="button" class="opt" data-q="2" data-o="a" data-ok="1"><span class="ltr">A</span><span>Water clinging to the outside would be weighed as though it were inside the potato.</span></button><button type="button" class="opt" data-q="2" data-o="b" data-ok="0"><span class="ltr">B</span><span>Water clinging to the outside would carry on moving into the potato while it was weighed.</span></button><button type="button" class="opt" data-q="2" data-o="c" data-ok="0"><span class="ltr">C</span><span>Water clinging to the outside would make the balance read less than the true mass.</span></button><button type="button" class="opt" data-q="2" data-o="d" data-ok="0"><span class="ltr">D</span><span>Water clinging to the outside would dilute the next solution the cylinder went into.</span></button></div><div class="fb" id="fb2"></div></div><div class="q" data-qn="3"><h2>Question 3 of 8</h2><div class="stem"><p>All five cylinders are cut from the same potato with the same cork borer and trimmed to the same length. Why must they be the same size as each other?</p></div><div class="opts"><button type="button" class="opt" data-q="3" data-o="a" data-ok="1"><span class="ltr">A</span><span>A bigger cylinder would take in more water, so size could explain the result instead of the solution.</span></button><button type="button" class="opt" data-q="3" data-o="b" data-ok="0"><span class="ltr">B</span><span>A bigger cylinder would need longer than the 30 minutes allowed to settle.</span></button><button type="button" class="opt" data-q="3" data-o="c" data-ok="0"><span class="ltr">C</span><span>A bigger cylinder would not fit into a test tube beside the volume of solution used.</span></button><button type="button" class="opt" data-q="3" data-o="d" data-ok="0"><span class="ltr">D</span><span>A bigger cylinder would float rather than stay fully under the surface of its solution.</span></button></div><div class="fb" id="fb3"></div></div><div class="q" data-qn="4"><h2>Question 4 of 8</h2><div class="stem"><p>A cylinder left in pure water gains mass. What has moved, and which way?</p></div><div class="opts"><button type="button" class="opt" data-q="4" data-o="a" data-ok="1"><span class="ltr">A</span><span>Water has moved into the cells, because the solution inside them is the more concentrated.</span></button><button type="button" class="opt" data-q="4" data-o="b" data-ok="0"><span class="ltr">B</span><span>Water has moved into the cells, because the pure water outside is the more concentrated.</span></button><button type="button" class="opt" data-q="4" data-o="c" data-ok="0"><span class="ltr">C</span><span>Sucrose has moved into the cells from the water surrounding the cylinder.</span></button><button type="button" class="opt" data-q="4" data-o="d" data-ok="0"><span class="ltr">D</span><span>Water has been pulled into the cells using energy released by their mitochondria.</span></button></div><div class="fb" id="fb4"></div></div><div class="q" data-qn="5"><h2>Question 5 of 8</h2><div class="stem"><p>A cylinder left in 20% sucrose loses mass. What has happened to it?</p></div><div class="opts"><button type="button" class="opt" data-q="5" data-o="a" data-ok="1"><span class="ltr">A</span><span>Water has moved out of its cells, because the solution outside is the more concentrated.</span></button><button type="button" class="opt" data-q="5" data-o="b" data-ok="0"><span class="ltr">B</span><span>Sucrose has moved into its cells, because the solution outside is the more concentrated.</span></button><button type="button" class="opt" data-q="5" data-o="c" data-ok="0"><span class="ltr">C</span><span>Water has moved out of its cells, because the solution outside is the more dilute.</span></button><button type="button" class="opt" data-q="5" data-o="d" data-ok="0"><span class="ltr">D</span><span>Sucrose has moved out of its cells and taken water with it as it went.</span></button></div><div class="fb" id="fb5"></div></div><div class="q" data-qn="6"><h2>Question 6 of 8</h2><div class="stem"><p>A graph of the results is a straight line that crosses zero at about 10% sucrose. What does that concentration tell you about the potato?</p></div><div class="opts"><button type="button" class="opt" data-q="6" data-o="a" data-ok="1"><span class="ltr">A</span><span>It is as concentrated as the solution inside the cells themselves.</span></button><button type="button" class="opt" data-q="6" data-o="b" data-ok="0"><span class="ltr">B</span><span>It is the concentration at which the membrane stops letting water through.</span></button><button type="button" class="opt" data-q="6" data-o="c" data-ok="0"><span class="ltr">C</span><span>It is the concentration at which the cells have taken in all the water they can hold.</span></button><button type="button" class="opt" data-q="6" data-o="d" data-ok="0"><span class="ltr">D</span><span>It is the concentration at which sucrose starts to cross into the cells.</span></button></div><div class="fb" id="fb6"></div></div><div class="q" data-qn="7"><h2>Question 7 of 8</h2><div class="stem"><p>Using that same graph, which crosses zero at about 10% sucrose, what would happen to a cylinder left in 5% sucrose?</p></div><div class="opts"><button type="button" class="opt" data-q="7" data-o="a" data-ok="1"><span class="ltr">A</span><span>It would gain mass, because water would move into its cells.</span></button><button type="button" class="opt" data-q="7" data-o="b" data-ok="0"><span class="ltr">B</span><span>It would lose mass, because water would move out of its cells.</span></button><button type="button" class="opt" data-q="7" data-o="c" data-ok="0"><span class="ltr">C</span><span>It would keep the same mass, because 5% is fairly close to where the line crosses zero.</span></button><button type="button" class="opt" data-q="7" data-o="d" data-ok="0"><span class="ltr">D</span><span>It would gain mass, because sucrose would move into its cells from the solution.</span></button></div><div class="fb" id="fb7"></div></div><div class="q" data-qn="8"><h2>Question 8 of 8</h2><div class="stem"><p>The results are worked out as a percentage change in mass rather than as a change in grams. What does using a percentage allow?</p></div><div class="opts"><button type="button" class="opt" data-q="8" data-o="a" data-ok="1"><span class="ltr">A</span><span>Cylinders that did not start at exactly the same mass can still be compared fairly.</span></button><button type="button" class="opt" data-q="8" data-o="b" data-ok="0"><span class="ltr">B</span><span>Cylinders that were left in their solutions for different times can still be compared.</span></button><button type="button" class="opt" data-q="8" data-o="c" data-ok="0"><span class="ltr">C</span><span>The change can be worked out without weighing each cylinder at the start.</span></button><button type="button" class="opt" data-q="8" data-o="d" data-ok="0"><span class="ltr">D</span><span>The change can be read off the balance directly, with no working out needed.</span></button></div><div class="fb" id="fb8"></div></div><p class="score" id="score" role="status" aria-live="polite"></p><div class="actions"><button id="reset" type="button">Start again</button></div></div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "bio2-210_practical-questions";
+  var EXPL = {"1": "The variable you deliberately change is the independent variable, and it goes on the horizontal axis. Here that is the concentration of the solution.", "2": "The balance weighs everything on the pan. Surface water is counted as part of the cylinder, so a cylinder that was not blotted looks heavier than it is.", "3": "If the cylinders differed in size as well as in the solution they sat in, the result could not tell you which of the two caused the change.", "4": "Water moves from where it is more dilute to where it is more concentrated. Pure water is more dilute than the solution inside the cells, so water moves in.", "5": "The solution outside is more concentrated than the solution inside the cells, so water moves out of the cells and the cylinder loses mass.", "6": "Where the line crosses zero the cylinder neither gained nor lost mass, so water was moving in and out at the same rate. That happens when the two solutions are equally concentrated.", "7": "5% is more dilute than the solution inside the cells, so water moves into them and the cylinder gains mass. Every concentration below the crossing point does the same.", "8": "A gain of 0.5 g means much more for a small cylinder than for a large one. Turning each change into a percentage of its own starting mass puts all five on the same footing."}, ERR = {"1": {"a": "", "b": "that is the dependent variable, and it goes on the vertical axis", "c": "a control variable is not plotted at all", "d": "that was held the same, so it is a control variable"}, "2": {"a": "", "b": "the reason is what the balance reads, not what the water does next", "c": "extra water on a cylinder makes the reading larger, not smaller", "d": "each cylinder goes into one solution only, and this is about the weighing"}, "3": {"a": "", "b": "all five are left for the same time, whatever their size", "c": "the tube is not what decides this; two things changing at once is", "d": "potato sinks in these solutions, and floating is not the problem"}, "4": {"a": "", "b": "pure water is the most dilute thing in the experiment", "c": "there is no sucrose in pure water for anything to move", "d": "that is active transport, and osmosis needs no energy"}, "5": {"a": "", "b": "the membrane lets water through but holds the sucrose back", "c": "20% sucrose is the most concentrated solution in the experiment", "d": "the sucrose outside is more concentrated, and it cannot cross the membrane anyway"}, "6": {"a": "", "b": "water keeps crossing; what stops is any net change in mass", "c": "at that point the cylinder has neither gained nor lost mass", "d": "sucrose does not cross the membrane at any of these concentrations"}, "7": {"a": "", "b": "5% is more dilute than the inside of the cells, so water moves the other way", "c": "close is not the same; only the crossing point gives no change", "d": "what moves is water; the sucrose stays outside"}, "8": {"a": "", "b": "all five are left for the same 30 minutes, so there is nothing to correct for", "c": "a percentage change needs the starting mass more than a change in grams does", "d": "a percentage always has to be calculated from two readings"}}, TOTAL = 8;
+  var done = {}, right = 0;
+  var score = document.getElementById("score");
+
+  Array.prototype.forEach.call(document.querySelectorAll(".opt"), function (b) {
+    b.addEventListener("click", function () {
+      var qn = b.dataset.q;
+      if (done[qn]) return;
+      done[qn] = true;
+      var ok = b.dataset.ok === "1";
+      if (ok) right++;
+      var q = document.querySelector('.q[data-qn="' + qn + '"]');
+      Array.prototype.forEach.call(q.querySelectorAll(".opt"), function (o) {
+        o.disabled = true;
+        if (o.dataset.ok === "1") o.classList.add("right");
+      });
+      if (!ok) b.classList.add("wrong");
+      var fb = document.getElementById("fb" + qn);
+      fb.className = "fb on";
+      fb.innerHTML = (ok ? "" : "<b>" + ERR[qn][b.dataset.o] + ".</b> ") + EXPL[qn];
+      var n = Object.keys(done).length;
+      score.textContent = n + " of " + TOTAL + " answered, " + right + " right.";
+      reportHeight();
+    });
+  });
+  document.getElementById("reset").addEventListener("click", function () { location.reload(); });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

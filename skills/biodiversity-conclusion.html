@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Writing a conclusion the data supports</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step h2{font-size:12.5px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--card);font-weight:650}
+th[scope=row]{text-align:left}
+td.cell{cursor:pointer}
+td.cell:hover{background:var(--accent-soft)}
+td.cell:focus{outline:2px solid var(--accent);outline-offset:-2px}
+td.flagged{background:var(--warn-bg);color:var(--warn);font-weight:700;
+  box-shadow:inset 0 0 0 2px var(--warn-line)}
+td.mean{font-weight:650}
+td.dim{color:var(--muted)}
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 200px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;
+  color:var(--muted)}
+.spin{display:flex;align-items:center;gap:6px}
+.spin button{width:32px;height:32px;border:1px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:17px;cursor:pointer;line-height:1}
+.spin output{min-width:64px;text-align:center;font-variant-numeric:tabular-nums;
+  font-weight:650;font-size:16px}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.final{margin-top:12px;font-size:15px;background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:9px;padding:11px 13px}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Writing a conclusion the data supports</h1>
+<p class="sub">Two woodlands, 200 trees counted in each, the same five species in both.</p>
+
+<table><caption>Trees of each species, from a survey of 200 trees in each woodland.</caption>
+<thead><tr><th scope="col">Woodland</th><th scope="col">spruce</th><th scope="col">ash</th><th scope="col">birch</th><th scope="col">hickory</th><th scope="col">maple</th><th scope="col">Total</th></tr></thead>
+<tbody><tr><th scope="row">Mixed</th><td>41</td><td>39</td><td>38</td><td>42</td><td>40</td><td class="mean">200</td></tr><tr><th scope="row">Plantation</th><td>196</td><td>1</td><td>1</td><td>1</td><td>1</td><td class="mean">200</td></tr></tbody></table>
+
+<div class="step" id="s1">
+<h2>Step 1 &mdash; count the species</h2>
+<div class="calc"><div class="calcrow" id="row-sp"><span class="lab">Species in the mixed woodland</span><span class="work" id="work-sp">count the species present</span><span class="spin" id="spin-sp"><button type="button" data-d="-1" aria-label="down">&minus;</button><output></output><button type="button" data-d="1" aria-label="up">+</button></span></div>
+<div class="calcrow" id="row-sp2"><span class="lab">Species in the plantation</span><span class="work" id="work-sp2">count the species present</span><span class="spin" id="spin-sp2"><button type="button" data-d="-1" aria-label="down">&minus;</button><output></output><button type="button" data-d="1" aria-label="up">+</button></span></div></div>
+</div>
+
+<div class="step" id="s2" hidden>
+<h2>Step 2 &mdash; so which is more biodiverse?</h2>
+<div class="choices" id="c2">
+<button type="button" class="choice" data-ok="1">The mixed woodland, because its 200 trees are
+shared far more evenly between the same five species.</button>
+<button type="button" class="choice" data-ok="0">Neither, because both woodlands hold five
+species and 200 trees.</button>
+<button type="button" class="choice" data-ok="0">The plantation, because one species has grown
+there far more successfully than the rest.</button>
+<button type="button" class="choice" data-ok="0">The mixed woodland, because it holds more
+species than the plantation does.</button>
+</div>
+</div>
+
+<div class="step" id="s3" hidden>
+<h2>Step 3 &mdash; what this survey cannot tell you</h2>
+<p class="ask">Which of these does the data <b>not</b> support?</p>
+<div class="choices" id="c3">
+<button type="button" class="choice" data-ok="1">The mixed woodland is healthier than the
+plantation.</button>
+<button type="button" class="choice" data-ok="0">Spruce is the most common tree in the
+plantation.</button>
+<button type="button" class="choice" data-ok="0">Both woodlands contain ash, birch, hickory
+and maple.</button>
+<button type="button" class="choice" data-ok="0">Four of the plantation's species are rare
+within it.</button>
+</div>
+</div>
+
+<p class="msg" id="msg" role="status" aria-live="polite">Start by counting the species.</p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "skill-biodiversity-conclusion";
+  var msg = document.getElementById("msg"), got = { sp: false, sp2: false };
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+  // A stepper rather than a text box: it can be driven from the keyboard, it cannot be given
+  // nonsense, and the student still has to know the number.
+  function spinner(host, opts) {
+    var v = opts.start, out = host.querySelector("output");
+    function show() { out.textContent = opts.fmt ? opts.fmt(v) : v; out.value = String(v); }
+    host.querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (host.dataset.locked) return;
+        v = Math.max(opts.min, Math.min(opts.max, v + (+b.dataset.d) * opts.step));
+        v = Math.round(v * 1000) / 1000;
+        show(); opts.onchange && opts.onchange(v);
+      });
+    });
+    show();
+    return { get: function () { return v; }, lock: function () { host.dataset.locked = "1"; } };
+  }
+
+  function counter(id, key) {
+    var row = document.getElementById("row-" + id);
+    spinner(document.getElementById("spin-" + id), { start: 0, min: 0, max: 9, step: 1,
+      onchange: function (v) {
+        if (v === 5) {
+          row.classList.add("done"); got[key] = true;
+          if (got.sp && got.sp2) {
+            document.getElementById("s2").hidden = false;
+            say("Both woodlands hold five species. Counting species alone cannot tell them "
+                + "apart, so it cannot be the whole of what biodiversity means.", "good");
+          } else { say("Five. Now do the other one."); }
+          reportHeight();
+        } else { row.classList.remove("done"); }
+      } });
+  }
+  counter("sp", "sp"); counter("sp2", "sp2");
+
+  function choose(id, good, bad, nextId) {
+    Array.prototype.forEach.call(document.querySelectorAll("#" + id + " .choice"), function (b) {
+      b.addEventListener("click", function () {
+        Array.prototype.forEach.call(document.querySelectorAll("#" + id + " .choice"),
+          function (o) { o.disabled = true; if (o.dataset.ok === "1") o.classList.add("right"); });
+        var ok = b.dataset.ok === "1";
+        if (!ok) b.classList.add("wrong");
+        say(ok ? good : bad, ok ? "good" : "warn");
+        if (ok && nextId) document.getElementById(nextId).hidden = false;
+        reportHeight();
+      });
+    });
+  }
+  choose("c2",
+    "Right. Both hold five species, so what separates them is how evenly the trees are spread "
+    + "between those species. In the plantation one species is almost everything.",
+    "Not this one. Look at how the 200 trees are shared out. Both woodlands have five species, "
+    + "so the number of species is not what distinguishes them.", "s3");
+  choose("c3",
+    "Right. Nothing here measures health. The survey counted trees by species, so it supports "
+    + "claims about how many and how evenly, and nothing about how well either woodland is "
+    + "doing.",
+    "That one the data does support: it can be read straight off the table. Look for the claim "
+    + "that goes beyond what was actually counted.");
+
+  document.getElementById("reset").addEventListener("click", function(){ location.reload(); });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

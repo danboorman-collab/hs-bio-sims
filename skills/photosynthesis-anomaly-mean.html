@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anomalous results and the mean</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step h2{font-size:12.5px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--card);font-weight:650}
+th[scope=row]{text-align:left}
+td.cell{cursor:pointer}
+td.cell:hover{background:var(--accent-soft)}
+td.cell:focus{outline:2px solid var(--accent);outline-offset:-2px}
+td.flagged{background:var(--warn-bg);color:var(--warn);font-weight:700;
+  box-shadow:inset 0 0 0 2px var(--warn-line)}
+td.mean{font-weight:650}
+td.dim{color:var(--muted)}
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 200px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;
+  color:var(--muted)}
+.spin{display:flex;align-items:center;gap:6px}
+.spin button{width:32px;height:32px;border:1px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:17px;cursor:pointer;line-height:1}
+.spin output{min-width:64px;text-align:center;font-variant-numeric:tabular-nums;
+  font-weight:650;font-size:16px}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.final{margin-top:12px;font-size:15px;background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:9px;padding:11px 13px}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Anomalous results and the mean</h1>
+<p class="sub">Every light intensity was counted three times. One of those counts does not
+belong with its own repeats.</p>
+
+<div class="step" id="s1">
+<h2>Step 1 &mdash; find the result that does not fit</h2>
+<p class="ask">Look along each row. Click the one count that does not sit with the other two in
+its row.</p>
+<table><caption>Bubbles counted in one minute, three counts at each light intensity.</caption>
+<thead><tr><th scope="col">Light intensity</th><th scope="col">Count 1</th>
+<th scope="col">Count 2</th><th scope="col">Count 3</th><th scope="col">Mean</th></tr></thead>
+<tbody id="tb"><tr><th scope="row">1</th><td class="cell" tabindex="0" data-i="1" data-v="5" data-k="0">5</td><td class="cell" tabindex="0" data-i="1" data-v="7" data-k="1">7</td><td class="cell" tabindex="0" data-i="1" data-v="6" data-k="2">6</td><td class="dim" id="m1">&mdash;</td></tr><tr><th scope="row">2</th><td class="cell" tabindex="0" data-i="2" data-v="12" data-k="0">12</td><td class="cell" tabindex="0" data-i="2" data-v="11" data-k="1">11</td><td class="cell" tabindex="0" data-i="2" data-v="13" data-k="2">13</td><td class="dim" id="m2">&mdash;</td></tr><tr><th scope="row">3</th><td class="cell" tabindex="0" data-i="3" data-v="17" data-k="0">17</td><td class="cell" tabindex="0" data-i="3" data-v="19" data-k="1">19</td><td class="cell" tabindex="0" data-i="3" data-v="34" data-k="2">34</td><td class="dim" id="m3">&mdash;</td></tr><tr><th scope="row">4</th><td class="cell" tabindex="0" data-i="4" data-v="23" data-k="0">23</td><td class="cell" tabindex="0" data-i="4" data-v="25" data-k="1">25</td><td class="cell" tabindex="0" data-i="4" data-v="24" data-k="2">24</td><td class="dim" id="m4">&mdash;</td></tr><tr><th scope="row">5</th><td class="cell" tabindex="0" data-i="5" data-v="30" data-k="0">30</td><td class="cell" tabindex="0" data-i="5" data-v="29" data-k="1">29</td><td class="cell" tabindex="0" data-i="5" data-v="31" data-k="2">31</td><td class="dim" id="m5">&mdash;</td></tr><tr><th scope="row">6</th><td class="cell" tabindex="0" data-i="6" data-v="31" data-k="0">31</td><td class="cell" tabindex="0" data-i="6" data-v="29" data-k="1">29</td><td class="cell" tabindex="0" data-i="6" data-v="30" data-k="2">30</td><td class="dim" id="m6">&mdash;</td></tr></tbody></table>
+</div>
+
+<div class="step" id="s2" hidden>
+<h2>Step 2 &mdash; take the mean without it</h2>
+<p class="ask">At intensity 3 the two counts that agree are 17 and
+19. What is their mean?</p>
+<div class="calc"><div class="calcrow" id="row-mean"><span class="lab">Mean at intensity 3</span><span class="work" id="work-mean">(17 + 19) &divide; 2</span><span class="spin" id="spin-mean"><button type="button" data-d="-1" aria-label="down">&minus;</button><output></output><button type="button" data-d="1" aria-label="up">+</button></span></div></div>
+</div>
+
+<div class="step" id="s3" hidden>
+<h2>Step 3 &mdash; what you write down</h2>
+<div class="choices" id="c3">
+<button type="button" class="choice" data-ok="1">Keep 34 in the table, mark it as anomalous,
+and say why it was left out of the mean.</button>
+<button type="button" class="choice" data-ok="0">Erase 34 from the table, because a wrong
+reading should not be in the record.</button>
+<button type="button" class="choice" data-ok="0">Change 34 to a number that fits the row, so
+the results look consistent.</button>
+<button type="button" class="choice" data-ok="0">Keep 34 and include it in the mean, because
+every reading counts equally.</button>
+</div>
+</div>
+
+<p class="msg" id="msg" role="status" aria-live="polite">Start by finding the odd count.</p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "skill-photosynthesis-anomaly";
+  var ROWS = [[1, [5, 7, 6]], [2, [12, 11, 13]], [3, [17, 19, 34]], [4, [23, 25, 24]], [5, [30, 29, 31]], [6, [31, 29, 30]]], AI = 3, AV = 34, WANT = 18.0;
+  var msg = document.getElementById("msg"), stage = 1;
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+  function meanOf(cs) { var s = 0; cs.forEach(function (c) { s += c; }); return s / cs.length; }
+
+  function fillMeans() {
+    ROWS.forEach(function (r) {
+      var i = r[0], cs = r[1];
+      var keep = (i === AI) ? cs.filter(function (c) { return c !== AV; }) : cs;
+      var cell = document.getElementById("m" + i);
+      cell.textContent = String(Math.round(meanOf(keep) * 10) / 10);
+      cell.className = "mean";
+    });
+  }
+
+  function pick(td) {
+    if (stage !== 1) return;
+    var i = +td.dataset.i, v = +td.dataset.v;
+    if (i === AI && v === AV) {
+      td.classList.add("flagged");
+      stage = 2;
+      document.getElementById("s2").hidden = false;
+      say("That is the one. " + AV + " at intensity " + AI + " sits far outside its own repeats, "
+          + "so it is an anomalous result.", "good");
+    } else {
+      say(v + " fits the other two counts in its row closely enough. Look for a row where one "
+          + "count stands well clear of the other two.", "warn");
+    }
+    reportHeight();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("#tb .cell"), function (td) {
+    td.addEventListener("click", function () { pick(td); });
+    td.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(td); }
+    });
+  });
+
+  // A stepper rather than a text box: it can be driven from the keyboard, it cannot be given
+  // nonsense, and the student still has to know the number.
+  function spinner(host, opts) {
+    var v = opts.start, out = host.querySelector("output");
+    function show() { out.textContent = opts.fmt ? opts.fmt(v) : v; out.value = String(v); }
+    host.querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (host.dataset.locked) return;
+        v = Math.max(opts.min, Math.min(opts.max, v + (+b.dataset.d) * opts.step));
+        v = Math.round(v * 1000) / 1000;
+        show(); opts.onchange && opts.onchange(v);
+      });
+    });
+    show();
+    return { get: function () { return v; }, lock: function () { host.dataset.locked = "1"; } };
+  }
+
+  var sp = spinner(document.getElementById("spin-mean"),
+                   { start: 10, min: 0, max: 40, step: 0.5,
+                     onchange: function (v) {
+                       var row = document.getElementById("row-mean");
+                       if (v === WANT) {
+                         row.classList.add("done"); sp.lock();
+                         fillMeans();
+                         stage = 3;
+                         document.getElementById("s3").hidden = false;
+                         say("Right: " + WANT + " bubbles in one minute. Every other row keeps "
+                             + "all three counts, because nothing in them stands out.", "good");
+                         reportHeight();
+                       } else { row.classList.remove("done"); }
+                     } });
+
+  Array.prototype.forEach.call(document.querySelectorAll("#c3 .choice"), function (b) {
+    b.addEventListener("click", function () {
+      if (stage !== 3) return;
+      stage = 4;
+      Array.prototype.forEach.call(document.querySelectorAll("#c3 .choice"), function (o) {
+        o.disabled = true;
+        if (o.dataset.ok === "1") o.classList.add("right");
+      });
+      var ok = b.dataset.ok === "1";
+      if (!ok) b.classList.add("wrong");
+      say(ok ? "Right. An anomalous result is reported, not hidden. You keep it, mark it, and "
+             + "say why it was left out, so anyone reading your work can check the judgement."
+             : "Not this one. Changing or erasing a reading hides what happened. You keep it, "
+             + "mark it, and say why it was left out of the mean.", ok ? "good" : "warn");
+      reportHeight();
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", function(){ location.reload(); });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

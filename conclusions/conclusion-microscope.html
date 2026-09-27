@@ -94,17 +94,17 @@ h1{font-size:17px;margin:0 0 2px}
 <p class="sub">A conclusion says what the results show. It is not a summary of what you did.</p>
 
 <div class="panel">
-<h2>First, a conclusion that does the job &mdash; A photograph of an ant</h2>
-<p class="setup">A photograph of an ant is printed 45 mm long. The real ant is 5 mm long.</p>
-<p class="model">The ant is printed 45 mm long and the real ant is 5 mm long. 45 divided by 5 is 9, so the photograph is &times;9. The answer is written with no units, because it is one length divided by another length of the same kind. It does not tell you how much detail the photograph shows, which depends on the camera that took it.</p>
-<ul class="why"><li><b>The answer that was asked for.</b> <q>the photograph is &times;9</q> &mdash; The question asked how much bigger, so the conclusion gives the magnification.</li><li><b>Where the number came from.</b> <q>45 mm divided by 5 mm</q> &mdash; Both lengths and the division, so a reader can check it.</li><li><b>What it does not tell you.</b> <q>how much detail the photograph shows</q> &mdash; Making something bigger is not the same as showing more of it, so the conclusion says so.</li></ul>
+<h2>First, a conclusion that does the job &mdash; A photograph of three ants</h2>
+<p class="setup">A photograph shows a row of 3 ants nose to tail, and the row is printed 90 mm long. A real ant is 5 mm long.</p>
+<p class="model">The row of 3 ants is printed 90 mm long, so one ant is printed 30 mm long. A real ant is 5 mm long, and 30 divided by 5 is 6, so the photograph is &times;6. The answer is written with no units, because it is one length divided by another length of the same kind. It does not tell you how much detail the photograph shows, which depends on the camera that took it.</p>
+<ul class="why"><li><b>The answer that was asked for.</b> <q>the photograph is &times;6</q> &mdash; The question asked how much bigger, so the conclusion gives the magnification.</li><li><b>Where the number came from.</b> <q>90 mm across 3 ants, then 30 mm divided by 5 mm</q> &mdash; Both steps and both lengths, so a reader can check them.</li><li><b>What it does not tell you.</b> <q>how much detail the photograph shows</q> &mdash; Making something bigger is not the same as showing more of it, so the conclusion says so.</li></ul>
 <p class="shape">Your own conclusion has to do those same three things, and it has to end in the number the question asked for.</p>
 </div>
 
 <div class="panel">
 <h2>Now your own results</h2>
-<p class="recap">You drew a row of 8 cells, and the row you drew measures 60 mm across. A real cell of this kind is 0.3 mm long.</p>
-<p class="q">Which of these is the most accurate conclusion for your drawing?</p>
+<p class="recap">You were asked how many times larger than the real cell your drawing is. You drew a row of 8 cells, and the row you drew measures 60 mm long. A real cell of this kind is 0.3 mm long.</p>
+<p class="q">Which of these is a conclusion, and one your own figures support?</p>
 <div class="opts" id="opts"></div>
 <p class="msg" id="msg" role="status" aria-live="polite">Pick one. You get one go at it, and
 then all three are explained.</p>
@@ -120,7 +120,7 @@ then all three are explained.</p>
   "use strict";
 
   var SIM_ID = "conclusion-microscope";
-  var OPTS = [{"text": "The row of 8 cells was drawn 60 mm long, so one cell was drawn 7.5 mm long. A real cell is 0.3 mm long, and 7.5 divided by 0.3 is 25, so the drawing is &times;25. The answer is written with no units, because it is one length divided by another length of the same kind.", "ok": true, "why": "This one answers what was asked, shows both lengths and the division, and gets the units right: a magnification has none."}, {"text": "The row was drawn 60 mm long and a real cell is 0.3 mm long, and 60 divided by 0.3 is 200, so the drawing is &times;200. The answer is written with no units, because it is one length divided by another length of the same kind, so the two sets of millimetres cancel out.", "ok": false, "why": "The 60 mm is 8 cells, not one. Dividing a row of 8 by a single cell makes the drawing look 8 times bigger than it is. Divide 60 by 8 first."}, {"text": "One cell was drawn 7.5 mm long and a real cell is 0.3 mm long, and 7.5 minus 0.3 is 7.2, so the drawing is 7.2 mm larger than the cell it was drawn from. The magnification of the drawing is therefore 7.2 mm, worked out from the length drawn and the length of the real cell.", "ok": false, "why": "Magnification is how many times bigger, not how much bigger, so the two lengths are divided rather than subtracted. That is also why a magnification carries no units."}];
+  var OPTS = [{"text": "The row of 8 cells was drawn 60 mm long, so one cell was drawn 7.5 mm long. A real cell is 0.3 mm long, and 7.5 divided by 0.3 is 25, so the drawing is &times;25. The answer carries no units, and it does not tell you how much detail the drawing shows.", "ok": true, "why": "A conclusion, it answers what was asked, and both steps are there: the row divided down to one cell, then one cell divided by the real one. A magnification carries no units, and this says so."}, {"text": "The row was drawn 60 mm long and a real cell is 0.3 mm long, and 60 divided by 0.3 is 200, so the drawing is &times;200. The answer carries no units, because it is one length divided by another. It does not tell you how much detail the drawing shows.", "ok": false, "why": "The 60 mm is 8 cells, not one. Dividing a row of 8 by a single cell makes the drawing look 8 times bigger than it is, so divide the 60 mm by 8 before you go anywhere near the real cell."}, {"text": "One cell was drawn 7.5 mm long and a real cell is 0.3 mm long, and 7.5 minus 0.3 is 7.2. So the drawing is 7.2 mm larger than the real cell, and the magnification is 7.2 mm. It does not tell you how much detail the drawing shows, which is a different thing.", "ok": false, "why": "Magnification is how many times bigger, not how much bigger, so the two lengths are divided and not subtracted. That is also why a magnification carries no units &mdash; 7.2 mm could not be one."}];
   var LETTERS = "ABC";
   var box = document.getElementById("opts"), msg = document.getElementById("msg");
   var done = false;

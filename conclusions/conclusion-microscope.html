@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Write your conclusion</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+  margin-top:12px}
+.panel[hidden]{display:none}
+.panel h2{font-size:12.5px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.setup{font-size:13.5px;color:var(--muted);margin:0 0 8px}
+.model{font-size:15px;line-height:1.62;margin:0;padding:11px 13px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tag{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;
+  background:var(--bg);color:var(--muted)}
+.tag b{color:var(--accent);font-weight:650}
+.q{font-family:var(--serif,Georgia,serif);font-size:17px;margin:0 0 10px}
+textarea{width:100%;min-height:150px;font:inherit;font-size:15px;line-height:1.6;padding:11px;
+  border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  resize:vertical}
+textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.count{font-size:12.5px;color:var(--muted);margin-top:6px}
+.check{display:grid;gap:8px;margin-top:10px}
+.check label{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;
+  border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);
+  cursor:pointer}
+.check input{margin-top:3px;width:17px;height:17px;flex:0 0 auto;accent-color:var(--accent)}
+.check label.ticked{border-color:var(--good-line);background:var(--good-bg)}
+.selfmark{font-size:13px;color:var(--muted);margin-top:10px}
+.yours{white-space:pre-wrap;font-size:15px;line-height:1.62;margin:0;padding:11px 13px;
+  background:var(--bg);border:1px solid var(--line);border-radius:8px}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Write your conclusion</h1>
+<p class="sub">A conclusion says what the results show. It is not a summary of what you did.</p>
+
+<div class="panel">
+<h2>A worked example, from a different investigation</h2>
+<p class="setup">Seedlings were grown at five temperatures and their height measured after two weeks.</p>
+<p class="model">As the temperature rose from 10 &deg;C to 25 &deg;C the seedlings grew taller, from 4 cm at 10 &deg;C to 11 cm at 25 &deg;C. Above 25 &deg;C they grew less well, reaching only 6 cm at 30 &deg;C. So these seedlings grow tallest at about 25 &deg;C. The results do not show what happens above 30 &deg;C, because no higher temperature was tested.</p>
+<div class="tags"><span class="tag"><b>relationship</b> &mdash; taller as the temperature rose, then less well above 25 &deg;C</span><span class="tag"><b>figure</b> &mdash; 4 cm, 11 cm and 6 cm, quoted from the results</span><span class="tag"><b>limit</b> &mdash; nothing above 30 &deg;C was tested</span></div>
+</div>
+
+<div class="panel">
+<h2>Now write your own</h2>
+<p class="q">How much larger than the real cell is the drawing?</p>
+<label for="ans" class="setup">Use your own results. Three or four sentences is enough.</label>
+<textarea id="ans" placeholder="As the ... increased, the ..."></textarea>
+<p class="count" id="count">0 words</p>
+<div class="actions">
+  <button id="show" class="primary" type="button" disabled>Compare with the model answer</button>
+  <button id="clear" type="button">Clear</button>
+</div>
+</div>
+
+<div class="panel" id="rev" hidden>
+<h2>The model answer</h2>
+<p class="model">The row of 8 cells was drawn 60 mm long, so one cell was drawn 7.5 mm. A real cell is 0.3 mm long, so the magnification is &times;25. It is written with no units, because it is one length divided by another. This does not tell you the resolution of the microscope, which is a different thing and is set by the light.</p>
+<h2 style="margin-top:14px">Your own</h2>
+<p class="yours" id="mine"></p>
+<h2 style="margin-top:14px">Check yours against it</h2>
+<div class="check"><label id="lab-relationship"><input type="checkbox" id="ck-relationship"><span>Says what the results show &mdash; how the thing you changed affected the thing you measured.</span></label><label id="lab-figure"><input type="checkbox" id="ck-figure"><span>Backs it with a figure from your own results, not just a direction.</span></label><label id="lab-limit"><input type="checkbox" id="ck-limit"><span>Says what the results do <b>not</b> show, and why.</span></label></div>
+<p class="selfmark" id="tally">Nothing ticked yet. Be honest with this &mdash; nobody marks it
+but you, and the point is to see what a conclusion needs.</p>
+</div>
+
+<p class="msg" id="msg" role="status" aria-live="polite"></p>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "conclusion-microscope";
+  var KEYS = ["relationship", "figure", "limit"];
+  var ta = document.getElementById("ans"), show = document.getElementById("show");
+  var count = document.getElementById("count"), msg = document.getElementById("msg");
+  var STORE = "hsbio-conclusion-microscope";
+
+  function words(s) { return s.trim() ? s.trim().split(/\s+/).length : 0; }
+
+  function update() {
+    var n = words(ta.value);
+    count.textContent = n + (n === 1 ? " word" : " words");
+    show.disabled = n < 15;
+    if (n && n < 15) count.textContent += " \u2014 a little more before you compare";
+    try { localStorage.setItem(STORE, ta.value); } catch (e) {}
+  }
+  ta.addEventListener("input", update);
+
+  // a draft survives a reload; it never leaves this browser
+  try {
+    var saved = localStorage.getItem(STORE);
+    if (saved) { ta.value = saved; }
+  } catch (e) {}
+  update();
+
+  show.addEventListener("click", function () {
+    document.getElementById("mine").textContent = ta.value.trim();
+    document.getElementById("rev").hidden = false;
+    msg.textContent = "Read the model answer, then tick whichever of the three your own does.";
+    msg.className = "msg";
+    document.getElementById("rev").scrollIntoView({ block: "start", behavior: "smooth" });
+    reportHeight();
+  });
+
+  document.getElementById("clear").addEventListener("click", function () {
+    ta.value = ""; update(); ta.focus();
+    try { localStorage.removeItem(STORE); } catch (e) {}
+  });
+
+  var tally = document.getElementById("tally");
+  KEYS.forEach(function (k) {
+    var box = document.getElementById("ck-" + k), lab = document.getElementById("lab-" + k);
+    box.addEventListener("change", function () {
+      lab.classList.toggle("ticked", box.checked);
+      var n = 0;
+      KEYS.forEach(function (j) { if (document.getElementById("ck-" + j).checked) n++; });
+      tally.innerHTML = n === KEYS.length
+        ? "All three. That is what a conclusion needs: what the results show, a figure to back "
+          + "it, and an honest word about what they do not show."
+        : n + " of " + KEYS.length + " ticked. Look at the model again for the ones you left "
+          + "&mdash; the last is the one most people miss.";
+      reportHeight();
+    });
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

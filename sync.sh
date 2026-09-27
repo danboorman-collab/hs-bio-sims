@@ -13,4 +13,5 @@ cp "$SRC/Unit 2 Rebuild/sims/bio2-210_osmosis-collect.html"     "$HERE/osmosis-p
 cp "$SRC/Unit 2 Rebuild/sims/bio2-210_osmosis-plot.html"        "$HERE/osmosis-potato/plot-the-graph.html"
 cp "$SRC/Practicals/conclusions/"*.html                          "$HERE/conclusions/"
 cp "$SRC/Practicals/skills/"*.html                               "$HERE/skills/"
+cp "$SRC/Practicals/sims/"*.html                                  "$HERE/practicals/"
 echo "synced $(find "$HERE" -name '*.html' | wc -l | tr -d ' ') pages"

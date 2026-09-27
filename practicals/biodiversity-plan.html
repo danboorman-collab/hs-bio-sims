@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan the survey</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.dec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;
+  margin-top:12px}
+.dec h2{font-size:12px;margin:0 0 4px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.dec .q{font-size:15.5px;font-weight:600;margin:0 0 10px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:10px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:14.5px;line-height:1.5;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw{font-size:13.5px;line-height:1.5;margin:6px 0 0;padding:8px 11px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line)}
+.rw.good{border-color:var(--good-line);background:var(--good-bg)}
+.rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw b{font-weight:650}
+.score{margin-top:14px;font-weight:650}
+</style>
+</head>
+<body>
+<div class="sim">
+  <h1>Plan the survey</h1>
+  <p class="sub">Four decisions to make before either forest is walked. One check, then all four are explained.</p>
+  <div class="brief"><p><b>The problem.</b> Two forests are to be compared, so the only thing that may differ between the two surveys is the forest itself.</p><p>Anything else that changes &mdash; how many trees are counted, which way the route runs, who does the identifying &mdash; turns up in the figures as if it were a difference between the forests, and nothing in the table would say otherwise.</p></div>
+  <div class="dec" data-n="0"><h2>Decision 1 of 4</h2><p class="q">How many trees are counted in each forest?</p><div class="opts" id="opts0"></div></div><div class="dec" data-n="1"><h2>Decision 2 of 4</h2><p class="q">Which way does the route run?</p><div class="opts" id="opts1"></div></div><div class="dec" data-n="2"><h2>Decision 3 of 4</h2><p class="q">You reach a tree you cannot name. What now?</p><div class="opts" id="opts2"></div></div><div class="dec" data-n="3"><h2>Decision 4 of 4</h2><p class="q">Who does the identifying?</p><div class="opts" id="opts3"></div></div>
+  <div class="actions">
+    <button id="check" class="primary" type="button">Check the plan</button>
+    <button id="reset" type="button">Start again</button>
+  </div>
+  <p class="msg" id="msg" role="status" aria-live="polite">Make all four decisions, then
+    check.</p>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "practical_biodiversity-plan";
+  var Q = [[{"text": "The same number in both: 200 and 200", "ok": true, "why": "Two columns can only be set side by side if the same number went into each. It is also what makes the counts add to the same total, so the share taken by each species can be compared directly."}, {"text": "As many as there is time for in each", "ok": false, "why": "A forest with 200 trees counted and one with 50 would differ in the figures for that reason alone, whatever the forests are like."}, {"text": "Enough in each to find every species present", "ok": false, "why": "Stopping when the last new species turns up means stopping at a different point in each forest, so the two totals end up different again."}], [{"text": "The same pattern through both forests", "ok": true, "why": "The route decides which trees are met. The same pattern in both means the forest is the only thing that has changed."}, {"text": "Wherever the trees look most varied", "ok": false, "why": "Walking toward the variety finds variety. Both forests would come out looking more mixed than they are, and the one with more to find would gain most."}, {"text": "Straight to the middle of each forest and back", "ok": false, "why": "The middle of a forest is one part of it. A plantation and a mixed forest may differ most at their edges, and a there-and-back route never reaches them."}], [{"text": "Check it against the identification key before tallying it", "ok": true, "why": "A tally mark against the wrong species is worse than no tally mark, because nothing later in the survey can find it."}, {"text": "Put it down as whatever the tree beside it is", "ok": false, "why": "Trees of one species do grow together, so this is right often enough to feel safe. It is exactly the assumption that would hide a rare species."}, {"text": "Leave it out and carry on", "ok": false, "why": "Leaving out the ones that are hard to name loses the unusual trees first, and those are the ones a diversity survey is most interested in."}], [{"text": "One person, for both forests", "ok": true, "why": "Two people draw the line between similar species in slightly different places. One person draws it in the same place in both forests, so the difference that is left is the forest."}, {"text": "One person in each forest, so both can be done in a morning", "ok": false, "why": "Whatever the two disagree about turns up in the figures as a difference between the forests, and no one reading the table could tell."}, {"text": "Whoever is nearest, tree by tree", "ok": false, "why": "That mixes the disagreement through both columns instead of into one, which makes it harder to find rather than smaller."}]];
+  var LETTERS = "ABC";
+  var picked = Q.map(function () { return null; });
+  var locked = false;
+  var msg = document.getElementById("msg"), check = document.getElementById("check");
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? "msg " + kind : "msg"; }
+
+  function lay() {
+    Q.forEach(function (opts, n) {
+      var box = document.getElementById("opts" + n);
+      box.innerHTML = "";
+      var order = opts.map(function (_, i) { return i; });
+      for (var i = order.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1)), t = order[i];
+        order[i] = order[j]; order[j] = t;
+      }
+      order.forEach(function (idx, pos) {
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "opt"; b.dataset.n = n; b.dataset.i = idx;
+        b.setAttribute("aria-pressed", "false");
+        b.innerHTML = '<span class="ltr">' + LETTERS[pos] + '</span><span>'
+                    + opts[idx].text + '</span>';
+        box.appendChild(b);
+        var r = document.createElement("p");
+        r.className = "rw"; r.id = "rw" + n + "_" + idx; r.hidden = true;
+        box.appendChild(r);
+      });
+    });
+  }
+  lay();
+
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest(".opt");
+    if (!b || locked) return;
+    var n = +b.dataset.n;
+    Array.prototype.forEach.call(document.querySelectorAll('.opt[data-n="' + n + '"]'),
+      function (o) { o.setAttribute("aria-pressed", "false"); });
+    b.setAttribute("aria-pressed", "true");
+    picked[n] = +b.dataset.i;
+    var done = picked.filter(function (p) { return p !== null; }).length;
+    say(done + " of " + Q.length + " decided.");
+  });
+
+  check.addEventListener("click", function () {
+    if (locked) return;
+    if (picked.indexOf(null) !== -1) {
+      say("Every decision needs an answer before the plan can be checked.", "warn");
+      return;
+    }
+    locked = true;
+    var right = 0;
+    Q.forEach(function (opts, n) {
+      opts.forEach(function (o, idx) {
+        var b = document.querySelector('.opt[data-n="' + n + '"][data-i="' + idx + '"]');
+        b.disabled = true;
+        b.classList.add(o.ok ? "right" : "wrong");
+        var r = document.getElementById("rw" + n + "_" + idx);
+        r.hidden = false;
+        r.className = "rw " + (o.ok ? "good" : "bad");
+        var head = o.ok ? "This is the one." : "Not this one.";
+        if (idx === picked[n]) {
+          head = o.ok ? "You chose this, and it is the one." : "You chose this.";
+        }
+        r.innerHTML = "<b>" + head + "</b> " + o.why;
+      });
+      if (opts[picked[n]].ok) right++;
+    });
+    say(right + " of " + Q.length + " decisions right. Read the others as well \u2014 each "
+        + "wrong one is something people really do, and the reason it costs you is the point.",
+        right === Q.length ? "good" : null);
+    check.disabled = true;
+    reportHeight();
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    locked = false; picked = Q.map(function () { return null; });
+    check.disabled = false;
+    lay();
+    say("Make all four decisions, then check.");
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estimating a population with quadrats — questions</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.q h2{font-size:12px;margin:0 0 6px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.q .stem{margin:0 0 10px;font-weight:500}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;text-align:left;padding:9px 11px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.fb{margin-top:8px;font-size:13.5px;padding:8px 10px;border-radius:8px;display:none}
+.fb.on{display:block;background:var(--bg);border:1px solid var(--line)}
+.score{margin-top:14px;font-weight:650}
+</style>
+</head>
+<body>
+<div class="sim"><h1>Estimating a population with quadrats</h1><p class="sub">Eight questions on the survey and on what its figures show.</p><div class="q" data-qn="1"><h2>Question 1 of 8</h2><div class="stem"><p>A student is estimating how many plants of one species grow in a field, using ten quadrats. Why are the quadrats put down at coordinates taken from random numbers?</p></div><div class="opts"><button type="button" class="opt" data-q="1" data-o="a" data-ok="1"><span class="ltr">A</span><span>So that the squares stand in for the whole field rather than for the parts somebody chose to walk to.</span></button><button type="button" class="opt" data-q="1" data-o="b" data-ok="0"><span class="ltr">B</span><span>So that the squares are spread out evenly, with none of them overlapping another.</span></button><button type="button" class="opt" data-q="1" data-o="c" data-ok="0"><span class="ltr">C</span><span>So that nobody has to measure where each square goes, which saves time in the field.</span></button></div><div class="fb" id="fb1"></div></div><div class="q" data-qn="2"><h2>Question 2 of 8</h2><div class="stem"><p>A pair of random numbers lands a quadrat on a patch of bare ground with none of the chosen species in it. What should the student record?</p></div><div class="opts"><button type="button" class="opt" data-q="2" data-o="a" data-ok="1"><span class="ltr">A</span><span>Zero, and move on to the next pair of numbers.</span></button><button type="button" class="opt" data-q="2" data-o="b" data-ok="0"><span class="ltr">B</span><span>Nothing, and draw another pair to replace it.</span></button><button type="button" class="opt" data-q="2" data-o="c" data-ok="0"><span class="ltr">C</span><span>The count from the nearest patch of the species, since that is what the square was meant to find.</span></button></div><div class="fb" id="fb2"></div></div><div class="q" data-qn="3"><h2>Question 3 of 8</h2><div class="stem"><p>Ten quadrats in a field give counts of 6, 4, 7, 5, 6, 3, 7, 5, 8 and 9 plants. What is the mean number of plants per quadrat?</p></div><div class="opts"><button type="button" class="opt" data-q="3" data-o="a" data-ok="1"><span class="ltr">A</span><span>6, from 60 plants shared between 10 quadrats.</span></button><button type="button" class="opt" data-q="3" data-o="b" data-ok="0"><span class="ltr">B</span><span>60, which is the number of plants that were counted altogether.</span></button><button type="button" class="opt" data-q="3" data-o="c" data-ok="0"><span class="ltr">C</span><span>5.5, halfway between the smallest count of 3 and the largest of 9.</span></button></div><div class="fb" id="fb3"></div></div><div class="q" data-qn="4"><h2>Question 4 of 8</h2><div class="stem"><p>Each quadrat in a field survey is a square of side 0.5 m, and the field measures 800 m&sup2;. How many quadrat areas fit into the field?</p></div><div class="opts"><button type="button" class="opt" data-q="4" data-o="a" data-ok="1"><span class="ltr">A</span><span>3,200, because a quadrat covers 0.25 m&sup2;.</span></button><button type="button" class="opt" data-q="4" data-o="b" data-ok="0"><span class="ltr">B</span><span>1,600, because a quadrat covers 0.5 m&sup2;.</span></button><button type="button" class="opt" data-q="4" data-o="c" data-ok="0"><span class="ltr">C</span><span>800, because there are 800 square meters and one quadrat to each.</span></button></div><div class="fb" id="fb4"></div></div><div class="q" data-qn="5"><h2>Question 5 of 8</h2><div class="stem"><p>Ten quadrats give a mean of 6 plants each, 3,200 quadrat areas fit into the field, and the student writes down 19,200 plants. How should that figure be described?</p></div><div class="opts"><button type="button" class="opt" data-q="5" data-o="a" data-ok="1"><span class="ltr">A</span><span>As an estimate, worked out from a sample of the field.</span></button><button type="button" class="opt" data-q="5" data-o="b" data-ok="0"><span class="ltr">B</span><span>As the number of plants in the field, since it came from counting them.</span></button><button type="button" class="opt" data-q="5" data-o="c" data-ok="0"><span class="ltr">C</span><span>As the largest number of plants the field could hold.</span></button></div><div class="fb" id="fb5"></div></div><div class="q" data-qn="6"><h2>Question 6 of 8</h2><div class="stem"><p>A student puts all ten quadrats in the greenest part of a field, where the plants grow most thickly. Which way does the estimate go, and why?</p></div><div class="opts"><button type="button" class="opt" data-q="6" data-o="a" data-ok="1"><span class="ltr">A</span><span>Too high, because the sample holds more plants per square than the field does.</span></button><button type="button" class="opt" data-q="6" data-o="b" data-ok="0"><span class="ltr">B</span><span>Too low, because the thickest patch leaves the rest of the field out of the sample.</span></button><button type="button" class="opt" data-q="6" data-o="c" data-ok="0"><span class="ltr">C</span><span>It stays about right, because the mean of ten squares is reliable however they were placed.</span></button></div><div class="fb" id="fb6"></div></div><div class="q" data-qn="7"><h2>Question 7 of 8</h2><div class="stem"><p>A student suggests using two quadrats instead of ten, since two counts still give a mean. What does the field lose by it?</p></div><div class="opts"><button type="button" class="opt" data-q="7" data-o="a" data-ok="1"><span class="ltr">A</span><span>One unusual square moves a mean of two by far more than it moves a mean of ten.</span></button><button type="button" class="opt" data-q="7" data-o="b" data-ok="0"><span class="ltr">B</span><span>Two quadrats cannot be placed at random, because two pairs of numbers is not enough.</span></button><button type="button" class="opt" data-q="7" data-o="c" data-ok="0"><span class="ltr">C</span><span>Two quadrats give a mean that is too small to scale up to a field of 800 m&sup2;.</span></button></div><div class="fb" id="fb7"></div></div><div class="q" data-qn="8"><h2>Question 8 of 8</h2><div class="stem"><p>Two students survey the same field. One counts every plant inside the frame, the other counts only the chosen species. Whose estimate answers the question the survey asked, and why?</p></div><div class="opts"><button type="button" class="opt" data-q="8" data-o="a" data-ok="1"><span class="ltr">A</span><span>The one who counted the chosen species, because the question asks how many plants of that species the field holds.</span></button><button type="button" class="opt" data-q="8" data-o="b" data-ok="0"><span class="ltr">B</span><span>The one who counted everything, because a fuller count is always the safer record.</span></button><button type="button" class="opt" data-q="8" data-o="c" data-ok="0"><span class="ltr">C</span><span>Both, since the two figures can be scaled up in the same way afterward.</span></button></div><div class="fb" id="fb8"></div></div><p class="score" id="score" role="status" aria-live="polite"></p><div class="actions"><button id="reset" type="button">Start again</button></div></div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "practical_population-questions";
+  var EXPL = {"1": "Anyone choosing where to put a frame will tend to put it where there is something to count. Letting the numbers choose is what stops the sample being better than the field it came from.", "2": "Bare ground is part of the field, and a field with bare patches really does hold fewer plants. Every empty square thrown away lifts the estimate above the truth.", "3": "A mean is the total divided by how many readings there were. The ten counts add to 60, and 60 divided by 10 is 6 plants per quadrat.", "4": "A square of side 0.5 m covers 0.5 &times; 0.5, which is 0.25 m&sup2;. The field is 800 m&sup2;, and 800 divided by 0.25 is 3,200.", "5": "Ten squares out of 3,200 were counted. Scaling up gives the best figure available from that sample, and calling it a count would claim a great deal more than was done.", "6": "The scaling up treats every part of the field as being like the squares that were counted. Squares from the thickest patch make the whole field look like the thickest patch, so the answer comes out above the truth.", "7": "Both means are real means. The difference is how far one odd reading can drag them: with two readings it moves the mean by half its own difference, with ten by a tenth.", "8": "The two students measured different things. Counting everything gives the number of plants of all kinds, which is a fine figure and not the one that was asked for."}, ERR = {"1": {"a": "", "b": "random pairs can land close together, and often do", "c": "the coordinates have to be measured out either way"}, "2": {"a": "", "b": "replacing the empty squares keeps only the full ones", "c": "that is choosing where to count, which the numbers exist to stop"}, "3": {"a": "", "b": "gives the total rather than the mean", "c": "that is the middle of the range, which is a different figure"}, "4": {"a": "", "b": "uses the length of the side where the area belongs", "c": "treats the quadrat as covering a whole square meter"}, "5": {"a": "", "b": "only the plants inside ten squares were counted", "c": "nothing in the method looks for a maximum"}, "6": {"a": "", "b": "gets the direction the wrong way round", "c": "ten squares are only as good as where they were put"}, "7": {"a": "", "b": "a pair of numbers is a pair of numbers however many are drawn", "c": "the scaling works from any mean at all"}, "8": {"a": "", "b": "a fuller count of the wrong thing does not answer the question", "c": "the scaling is the same, but the two figures mean different things"}}, TOTAL = 8;
+  var done = {}, right = 0;
+  var score = document.getElementById("score");
+
+  // The JSON keeps every key at option a, because TimeBack randomises. This page does not, so
+  // without a shuffle here the key sits at A in all eight and is spotted by question three.
+  Array.prototype.forEach.call(document.querySelectorAll(".opts"), function (box) {
+    var kids = Array.prototype.slice.call(box.children);
+    for (var i = kids.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = kids[i];
+      kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k, n) {
+      box.appendChild(k);
+      k.querySelector(".ltr").textContent = "ABCD"[n];
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".opt"), function (b) {
+    b.addEventListener("click", function () {
+      var qn = b.dataset.q;
+      if (done[qn]) return;
+      done[qn] = true;
+      var ok = b.dataset.ok === "1";
+      if (ok) right++;
+      var q = document.querySelector('.q[data-qn="' + qn + '"]');
+      Array.prototype.forEach.call(q.querySelectorAll(".opt"), function (o) {
+        o.disabled = true;
+        if (o.dataset.ok === "1") o.classList.add("right");
+      });
+      if (!ok) b.classList.add("wrong");
+      var fb = document.getElementById("fb" + qn);
+      fb.className = "fb on";
+      fb.innerHTML = (ok ? "" : "<b>That one " + ERR[qn][b.dataset.o] + ".</b> ") + EXPL[qn];
+      var n = Object.keys(done).length;
+      score.textContent = n + " of " + TOTAL + " answered, " + right + " right.";
+      reportHeight();
+    });
+  });
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

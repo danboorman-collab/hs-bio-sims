@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan the survey</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.dec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;
+  margin-top:12px}
+.dec h2{font-size:12px;margin:0 0 4px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.dec .q{font-size:15.5px;font-weight:600;margin:0 0 10px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:10px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:14.5px;line-height:1.5;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw{font-size:13.5px;line-height:1.5;margin:6px 0 0;padding:8px 11px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line)}
+.rw.good{border-color:var(--good-line);background:var(--good-bg)}
+.rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw b{font-weight:650}
+.score{margin-top:14px;font-weight:650}
+</style>
+</head>
+<body>
+<div class="sim">
+  <h1>Plan the survey</h1>
+  <p class="sub">Four decisions to make before anyone walks into the field. One check, then all four are explained.</p>
+  <div class="brief"><p><b>The problem.</b> The field holds far more plants of this species than anyone could count one at a time. So a sample is counted instead: a few small squares of known area, scaled up to the whole field.</p><p>That only works if the squares stand in fairly for the field. Every decision below is about whether they do.</p></div>
+  <div class="dec" data-n="0"><h2>Decision 1 of 4</h2><p class="q">Where does each quadrat go?</p><div class="opts" id="opts0"></div></div><div class="dec" data-n="1"><h2>Decision 2 of 4</h2><p class="q">A pair of numbers lands the quadrat on bare ground. What now?</p><div class="opts" id="opts1"></div></div><div class="dec" data-n="2"><h2>Decision 3 of 4</h2><p class="q">Which plants inside the frame get counted?</p><div class="opts" id="opts2"></div></div><div class="dec" data-n="3"><h2>Decision 4 of 4</h2><p class="q">How many quadrats, and where?</p><div class="opts" id="opts3"></div></div>
+  <div class="actions">
+    <button id="check" class="primary" type="button">Check the plan</button>
+    <button id="reset" type="button">Start again</button>
+  </div>
+  <p class="msg" id="msg" role="status" aria-live="polite">Make all four decisions, then
+    check.</p>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "practical_population-plan";
+  var Q = [[{"text": "At the coordinates a pair of random numbers gives", "ok": true, "why": "The numbers choose, not the person holding the frame. That is the only way the squares stand in for the whole field rather than for the bits someone liked the look of."}, {"text": "Where the plants are growing well, so there is something to count", "ok": false, "why": "Every square would then hold more than its share, and the estimate would come out far above the real number."}, {"text": "Spread out evenly along one edge of the field", "ok": false, "why": "One edge is one strip of ground. If it is damper or shadier than the rest, every square carries that, and nothing in the survey would show it."}], [{"text": "Count it, and write down zero", "ok": true, "why": "Bare ground is part of the field, and leaving it out would quietly raise every figure that follows. A zero is a reading like any other."}, {"text": "Move the frame to the nearest patch of plants", "ok": false, "why": "That is choosing where to count, which is the one thing the random numbers exist to stop."}, {"text": "Throw that pair out and draw another", "ok": false, "why": "Discarding the empty squares keeps only the full ones, and the estimate climbs with every pair thrown away."}], [{"text": "One species, the same one in every quadrat", "ok": true, "why": "The question asks how many plants of one species the field holds, so one species is what is counted. Other plants inside the frame are left alone."}, {"text": "Every plant inside the frame", "ok": false, "why": "That gives a figure for all the plants together, which is not the number the investigation set out to find."}, {"text": "The plants of that species that are big enough to see easily", "ok": false, "why": "The small ones are plants too. Leaving them out would lower every count, and by an amount nobody could work out afterwards."}], [{"text": "Ten, at ten random pairs across the whole field", "ok": true, "why": "Ten readings spread over the whole field, so one odd square pulls the mean less and no one part of the field decides the answer."}, {"text": "Two, which is quicker and gives the same mean", "ok": false, "why": "Two readings give a mean, but one unusual square moves it by half its own value. Ten readings move far less on one odd square."}, {"text": "Ten, all within a few steps of each other", "ok": false, "why": "Ten squares in one corner describe that corner. The rest of the field is not in the sample at all."}]];
+  var LETTERS = "ABC";
+  var picked = Q.map(function () { return null; });
+  var locked = false;
+  var msg = document.getElementById("msg"), check = document.getElementById("check");
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? "msg " + kind : "msg"; }
+
+  function lay() {
+    Q.forEach(function (opts, n) {
+      var box = document.getElementById("opts" + n);
+      box.innerHTML = "";
+      var order = opts.map(function (_, i) { return i; });
+      for (var i = order.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1)), t = order[i];
+        order[i] = order[j]; order[j] = t;
+      }
+      order.forEach(function (idx, pos) {
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "opt"; b.dataset.n = n; b.dataset.i = idx;
+        b.setAttribute("aria-pressed", "false");
+        b.innerHTML = '<span class="ltr">' + LETTERS[pos] + '</span><span>'
+                    + opts[idx].text + '</span>';
+        box.appendChild(b);
+        var r = document.createElement("p");
+        r.className = "rw"; r.id = "rw" + n + "_" + idx; r.hidden = true;
+        box.appendChild(r);
+      });
+    });
+  }
+  lay();
+
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest(".opt");
+    if (!b || locked) return;
+    var n = +b.dataset.n;
+    Array.prototype.forEach.call(document.querySelectorAll('.opt[data-n="' + n + '"]'),
+      function (o) { o.setAttribute("aria-pressed", "false"); });
+    b.setAttribute("aria-pressed", "true");
+    picked[n] = +b.dataset.i;
+    var done = picked.filter(function (p) { return p !== null; }).length;
+    say(done + " of " + Q.length + " decided.");
+  });
+
+  check.addEventListener("click", function () {
+    if (locked) return;
+    if (picked.indexOf(null) !== -1) {
+      say("Every decision needs an answer before the plan can be checked.", "warn");
+      return;
+    }
+    locked = true;
+    var right = 0;
+    Q.forEach(function (opts, n) {
+      opts.forEach(function (o, idx) {
+        var b = document.querySelector('.opt[data-n="' + n + '"][data-i="' + idx + '"]');
+        b.disabled = true;
+        b.classList.add(o.ok ? "right" : "wrong");
+        var r = document.getElementById("rw" + n + "_" + idx);
+        r.hidden = false;
+        r.className = "rw " + (o.ok ? "good" : "bad");
+        var head = o.ok ? "This is the one." : "Not this one.";
+        if (idx === picked[n]) {
+          head = o.ok ? "You chose this, and it is the one." : "You chose this.";
+        }
+        r.innerHTML = "<b>" + head + "</b> " + o.why;
+      });
+      if (opts[picked[n]].ok) right++;
+    });
+    say(right + " of " + Q.length + " decisions right. Read the others as well \u2014 each "
+        + "wrong one is something people really do, and the reason it costs you is the point.",
+        right === Q.length ? "good" : null);
+    check.disabled = true;
+    reportHeight();
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    locked = false; picked = Q.map(function () { return null; });
+    check.disabled = false;
+    lay();
+    say("Make all four decisions, then check.");
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

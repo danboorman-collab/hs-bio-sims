@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Comparing two forests — questions</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.q h2{font-size:12px;margin:0 0 6px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.q .stem{margin:0 0 10px;font-weight:500}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;text-align:left;padding:9px 11px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.fb{margin-top:8px;font-size:13.5px;padding:8px 10px;border-radius:8px;display:none}
+.fb.on{display:block;background:var(--bg);border:1px solid var(--line)}
+.score{margin-top:14px;font-weight:650}
+</style>
+</head>
+<body>
+<div class="sim"><h1>Comparing two forests</h1><p class="sub">Eight questions on the survey and on what its figures show.</p><div class="q" data-qn="1"><h2>Question 1 of 8</h2><div class="stem"><p>Two forests are being compared for biodiversity, and 200 trees are counted in each one. Why is the same number counted in both?</p></div><div class="opts"><button type="button" class="opt" data-q="1" data-o="a" data-ok="1"><span class="ltr">A</span><span>So that the two sets of figures can be set beside each other, with the forest as the only difference between them.</span></button><button type="button" class="opt" data-q="1" data-o="b" data-ok="0"><span class="ltr">B</span><span>So that neither survey takes longer than the other one does.</span></button><button type="button" class="opt" data-q="1" data-o="c" data-ok="0"><span class="ltr">C</span><span>So that every species in each forest is certain to turn up in the count.</span></button></div><div class="fb" id="fb1"></div></div><div class="q" data-qn="2"><h2>Question 2 of 8</h2><div class="stem"><p>A forest survey records 200 trees belonging to 5 species. What is the species richness of that forest?</p></div><div class="opts"><button type="button" class="opt" data-q="2" data-o="a" data-ok="1"><span class="ltr">A</span><span>5, the number of different species found.</span></button><button type="button" class="opt" data-q="2" data-o="b" data-ok="0"><span class="ltr">B</span><span>200, the number of trees found.</span></button><button type="button" class="opt" data-q="2" data-o="c" data-ok="0"><span class="ltr">C</span><span>40, the number of trees there would be of each species if they were shared evenly.</span></button></div><div class="fb" id="fb2"></div></div><div class="q" data-qn="3"><h2>Question 3 of 8</h2><div class="stem"><p>A mixed forest holds 41, 39, 38, 42 and 40 trees of its 5 species. A plantation holds 196, 1, 1, 1 and 1. What does evenness tell you that species richness does not?</p></div><div class="opts"><button type="button" class="opt" data-q="3" data-o="a" data-ok="1"><span class="ltr">A</span><span>How the 200 trees are shared out between the species that are there.</span></button><button type="button" class="opt" data-q="3" data-o="b" data-ok="0"><span class="ltr">B</span><span>How many species are present in each of the two forests.</span></button><button type="button" class="opt" data-q="3" data-o="c" data-ok="0"><span class="ltr">C</span><span>Which of the two forests holds the rarer species.</span></button></div><div class="fb" id="fb3"></div></div><div class="q" data-qn="4"><h2>Question 4 of 8</h2><div class="stem"><p>A mixed forest and a plantation each hold 200 trees of 5 species. In the mixed forest the counts run from 38 to 42; in the plantation one species has 196. Which is the more biodiverse, and why?</p></div><div class="opts"><button type="button" class="opt" data-q="4" data-o="a" data-ok="1"><span class="ltr">A</span><span>The mixed forest, because its trees are shared far more evenly between the same five species.</span></button><button type="button" class="opt" data-q="4" data-o="b" data-ok="0"><span class="ltr">B</span><span>The plantation, because one species is doing well enough there to reach 196 trees.</span></button><button type="button" class="opt" data-q="4" data-o="c" data-ok="0"><span class="ltr">C</span><span>Neither, because the two forests hold the same number of species and the same number of trees.</span></button></div><div class="fb" id="fb4"></div></div><div class="q" data-qn="5"><h2>Question 5 of 8</h2><div class="stem"><p>A survey counts and identifies 200 trees in each of two forests and nothing else. Which of these can the survey not say?</p></div><div class="opts"><button type="button" class="opt" data-q="5" data-o="a" data-ok="1"><span class="ltr">A</span><span>Which of the two forests is the healthier.</span></button><button type="button" class="opt" data-q="5" data-o="b" data-ok="0"><span class="ltr">B</span><span>Which forest has its trees shared more evenly between its species.</span></button><button type="button" class="opt" data-q="5" data-o="c" data-ok="0"><span class="ltr">C</span><span>How many species were found in each forest.</span></button></div><div class="fb" id="fb5"></div></div><div class="q" data-qn="6"><h2>Question 6 of 8</h2><div class="stem"><p>During a forest survey a student meets a tree they cannot name. What should they do with it?</p></div><div class="opts"><button type="button" class="opt" data-q="6" data-o="a" data-ok="1"><span class="ltr">A</span><span>Check it against the identification key before adding a tally mark.</span></button><button type="button" class="opt" data-q="6" data-o="b" data-ok="0"><span class="ltr">B</span><span>Tally it as whatever the tree next to it is, since trees of a kind grow together.</span></button><button type="button" class="opt" data-q="6" data-o="c" data-ok="0"><span class="ltr">C</span><span>Leave it out of the survey and carry on to the next tree.</span></button></div><div class="fb" id="fb6"></div></div><div class="q" data-qn="7"><h2>Question 7 of 8</h2><div class="stem"><p>Two forests are surveyed on the same day using the same identification key. Why does it matter that the key is the same one?</p></div><div class="opts"><button type="button" class="opt" data-q="7" data-o="a" data-ok="1"><span class="ltr">A</span><span>Two keys can draw the line between similar species in different places, and that difference would show up as a difference between the forests.</span></button><button type="button" class="opt" data-q="7" data-o="b" data-ok="0"><span class="ltr">B</span><span>A second key might not include every species that grows in both forests.</span></button><button type="button" class="opt" data-q="7" data-o="c" data-ok="0"><span class="ltr">C</span><span>Using one key means the survey can be finished more quickly.</span></button></div><div class="fb" id="fb7"></div></div><div class="q" data-qn="8"><h2>Question 8 of 8</h2><div class="stem"><p>In a plantation, four of the five species have just one tree each out of 200. A student says the plantation therefore has a species richness of 1. Why is that wrong?</p></div><div class="opts"><button type="button" class="opt" data-q="8" data-o="a" data-ok="1"><span class="ltr">A</span><span>Richness counts the species that are present, and a species with one tree is present.</span></button><button type="button" class="opt" data-q="8" data-o="b" data-ok="0"><span class="ltr">B</span><span>Richness counts the species that are present, and four species with one tree each make a richness of 4.</span></button><button type="button" class="opt" data-q="8" data-o="c" data-ok="0"><span class="ltr">C</span><span>Richness is worked out from the number of trees, so with 200 trees it cannot be 1.</span></button></div><div class="fb" id="fb8"></div></div><p class="score" id="score" role="status" aria-live="polite"></p><div class="actions"><button id="reset" type="button">Start again</button></div></div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "practical_biodiversity-questions";
+  var EXPL = {"1": "If 200 trees were counted in one forest and 50 in the other, the first would show more of everything for that reason alone. Equal totals leave the forest as the one thing that differs.", "2": "Species richness is a plain count of how many different species are present. How many trees each one has is a separate matter, and it is the evenness.", "3": "Both forests have a richness of 5, so richness cannot separate them. Evenness can: one forest shares its trees almost equally, and in the other a single species holds 196 of the 200.", "4": "Biodiversity takes in both how many species there are and how the individuals are shared between them. The richness is tied, so the evenness decides, and the mixed forest is far the more even.", "5": "Health would need something measured about the trees themselves &mdash; growth, disease, the soil they stand in. This survey counted trees and named them, so what it can speak about is how many and how shared.", "6": "A tally mark against the wrong species cannot be found afterward by anyone reading the table. The key exists for exactly this moment, and using it costs a minute.", "7": "Everything that differs between the two surveys arrives in the figures looking like a difference between the forests. One key means one dividing line between species, applied the same way in both.", "8": "A single tree is still a tree of that species, so all five count and the richness is 5. What the four lone trees do change is the evenness, and that is where the difference between the two forests lives."}, ERR = {"1": {"a": "", "b": "the time taken is not what the comparison rests on", "c": "counting 200 trees gives no such guarantee in either forest"}, "2": {"a": "", "b": "counts individuals where species are wanted", "c": "that is a share, not a count of species"}, "3": {"a": "", "b": "that is the richness, and it is 5 in both", "c": "the survey names the species but does not say which are rare"}, "4": {"a": "", "b": "one species doing well is the opposite of a diverse forest", "c": "richness is only half of what biodiversity means"}, "5": {"a": "", "b": "the counts show exactly that", "c": "the identifications give the richness directly"}, "6": {"a": "", "b": "often true, which is why it hides a rare species so well", "c": "loses the unusual trees first, and those matter most here"}, "7": {"a": "", "b": "a missing species is a different fault from an inconsistent one", "c": "speed is not what the comparison depends on"}, "8": {"a": "", "b": "leaves out the species with 196 trees", "c": "richness is not worked out from the number of trees at all"}}, TOTAL = 8;
+  var done = {}, right = 0;
+  var score = document.getElementById("score");
+
+  // The JSON keeps every key at option a, because TimeBack randomises. This page does not, so
+  // without a shuffle here the key sits at A in all eight and is spotted by question three.
+  Array.prototype.forEach.call(document.querySelectorAll(".opts"), function (box) {
+    var kids = Array.prototype.slice.call(box.children);
+    for (var i = kids.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = kids[i];
+      kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k, n) {
+      box.appendChild(k);
+      k.querySelector(".ltr").textContent = "ABCD"[n];
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".opt"), function (b) {
+    b.addEventListener("click", function () {
+      var qn = b.dataset.q;
+      if (done[qn]) return;
+      done[qn] = true;
+      var ok = b.dataset.ok === "1";
+      if (ok) right++;
+      var q = document.querySelector('.q[data-qn="' + qn + '"]');
+      Array.prototype.forEach.call(q.querySelectorAll(".opt"), function (o) {
+        o.disabled = true;
+        if (o.dataset.ok === "1") o.classList.add("right");
+      });
+      if (!ok) b.classList.add("wrong");
+      var fb = document.getElementById("fb" + qn);
+      fb.className = "fb on";
+      fb.innerHTML = (ok ? "" : "<b>That one " + ERR[qn][b.dataset.o] + ".</b> ") + EXPL[qn];
+      var n = Object.keys(done).length;
+      score.textContent = n + " of " + TOTAL + " answered, " + right + " right.";
+      reportHeight();
+    });
+  });
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

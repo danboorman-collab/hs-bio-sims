@@ -78,6 +78,22 @@ h1{font-size:17px;margin:0 0 2px}
   var done = {}, right = 0;
   var score = document.getElementById("score");
 
+  // The atom JSON keeps every key at option a, because TimeBack randomises the order it serves
+  // them in. THIS PAGE DOES NOT -- it renders them as written, so without a shuffle here the
+  // key sits at A in all eight items and a student spots it by question three. Shuffle on load,
+  // and relabel, so the letters still read A, B, C, D down the list.
+  Array.prototype.forEach.call(document.querySelectorAll(".opts"), function (box) {
+    var kids = Array.prototype.slice.call(box.children);
+    for (var i = kids.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = kids[i];
+      kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k, n) {
+      box.appendChild(k);
+      k.querySelector(".ltr").textContent = "ABCD"[n];
+    });
+  });
+
   Array.prototype.forEach.call(document.querySelectorAll(".opt"), function (b) {
     b.addEventListener("click", function () {
       var qn = b.dataset.q;

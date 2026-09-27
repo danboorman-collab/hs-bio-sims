@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Onion cells under the microscope</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,340px);gap:12px;
+  align-items:stretch;margin-bottom:2px}
+@media (max-width:700px){.bench{grid-template-columns:1fr}}
+.results{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;display:flex;flex-direction:column;justify-content:center}
+.stage{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stage svg{flex:0 0 auto;max-width:100%;height:auto}
+.readouts{flex:1 1 140px;min-width:138px;display:grid;gap:6px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+    border-bottom:1px dotted var(--line);padding-bottom:4px}
+.ro>span{color:var(--muted);font-size:12px}
+.ro b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:650}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:12px 0 0;padding:10px 12px 12px}
+legend{font-size:12px;font-weight:650;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em;padding:0 5px}
+.hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+.picks{display:flex;gap:6px;flex-wrap:wrap}
+.picks button{flex:1 1 56px;padding:9px 4px;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg);border-radius:8px;font:inherit;font-variant-numeric:tabular-nums;
+  cursor:pointer}
+.picks button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);
+  border-color:var(--accent);font-weight:650}
+.picks button:disabled{opacity:.5;cursor:not-allowed}
+.picks button .done{display:block;font-size:10px;color:var(--muted);line-height:1.2}
+.picks button[aria-pressed="true"] .done{color:var(--accent-fg);opacity:.85}
+.fixedgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.fixed{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed b{font-size:15px;font-weight:650;color:var(--fg);padding:5px 0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:8px}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+th[scope="row"]{text-align:left}
+td.empty{color:var(--muted)}
+tr.active th[scope="row"]{color:var(--accent);font-weight:700}
+</style>
+</head>
+<body>
+<div class="sim">
+  <h1>Onion cells under the microscope</h1>
+  <p class="sub">Count the cells across the field of view, then measure the row you drew. Those
+    two numbers are what the magnification is worked out from.</p>
+
+  <div class="bench">
+    <div class="stage">
+<svg viewBox="0 0 240 240" width="232" role="img" aria-label="The view down the microscope: a
+     row of 8 onion epidermis cells lying end to end, each with a stained nucleus.">
+  <defs><clipPath id="fov"><circle cx="120" cy="120" r="104"/></clipPath></defs>
+  <circle cx="120" cy="120" r="104" fill="var(--lens)"/>
+  <g clip-path="url(#fov)">
+    <rect x="0" y="0" width="240" height="240" fill="var(--lens)"/>
+    <g transform="translate(-10,0)"><rect x="18" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="32" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="45" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="58" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="70" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="84" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="97" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="110" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="122" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="136" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="149" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="162" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="174" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="188" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="201" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="214" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/></g>
+    <g transform="translate(-10,-58)" opacity="0.5"><rect x="18" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="32" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="45" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="58" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="70" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="84" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="97" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="110" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="122" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="136" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="149" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="162" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="174" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="188" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="201" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="214" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/></g>
+    <g transform="translate(-10,58)" opacity="0.5"><rect x="18" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="32" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="45" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="58" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="70" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="84" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="97" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="110" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="122" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="136" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="149" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="162" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="174" y="72" width="27" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="188" cy="92" r="5.4" fill="var(--warn)" opacity="0.55"/><rect x="201" y="72" width="25" height="56" rx="4" fill="var(--agar)" stroke="var(--potatoline)" stroke-width="1.8"/><circle cx="214" cy="100" r="5.4" fill="var(--warn)" opacity="0.55"/></g>
+  </g>
+  <circle cx="120" cy="120" r="104" fill="none" stroke="var(--ink)" stroke-width="4"/>
+  <circle cx="120" cy="120" r="108" fill="none" stroke="var(--metal)" stroke-width="5"/>
+</svg>
+      <div class="readouts">
+        <div class="ro"><span>Objective lens</span><b>&times;10</b></div>
+        <div class="ro"><span>Cells counted</span><b id="roN">0</b></div>
+        <div class="ro"><span>Row as drawn</span><b><span id="roL">&mdash;</span> mm</b></div>
+      </div>
+    </div>
+    <div class="results">
+      <table>
+        <caption>What the drawing and the ruler give you.</caption>
+        <tbody>
+          <tr><th scope="row">Cells in the row</th><td class="empty" id="tN">&mdash;</td></tr>
+          <tr><th scope="row">Row as drawn</th><td class="empty" id="tL">&mdash;</td></tr>
+          <tr><th scope="row">One cell as drawn</th><td class="empty" id="tC">&mdash;</td></tr>
+          <tr><th scope="row">A real cell</th><td>0.3 mm</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>Step 1 &mdash; count the cells in the row</legend>
+    <p class="hint">Count along the middle row, from the wall at one end to the wall at the
+      other. Cells cut off by the edge of the field of view are not counted.</p>
+    <div class="picks" id="counter" role="group" aria-label="Number of cells counted">
+      <button type="button" id="less">&minus;</button>
+      <button type="button" aria-pressed="true" id="val" disabled>0</button>
+      <button type="button" id="more">+</button>
+      <button type="button" class="primary" id="lockN">Record the count</button>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Step 2 &mdash; measure the row you drew</legend>
+    <p class="hint">The row is drawn on the page below with a ruler under it. Click the mark on
+      the ruler that the end of the row reaches.</p>
+    
+<svg viewBox="0 0 380 180" width="360" id="page" role="img" aria-label="The row of 8 cells
+     drawn on the page, with a ruler beneath it marked in millimeters.">
+  <rect x="8" y="8" width="364" height="164" rx="8" fill="var(--bg)" stroke="var(--line)"
+        stroke-width="1.6"/>
+  <g><rect x="30.0" y="44" width="30.0" height="46" rx="3" fill="none" stroke="var(--ink)" stroke-width="1.8"/><rect x="60.0" y="44" width="30.0" height="46" rx="3" fill="none" stroke="var(--ink)" stroke-width="1.8"/><rect x="90.0" y="44" width="30.0" height="46" rx="3" fill="none" stroke="var(--ink)" stroke-width="1.8"/><rect x="120.0" y="44" width="30.0" height="46" rx="3" fill="none" stroke="var(--ink)" stroke-width="1.8"/><rect x="150.0" y="44" width="30.0" height="46" rx="3" fill="none" stroke="var(--ink)" stroke-width="1.8"/><rect x="180.0" y="44" width="30.0" height="46" rx="3" fill="none" stroke="var(--ink)" stroke-width="1.8"/><rect x="210.0" y="44" width="30.0" height="46" rx="3" fill="none" stroke="var(--ink)" stroke-width="1.8"/><rect x="240.0" y="44" width="30.0" height="46" rx="3" fill="none" stroke="var(--ink)" stroke-width="1.8"/></g>
+  <line x1="30" y1="104" x2="270" y2="104" stroke="var(--accent)"
+        stroke-width="2" stroke-dasharray="4 3" id="span" opacity="0"/>
+  <line x1="30" y1="150" x2="356" y2="150" stroke="var(--ink)" stroke-width="2"/>
+  <text x="30.0" y="132" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="system-ui, sans-serif">0</text><text x="70.0" y="132" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="system-ui, sans-serif">10</text><text x="110.0" y="132" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="system-ui, sans-serif">20</text><text x="150.0" y="132" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="system-ui, sans-serif">30</text><text x="190.0" y="132" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="system-ui, sans-serif">40</text><text x="230.0" y="132" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="system-ui, sans-serif">50</text><text x="270.0" y="132" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="system-ui, sans-serif">60</text><text x="310.0" y="132" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="system-ui, sans-serif">70</text><text x="350.0" y="132" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="system-ui, sans-serif">80</text><line x1="30.0" y1="150" x2="30.0" y2="136" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="0" x="22.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="0 millimeters"/><line x1="50.0" y1="150" x2="50.0" y2="142" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="5" x="42.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="5 millimeters"/><line x1="70.0" y1="150" x2="70.0" y2="136" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="10" x="62.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="10 millimeters"/><line x1="90.0" y1="150" x2="90.0" y2="142" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="15" x="82.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="15 millimeters"/><line x1="110.0" y1="150" x2="110.0" y2="136" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="20" x="102.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="20 millimeters"/><line x1="130.0" y1="150" x2="130.0" y2="142" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="25" x="122.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="25 millimeters"/><line x1="150.0" y1="150" x2="150.0" y2="136" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="30" x="142.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="30 millimeters"/><line x1="170.0" y1="150" x2="170.0" y2="142" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="35" x="162.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="35 millimeters"/><line x1="190.0" y1="150" x2="190.0" y2="136" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="40" x="182.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="40 millimeters"/><line x1="210.0" y1="150" x2="210.0" y2="142" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="45" x="202.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="45 millimeters"/><line x1="230.0" y1="150" x2="230.0" y2="136" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="50" x="222.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="50 millimeters"/><line x1="250.0" y1="150" x2="250.0" y2="142" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="55" x="242.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="55 millimeters"/><line x1="270.0" y1="150" x2="270.0" y2="136" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="60" x="262.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="60 millimeters"/><line x1="290.0" y1="150" x2="290.0" y2="142" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="65" x="282.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="65 millimeters"/><line x1="310.0" y1="150" x2="310.0" y2="136" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="70" x="302.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="70 millimeters"/><line x1="330.0" y1="150" x2="330.0" y2="142" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="75" x="322.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="75 millimeters"/><line x1="350.0" y1="150" x2="350.0" y2="136" stroke="var(--ink)" stroke-width="1.6"/><rect class="tick" data-mm="80" x="342.0" y="128" width="16" height="34" fill="transparent" tabindex="0" role="button" aria-label="80 millimeters"/>
+  <line id="pin" x1="30" y1="128" x2="30" y2="162" stroke="var(--accent)" stroke-width="2.6"
+        opacity="0"/>
+</svg>
+  </fieldset>
+
+  <div class="actions">
+    <button id="reset" type="button">Start again</button>
+  </div>
+  <p class="msg" id="msg" role="status" aria-live="polite">Count the cells first.</p>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "practical_microscope-collect";
+  var N = 8, ROW = 60, REAL = 0.3;
+  var n = 0, lockedN = false, lockedL = false;
+  var msg = document.getElementById("msg"), val = document.getElementById("val");
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? "msg " + kind : "msg"; }
+
+  function paint() {
+    val.textContent = n;
+    document.getElementById("roN").textContent = n;
+    document.getElementById("less").disabled = lockedN || n <= 0;
+    document.getElementById("more").disabled = lockedN || n >= 14;
+    document.getElementById("lockN").disabled = lockedN || n === 0;
+  }
+  document.getElementById("less").addEventListener("click", function () { n--; paint(); });
+  document.getElementById("more").addEventListener("click", function () { n++; paint(); });
+
+  document.getElementById("lockN").addEventListener("click", function () {
+    if (n !== N) {
+      say("Count again. Start at the wall on the left of the middle row and work across, and "
+          + "leave out any cell the edge of the circle cuts through.", "warn");
+      return;
+    }
+    lockedN = true; paint();
+    var t = document.getElementById("tN");
+    t.textContent = N; t.classList.remove("empty");
+    say("Recorded. Now measure the row on the page below.", "good");
+    reportHeight();
+  });
+
+  function readRuler(mm) {
+    if (!lockedN) { say("Count the cells first.", "warn"); return; }
+    if (lockedL) return;
+    var x = 30 + mm * 4.0;
+    var pin = document.getElementById("pin");
+    pin.setAttribute("x1", x); pin.setAttribute("x2", x); pin.setAttribute("opacity", 1);
+    document.getElementById("roL").textContent = mm;
+    if (mm !== ROW) {
+      say("That is where " + mm + " mm falls. Read the mark the far wall of the last cell "
+          + "reaches, not the one nearest it.", "warn");
+      return;
+    }
+    lockedL = true;
+    document.getElementById("span").setAttribute("opacity", 1);
+    var tl = document.getElementById("tL"), tc = document.getElementById("tC");
+    tl.textContent = ROW + " mm"; tl.classList.remove("empty");
+    tc.textContent = (ROW / N) + " mm"; tc.classList.remove("empty");
+    say("Both readings are in the table. A real cell is " + REAL + " mm long, so the drawing "
+        + "is bigger than the cell by some number of times \u2014 that number is the next "
+        + "stage's work.", "good");
+    reportHeight();
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll(".tick"), function (t) {
+    t.addEventListener("click", function () { readRuler(+t.dataset.mm); });
+    t.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); readRuler(+t.dataset.mm); }
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    n = 0; lockedN = false; lockedL = false;
+    ["tN", "tL", "tC"].forEach(function (id) {
+      var e = document.getElementById(id);
+      e.textContent = "\u2014"; e.classList.add("empty");
+    });
+    document.getElementById("roL").textContent = "\u2014";
+    document.getElementById("pin").setAttribute("opacity", 0);
+    document.getElementById("span").setAttribute("opacity", 0);
+    say("Count the cells first.");
+    paint(); reportHeight();
+  });
+
+  paint();
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Surveying the trees in two forests</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,340px);gap:12px;
+  align-items:stretch;margin-bottom:2px}
+@media (max-width:700px){.bench{grid-template-columns:1fr}}
+.results{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;display:flex;flex-direction:column;justify-content:center}
+.stage{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stage svg{flex:0 0 auto;max-width:100%;height:auto}
+.readouts{flex:1 1 140px;min-width:138px;display:grid;gap:6px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+    border-bottom:1px dotted var(--line);padding-bottom:4px}
+.ro>span{color:var(--muted);font-size:12px}
+.ro b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:650}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:12px 0 0;padding:10px 12px 12px}
+legend{font-size:12px;font-weight:650;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em;padding:0 5px}
+.hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+.picks{display:flex;gap:6px;flex-wrap:wrap}
+.picks button{flex:1 1 56px;padding:9px 4px;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg);border-radius:8px;font:inherit;font-variant-numeric:tabular-nums;
+  cursor:pointer}
+.picks button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);
+  border-color:var(--accent);font-weight:650}
+.picks button:disabled{opacity:.5;cursor:not-allowed}
+.picks button .done{display:block;font-size:10px;color:var(--muted);line-height:1.2}
+.picks button[aria-pressed="true"] .done{color:var(--accent-fg);opacity:.85}
+.fixedgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.fixed{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed b{font-size:15px;font-weight:650;color:var(--fg);padding:5px 0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:8px}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+th[scope="row"]{text-align:left}
+td.empty{color:var(--muted)}
+tr.active th[scope="row"]{color:var(--accent);font-weight:700}
+</style>
+</head>
+<body>
+<div class="sim">
+  <h1>Surveying the trees in two forests</h1>
+  <p class="sub">Walk the same route in each forest, identify every tree it takes you past, and
+    tally it against its species. Each forest is surveyed once.</p>
+
+  <div class="bench">
+    <div class="stage">
+      <svg viewBox="0 0 220 220" width="212" id="plot" role="img" aria-label="A forest seen
+           from above, with the crowns of the trees drawn as circles. A route runs through it.">
+        <rect x="6" y="6" width="208" height="208" rx="6" fill="var(--agar)"
+              stroke="var(--ink)" stroke-width="2"/>
+        <g id="trees"><circle cx="76" cy="43" r="9.0" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="172" cy="32" r="8.7" fill="var(--water)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="55" cy="31" r="8.3" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="31" cy="96" r="9.5" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="196" cy="135" r="8.7" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="125" cy="90" r="9.9" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="121" cy="40" r="8.3" fill="var(--water)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="37" cy="73" r="9.4" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="34" cy="124" r="7.6" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="119" cy="26" r="7.2" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="109" cy="116" r="9.3" fill="var(--potato)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="126" cy="101" r="7.9" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="148" cy="61" r="8.7" fill="var(--water)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="109" cy="80" r="8.3" fill="var(--water)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="202" cy="37" r="8.3" fill="var(--agar)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="43" cy="108" r="7.1" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="161" cy="124" r="9.6" fill="var(--agar)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="79" cy="81" r="8.5" fill="var(--potato)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="27" cy="32" r="7.8" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="26" cy="149" r="8.9" fill="var(--potato)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="69" cy="88" r="9.0" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="195" cy="82" r="8.8" fill="var(--potato)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="25" cy="162" r="7.4" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="90" cy="190" r="8.5" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="100" cy="119" r="9.7" fill="var(--potato)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="180" cy="67" r="8.2" fill="var(--agar)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="145" cy="87" r="7.7" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="48" cy="59" r="7.7" fill="var(--potato)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="174" cy="49" r="7.8" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="94" cy="85" r="8.7" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="147" cy="113" r="8.9" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="102" cy="181" r="9.9" fill="var(--water)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="89" cy="91" r="7.3" fill="var(--potato)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="26" cy="27" r="7.6" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="35" cy="129" r="7.3" fill="var(--water)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="43" cy="33" r="8.1" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="28" cy="54" r="8.1" fill="var(--agar)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="197" cy="130" r="8.4" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="177" cy="205" r="8.4" fill="var(--potato)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="74" cy="42" r="9.2" fill="var(--agar)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="106" cy="147" r="8.5" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="197" cy="115" r="7.4" fill="var(--water)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="190" cy="160" r="7.9" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="148" cy="64" r="8.1" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="82" cy="57" r="8.6" fill="var(--water)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="77" cy="57" r="9.4" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="169" cy="171" r="9.2" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="52" cy="109" r="9.2" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="166" cy="105" r="7.6" fill="var(--water)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="198" cy="100" r="9.8" fill="var(--agar)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="197" cy="84" r="7.7" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="104" cy="79" r="8.4" fill="var(--water)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="175" cy="106" r="9.0" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="174" cy="37" r="8.2" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="106" cy="48" r="9.4" fill="var(--agar)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="31" cy="196" r="9.2" fill="var(--potato)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="91" cy="196" r="9.2" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="205" cy="19" r="8.8" fill="var(--potato)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="169" cy="42" r="9.5" fill="var(--potato)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="140" cy="81" r="8.6" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="18" cy="167" r="9.2" fill="var(--good)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="115" cy="193" r="8.3" fill="var(--wood)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="173" cy="55" r="7.8" fill="var(--agar)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/><circle cx="110" cy="161" r="8.0" fill="var(--water)" stroke="var(--ink)" stroke-width="0.9" opacity="0.9"/></g>
+        <path id="route" d="M20,196 L60,150 L40,104 L92,70 L150,96 L128,150 L188,182
+                            L196,120 L160,40 L88,24" fill="none" stroke="var(--accent)"
+              stroke-width="2.4" stroke-dasharray="6 5" opacity="0"/>
+        <circle id="walker" cx="20" cy="196" r="5" fill="var(--accent)" stroke="var(--bg)"
+                stroke-width="1.8" opacity="0"/>
+      </svg>
+      <div class="readouts">
+        <div class="ro"><span>Forest</span><b id="roF">mixed</b></div>
+        <div class="ro"><span>Trees tallied</span><b><span id="roN">0</span> of 200</b></div>
+        <div class="ro"><span>Species so far</span><b id="roS">0</b></div>
+      </div>
+    </div>
+    <div class="results">
+      <table>
+        <caption>Number of trees of each species, in two forests of 200 trees.</caption>
+        <thead><tr><th scope="col">Species</th><th scope="col">Mixed forest</th>
+          <th scope="col">Plantation</th></tr></thead>
+        <tbody id="tbody"><tr><th scope="row">spruce</th><td class="empty" id="m0">&mdash;</td><td class="empty" id="p0">&mdash;</td></tr><tr><th scope="row">ash</th><td class="empty" id="m1">&mdash;</td><td class="empty" id="p1">&mdash;</td></tr><tr><th scope="row">birch</th><td class="empty" id="m2">&mdash;</td><td class="empty" id="p2">&mdash;</td></tr><tr><th scope="row">hickory</th><td class="empty" id="m3">&mdash;</td><td class="empty" id="p3">&mdash;</td></tr><tr><th scope="row">maple</th><td class="empty" id="m4">&mdash;</td><td class="empty" id="p4">&mdash;</td></tr></tbody>
+        <tfoot><tr><th scope="row">Total</th><td class="empty" id="mT">&mdash;</td>
+          <td class="empty" id="pT">&mdash;</td></tr></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>What has to be the same in both forests</legend>
+    <p class="hint">Only the forest may differ. Everything else about the survey is held still,
+      or the two columns cannot be set beside each other.</p>
+    <div class="fixedgrid">
+      <div class="fixed"><span>Trees counted</span><b>200 in each</b></div>
+      <div class="fixed"><span>Route</span><b>the same pattern in both</b></div>
+      <div class="fixed"><span>Identification key</span><b>the same key</b></div>
+      <div class="fixed"><span>Surveyor</span><b>the same person</b></div>
+    </div>
+  </fieldset>
+
+  <div class="actions">
+    <button id="mixed" class="primary" type="button">Survey the mixed forest</button>
+    <button id="plant" class="primary" type="button">Survey the plantation</button>
+    <button id="reset" type="button">Start again</button>
+  </div>
+  <p class="msg" id="msg" role="status" aria-live="polite">Two forests to survey.</p>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "practical_biodiversity-collect";
+  var SP = ["spruce", "ash", "birch", "hickory", "maple"], MIXED = [41, 39, 38, 42, 40], PLANT = [196, 1, 1, 1, 1];
+  var PLOTS = {"mixed": "<circle cx=\"76\" cy=\"43\" r=\"9.0\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"172\" cy=\"32\" r=\"8.7\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"55\" cy=\"31\" r=\"8.3\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"31\" cy=\"96\" r=\"9.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"196\" cy=\"135\" r=\"8.7\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"125\" cy=\"90\" r=\"9.9\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"121\" cy=\"40\" r=\"8.3\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"37\" cy=\"73\" r=\"9.4\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"34\" cy=\"124\" r=\"7.6\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"119\" cy=\"26\" r=\"7.2\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"109\" cy=\"116\" r=\"9.3\" fill=\"var(--potato)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"126\" cy=\"101\" r=\"7.9\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"148\" cy=\"61\" r=\"8.7\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"109\" cy=\"80\" r=\"8.3\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"202\" cy=\"37\" r=\"8.3\" fill=\"var(--agar)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"43\" cy=\"108\" r=\"7.1\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"161\" cy=\"124\" r=\"9.6\" fill=\"var(--agar)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"79\" cy=\"81\" r=\"8.5\" fill=\"var(--potato)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"27\" cy=\"32\" r=\"7.8\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"26\" cy=\"149\" r=\"8.9\" fill=\"var(--potato)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"69\" cy=\"88\" r=\"9.0\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"195\" cy=\"82\" r=\"8.8\" fill=\"var(--potato)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"25\" cy=\"162\" r=\"7.4\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"90\" cy=\"190\" r=\"8.5\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"100\" cy=\"119\" r=\"9.7\" fill=\"var(--potato)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"180\" cy=\"67\" r=\"8.2\" fill=\"var(--agar)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"145\" cy=\"87\" r=\"7.7\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"48\" cy=\"59\" r=\"7.7\" fill=\"var(--potato)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"174\" cy=\"49\" r=\"7.8\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"94\" cy=\"85\" r=\"8.7\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"147\" cy=\"113\" r=\"8.9\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"102\" cy=\"181\" r=\"9.9\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"89\" cy=\"91\" r=\"7.3\" fill=\"var(--potato)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"26\" cy=\"27\" r=\"7.6\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"35\" cy=\"129\" r=\"7.3\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"43\" cy=\"33\" r=\"8.1\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"28\" cy=\"54\" r=\"8.1\" fill=\"var(--agar)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"197\" cy=\"130\" r=\"8.4\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"177\" cy=\"205\" r=\"8.4\" fill=\"var(--potato)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"74\" cy=\"42\" r=\"9.2\" fill=\"var(--agar)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"106\" cy=\"147\" r=\"8.5\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"197\" cy=\"115\" r=\"7.4\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"190\" cy=\"160\" r=\"7.9\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"148\" cy=\"64\" r=\"8.1\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"82\" cy=\"57\" r=\"8.6\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"77\" cy=\"57\" r=\"9.4\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"169\" cy=\"171\" r=\"9.2\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"52\" cy=\"109\" r=\"9.2\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"166\" cy=\"105\" r=\"7.6\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"198\" cy=\"100\" r=\"9.8\" fill=\"var(--agar)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"197\" cy=\"84\" r=\"7.7\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"104\" cy=\"79\" r=\"8.4\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"175\" cy=\"106\" r=\"9.0\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"174\" cy=\"37\" r=\"8.2\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"106\" cy=\"48\" r=\"9.4\" fill=\"var(--agar)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"31\" cy=\"196\" r=\"9.2\" fill=\"var(--potato)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"91\" cy=\"196\" r=\"9.2\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"205\" cy=\"19\" r=\"8.8\" fill=\"var(--potato)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"169\" cy=\"42\" r=\"9.5\" fill=\"var(--potato)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"140\" cy=\"81\" r=\"8.6\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"18\" cy=\"167\" r=\"9.2\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"115\" cy=\"193\" r=\"8.3\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"173\" cy=\"55\" r=\"7.8\" fill=\"var(--agar)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"110\" cy=\"161\" r=\"8.0\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/>", "plantation": "<circle cx=\"22\" cy=\"22\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"47\" cy=\"22\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"72\" cy=\"22\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"97\" cy=\"22\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"122\" cy=\"22\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"147\" cy=\"22\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"172\" cy=\"22\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"197\" cy=\"22\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"22\" cy=\"47\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"47\" cy=\"47\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"72\" cy=\"47\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"97\" cy=\"47\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"122\" cy=\"47\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"147\" cy=\"47\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"172\" cy=\"47\" r=\"8.5\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"197\" cy=\"47\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"22\" cy=\"72\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"47\" cy=\"72\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"72\" cy=\"72\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"97\" cy=\"72\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"122\" cy=\"72\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"147\" cy=\"72\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"172\" cy=\"72\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"197\" cy=\"72\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"22\" cy=\"97\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"47\" cy=\"97\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"72\" cy=\"97\" r=\"8.5\" fill=\"var(--agar)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"97\" cy=\"97\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"122\" cy=\"97\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"147\" cy=\"97\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"172\" cy=\"97\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"197\" cy=\"97\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"22\" cy=\"122\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"47\" cy=\"122\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"72\" cy=\"122\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"97\" cy=\"122\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"122\" cy=\"122\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"147\" cy=\"122\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"172\" cy=\"122\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"197\" cy=\"122\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"22\" cy=\"147\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"47\" cy=\"147\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"72\" cy=\"147\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"97\" cy=\"147\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"122\" cy=\"147\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"147\" cy=\"147\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"172\" cy=\"147\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"197\" cy=\"147\" r=\"8.5\" fill=\"var(--wood)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"22\" cy=\"172\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"47\" cy=\"172\" r=\"8.5\" fill=\"var(--water)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"72\" cy=\"172\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"97\" cy=\"172\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"122\" cy=\"172\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"147\" cy=\"172\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"172\" cy=\"172\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"197\" cy=\"172\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"22\" cy=\"197\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"47\" cy=\"197\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"72\" cy=\"197\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"97\" cy=\"197\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"122\" cy=\"197\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"147\" cy=\"197\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"172\" cy=\"197\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/><circle cx=\"197\" cy=\"197\" r=\"8.5\" fill=\"var(--good)\" stroke=\"var(--ink)\" stroke-width=\"0.9\" opacity=\"0.9\"/>"};
+  var busy = false, done = { mixed: false, plantation: false };
+  var msg = document.getElementById("msg");
+  var bM = document.getElementById("mixed"), bP = document.getElementById("plant");
+  var route = document.getElementById("route"), walker = document.getElementById("walker");
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? "msg " + kind : "msg"; }
+
+  function survey(which) {
+    if (busy || done[which]) return;
+    busy = true; bM.disabled = true; bP.disabled = true;
+    document.getElementById("trees").innerHTML = PLOTS[which];
+    document.getElementById("roF").textContent = which;
+    route.setAttribute("opacity", 0.9);
+    walker.setAttribute("opacity", 1);
+
+    var counts = which === "mixed" ? MIXED : PLANT;
+    var pre = which === "mixed" ? "m" : "p";
+    var running = counts.map(function () { return 0; });
+    var order = [];
+    counts.forEach(function (c, i) { for (var k = 0; k < c; k++) order.push(i); });
+    for (var a = order.length - 1; a > 0; a--) {
+      var b = Math.floor(Math.random() * (a + 1)), t = order[a];
+      order[a] = order[b]; order[b] = t;
+    }
+
+    var len = route.getTotalLength();
+    var seen = 0, t0 = Date.now(), DUR = 4200;
+    var timer = setInterval(function () {
+      var p = Math.min(1, (Date.now() - t0) / DUR);
+      var pt = route.getPointAtLength(p * len);
+      walker.setAttribute("cx", pt.x); walker.setAttribute("cy", pt.y);
+      var want = Math.round(p * order.length);
+      while (seen < want) {
+        running[order[seen]]++; seen++;
+      }
+      document.getElementById("roN").textContent = seen;
+      var live = 0;
+      running.forEach(function (v, i) {
+        if (v) live++;
+        var cell = document.getElementById(pre + i);
+        cell.textContent = v; cell.classList.remove("empty");
+      });
+      document.getElementById("roS").textContent = live;
+      var tot = document.getElementById(pre + "T");
+      tot.textContent = seen; tot.classList.remove("empty");
+      if (p >= 1) {
+        clearInterval(timer);
+        // the tally has to land on the survey's own figures, not on wherever the timer stopped
+        counts.forEach(function (v, i) {
+          document.getElementById(pre + i).textContent = v;
+        });
+        tot.textContent = counts.reduce(function (s, v) { return s + v; }, 0);
+        walker.setAttribute("opacity", 0);
+        done[which] = true; busy = false;
+        bM.disabled = done.mixed; bP.disabled = done.plantation;
+        if (done.mixed && done.plantation) {
+          say("Both forests surveyed, 200 trees each. Which one the figures pick out, and on "
+              + "what measure, is the next stage.", "good");
+        } else {
+          say(which + " done. Now the other forest, the same way.");
+        }
+        reportHeight();
+      }
+    }, 40);
+  }
+
+  bM.addEventListener("click", function () { survey("mixed"); });
+  bP.addEventListener("click", function () { survey("plantation"); });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    if (busy) return;
+    done = { mixed: false, plantation: false };
+    SP.forEach(function (_, i) {
+      ["m", "p"].forEach(function (pre) {
+        var e = document.getElementById(pre + i);
+        e.textContent = "\u2014"; e.classList.add("empty");
+      });
+    });
+    ["mT", "pT"].forEach(function (id) {
+      var e = document.getElementById(id);
+      e.textContent = "\u2014"; e.classList.add("empty");
+    });
+    document.getElementById("trees").innerHTML = PLOTS.mixed;
+    document.getElementById("roF").textContent = "mixed";
+    document.getElementById("roN").textContent = "0";
+    document.getElementById("roS").textContent = "0";
+    route.setAttribute("opacity", 0);
+    bM.disabled = false; bP.disabled = false;
+    say("Two forests to survey.");
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Set out the equipment</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.tray{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.tile{background:var(--card);border:2px solid var(--line);border-radius:10px;
+  padding:6px 4px 4px;cursor:pointer;font:inherit;color:var(--fg);display:flex;
+  flex-direction:column;gap:2px;align-items:center;text-align:center}
+.tile svg{width:100%;height:auto;max-width:86px;display:block}
+.tile .nm{font-size:12px;line-height:1.25;font-weight:600}
+.tile[aria-pressed="true"]{border-color:var(--accent);background:var(--bg);
+  box-shadow:inset 0 0 0 2px var(--accent)}
+.tile .mk{font-size:11px;font-weight:700;min-height:14px}
+.tile.hit{border-color:var(--good-line);background:var(--good-bg)}
+.tile.hit .mk{color:var(--good)}
+.tile.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.tile.miss .mk{color:var(--bad)}
+.tile.over{border-color:var(--warn-line);background:var(--warn-bg)}
+.tile.over .mk{color:var(--warn)}
+.tile:disabled{cursor:default}
+.why{margin-top:14px;display:grid;gap:8px}
+.why h2{font-size:13px;margin:0;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.why ul{margin:0;padding-left:18px} .why li{font-size:13.5px;margin-bottom:5px}
+.why li b{font-weight:650}
+.rig{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px}
+.rig svg{width:100%;height:auto;display:block;border-radius:6px}
+.rig .cap{font-size:12.5px;color:var(--muted);padding-top:6px}
+</style>
+</head>
+<body>
+<div class="sim">
+  <h1>Set out the equipment</h1>
+  <p class="sub">Choose every piece of equipment this method needs, then check your set-up.</p>
+  <div class="brief"><p><b>The method.</b> The skin lining the inner curve of an onion scale is one cell thick, which is thin enough to see through. Peeling a piece of it off and mounting it on a slide gives a view of cells with nothing in front of them.</p><p>The peel is almost colorless, so one drop of iodine stain is added to give the structures inside the cells some color.</p><p>The coverslip goes on last, and it goes on from one edge rather than flat, so the glass pushes the air out ahead of itself instead of trapping it over the specimen.</p></div>
+  <div class="tray" id="tray" role="group" aria-label="Equipment on the bench"><button type="button" class="tile" data-id="onion" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M60,24 C57,30 55,33 52,36" fill="none" stroke="var(--good)" stroke-width="2.4"
+      stroke-linecap="round"/>
+<path d="M60,24 C63,30 65,33 68,36" fill="none" stroke="var(--good)" stroke-width="2.4"
+      stroke-linecap="round"/>
+<path d="M60,32 C60,32 44,34 32,50 C20,66 18,88 24,102 C31,118 44,126 60,126
+         C76,126 89,118 96,102 C102,88 100,66 88,50 C76,34 60,32 60,32 Z"
+      fill="var(--card)" stroke="var(--potatoline)" stroke-width="1.6" opacity="0.9"/>
+<path d="M60,36 C60,36 46,38 35,53 C25,67 23,87 28,100 C34,114 46,121 60,121
+         C74,121 86,114 92,100 C97,87 95,67 85,53 C74,38 60,36 60,36 Z"
+      fill="var(--potato)" stroke="var(--potatoline)" stroke-width="2.2"/>
+<path d="M60,40 C50,42 41,55 34,70 C29,82 30,98 38,108" fill="none"
+      stroke="var(--potatoline)" stroke-width="1.7"/>
+<path d="M60,40 C70,42 79,55 86,70 C91,82 90,98 82,108" fill="none"
+      stroke="var(--potatoline)" stroke-width="1.7"/>
+<path d="M60,46 C52,49 46,60 41,73 C37,84 38,97 44,106" fill="none"
+      stroke="var(--potatoline)" stroke-width="1.7"/>
+<path d="M60,46 C68,49 74,60 79,73 C83,84 82,97 76,106" fill="none"
+      stroke="var(--potatoline)" stroke-width="1.7"/>
+<path d="M60,54 C54,57 51,66 48,77 C46,86 47,97 51,104" fill="none"
+      stroke="var(--potatoline)" stroke-width="1.7"/>
+<path d="M60,54 C66,57 69,66 72,77 C74,86 73,97 69,104" fill="none"
+      stroke="var(--potatoline)" stroke-width="1.7"/>
+<path d="M60,62 C57,66 56,74 55,82 C54,90 55,98 58,103" fill="none"
+      stroke="var(--potatoline)" stroke-width="1.7"/>
+<path d="M60,62 C63,66 64,74 65,82 C66,90 65,98 62,103" fill="none"
+      stroke="var(--potatoline)" stroke-width="1.7"/>
+<path d="M44,120 C50,124 70,124 76,120 L76,126 C70,130 50,130 44,126 Z"
+      fill="var(--wood)" stroke="var(--woodline)" stroke-width="1.8"
+      stroke-linejoin="round"/>
+<g stroke="var(--woodline)" stroke-width="1.4" stroke-linecap="round" fill="none">
+  <path d="M50,129 C47,134 44,136 41,139"/><path d="M56,130 C55,135 54,138 52,142"/>
+  <path d="M62,130 C63,135 64,138 66,142"/><path d="M70,129 C73,134 76,136 79,139"/>
+</g>
+</svg><span class="nm">Onion</span><span class="mk"></span></button><button type="button" class="tile" data-id="forceps" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M46,26 C46,14 74,14 74,26 L71,34 L69,26 C69,21 51,21 51,26 L49,34 Z"
+      fill="var(--metal)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+<path d="M49,32 L44,72 L52,118 L57,130 L60,130 L56,116 L53,72 L54,32 Z"
+      fill="var(--metal)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+<path d="M71,32 L76,72 L68,118 L63,130 L60,130 L64,116 L67,72 L66,32 Z"
+      fill="var(--metal)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+<path d="M50,44 L47,70" stroke="var(--bg)" stroke-width="1.8" opacity="0.75"/>
+<path d="M70,44 L73,70" stroke="var(--bg)" stroke-width="1.8" opacity="0.75"/>
+<g stroke="var(--ink)" stroke-width="1" opacity="0.75">
+  <path d="M53.6,118 L57.4,118"/><path d="M54.4,122 L58,122"/><path d="M55.2,126 L58.6,126"/>
+  <path d="M62.6,118 L66.4,118"/><path d="M62,122 L65.6,122"/><path d="M61.4,126 L64.8,126"/>
+</g>
+</svg><span class="nm">Forceps</span><span class="mk"></span></button><button type="button" class="tile" data-id="slide" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M10,58 L104,46 L110,80 L16,92 Z" fill="var(--glass-fill)" stroke="var(--glass)"
+      stroke-width="2" stroke-linejoin="round" opacity="0.65"/>
+<path d="M16,92 L16,96 L110,84 L110,80" fill="var(--glass-fill)" stroke="var(--glass)"
+      stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M10,58 L10,62 L16,96" fill="none" stroke="var(--glass)" stroke-width="1.6"/>
+<path d="M10,58 L34,55 L40,89 L16,92 Z" fill="var(--card)" stroke="var(--glass)"
+      stroke-width="1.4"/>
+<g stroke="var(--glass)" stroke-width="0.8" opacity="0.65">
+  <path d="M15,57 L21,91"/><path d="M21,56 L27,90"/><path d="M27,55.5 L33,89.5"/>
+</g>
+<path d="M58,56 L88,52 L91,74 L61,78 Z" fill="var(--glass-fill)" stroke="var(--glass)"
+      stroke-width="1.6" opacity="0.9"/>
+<ellipse cx="74.5" cy="64.5" rx="11" ry="7" fill="var(--warn)" opacity="0.35"/>
+<path d="M46,54 L52,88" stroke="var(--bg)" stroke-width="2" opacity="0.8"/>
+</svg><span class="nm">Microscope slide</span><span class="mk"></span></button><button type="button" class="tile" data-id="dropper" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M44,20 C36,20 34,26 34,32 C34,40 40,46 44,46 L64,46 C68,46 74,40 74,32
+         C74,26 72,20 64,20 Z" fill="var(--dark)" stroke="var(--ink)" stroke-width="2"
+      stroke-linejoin="round"/>
+<path d="M42,46 L66,46 L66,52 L42,52 Z" fill="var(--dark)" stroke="var(--ink)"
+      stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M45,52 L45,96 L51,120 L54,120" fill="none" stroke="var(--glass)"
+      stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M63,52 L63,96 L57,120 L54,120" fill="none" stroke="var(--glass)"
+      stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M45,52 L63,52 L63,96 L57,120 L51,120 L45,96 Z" fill="var(--glass-fill)"
+      opacity="0.55"/>
+<path d="M45,66 L63,66 L63,96 L57,118 L51,118 L45,96 Z" fill="var(--warn)" opacity="0.55"/>
+<path d="M45,66 L63,66" stroke="var(--warn)" stroke-width="1.4"/>
+<path d="M51,120 L57,120" stroke="var(--bg)" stroke-width="2.6"/>
+<path d="M48,58 L48,90" stroke="var(--bg)" stroke-width="1.8" opacity="0.8"/>
+<path d="M54,124 C51,128 50,131 50,133 A4,4 0 0 0 58,133 C58,131 57,128 54,124 Z"
+      fill="var(--warn)" opacity="0.8"/>
+</svg><span class="nm">Dropper of iodine</span><span class="mk"></span></button><button type="button" class="tile" data-id="mounting-needle" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M58.6,16 L61.4,16 L62,64 L58,64 Z" fill="var(--metal)" stroke="var(--ink)"
+      stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M60,10 L61.4,16 L58.6,16 Z" fill="var(--ink)" stroke="var(--ink)"
+      stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M56,64 L64,64 L65,72 L55,72 Z" fill="var(--metal)" stroke="var(--ink)"
+      stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M55,72 C55,72 50,76 50,84 C50,92 53,96 53,104 C53,114 49,118 50,124
+         C51,130 69,130 70,124 C71,118 67,114 67,104 C67,96 70,92 70,84
+         C70,76 65,72 65,72 Z" fill="var(--wood)" stroke="var(--woodline)"
+      stroke-width="2" stroke-linejoin="round"/>
+<path d="M50,84 C55,86 65,86 70,84" fill="none" stroke="var(--woodline)" stroke-width="1.3"
+      opacity="0.75"/>
+<path d="M53,104 C57,106 63,106 67,104" fill="none" stroke="var(--woodline)"
+      stroke-width="1.3" opacity="0.75"/>
+<path d="M50,124 C55,128 65,128 70,124" fill="none" stroke="var(--woodline)"
+      stroke-width="1.3" opacity="0.75"/>
+<path d="M55,78 C53,86 56,96 56,106 C56,114 54,118 54,122" fill="none" stroke="var(--bg)"
+      stroke-width="2" opacity="0.4"/>
+</svg><span class="nm">Mounting needle</span><span class="mk"></span></button><button type="button" class="tile" data-id="coverslip" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M14,50 L104,38 L108,66 L18,78 Z" fill="none" stroke="var(--line)"
+      stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="61" y="34" text-anchor="middle" font-size="9.5" fill="var(--muted)"
+      font-family="system-ui, sans-serif">a slide, for size</text>
+<path d="M44,48 L74,44 L77,70 L47,74 Z" fill="var(--glass-fill)" stroke="var(--glass)"
+      stroke-width="2" stroke-linejoin="round" opacity="0.75"/>
+<path d="M47,74 L47,75.2 L77,71.2 L77,70" fill="var(--glass-fill)" stroke="var(--glass)"
+      stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M52,47 L55,72" stroke="var(--bg)" stroke-width="1.8" opacity="0.85"/>
+<path d="M32,106 L90,99 L90,101.4 L32,108.4 Z" fill="var(--glass-fill)"
+      stroke="var(--glass)" stroke-width="1.4" stroke-linejoin="round"/>
+<text x="61" y="126" text-anchor="middle" font-size="10" fill="var(--muted)"
+      font-family="system-ui, sans-serif">the same glass, on edge</text>
+</svg><span class="nm">Coverslip</span><span class="mk"></span></button><button type="button" class="tile" data-id="goggles" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M0,60 Q10,53 18,53 L22,53 M120,60 Q110,53 102,53 L98,53" fill="none"
+      stroke="var(--dark)" stroke-width="5.5" stroke-linecap="round"/>
+<path d="M0,60 Q3,74 0,88 M120,60 Q117,74 120,88" fill="none" stroke="var(--dark)"
+      stroke-width="5.5" stroke-linecap="round"/>
+<path d="M12,70 Q12,50 34,48 L86,48 Q108,50 108,70 Q108,98 86,101 L70,101 Q60,90 50,101
+         L34,101 Q12,98 12,70 Z"
+      fill="var(--bg)" stroke="var(--ink)" stroke-width="2.6" stroke-linejoin="round"/>
+<path d="M21,71 Q21,58 37,57 L83,57 Q99,58 99,71 Q99,92 83,94 L68,94 Q60,85 52,94
+         L37,94 Q21,92 21,71 Z"
+      fill="var(--lens)" stroke="var(--ink)" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M30,62 L46,54" stroke="var(--bg)" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
+<path d="M14,62 Q18,58 22,62 Q18,66 14,62 Z" fill="var(--dark)" stroke="var(--ink)"
+      stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M14,80 Q18,76 22,80 Q18,84 14,80 Z" fill="var(--dark)" stroke="var(--ink)"
+      stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M98,62 Q102,58 106,62 Q102,66 98,62 Z" fill="var(--dark)" stroke="var(--ink)"
+      stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M98,80 Q102,76 106,80 Q102,84 98,80 Z" fill="var(--dark)" stroke="var(--ink)"
+      stroke-width="1.2" stroke-linejoin="round"/>
+</svg><span class="nm">Safety goggles</span><span class="mk"></span></button><button type="button" class="tile" data-id="microscope" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M16,136 L104,136 L98,123 L42,123 Q28,123 22,130 Z" fill="var(--metal)"
+      stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+<path d="M96,129 C111,113 109,72 84,55 L76,65 C95,76 97,111 84,123 Z"
+      fill="var(--metal)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+<rect x="24" y="92" width="76" height="7" rx="1.5" fill="var(--metal)"
+      stroke="var(--ink)" stroke-width="2"/>
+<ellipse cx="59" cy="95.5" rx="7" ry="2.6" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.4"/>
+<path d="M42,92 L42,88 Q42,86 45,86 L51,86" fill="none" stroke="var(--ink)" stroke-width="1.8"
+      stroke-linecap="round"/>
+<path d="M76,92 L76,88 Q76,86 73,86 L67,86" fill="none" stroke="var(--ink)" stroke-width="1.8"
+      stroke-linecap="round"/>
+<circle cx="97" cy="106" r="9" fill="var(--bg)" stroke="var(--ink)" stroke-width="2"/>
+<circle cx="97" cy="106" r="4.5" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.8"/>
+<rect x="66" y="54" width="20" height="11" rx="2" fill="var(--metal)"
+      stroke="var(--ink)" stroke-width="2"/>
+<rect x="48" y="28" width="22" height="30" rx="2" fill="var(--bg)"
+      stroke="var(--ink)" stroke-width="2"/>
+<rect x="52" y="14" width="14" height="16" rx="2" fill="var(--bg)"
+      stroke="var(--ink)" stroke-width="2"/>
+<path d="M53,70 L65,70 L62,82 L56,82 Z" fill="var(--bg)" stroke="var(--ink)"
+      stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M68,70 L78,70 L76,80 L70,80 Z" fill="var(--bg)" stroke="var(--ink)"
+      stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M47,58 L71,58 L79,70 L39,70 Z" fill="var(--metal)" stroke="var(--ink)"
+      stroke-width="2" stroke-linejoin="round"/>
+<path d="M51,100 L67,100 L63,111 L55,111 Z" fill="var(--bg)" stroke="var(--ink)"
+      stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M62,104 L72,102" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="73.5" cy="101.6" r="2.4" fill="var(--ink)"/>
+<path d="M50,124 L50,114 M68,124 L68,114" stroke="var(--ink)" stroke-width="2.2"
+      stroke-linecap="round"/>
+<ellipse cx="59" cy="112" rx="10" ry="4" fill="var(--metal)" stroke="var(--ink)"
+         stroke-width="1.8" transform="rotate(-42 59 112)"/>
+<circle cx="50" cy="114" r="2" fill="var(--ink)"/>
+<circle cx="68" cy="114" r="2" fill="var(--ink)"/>
+</svg><span class="nm">Microscope</span><span class="mk"></span></button><button type="button" class="tile" data-id="hotplate" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<rect x="18" y="72" width="84" height="12" rx="2" fill="var(--metal)"
+      stroke="var(--ink)" stroke-width="2"/>
+<path d="M22,84 L22,116 Q22,120 26,120 L94,120 Q98,120 98,116 L98,84 Z"
+      fill="var(--bg)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="76" cy="101" r="8" fill="var(--bg)" stroke="var(--ink)" stroke-width="2"/>
+<path d="M76,101 L70.5,96.5" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/>
+<g stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.85">
+<path d="M64.5,107 L62.5,109 M63,97.5 L60.6,96 M68.5,90.5 L67,88.2 M76,88 L76,85.3
+         M83.5,90.5 L85,88.2 M89,97.5 L91.4,96 M87.5,107 L89.5,109"/>
+</g>
+<text x="60" y="118" font-size="7" fill="var(--ink)" text-anchor="end">&#176;C</text>
+<circle cx="36" cy="101" r="4.5" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.6"/>
+<rect x="28" y="120" width="12" height="5" rx="1.5" fill="var(--ink)"/>
+<rect x="80" y="120" width="12" height="5" rx="1.5" fill="var(--ink)"/>
+<path d="M98,110 C110,110 114,120 116,132" fill="none" stroke="var(--dark)" stroke-width="3"
+      stroke-linecap="round"/>
+</svg><span class="nm">Hotplate</span><span class="mk"></span></button><button type="button" class="tile" data-id="stopwatch" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<circle cx="60" cy="92" r="6" fill="none" stroke="var(--metal)" stroke-width="3"/>
+<rect x="55" y="46" width="10" height="11" rx="2" fill="var(--metal)"
+      stroke="var(--ink)" stroke-width="1.4"/>
+<rect x="82" y="58" width="9" height="7" rx="2" fill="var(--metal)"
+      stroke="var(--ink)" stroke-width="1.4" transform="rotate(38 86 61)"/>
+<circle cx="60" cy="92" r="36" fill="var(--metal)" stroke="var(--ink)" stroke-width="2"/>
+<circle cx="60" cy="92" r="33" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.6"/>
+<g stroke="var(--ink)" stroke-width="0.6" opacity="0.75"><path d="M63.0,63.7 L63.2,61.2 M65.9,64.1 L66.4,61.7 M68.8,64.9 L69.6,62.5 M71.6,66.0 L72.6,63.7 M76.8,68.9 L78.2,66.9 M79.1,70.8 L80.7,69.0 M81.2,72.9 L83.0,71.3 M83.1,75.2 L85.1,73.8 M86.0,80.4 L88.3,79.4 M87.1,83.2 L89.5,82.4 M87.9,86.1 L90.3,85.6 M88.3,89.0 L90.8,88.8 M88.3,95.0 L90.8,95.2 M87.9,97.9 L90.3,98.4 M87.1,100.8 L89.5,101.6 M86.0,103.6 L88.3,104.6 M83.1,108.8 L85.1,110.2 M81.2,111.1 L83.0,112.7 M79.1,113.2 L80.7,115.0 M76.8,115.1 L78.2,117.1 M71.6,118.0 L72.6,120.3 M68.8,119.1 L69.6,121.5 M65.9,119.9 L66.4,122.3 M63.0,120.3 L63.2,122.8 M57.0,120.3 L56.8,122.8 M54.1,119.9 L53.6,122.3 M51.2,119.1 L50.4,121.5 M48.4,118.0 L47.4,120.3 M43.2,115.1 L41.8,117.1 M40.9,113.2 L39.3,115.0 M38.8,111.1 L37.0,112.7 M36.9,108.8 L34.9,110.2 M34.0,103.6 L31.7,104.6 M32.9,100.8 L30.5,101.6 M32.1,97.9 L29.7,98.4 M31.7,95.0 L29.2,95.2 M31.7,89.0 L29.2,88.8 M32.1,86.1 L29.7,85.6 M32.9,83.2 L30.5,82.4 M34.0,80.4 L31.7,79.4 M36.9,75.2 L34.9,73.8 M38.8,72.9 L37.0,71.3 M40.9,70.8 L39.3,69.0 M43.2,68.9 L41.8,66.9 M48.4,66.0 L47.4,63.7 M51.2,64.9 L50.4,62.5 M54.1,64.1 L53.6,61.7 M57.0,63.7 L56.8,61.2"/></g><g stroke="var(--ink)" stroke-width="1.4" stroke-linecap="round"><path d="M60.0,66.0 L60.0,61.0 M73.0,69.5 L75.5,65.2 M82.5,79.0 L86.8,76.5 M86.0,92.0 L91.0,92.0 M82.5,105.0 L86.8,107.5 M73.0,114.5 L75.5,118.8 M60.0,118.0 L60.0,123.0 M47.0,114.5 L44.5,118.8 M37.5,105.0 L33.2,107.5 M34.0,92.0 L29.0,92.0 M37.5,79.0 L33.2,76.5 M47.0,69.5 L44.5,65.2"/></g><text x="70.8" y="75.2" font-size="5" fill="var(--ink)" text-anchor="middle">5</text><text x="78.6" y="83.0" font-size="5" fill="var(--ink)" text-anchor="middle">10</text><text x="81.5" y="93.8" font-size="5" fill="var(--ink)" text-anchor="middle">15</text><text x="78.6" y="104.5" font-size="5" fill="var(--ink)" text-anchor="middle">20</text><text x="70.8" y="112.4" font-size="5" fill="var(--ink)" text-anchor="middle">25</text><text x="60.0" y="115.3" font-size="5" fill="var(--ink)" text-anchor="middle">30</text><text x="49.2" y="112.4" font-size="5" fill="var(--ink)" text-anchor="middle">35</text><text x="41.4" y="104.5" font-size="5" fill="var(--ink)" text-anchor="middle">40</text><text x="38.5" y="93.8" font-size="5" fill="var(--ink)" text-anchor="middle">45</text><text x="41.4" y="83.0" font-size="5" fill="var(--ink)" text-anchor="middle">50</text><text x="49.2" y="75.2" font-size="5" fill="var(--ink)" text-anchor="middle">55</text><text x="60.0" y="72.3" font-size="5" fill="var(--ink)" text-anchor="middle">60</text>
+<circle cx="60" cy="104" r="6" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.1"/>
+<g stroke="var(--ink)" stroke-width="0.8" opacity="0.8">
+<path d="M60,99 L60,100.6 M65,104 L63.4,104 M60,109 L60,107.4 M55,104 L56.6,104"/>
+</g>
+<path d="M60,104 L62.6,101.4" stroke="var(--ink)" stroke-width="1.1" stroke-linecap="round"/>
+<path d="M53.2,93.8 L88.0,84.5" stroke="var(--warm)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="60" cy="92" r="2.6" fill="var(--ink)"/>
+</svg><span class="nm">Stopwatch</span><span class="mk"></span></button><button type="button" class="tile" data-id="funnel" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M27,44 L93,44 L65,101 L55,101 Z" fill="var(--glass-fill)"
+      stroke="var(--glass)" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M55,101 L55,130 M65,101 L65,130" stroke="var(--glass)" stroke-width="2.4"/>
+<path d="M55,101 L65,101" stroke="var(--glass-fill)" stroke-width="3"/>
+<ellipse cx="60" cy="130" rx="5" ry="2.4" fill="var(--bg)" stroke="var(--glass)" stroke-width="2.2"/>
+<path d="M55.4,129 A5,2.4 0 0 1 64.6,129" fill="none" stroke="var(--glass)" stroke-width="1"
+      opacity="0.5"/>
+<path d="M45,54 L58,80" stroke="var(--bg)" stroke-width="2.4" stroke-linecap="round"
+      opacity="0.8"/>
+<ellipse cx="60" cy="44" rx="33" ry="6.5" fill="var(--bg)" stroke="var(--glass)" stroke-width="2.4"/>
+</svg><span class="nm">Funnel</span><span class="mk"></span></button><button type="button" class="tile" data-id="conical-flask" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M25,132 L46,74 Q50,64 51,56 L51,38 L69,38 L69,56 Q70,64 74,74 L95,132 Z"
+      fill="var(--glass-fill)" stroke="var(--glass)" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M29,128 A31,5 0 0 0 91,128" fill="none" stroke="var(--glass)" stroke-width="1.2"
+      opacity="0.55"/>
+<path d="M45,86 L36,122" stroke="var(--bg)" stroke-width="2.4" stroke-linecap="round"
+      opacity="0.8"/>
+<g stroke="var(--glass)" stroke-width="1.4" opacity="0.8">
+<path d="M34,109 L48,109 M31,118 L45,118"/>
+</g>
+<text x="51" y="111.5" font-size="7.5" fill="var(--glass)">150</text>
+<text x="48" y="121" font-size="7.5" fill="var(--glass)">100 cm&#179;</text>
+<ellipse cx="60" cy="34" rx="9.5" ry="2.8" fill="var(--bg)" stroke="var(--glass)" stroke-width="2.4"/>
+</svg><span class="nm">Conical flask</span><span class="mk"></span></button><button type="button" class="tile" data-id="ph-meter" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M10,84 L62,84 Q66,84 66,88 L66,124 Q66,128 62,128 L10,128
+         Q6,128 6,124 L6,88 Q6,84 10,84 Z"
+      fill="var(--bg)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+<rect x="11" y="88" width="46" height="17" rx="2" fill="var(--dark)"
+      stroke="var(--ink)" stroke-width="1.6"/>
+<text x="34" y="101" font-size="11.5" fill="var(--screen)" text-anchor="middle"
+      font-family="ui-monospace,Menlo,Consolas,monospace">7.00</text>
+<text x="14" y="120" font-size="8.5" fill="var(--ink)">pH</text>
+<rect x="30" y="111" width="12" height="8" rx="2" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.5"/>
+<rect x="46" y="111" width="12" height="8" rx="2" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.5"/>
+<circle cx="66" cy="92" r="3.2" fill="var(--metal)" stroke="var(--ink)" stroke-width="1.5"/>
+<path d="M69,92 C82,80 86,58 90,44" fill="none" stroke="var(--dark)" stroke-width="3"/>
+<rect x="84" y="42" width="13" height="22" rx="3" fill="var(--bg)"
+      stroke="var(--ink)" stroke-width="2"/>
+<path d="M86,64 L95,64 L95,104 L86,104 Z" fill="var(--glass-fill)"
+      stroke="var(--glass)" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="90.5" cy="110" r="6" fill="var(--glass-fill)" stroke="var(--glass)" stroke-width="2"/>
+<path d="M88,107 A3,3 0 0 1 90.5,106" fill="none" stroke="var(--bg)" stroke-width="1.6"
+      stroke-linecap="round"/>
+<path d="M86,96 L95,96" stroke="var(--glass)" stroke-width="1.3" opacity="0.8"/>
+<path d="M88,72 L88,92" stroke="var(--bg)" stroke-width="1.6" stroke-linecap="round" opacity="0.8"/>
+</svg><span class="nm">pH meter</span><span class="mk"></span></button><button type="button" class="tile" data-id="mass-balance" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M33,79 L87,79 L84,83 L36,83 Z" fill="var(--metal)" stroke="var(--ink)"
+      stroke-width="2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="79" rx="27" ry="4.5" fill="var(--metal)" stroke="var(--ink)" stroke-width="2"/>
+<rect x="55" y="83" width="10" height="7" fill="var(--metal)" stroke="var(--ink)" stroke-width="1.8"/>
+<path d="M16,89 L104,89 Q108,89 108,93 L108,120 Q108,124 104,124 L16,124
+         Q12,124 12,120 L12,93 Q12,89 16,89 Z"
+      fill="var(--bg)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+<rect x="60" y="94" width="42" height="17" rx="2" fill="var(--dark)"
+      stroke="var(--ink)" stroke-width="1.6"/>
+<text x="81" y="107" font-size="11" fill="var(--screen)" text-anchor="middle"
+      font-family="ui-monospace,Menlo,Consolas,monospace">0.00 g</text>
+<rect x="19" y="96" width="17" height="9" rx="2" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.6"/>
+<rect x="40" y="96" width="17" height="9" rx="2" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.6"/>
+<text x="27.5" y="102.8" font-size="5.5" fill="var(--ink)" text-anchor="middle">ON</text>
+<text x="48.5" y="102.8" font-size="5.5" fill="var(--ink)" text-anchor="middle">TARE</text>
+<circle cx="30" cy="115" r="5" fill="none" stroke="var(--ink)" stroke-width="1.4"/>
+<circle cx="30" cy="115" r="1.8" fill="var(--ink)"/>
+<rect x="20" y="124" width="9" height="6" rx="1.5" fill="var(--ink)"/>
+<rect x="91" y="124" width="9" height="6" rx="1.5" fill="var(--ink)"/>
+</svg><span class="nm">Mass balance</span><span class="mk"></span></button></div>
+  <div class="actions">
+    <button id="check" class="primary" type="button">Check my set-up</button>
+    <button id="reset" type="button">Start again</button>
+  </div>
+  <p class="msg" id="msg" role="status" aria-live="polite">Nothing chosen yet.</p>
+  <div class="why" id="why"></div>
+  <div class="rig" id="rig" hidden></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "practical_microscope-equipment";
+  var ITEMS = [{"id": "onion", "name": "Onion", "needed": true, "why": "The specimen. The skin lining the inner curve of a scale is one cell thick, so it is thin enough to see through."}, {"id": "forceps", "name": "Forceps", "needed": true, "why": "Grip the edge of the peel and lift it off the scale in one piece. Fingers would tear it."}, {"id": "slide", "name": "Microscope slide", "needed": true, "why": "The flat glass the peel lies on. Everything else is built up on top of it."}, {"id": "dropper", "name": "Dropper of iodine", "needed": true, "why": "Puts one drop of stain on the peel. Without it the cells are almost colorless and their structures cannot be made out."}, {"id": "mounting-needle", "name": "Mounting needle", "needed": true, "why": "Props the coverslip up at one edge so it can be lowered slowly, and teases the peel flat if it folds."}, {"id": "coverslip", "name": "Coverslip", "needed": true, "why": "The thin square of glass that goes over the specimen. It holds the peel flat and keeps the stain off the objective lens."}, {"id": "goggles", "name": "Safety goggles", "needed": true, "why": "Iodine stains skin and eyes. They go on before the stain comes out, not after."}, {"id": "microscope", "name": "Microscope", "needed": true, "why": "Magnifies the cells. The lowest power goes on first, and the focus moves the lens away from the slide, never toward it."}, {"id": "hotplate", "name": "Hotplate", "needed": false, "why": "Nothing is heated. The peel is mounted cold."}, {"id": "stopwatch", "name": "Stopwatch", "needed": false, "why": "Nothing here is timed. The slide is ready when the coverslip is down."}, {"id": "funnel", "name": "Funnel", "needed": false, "why": "Nothing is filtered. The stain goes on one drop at a time, straight from the dropper."}, {"id": "conical-flask", "name": "Conical flask", "needed": false, "why": "Nothing is mixed or held in bulk. The whole specimen fits under a coverslip."}, {"id": "ph-meter", "name": "pH meter", "needed": false, "why": "pH has nothing to do with making a slide."}, {"id": "mass-balance", "name": "Mass balance", "needed": false, "why": "Nothing is weighed. A piece of onion peel is chosen for being thin, not for its mass."}];
+  var RIG = "\n<svg viewBox=\"0 0 300 200\" role=\"img\" aria-label=\"A microscope slide on the bench. A piece of\n     onion peel lies flat in a drop of iodine, and a coverslip is being lowered onto it from one\n     edge, propped on a mounting needle.\">\n  <line x1=\"10\" y1=\"168\" x2=\"290\" y2=\"168\" stroke=\"var(--line)\" stroke-width=\"2\"/>\n  <path d=\"M28,132 L28,140 L262,140 L262,132 Z\" fill=\"var(--glass-fill)\"\n        stroke=\"var(--glass)\" stroke-width=\"2\" stroke-linejoin=\"round\"/>\n  <path d=\"M28,128 L262,128 L262,132 L28,132 Z\" fill=\"var(--glass-fill)\"\n        stroke=\"var(--glass)\" stroke-width=\"2\" stroke-linejoin=\"round\" opacity=\"0.8\"/>\n  <path d=\"M28,128 L86,128 L86,140 L28,140 Z\" fill=\"var(--card)\" stroke=\"var(--glass)\"\n        stroke-width=\"1.6\"/>\n  <g stroke=\"var(--glass)\" stroke-width=\"0.8\" opacity=\"0.6\">\n    <path d=\"M38,128 L38,140\"/><path d=\"M48,128 L48,140\"/><path d=\"M58,128 L58,140\"/>\n    <path d=\"M68,128 L68,140\"/><path d=\"M78,128 L78,140\"/>\n  </g>\n  <path d=\"M120,128 C120,120 190,120 190,128 Z\" fill=\"var(--warn)\" opacity=\"0.45\"/>\n  <path d=\"M126,127 L184,127\" stroke=\"var(--potatoline)\" stroke-width=\"3\"\n        stroke-linecap=\"round\"/>\n  <path d=\"M172,124 L230,92 L233,96 L175,128 Z\" fill=\"var(--glass-fill)\"\n        stroke=\"var(--glass)\" stroke-width=\"1.8\" stroke-linejoin=\"round\" opacity=\"0.85\"/>\n  <path d=\"M243,84 L240,90 L233,96 L230,92 L237,86 Z\" fill=\"var(--metal)\"\n        stroke=\"var(--ink)\" stroke-width=\"1.4\" stroke-linejoin=\"round\"/>\n  <path d=\"M243,84 L272,64\" stroke=\"var(--metal)\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n  <path d=\"M243,84 L272,64\" stroke=\"var(--ink)\" stroke-width=\"1.2\"/>\n  <path d=\"M225,110 C218,104 214,100 212,96\" fill=\"none\" stroke=\"var(--accent)\"\n        stroke-width=\"2\" stroke-dasharray=\"4 3\" marker-end=\"\"/>\n  <path d=\"M212,96 L216,100 M212,96 L216,95\" fill=\"none\" stroke=\"var(--accent)\"\n        stroke-width=\"2\" stroke-linecap=\"round\"/>\n  <text x=\"150\" y=\"160\" text-anchor=\"middle\" font-size=\"11\" fill=\"var(--muted)\"\n        font-family=\"system-ui, sans-serif\">lowered from one edge, so the air is pushed out\n    ahead of the glass</text>\n  <text x=\"150\" y=\"112\" text-anchor=\"middle\" font-size=\"10\" fill=\"var(--muted)\"\n        font-family=\"system-ui, sans-serif\">onion peel in a drop of iodine</text>\n</svg>\n", CAP = "The slide made up: the peel lies flat in a drop of iodine, and the coverslip has been lowered from one edge so no air is trapped underneath it.";
+  var byId = {};
+  ITEMS.forEach(function (it) { byId[it.id] = it; });
+
+  var tray = document.getElementById("tray"), msg = document.getElementById("msg");
+  var why = document.getElementById("why"), rig = document.getElementById("rig");
+  var elCheck = document.getElementById("check"), elReset = document.getElementById("reset");
+  var tiles = Array.prototype.slice.call(tray.querySelectorAll(".tile"));
+  var locked = false;
+
+  function shuffleTray() {
+    var kids = Array.prototype.slice.call(tray.children);
+    for (var i = kids.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = kids[i]; kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k) { tray.appendChild(k); });
+  }
+  shuffleTray();
+
+  function say(text, kind) {
+    msg.textContent = text;
+    msg.className = kind ? "msg " + kind : "msg";
+  }
+
+  function chosen() {
+    return tiles.filter(function (t) { return t.getAttribute("aria-pressed") === "true"; })
+                .map(function (t) { return t.dataset.id; });
+  }
+
+  tiles.forEach(function (t) {
+    t.addEventListener("click", function () {
+      if (locked) return;
+      var on = t.getAttribute("aria-pressed") === "true";
+      t.setAttribute("aria-pressed", on ? "false" : "true");
+      var n = chosen().length;
+      say(n === 0 ? "Nothing chosen yet."
+                  : n + (n === 1 ? " piece chosen." : " pieces chosen."));
+    });
+  });
+
+  function check() {
+    if (locked) return;
+    var picked = chosen();
+    if (!picked.length) { say("Choose the equipment first, then check your set-up."); return; }
+    locked = true;
+    var hits = [], missed = [], over = [];
+    tiles.forEach(function (t) {
+      var it = byId[t.dataset.id], on = picked.indexOf(it.id) !== -1;
+      t.disabled = true;
+      var mk = t.querySelector(".mk");
+      if (it.needed && on) { t.classList.add("hit"); mk.textContent = "needed"; hits.push(it); }
+      else if (it.needed) { t.classList.add("miss"); mk.textContent = "missed"; missed.push(it); }
+      else if (on) { t.classList.add("over"); mk.textContent = "not needed"; over.push(it); }
+      else { mk.textContent = ""; }
+    });
+
+    var need = ITEMS.filter(function (i) { return i.needed; }).length;
+    var parts = ["You chose " + hits.length + " of the " + need + " pieces this method needs"];
+    if (over.length) parts.push("and " + over.length + " it does not");
+    say(parts.join(", ") + ".", (hits.length === need && !over.length) ? "good" : null);
+
+    var out = "";
+    if (missed.length) {
+      out += "<h2>Missed</h2><ul>" + missed.map(function (i) {
+        return "<li><b>" + i.name + "</b> &mdash; " + i.why + "</li>"; }).join("") + "</ul>";
+    }
+    if (over.length) {
+      out += "<h2>Chosen, but not needed</h2><ul>" + over.map(function (i) {
+        return "<li><b>" + i.name + "</b> &mdash; " + i.why + "</li>"; }).join("") + "</ul>";
+    }
+    out += "<h2>What each piece is for</h2><ul>"
+      + ITEMS.filter(function (i) { return i.needed; }).map(function (i) {
+          return "<li><b>" + i.name + "</b> &mdash; " + i.why + "</li>"; }).join("")
+      + "</ul>";
+    why.innerHTML = out;
+
+    rig.hidden = false;
+    rig.innerHTML = RIG + '<div class="cap">' + CAP + '</div>';
+    elCheck.disabled = true;
+    reportHeight();
+  }
+
+  elCheck.addEventListener("click", check);
+  elReset.addEventListener("click", function () {
+    locked = false;
+    tiles.forEach(function (t) {
+      t.disabled = false;
+      t.setAttribute("aria-pressed", "false");
+      t.classList.remove("hit", "miss", "over");
+      t.querySelector(".mk").textContent = "";
+    });
+    why.innerHTML = ""; rig.hidden = true; rig.innerHTML = "";
+    elCheck.disabled = false;
+    shuffleTray();
+    say("Nothing chosen yet.");
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

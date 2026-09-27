@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Counting plants in quadrats</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,340px);gap:12px;
+  align-items:stretch;margin-bottom:2px}
+@media (max-width:700px){.bench{grid-template-columns:1fr}}
+.results{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;display:flex;flex-direction:column;justify-content:center}
+.stage{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stage svg{flex:0 0 auto;max-width:100%;height:auto}
+.readouts{flex:1 1 140px;min-width:138px;display:grid;gap:6px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+    border-bottom:1px dotted var(--line);padding-bottom:4px}
+.ro>span{color:var(--muted);font-size:12px}
+.ro b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:650}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:12px 0 0;padding:10px 12px 12px}
+legend{font-size:12px;font-weight:650;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em;padding:0 5px}
+.hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+.picks{display:flex;gap:6px;flex-wrap:wrap}
+.picks button{flex:1 1 56px;padding:9px 4px;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg);border-radius:8px;font:inherit;font-variant-numeric:tabular-nums;
+  cursor:pointer}
+.picks button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);
+  border-color:var(--accent);font-weight:650}
+.picks button:disabled{opacity:.5;cursor:not-allowed}
+.picks button .done{display:block;font-size:10px;color:var(--muted);line-height:1.2}
+.picks button[aria-pressed="true"] .done{color:var(--accent-fg);opacity:.85}
+.fixedgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.fixed{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed b{font-size:15px;font-weight:650;color:var(--fg);padding:5px 0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:8px}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+th[scope="row"]{text-align:left}
+td.empty{color:var(--muted)}
+tr.active th[scope="row"]{color:var(--accent);font-weight:700}
+</style>
+</head>
+<body>
+<div class="sim">
+  <h1>Counting plants in quadrats</h1>
+  <p class="sub">Draw a pair of random numbers, drop the quadrat where they point, and count
+    every plant of the chosen species inside the frame. Ten times.</p>
+
+  <div class="bench">
+    <div class="stage">
+<svg viewBox="0 0 252 252" width="244" role="img" aria-label="A field seen from above, divided
+     into a grid of 10 by 10 squares numbered along both edges. Quadrat frames appear on the
+     squares the random pairs pick out.">
+  <rect x="20" y="14" width="220" height="220" fill="var(--agar)"/>
+  <g><rect x="20" y="14" width="22" height="22" fill="var(--good)" opacity="0.20"/><rect x="20" y="36" width="22" height="22" fill="var(--good)" opacity="0.22"/><rect x="20" y="58" width="22" height="22" fill="var(--good)" opacity="0.30"/><rect x="20" y="80" width="22" height="22" fill="var(--good)" opacity="0.20"/><rect x="20" y="102" width="22" height="22" fill="var(--good)" opacity="0.21"/><rect x="20" y="124" width="22" height="22" fill="var(--good)" opacity="0.23"/><rect x="20" y="146" width="22" height="22" fill="var(--good)" opacity="0.14"/><rect x="20" y="168" width="22" height="22" fill="var(--good)" opacity="0.21"/><rect x="20" y="190" width="22" height="22" fill="var(--good)" opacity="0.24"/><rect x="20" y="212" width="22" height="22" fill="var(--good)" opacity="0.27"/><rect x="42" y="14" width="22" height="22" fill="var(--good)" opacity="0.12"/><rect x="42" y="36" width="22" height="22" fill="var(--good)" opacity="0.17"/><rect x="42" y="58" width="22" height="22" fill="var(--good)" opacity="0.12"/><rect x="42" y="80" width="22" height="22" fill="var(--good)" opacity="0.28"/><rect x="42" y="102" width="22" height="22" fill="var(--good)" opacity="0.25"/><rect x="42" y="124" width="22" height="22" fill="var(--good)" opacity="0.11"/><rect x="42" y="146" width="22" height="22" fill="var(--good)" opacity="0.32"/><rect x="42" y="168" width="22" height="22" fill="var(--good)" opacity="0.31"/><rect x="42" y="190" width="22" height="22" fill="var(--good)" opacity="0.24"/><rect x="42" y="212" width="22" height="22" fill="var(--good)" opacity="0.24"/><rect x="64" y="14" width="22" height="22" fill="var(--good)" opacity="0.13"/><rect x="64" y="36" width="22" height="22" fill="var(--good)" opacity="0.10"/><rect x="64" y="58" width="22" height="22" fill="var(--good)" opacity="0.22"/><rect x="64" y="80" width="22" height="22" fill="var(--good)" opacity="0.11"/><rect x="64" y="102" width="22" height="22" fill="var(--good)" opacity="0.14"/><rect x="64" y="124" width="22" height="22" fill="var(--good)" opacity="0.15"/><rect x="64" y="146" width="22" height="22" fill="var(--good)" opacity="0.11"/><rect x="64" y="168" width="22" height="22" fill="var(--good)" opacity="0.20"/><rect x="64" y="190" width="22" height="22" fill="var(--good)" opacity="0.20"/><rect x="64" y="212" width="22" height="22" fill="var(--good)" opacity="0.29"/><rect x="86" y="14" width="22" height="22" fill="var(--good)" opacity="0.21"/><rect x="86" y="36" width="22" height="22" fill="var(--good)" opacity="0.24"/><rect x="86" y="58" width="22" height="22" fill="var(--good)" opacity="0.21"/><rect x="86" y="80" width="22" height="22" fill="var(--good)" opacity="0.25"/><rect x="86" y="102" width="22" height="22" fill="var(--good)" opacity="0.20"/><rect x="86" y="124" width="22" height="22" fill="var(--good)" opacity="0.16"/><rect x="86" y="146" width="22" height="22" fill="var(--good)" opacity="0.32"/><rect x="86" y="168" width="22" height="22" fill="var(--good)" opacity="0.32"/><rect x="86" y="190" width="22" height="22" fill="var(--good)" opacity="0.28"/><rect x="86" y="212" width="22" height="22" fill="var(--good)" opacity="0.26"/><rect x="108" y="14" width="22" height="22" fill="var(--good)" opacity="0.17"/><rect x="108" y="36" width="22" height="22" fill="var(--good)" opacity="0.15"/><rect x="108" y="58" width="22" height="22" fill="var(--good)" opacity="0.16"/><rect x="108" y="80" width="22" height="22" fill="var(--good)" opacity="0.12"/><rect x="108" y="102" width="22" height="22" fill="var(--good)" opacity="0.27"/><rect x="108" y="124" width="22" height="22" fill="var(--good)" opacity="0.19"/><rect x="108" y="146" width="22" height="22" fill="var(--good)" opacity="0.29"/><rect x="108" y="168" width="22" height="22" fill="var(--good)" opacity="0.19"/><rect x="108" y="190" width="22" height="22" fill="var(--good)" opacity="0.31"/><rect x="108" y="212" width="22" height="22" fill="var(--good)" opacity="0.29"/><rect x="130" y="14" width="22" height="22" fill="var(--good)" opacity="0.10"/><rect x="130" y="36" width="22" height="22" fill="var(--good)" opacity="0.15"/><rect x="130" y="58" width="22" height="22" fill="var(--good)" opacity="0.30"/><rect x="130" y="80" width="22" height="22" fill="var(--good)" opacity="0.20"/><rect x="130" y="102" width="22" height="22" fill="var(--good)" opacity="0.32"/><rect x="130" y="124" width="22" height="22" fill="var(--good)" opacity="0.19"/><rect x="130" y="146" width="22" height="22" fill="var(--good)" opacity="0.12"/><rect x="130" y="168" width="22" height="22" fill="var(--good)" opacity="0.24"/><rect x="130" y="190" width="22" height="22" fill="var(--good)" opacity="0.27"/><rect x="130" y="212" width="22" height="22" fill="var(--good)" opacity="0.16"/><rect x="152" y="14" width="22" height="22" fill="var(--good)" opacity="0.12"/><rect x="152" y="36" width="22" height="22" fill="var(--good)" opacity="0.17"/><rect x="152" y="58" width="22" height="22" fill="var(--good)" opacity="0.31"/><rect x="152" y="80" width="22" height="22" fill="var(--good)" opacity="0.27"/><rect x="152" y="102" width="22" height="22" fill="var(--good)" opacity="0.13"/><rect x="152" y="124" width="22" height="22" fill="var(--good)" opacity="0.15"/><rect x="152" y="146" width="22" height="22" fill="var(--good)" opacity="0.12"/><rect x="152" y="168" width="22" height="22" fill="var(--good)" opacity="0.11"/><rect x="152" y="190" width="22" height="22" fill="var(--good)" opacity="0.28"/><rect x="152" y="212" width="22" height="22" fill="var(--good)" opacity="0.14"/><rect x="174" y="14" width="22" height="22" fill="var(--good)" opacity="0.22"/><rect x="174" y="36" width="22" height="22" fill="var(--good)" opacity="0.20"/><rect x="174" y="58" width="22" height="22" fill="var(--good)" opacity="0.14"/><rect x="174" y="80" width="22" height="22" fill="var(--good)" opacity="0.26"/><rect x="174" y="102" width="22" height="22" fill="var(--good)" opacity="0.13"/><rect x="174" y="124" width="22" height="22" fill="var(--good)" opacity="0.24"/><rect x="174" y="146" width="22" height="22" fill="var(--good)" opacity="0.13"/><rect x="174" y="168" width="22" height="22" fill="var(--good)" opacity="0.19"/><rect x="174" y="190" width="22" height="22" fill="var(--good)" opacity="0.15"/><rect x="174" y="212" width="22" height="22" fill="var(--good)" opacity="0.16"/><rect x="196" y="14" width="22" height="22" fill="var(--good)" opacity="0.31"/><rect x="196" y="36" width="22" height="22" fill="var(--good)" opacity="0.28"/><rect x="196" y="58" width="22" height="22" fill="var(--good)" opacity="0.17"/><rect x="196" y="80" width="22" height="22" fill="var(--good)" opacity="0.29"/><rect x="196" y="102" width="22" height="22" fill="var(--good)" opacity="0.15"/><rect x="196" y="124" width="22" height="22" fill="var(--good)" opacity="0.19"/><rect x="196" y="146" width="22" height="22" fill="var(--good)" opacity="0.29"/><rect x="196" y="168" width="22" height="22" fill="var(--good)" opacity="0.24"/><rect x="196" y="190" width="22" height="22" fill="var(--good)" opacity="0.12"/><rect x="196" y="212" width="22" height="22" fill="var(--good)" opacity="0.32"/><rect x="218" y="14" width="22" height="22" fill="var(--good)" opacity="0.15"/><rect x="218" y="36" width="22" height="22" fill="var(--good)" opacity="0.16"/><rect x="218" y="58" width="22" height="22" fill="var(--good)" opacity="0.27"/><rect x="218" y="80" width="22" height="22" fill="var(--good)" opacity="0.17"/><rect x="218" y="102" width="22" height="22" fill="var(--good)" opacity="0.17"/><rect x="218" y="124" width="22" height="22" fill="var(--good)" opacity="0.12"/><rect x="218" y="146" width="22" height="22" fill="var(--good)" opacity="0.12"/><rect x="218" y="168" width="22" height="22" fill="var(--good)" opacity="0.23"/><rect x="218" y="190" width="22" height="22" fill="var(--good)" opacity="0.15"/><rect x="218" y="212" width="22" height="22" fill="var(--good)" opacity="0.23"/></g>
+  <g><line x1="20" y1="14" x2="20" y2="234" stroke="var(--grid)" stroke-width="1"/><line x1="20" y1="14" x2="240" y2="14" stroke="var(--grid)" stroke-width="1"/><line x1="42" y1="14" x2="42" y2="234" stroke="var(--grid)" stroke-width="1"/><line x1="20" y1="36" x2="240" y2="36" stroke="var(--grid)" stroke-width="1"/><line x1="64" y1="14" x2="64" y2="234" stroke="var(--grid)" stroke-width="1"/><line x1="20" y1="58" x2="240" y2="58" stroke="var(--grid)" stroke-width="1"/><line x1="86" y1="14" x2="86" y2="234" stroke="var(--grid)" stroke-width="1"/><line x1="20" y1="80" x2="240" y2="80" stroke="var(--grid)" stroke-width="1"/><line x1="108" y1="14" x2="108" y2="234" stroke="var(--grid)" stroke-width="1"/><line x1="20" y1="102" x2="240" y2="102" stroke="var(--grid)" stroke-width="1"/><line x1="130" y1="14" x2="130" y2="234" stroke="var(--grid)" stroke-width="1"/><line x1="20" y1="124" x2="240" y2="124" stroke="var(--grid)" stroke-width="1"/><line x1="152" y1="14" x2="152" y2="234" stroke="var(--grid)" stroke-width="1"/><line x1="20" y1="146" x2="240" y2="146" stroke="var(--grid)" stroke-width="1"/><line x1="174" y1="14" x2="174" y2="234" stroke="var(--grid)" stroke-width="1"/><line x1="20" y1="168" x2="240" y2="168" stroke="var(--grid)" stroke-width="1"/><line x1="196" y1="14" x2="196" y2="234" stroke="var(--grid)" stroke-width="1"/><line x1="20" y1="190" x2="240" y2="190" stroke="var(--grid)" stroke-width="1"/><line x1="218" y1="14" x2="218" y2="234" stroke="var(--grid)" stroke-width="1"/><line x1="20" y1="212" x2="240" y2="212" stroke="var(--grid)" stroke-width="1"/><line x1="240" y1="14" x2="240" y2="234" stroke="var(--grid)" stroke-width="1"/><line x1="20" y1="234" x2="240" y2="234" stroke="var(--grid)" stroke-width="1"/></g>
+  <rect x="20" y="14" width="220" height="220" fill="none" stroke="var(--ink)"
+        stroke-width="2"/>
+  <g id="drops"></g>
+  <text x="31" y="246" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">1</text><text x="13" y="32" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">1</text><text x="53" y="246" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">2</text><text x="13" y="54" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">2</text><text x="75" y="246" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">3</text><text x="13" y="76" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">3</text><text x="97" y="246" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">4</text><text x="13" y="98" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">4</text><text x="119" y="246" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">5</text><text x="13" y="120" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">5</text><text x="141" y="246" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">6</text><text x="13" y="142" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">6</text><text x="163" y="246" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">7</text><text x="13" y="164" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">7</text><text x="185" y="246" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">8</text><text x="13" y="186" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">8</text><text x="207" y="246" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">9</text><text x="13" y="208" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">9</text><text x="229" y="246" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">10</text><text x="13" y="230" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="system-ui, sans-serif">10</text>
+</svg>
+      <div class="readouts">
+        <div class="ro"><span>Quadrat</span><b><span id="roQ">0</span> of 10</b></div>
+        <div class="ro"><span>Random pair</span><b id="roP">&mdash;</b></div>
+        <div class="ro"><span>Plants inside</span><b id="roN">&mdash;</b></div>
+        <div class="ro"><span>Running total</span><b id="roT">0</b></div>
+      </div>
+    </div>
+    <div class="results">
+      <table>
+        <caption>Plants of the chosen species inside each quadrat.</caption>
+        <thead><tr><th scope="col">Quadrat</th><th scope="col">Where</th>
+          <th scope="col">Plants</th></tr></thead>
+        <tbody id="tbody"><tr id="q1"><th scope="row">1</th><td class="empty" id="p1">&mdash;</td><td class="empty" id="n1">&mdash;</td></tr><tr id="q2"><th scope="row">2</th><td class="empty" id="p2">&mdash;</td><td class="empty" id="n2">&mdash;</td></tr><tr id="q3"><th scope="row">3</th><td class="empty" id="p3">&mdash;</td><td class="empty" id="n3">&mdash;</td></tr><tr id="q4"><th scope="row">4</th><td class="empty" id="p4">&mdash;</td><td class="empty" id="n4">&mdash;</td></tr><tr id="q5"><th scope="row">5</th><td class="empty" id="p5">&mdash;</td><td class="empty" id="n5">&mdash;</td></tr><tr id="q6"><th scope="row">6</th><td class="empty" id="p6">&mdash;</td><td class="empty" id="n6">&mdash;</td></tr><tr id="q7"><th scope="row">7</th><td class="empty" id="p7">&mdash;</td><td class="empty" id="n7">&mdash;</td></tr><tr id="q8"><th scope="row">8</th><td class="empty" id="p8">&mdash;</td><td class="empty" id="n8">&mdash;</td></tr><tr id="q9"><th scope="row">9</th><td class="empty" id="p9">&mdash;</td><td class="empty" id="n9">&mdash;</td></tr><tr id="q10"><th scope="row">10</th><td class="empty" id="p10">&mdash;</td><td class="empty" id="n10">&mdash;</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>What the method fixes</legend>
+    <p class="hint">Nothing here is yours to choose. The pair of numbers decides where the
+      frame goes, and a pair that lands on thin ground is counted like any other &mdash; that
+      is what keeps the sample fair.</p>
+    <div class="fixedgrid">
+      <div class="fixed"><span>Quadrat</span><b>0.5 m by
+        0.5 m</b></div>
+      <div class="fixed"><span>Area of one quadrat</span><b>0.25
+        m&sup2;</b></div>
+      <div class="fixed"><span>Area of the field</span><b>800
+        m&sup2;</b></div>
+      <div class="fixed"><span>Species counted</span><b>one, the same one each time</b></div>
+    </div>
+  </fieldset>
+
+  <div class="actions">
+    <button id="draw" class="primary" type="button">Draw a random pair</button>
+    <button id="reset" type="button">Start again</button>
+  </div>
+  <p class="msg" id="msg" role="status" aria-live="polite">Ten quadrats to place.</p>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "practical_population-collect";
+  var PAIRS = [[3, 7], [6, 3], [1, 5], [9, 6], [4, 8], [2, 2], [7, 9], [5, 4], [8, 1], [6, 10]], COUNTS = [6, 4, 7, 5, 6, 3, 7, 5, 8, 9];
+  var i = 0, busy = false, total = 0;
+  var msg = document.getElementById("msg"), drops = document.getElementById("drops");
+  var draw = document.getElementById("draw");
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? "msg " + kind : "msg"; }
+
+  draw.addEventListener("click", function () {
+    if (busy || i >= PAIRS.length) return;
+    busy = true; draw.disabled = true;
+    var p = PAIRS[i], n = COUNTS[i], k = i + 1;
+    document.getElementById("roQ").textContent = k;
+    document.getElementById("roP").textContent = "(" + p[0] + ", " + p[1] + ")";
+    document.getElementById("roN").textContent = "\u2014";
+    var tr = document.getElementById("q" + k);
+    Array.prototype.forEach.call(document.querySelectorAll("#tbody tr"), function (r) {
+      r.classList.remove("active"); });
+    tr.classList.add("active");
+
+    var f = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    f.setAttribute("x", 20 + (p[0] - 1) * 22);
+    f.setAttribute("y", 14 + (p[1] - 1) * 22);
+    f.setAttribute("width", 22); f.setAttribute("height", 22);
+    f.setAttribute("fill", "var(--bg)"); f.setAttribute("fill-opacity", "0.25");
+    f.setAttribute("stroke", "var(--accent)"); f.setAttribute("stroke-width", "2.4");
+    drops.appendChild(f);
+
+    var cell = document.getElementById("p" + k);
+    cell.textContent = "(" + p[0] + ", " + p[1] + ")"; cell.classList.remove("empty");
+    say("Quadrat " + k + " lands on (" + p[0] + ", " + p[1] + "). Counting inside the frame.");
+
+    // count up to the reading, so the number is watched being taken rather than appearing
+    var shown = 0, t0 = Date.now();
+    var timer = setInterval(function () {
+      var want = Math.min(n, Math.floor((Date.now() - t0) / 90));
+      if (want > shown) { shown = want; document.getElementById("roN").textContent = shown; }
+      if (shown >= n) {
+        clearInterval(timer);
+        var c = document.getElementById("n" + k);
+        c.textContent = n; c.classList.remove("empty");
+        total += n;
+        document.getElementById("roT").textContent = total;
+        i++; busy = false;
+        if (i >= PAIRS.length) {
+          draw.disabled = true;
+          draw.textContent = "All ten quadrats placed";
+          say("Ten quadrats, " + total + " plants between them. Working that up into a figure "
+              + "for the whole field is the next stage.", "good");
+        } else {
+          draw.disabled = false;
+          say("Quadrat " + k + " held " + n + ". " + (PAIRS.length - i) + " to go.");
+        }
+        reportHeight();
+      }
+    }, 40);
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    if (busy) return;
+    i = 0; total = 0; drops.innerHTML = "";
+    for (var k = 1; k <= PAIRS.length; k++) {
+      ["p", "n"].forEach(function (pre) {
+        var e = document.getElementById(pre + k);
+        e.textContent = "\u2014"; e.classList.add("empty");
+      });
+      document.getElementById("q" + k).classList.remove("active");
+    }
+    document.getElementById("roQ").textContent = "0";
+    document.getElementById("roP").textContent = "\u2014";
+    document.getElementById("roN").textContent = "\u2014";
+    document.getElementById("roT").textContent = "0";
+    draw.disabled = false; draw.textContent = "Draw a random pair";
+    say("Ten quadrats to place.");
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

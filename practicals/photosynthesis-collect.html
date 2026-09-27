@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pondweed and light intensity</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,340px);gap:12px;
+  align-items:stretch;margin-bottom:2px}
+@media (max-width:700px){.bench{grid-template-columns:1fr}}
+.results{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;display:flex;flex-direction:column;justify-content:center}
+.stage{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stage svg{flex:0 0 auto;max-width:100%;height:auto}
+.readouts{flex:1 1 140px;min-width:138px;display:grid;gap:6px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+    border-bottom:1px dotted var(--line);padding-bottom:4px}
+.ro>span{color:var(--muted);font-size:12px}
+.ro b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:650}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:12px 0 0;padding:10px 12px 12px}
+legend{font-size:12px;font-weight:650;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em;padding:0 5px}
+.hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+.picks{display:flex;gap:6px;flex-wrap:wrap}
+.picks button{flex:1 1 56px;padding:9px 4px;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg);border-radius:8px;font:inherit;font-variant-numeric:tabular-nums;
+  cursor:pointer}
+.picks button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);
+  border-color:var(--accent);font-weight:650}
+.picks button:disabled{opacity:.5;cursor:not-allowed}
+.picks button .done{display:block;font-size:10px;color:var(--muted);line-height:1.2}
+.picks button[aria-pressed="true"] .done{color:var(--accent-fg);opacity:.85}
+.fixedgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.fixed{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed b{font-size:15px;font-weight:650;color:var(--fg);padding:5px 0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:8px}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+th[scope="row"]{text-align:left}
+td.empty{color:var(--muted)}
+tr.active th[scope="row"]{color:var(--accent);font-weight:700}
+</style>
+</head>
+<body>
+<div class="sim">
+  <h1>Pondweed and light intensity</h1>
+  <p class="sub">Count the bubbles given off in one minute, three times at each lamp setting.
+    Each setting can be collected once.</p>
+
+  <div class="bench">
+    <div class="stage">
+<svg viewBox="0 0 260 230" width="252" role="img" aria-label="A lamp shining through a beaker
+     of water onto a test tube of pondweed standing in a rack. Bubbles rise from the cut end of
+     the stem.">
+  <ellipse cx="34" cy="196" rx="26" ry="7" fill="var(--metal)" stroke="var(--ink)"
+           stroke-width="2"/>
+  <path d="M8,196 A26,7 0 0 0 60,196 L60,191 A26,7 0 0 1 8,191 Z" fill="var(--metal)"
+        stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M34,191 L34,150 L58,112" stroke="var(--ink)" stroke-width="3.4" fill="none"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M58,112 L88,90 A19,19 0 0 1 98,112 L68,134 Z" fill="var(--dark)"
+        stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+  <ellipse cx="83" cy="123" rx="11" ry="15" transform="rotate(-36 83 123)" fill="var(--bg)"
+           stroke="var(--ink)" stroke-width="2"/>
+  <g id="beam" opacity="0.30">
+    <path d="M92,110 L150,96 L150,152 L92,138 Z" fill="var(--warn)"/>
+  </g>
+  <path d="M110,96 L110,186 L146,186 L146,96" fill="var(--glass-fill)" stroke="var(--glass)"
+        stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M110,110 L110,186 L146,186 L146,110 Z" fill="var(--water)" opacity="0.75"/>
+  <ellipse cx="128" cy="110" rx="18" ry="3.6" fill="var(--water)"/>
+  <path d="M114,124 L114,172" stroke="var(--bg)" stroke-width="2.2" opacity="0.7"/>
+  <rect x="164" y="176" width="74" height="7" rx="2" fill="var(--metal)" stroke="var(--ink)"
+        stroke-width="1.8"/>
+  <rect x="164" y="206" width="74" height="7" rx="2" fill="var(--metal)" stroke="var(--ink)"
+        stroke-width="1.8"/>
+  <rect x="168" y="183" width="6" height="23" fill="var(--metal)" stroke="var(--ink)"
+        stroke-width="1.8"/>
+  <rect x="228" y="183" width="6" height="23" fill="var(--metal)" stroke="var(--ink)"
+        stroke-width="1.8"/>
+  <path d="M186,36 L186,186 A15,15 0 0 0 216,186 L216,36" fill="var(--glass-fill)"
+        stroke="var(--glass)" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M186,58 L186,186 A15,15 0 0 0 216,186 L216,58 Z" fill="var(--water)"
+        opacity="0.75"/>
+  <ellipse cx="201" cy="58" rx="15" ry="3.4" fill="var(--water)"/>
+  <path d="M201,178 L201,72" stroke="var(--good)" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M195,178 L207,178" stroke="var(--good)" stroke-width="3"
+        stroke-linecap="round"/>
+  <g stroke="var(--good)" stroke-width="1.7" fill="none" stroke-linecap="round">
+    <path d="M201,84 C194,81 191,84 188,81"/><path d="M201,84 C208,81 211,84 214,81"/>
+    <path d="M201,104 C194,101 191,104 188,101"/><path d="M201,104 C208,101 211,104 214,101"/>
+    <path d="M201,124 C194,121 191,124 188,121"/><path d="M201,124 C208,121 211,124 214,121"/>
+    <path d="M201,144 C194,141 191,144 188,141"/><path d="M201,144 C208,141 211,144 214,141"/>
+  </g>
+  <g id="bubbles"></g>
+  <ellipse cx="201" cy="36" rx="15" ry="4" fill="var(--bg)" stroke="var(--glass)"
+           stroke-width="2.4"/>
+  <ellipse cx="128" cy="96" rx="18" ry="4" fill="var(--bg)" stroke="var(--glass)"
+           stroke-width="2.4"/>
+  <text x="128" y="204" text-anchor="middle" font-size="10" fill="var(--muted)"
+        font-family="system-ui, sans-serif">heat shield</text>
+</svg>
+
+      <div class="readouts">
+        <div class="ro"><span>Lamp setting</span><b id="roS">1</b></div>
+        <div class="ro"><span>Run</span><b><span id="roR">0</span> of 3</b></div>
+        <div class="ro"><span>Bubbles</span><b id="roB">0</b></div>
+        <div class="ro"><span>Time</span><b><span id="roT">0</span> s</b></div>
+      </div>
+    </div>
+    <div class="results">
+      <table>
+        <caption>Bubbles counted in one minute, at each lamp setting.</caption>
+        <thead><tr><th scope="col">Setting</th><th scope="col">Run 1</th>
+          <th scope="col">Run 2</th><th scope="col">Run 3</th></tr></thead>
+        <tbody id="tbody"><tr id="row1"><th scope="row">1</th><td class="empty" id="c1_0">&mdash;</td><td class="empty" id="c1_1">&mdash;</td><td class="empty" id="c1_2">&mdash;</td></tr><tr id="row2"><th scope="row">2</th><td class="empty" id="c2_0">&mdash;</td><td class="empty" id="c2_1">&mdash;</td><td class="empty" id="c2_2">&mdash;</td></tr><tr id="row3"><th scope="row">3</th><td class="empty" id="c3_0">&mdash;</td><td class="empty" id="c3_1">&mdash;</td><td class="empty" id="c3_2">&mdash;</td></tr><tr id="row4"><th scope="row">4</th><td class="empty" id="c4_0">&mdash;</td><td class="empty" id="c4_1">&mdash;</td><td class="empty" id="c4_2">&mdash;</td></tr><tr id="row5"><th scope="row">5</th><td class="empty" id="c5_0">&mdash;</td><td class="empty" id="c5_1">&mdash;</td><td class="empty" id="c5_2">&mdash;</td></tr><tr id="row6"><th scope="row">6</th><td class="empty" id="c6_0">&mdash;</td><td class="empty" id="c6_1">&mdash;</td><td class="empty" id="c6_2">&mdash;</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>Independent variable &mdash; what we change</legend>
+    <p class="hint">The brightness of the lamp, set on its own dial from 1 to 6.</p>
+    <div class="picks" id="picks" role="group" aria-label="Lamp setting"><button type="button" data-s="1" aria-pressed="true">1<span class="done" data-done="1"></span></button><button type="button" data-s="2" aria-pressed="false">2<span class="done" data-done="2"></span></button><button type="button" data-s="3" aria-pressed="false">3<span class="done" data-done="3"></span></button><button type="button" data-s="4" aria-pressed="false">4<span class="done" data-done="4"></span></button><button type="button" data-s="5" aria-pressed="false">5<span class="done" data-done="5"></span></button><button type="button" data-s="6" aria-pressed="false">6<span class="done" data-done="6"></span></button></div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Control variables &mdash; what we keep the same</legend>
+    <p class="hint">The design sets these once and holds them there. The beaker of water between
+      the lamp and the tube takes the heat out of the light, so a brighter setting does not also
+      warm the water.</p>
+    <div class="fixedgrid">
+      <div class="fixed"><span>Piece of pondweed</span><b>the same one throughout</b></div>
+      <div class="fixed"><span>Distance from lamp to tube</span><b>20 cm</b></div>
+      <div class="fixed"><span>Water in the tube</span><b>15 cm&sup3;</b></div>
+      <div class="fixed"><span>Counting time</span><b>60 s</b></div>
+    </div>
+  </fieldset>
+
+  <div class="actions">
+    <button id="run" class="primary" type="button">Collect the three runs at setting 1</button>
+    <button id="reset" type="button">Start the whole experiment again</button>
+  </div>
+  <p class="msg" id="msg" role="status" aria-live="polite">Pick a setting, then collect.</p>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "practical_photosynthesis-collect";
+  var DATA = {"1": [5, 7, 6], "2": [12, 11, 13], "3": [17, 19, 34], "4": [23, 25, 24], "5": [30, 29, 31], "6": [31, 29, 30]};
+  var setting = 1, running = false;
+  var done = {};
+
+  var picks = document.getElementById("picks"), msg = document.getElementById("msg");
+  var run = document.getElementById("run"), bubbles = document.getElementById("bubbles");
+  var beam = document.getElementById("beam");
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? "msg " + kind : "msg"; }
+
+  function paintPicks() {
+    Array.prototype.forEach.call(picks.children, function (b) {
+      var s = +b.dataset.s;
+      b.setAttribute("aria-pressed", s === setting ? "true" : "false");
+      b.disabled = running || !!done[s];
+      b.querySelector(".done").textContent = done[s] ? "done" : "";
+    });
+    document.getElementById("roS").textContent = setting;
+    // A brighter setting is a brighter beam, so the apparatus shows what the dial says.
+    beam.setAttribute("opacity", (0.12 + 0.06 * setting).toFixed(2));
+    run.textContent = done[setting]
+      ? "Setting " + setting + " is already collected"
+      : "Collect the three runs at setting " + setting;
+    run.disabled = running || !!done[setting];
+    Array.prototype.forEach.call(document.querySelectorAll("#tbody tr"), function (tr) {
+      tr.classList.toggle("active", tr.id === "row" + setting);
+    });
+  }
+
+  picks.addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-s]");
+    if (!b || running || b.disabled) return;
+    setting = +b.dataset.s;
+    paintPicks();
+    reportHeight();
+  });
+
+  // setInterval on the wall clock, never requestAnimationFrame: a frame callback is throttled
+  // to a stop in a background tab, and the run would never finish.
+  function oneRun(n, counts, idx, after) {
+    running = true; paintPicks();
+    var target = counts[idx], t0 = Date.now(), shown = 0;
+    document.getElementById("roR").textContent = idx + 1;
+    var timer = setInterval(function () {
+      var p = Math.min(1, (Date.now() - t0) / 2600);
+      document.getElementById("roT").textContent = Math.round(p * 60);
+      var want = Math.round(p * target);
+      while (shown < want) { shown++; blow(); }
+      document.getElementById("roB").textContent = shown;
+      if (p >= 1) {
+        clearInterval(timer);
+        var cell = document.getElementById("c" + n + "_" + idx);
+        cell.textContent = target; cell.classList.remove("empty");
+        after();
+      }
+    }, 40);
+  }
+
+  function blow() {
+    var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    c.setAttribute("cx", 201 + (Math.random() * 10 - 5));
+    c.setAttribute("cy", 172);
+    c.setAttribute("r", 2 + Math.random() * 1.6);
+    c.setAttribute("fill", "var(--bubble)");
+    c.setAttribute("stroke", "var(--glass)");
+    c.setAttribute("stroke-width", "0.7");
+    bubbles.appendChild(c);
+    var y = 172, t = setInterval(function () {
+      y -= 3.2;
+      c.setAttribute("cy", y);
+      if (y < 62) { clearInterval(t); if (c.parentNode) c.parentNode.removeChild(c); }
+    }, 30);
+  }
+
+  run.addEventListener("click", function () {
+    if (running || done[setting]) return;
+    var counts = DATA[setting];
+    say("Counting. Three runs at setting " + setting + ".");
+    oneRun(setting, counts, 0, function () {
+      oneRun(setting, counts, 1, function () {
+        oneRun(setting, counts, 2, function () {
+          done[setting] = true; running = false;
+          var left = 6 - Object.keys(done).length;
+          say(left ? "Setting " + setting + " done. " + left +
+                     (left === 1 ? " setting left." : " settings left.")
+                   : "All six settings collected. The means are the next stage's work.",
+              left ? null : "good");
+          var next = [1,2,3,4,5,6].filter(function (s) { return !done[s]; })[0];
+          if (next) setting = next;
+          paintPicks(); reportHeight();
+        });
+      });
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    if (running) return;
+    done = {}; setting = 1;
+    Array.prototype.forEach.call(document.querySelectorAll("#tbody td"), function (td) {
+      td.textContent = "\u2014"; td.classList.add("empty");
+    });
+    document.getElementById("roR").textContent = "0";
+    document.getElementById("roB").textContent = "0";
+    document.getElementById("roT").textContent = "0";
+    say("Pick a setting, then collect.");
+    paintPicks(); reportHeight();
+  });
+
+  paintPicks();
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

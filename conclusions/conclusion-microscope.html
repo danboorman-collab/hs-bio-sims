@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Write your conclusion</title>
+<title>Choose the conclusion</title>
 <style>
 :root{
   --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
@@ -56,125 +56,125 @@ h1{font-size:17px;margin:0 0 2px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
   margin-top:12px}
 .panel[hidden]{display:none}
-.panel h2{font-size:12.5px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+.panel h2{font-size:12px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
   letter-spacing:.04em}
-.setup{font-size:13.5px;color:var(--muted);margin:0 0 8px}
+.setup{font-size:13.5px;color:var(--muted);margin:0 0 9px}
 .model{font-size:15px;line-height:1.62;margin:0;padding:11px 13px;background:var(--bg);
   border:1px solid var(--line);border-radius:8px}
-.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.tag{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;
-  background:var(--bg);color:var(--muted)}
-.tag b{color:var(--accent);font-weight:650}
-.q{font-family:var(--serif,Georgia,serif);font-size:17px;margin:0 0 10px}
-textarea{width:100%;min-height:150px;font:inherit;font-size:15px;line-height:1.6;padding:11px;
-  border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
-  resize:vertical}
-textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
-.count{font-size:12.5px;color:var(--muted);margin-top:6px}
-.check{display:grid;gap:8px;margin-top:10px}
-.check label{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;
-  border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);
-  cursor:pointer}
-.check input{margin-top:3px;width:17px;height:17px;flex:0 0 auto;accent-color:var(--accent)}
-.check label.ticked{border-color:var(--good-line);background:var(--good-bg)}
-.selfmark{font-size:13px;color:var(--muted);margin-top:10px}
-.yours{white-space:pre-wrap;font-size:15px;line-height:1.62;margin:0;padding:11px 13px;
-  background:var(--bg);border:1px solid var(--line);border-radius:8px}
+.why{list-style:none;padding:0;margin:11px 0 0;display:grid;gap:7px}
+.why li{font-size:13.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);
+  border-left:3px solid var(--accent);border-radius:8px;padding:8px 11px}
+.why q{font-style:italic;color:var(--accent);quotes:"\201C" "\201D"}
+.why b{color:var(--fg);font-weight:650}
+.shape{font-size:13.5px;margin:11px 0 0;padding:9px 11px;border:1px solid var(--warn-line);
+  background:var(--warn-bg);color:var(--warn);border-radius:8px}
+.recap{font-size:14px;line-height:1.55;margin:0 0 11px;padding:10px 12px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.q{font-size:15px;font-weight:600;margin:0 0 10px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:11px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:14.5px;line-height:1.55;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.picked{border-color:var(--accent)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw{font-size:13.5px;line-height:1.5;margin:6px 0 0;padding:8px 11px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line)}
+.rw.good{border-color:var(--good-line);background:var(--good-bg)}
+.rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw b{font-weight:650}
 </style>
 </head>
 <body>
 <div class="sim">
-<h1>Write your conclusion</h1>
+<h1>Choose the conclusion</h1>
 <p class="sub">A conclusion says what the results show. It is not a summary of what you did.</p>
 
 <div class="panel">
-<h2>A worked example, from a different investigation</h2>
-<p class="setup">Seedlings were grown at five temperatures and their height measured after two weeks.</p>
-<p class="model">As the temperature rose from 10 &deg;C to 25 &deg;C the seedlings grew taller, from 4 cm at 10 &deg;C to 11 cm at 25 &deg;C. Above 25 &deg;C they grew less well, reaching only 6 cm at 30 &deg;C. So these seedlings grow tallest at about 25 &deg;C. The results do not show what happens above 30 &deg;C, because no higher temperature was tested.</p>
-<div class="tags"><span class="tag"><b>relationship</b> &mdash; taller as the temperature rose, then less well above 25 &deg;C</span><span class="tag"><b>figure</b> &mdash; 4 cm, 11 cm and 6 cm, quoted from the results</span><span class="tag"><b>limit</b> &mdash; nothing above 30 &deg;C was tested</span></div>
+<h2>First, a conclusion that does the job &mdash; A photograph of an ant</h2>
+<p class="setup">A photograph of an ant is printed 45 mm long. The real ant is 5 mm long.</p>
+<p class="model">The ant is printed 45 mm long and the real ant is 5 mm long. 45 divided by 5 is 9, so the photograph is &times;9. The answer is written with no units, because it is one length divided by another length of the same kind. It does not tell you how much detail the photograph shows, which depends on the camera that took it.</p>
+<ul class="why"><li><b>The answer that was asked for.</b> <q>the photograph is &times;9</q> &mdash; The question asked how much bigger, so the conclusion gives the magnification.</li><li><b>Where the number came from.</b> <q>45 mm divided by 5 mm</q> &mdash; Both lengths and the division, so a reader can check it.</li><li><b>What it does not tell you.</b> <q>how much detail the photograph shows</q> &mdash; Making something bigger is not the same as showing more of it, so the conclusion says so.</li></ul>
+<p class="shape">Your own conclusion has to do those same three things, and it has to end in the number the question asked for.</p>
 </div>
 
 <div class="panel">
-<h2>Now write your own</h2>
-<p class="q">How much larger than the real cell is the drawing?</p>
-<label for="ans" class="setup">Use your own results. Three or four sentences is enough.</label>
-<textarea id="ans" placeholder="As the ... increased, the ..."></textarea>
-<p class="count" id="count">0 words</p>
-<div class="actions">
-  <button id="show" class="primary" type="button" disabled>Compare with the model answer</button>
-  <button id="clear" type="button">Clear</button>
-</div>
+<h2>Now your own results</h2>
+<p class="recap">You drew a row of 8 cells, and the row you drew measures 60 mm across. A real cell of this kind is 0.3 mm long.</p>
+<p class="q">Which of these is the most accurate conclusion for your drawing?</p>
+<div class="opts" id="opts"></div>
+<p class="msg" id="msg" role="status" aria-live="polite">Pick one. You get one go at it, and
+then all three are explained.</p>
 </div>
 
-<div class="panel" id="rev" hidden>
-<h2>The model answer</h2>
-<p class="model">The row of 8 cells was drawn 60 mm long, so one cell was drawn 7.5 mm. A real cell is 0.3 mm long, so the magnification is &times;25. It is written with no units, because it is one length divided by another. This does not tell you the resolution of the microscope, which is a different thing and is set by the light.</p>
-<h2 style="margin-top:14px">Your own</h2>
-<p class="yours" id="mine"></p>
-<h2 style="margin-top:14px">Check yours against it</h2>
-<div class="check"><label id="lab-relationship"><input type="checkbox" id="ck-relationship"><span>Says what the results show &mdash; how the thing you changed affected the thing you measured.</span></label><label id="lab-figure"><input type="checkbox" id="ck-figure"><span>Backs it with a figure from your own results, not just a direction.</span></label><label id="lab-limit"><input type="checkbox" id="ck-limit"><span>Says what the results do <b>not</b> show, and why.</span></label></div>
-<p class="selfmark" id="tally">Nothing ticked yet. Be honest with this &mdash; nobody marks it
-but you, and the point is to see what a conclusion needs.</p>
+<div class="panel" id="after" hidden>
+<h2>What that conclusion had to do</h2>
+<ul class="why" id="afterlist"><li><b>The answer that was asked for.</b> The question asked for a number, so the conclusion gives that number.</li><li><b>Where the number came from.</b> The figures it was worked out from, so the arithmetic can be checked.</li><li><b>What it does not tell you.</b> What the number is not, which is easy to forget once it is written down.</li></ul>
 </div>
-
-<p class="msg" id="msg" role="status" aria-live="polite"></p>
 </div>
 <script>
 (function () {
   "use strict";
 
   var SIM_ID = "conclusion-microscope";
-  var KEYS = ["relationship", "figure", "limit"];
-  var ta = document.getElementById("ans"), show = document.getElementById("show");
-  var count = document.getElementById("count"), msg = document.getElementById("msg");
-  var STORE = "hsbio-conclusion-microscope";
+  var OPTS = [{"text": "The row of 8 cells was drawn 60 mm long, so one cell was drawn 7.5 mm long. A real cell is 0.3 mm long, and 7.5 divided by 0.3 is 25, so the drawing is &times;25. The answer is written with no units, because it is one length divided by another length of the same kind.", "ok": true, "why": "This one answers what was asked, shows both lengths and the division, and gets the units right: a magnification has none."}, {"text": "The row was drawn 60 mm long and a real cell is 0.3 mm long, and 60 divided by 0.3 is 200, so the drawing is &times;200. The answer is written with no units, because it is one length divided by another length of the same kind, so the two sets of millimetres cancel out.", "ok": false, "why": "The 60 mm is 8 cells, not one. Dividing a row of 8 by a single cell makes the drawing look 8 times bigger than it is. Divide 60 by 8 first."}, {"text": "One cell was drawn 7.5 mm long and a real cell is 0.3 mm long, and 7.5 minus 0.3 is 7.2, so the drawing is 7.2 mm larger than the cell it was drawn from. The magnification of the drawing is therefore 7.2 mm, worked out from the length drawn and the length of the real cell.", "ok": false, "why": "Magnification is how many times bigger, not how much bigger, so the two lengths are divided rather than subtracted. That is also why a magnification carries no units."}];
+  var LETTERS = "ABC";
+  var box = document.getElementById("opts"), msg = document.getElementById("msg");
+  var done = false;
 
-  function words(s) { return s.trim() ? s.trim().split(/\s+/).length : 0; }
-
-  function update() {
-    var n = words(ta.value);
-    count.textContent = n + (n === 1 ? " word" : " words");
-    show.disabled = n < 15;
-    if (n && n < 15) count.textContent += " \u2014 a little more before you compare";
-    try { localStorage.setItem(STORE, ta.value); } catch (e) {}
+  // Fisher-Yates, so the accurate conclusion is in no fixed position.
+  var order = OPTS.map(function (o, i) { return i; });
+  for (var i = order.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1)), t = order[i];
+    order[i] = order[j]; order[j] = t;
   }
-  ta.addEventListener("input", update);
 
-  // a draft survives a reload; it never leaves this browser
-  try {
-    var saved = localStorage.getItem(STORE);
-    if (saved) { ta.value = saved; }
-  } catch (e) {}
-  update();
-
-  show.addEventListener("click", function () {
-    document.getElementById("mine").textContent = ta.value.trim();
-    document.getElementById("rev").hidden = false;
-    msg.textContent = "Read the model answer, then tick whichever of the three your own does.";
-    msg.className = "msg";
-    document.getElementById("rev").scrollIntoView({ block: "start", behavior: "smooth" });
-    reportHeight();
+  order.forEach(function (idx, pos) {
+    var o = OPTS[idx];
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt";
+    b.dataset.i = idx;
+    b.innerHTML = '<span class="ltr">' + LETTERS[pos] + '</span><span>' + o.text + '</span>';
+    box.appendChild(b);
+    var r = document.createElement("p");
+    r.className = "rw";
+    r.id = "rw" + idx;
+    r.hidden = true;
+    box.appendChild(r);
   });
 
-  document.getElementById("clear").addEventListener("click", function () {
-    ta.value = ""; update(); ta.focus();
-    try { localStorage.removeItem(STORE); } catch (e) {}
-  });
+  box.addEventListener("click", function (e) {
+    var b = e.target.closest(".opt");
+    if (!b || done) return;
+    done = true;
+    var chosen = +b.dataset.i;
 
-  var tally = document.getElementById("tally");
-  KEYS.forEach(function (k) {
-    var box = document.getElementById("ck-" + k), lab = document.getElementById("lab-" + k);
-    box.addEventListener("change", function () {
-      lab.classList.toggle("ticked", box.checked);
-      var n = 0;
-      KEYS.forEach(function (j) { if (document.getElementById("ck-" + j).checked) n++; });
-      tally.innerHTML = n === KEYS.length
-        ? "All three. That is what a conclusion needs: what the results show, a figure to back "
-          + "it, and an honest word about what they do not show."
-        : n + " of " + KEYS.length + " ticked. Look at the model again for the ones you left "
-          + "&mdash; the last is the one most people miss.";
-      reportHeight();
+    OPTS.forEach(function (o, idx) {
+      var btn = box.querySelector('.opt[data-i="' + idx + '"]');
+      btn.disabled = true;
+      btn.classList.add(o.ok ? "right" : "wrong");
+      var r = document.getElementById("rw" + idx);
+      r.hidden = false;
+      r.className = "rw " + (o.ok ? "good" : "bad");
+      var head = o.ok ? "The accurate one." : "Not this one.";
+      if (idx === chosen) head = o.ok ? "You picked this one, and it is the accurate one."
+                                      : "You picked this one.";
+      r.innerHTML = "<b>" + head + "</b> " + o.why;
     });
+
+    var right = OPTS[chosen].ok;
+    msg.textContent = right
+      ? "That is the one. Read the other two as well \u2014 each is wrong in a way that is "
+        + "easy to fall into."
+      : "Not that one. The accurate conclusion is marked in green, and every option now says "
+        + "what is right or wrong with it.";
+    msg.className = "msg " + (right ? "good" : "warn");
+    document.getElementById("after").hidden = false;
+    reportHeight();
   });
 
 

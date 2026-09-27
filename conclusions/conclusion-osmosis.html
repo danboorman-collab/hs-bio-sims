@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Write your conclusion</title>
+<title>Choose the conclusion</title>
 <style>
 :root{
   --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
@@ -56,125 +56,125 @@ h1{font-size:17px;margin:0 0 2px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
   margin-top:12px}
 .panel[hidden]{display:none}
-.panel h2{font-size:12.5px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+.panel h2{font-size:12px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
   letter-spacing:.04em}
-.setup{font-size:13.5px;color:var(--muted);margin:0 0 8px}
+.setup{font-size:13.5px;color:var(--muted);margin:0 0 9px}
 .model{font-size:15px;line-height:1.62;margin:0;padding:11px 13px;background:var(--bg);
   border:1px solid var(--line);border-radius:8px}
-.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.tag{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;
-  background:var(--bg);color:var(--muted)}
-.tag b{color:var(--accent);font-weight:650}
-.q{font-family:var(--serif,Georgia,serif);font-size:17px;margin:0 0 10px}
-textarea{width:100%;min-height:150px;font:inherit;font-size:15px;line-height:1.6;padding:11px;
-  border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
-  resize:vertical}
-textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
-.count{font-size:12.5px;color:var(--muted);margin-top:6px}
-.check{display:grid;gap:8px;margin-top:10px}
-.check label{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;
-  border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);
-  cursor:pointer}
-.check input{margin-top:3px;width:17px;height:17px;flex:0 0 auto;accent-color:var(--accent)}
-.check label.ticked{border-color:var(--good-line);background:var(--good-bg)}
-.selfmark{font-size:13px;color:var(--muted);margin-top:10px}
-.yours{white-space:pre-wrap;font-size:15px;line-height:1.62;margin:0;padding:11px 13px;
-  background:var(--bg);border:1px solid var(--line);border-radius:8px}
+.why{list-style:none;padding:0;margin:11px 0 0;display:grid;gap:7px}
+.why li{font-size:13.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);
+  border-left:3px solid var(--accent);border-radius:8px;padding:8px 11px}
+.why q{font-style:italic;color:var(--accent);quotes:"\201C" "\201D"}
+.why b{color:var(--fg);font-weight:650}
+.shape{font-size:13.5px;margin:11px 0 0;padding:9px 11px;border:1px solid var(--warn-line);
+  background:var(--warn-bg);color:var(--warn);border-radius:8px}
+.recap{font-size:14px;line-height:1.55;margin:0 0 11px;padding:10px 12px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.q{font-size:15px;font-weight:600;margin:0 0 10px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:11px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:14.5px;line-height:1.55;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.picked{border-color:var(--accent)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw{font-size:13.5px;line-height:1.5;margin:6px 0 0;padding:8px 11px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line)}
+.rw.good{border-color:var(--good-line);background:var(--good-bg)}
+.rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw b{font-weight:650}
 </style>
 </head>
 <body>
 <div class="sim">
-<h1>Write your conclusion</h1>
+<h1>Choose the conclusion</h1>
 <p class="sub">A conclusion says what the results show. It is not a summary of what you did.</p>
 
 <div class="panel">
-<h2>A worked example, from a different investigation</h2>
-<p class="setup">Seedlings were grown at five temperatures and their height measured after two weeks.</p>
-<p class="model">As the temperature rose from 10 &deg;C to 25 &deg;C the seedlings grew taller, from 4 cm at 10 &deg;C to 11 cm at 25 &deg;C. Above 25 &deg;C they grew less well, reaching only 6 cm at 30 &deg;C. So these seedlings grow tallest at about 25 &deg;C. The results do not show what happens above 30 &deg;C, because no higher temperature was tested.</p>
-<div class="tags"><span class="tag"><b>relationship</b> &mdash; taller as the temperature rose, then less well above 25 &deg;C</span><span class="tag"><b>figure</b> &mdash; 4 cm, 11 cm and 6 cm, quoted from the results</span><span class="tag"><b>limit</b> &mdash; nothing above 30 &deg;C was tested</span></div>
+<h2>First, a conclusion that does the job &mdash; Bags of dialysis tubing</h2>
+<p class="setup">Five bags of dialysis tubing, each holding the same sugar solution, were left for 30 minutes in sucrose solutions of five strengths, then weighed.</p>
+<p class="model">The bags in the weaker solutions gained mass and those in the stronger ones lost it: +18% in pure water and &minus;15% in 25% sucrose. The line of best fit crosses zero at about 12% sucrose, so a solution of about that strength matches the solution inside the bags. The results do not show what happens above 25% sucrose, because no stronger solution was tested.</p>
+<ul class="why"><li><b>What the results show.</b> <q>gained mass ... lost it ... crosses zero at about 12% sucrose</q> &mdash; The direction changes partway along, so the conclusion says where it changes, not just which way it goes.</li><li><b>A figure from them.</b> <q>+18%, &minus;15% and 12%</q> &mdash; The two ends and the crossing point, all read off the graph that was drawn.</li><li><b>What they do not show.</b> <q>no stronger solution was tested</q> &mdash; 25% sucrose was the strongest tried, so nothing can be said about a stronger one.</li></ul>
+<p class="shape">Your own conclusion has to do those same three things, and it has to fit every one of your readings, not just the first few.</p>
 </div>
 
 <div class="panel">
-<h2>Now write your own</h2>
-<p class="q">How does the concentration of a sugar solution change the mass of potato tissue?</p>
-<label for="ans" class="setup">Use your own results. Three or four sentences is enough.</label>
-<textarea id="ans" placeholder="As the ... increased, the ..."></textarea>
-<p class="count" id="count">0 words</p>
-<div class="actions">
-  <button id="show" class="primary" type="button" disabled>Compare with the model answer</button>
-  <button id="clear" type="button">Clear</button>
-</div>
+<h2>Now your own results</h2>
+<p class="recap">Your cylinders gained 24% in pure water, gained 12% in 5% sucrose, gained 1% in 10% sucrose, lost 11% in 15% sucrose and lost 20% in 20% sucrose. Your line of best fit crossed zero at about 10.5% sucrose.</p>
+<p class="q">Which of these is the most accurate conclusion for your results?</p>
+<div class="opts" id="opts"></div>
+<p class="msg" id="msg" role="status" aria-live="polite">Pick one. You get one go at it, and
+then all three are explained.</p>
 </div>
 
-<div class="panel" id="rev" hidden>
-<h2>The model answer</h2>
-<p class="model">Cylinders in the weaker solutions gained mass and those in the stronger ones lost it: +24% in pure water and &minus;20% in 20% sucrose. The line of best fit crosses zero at about 10.5% sucrose, so a solution of about that strength matches the solution inside the potato cells. The results do not show what happens above 20% sucrose, because no stronger solution was tested.</p>
-<h2 style="margin-top:14px">Your own</h2>
-<p class="yours" id="mine"></p>
-<h2 style="margin-top:14px">Check yours against it</h2>
-<div class="check"><label id="lab-relationship"><input type="checkbox" id="ck-relationship"><span>Says what the results show &mdash; how the thing you changed affected the thing you measured.</span></label><label id="lab-figure"><input type="checkbox" id="ck-figure"><span>Backs it with a figure from your own results, not just a direction.</span></label><label id="lab-limit"><input type="checkbox" id="ck-limit"><span>Says what the results do <b>not</b> show, and why.</span></label></div>
-<p class="selfmark" id="tally">Nothing ticked yet. Be honest with this &mdash; nobody marks it
-but you, and the point is to see what a conclusion needs.</p>
+<div class="panel" id="after" hidden>
+<h2>What that conclusion had to do</h2>
+<ul class="why" id="afterlist"><li><b>What the results show.</b> How the thing that was changed affected the thing that was measured.</li><li><b>A figure from them.</b> A number read off the results, not just a direction.</li><li><b>What they do not show.</b> The edge of what was tested, said out loud.</li></ul>
 </div>
-
-<p class="msg" id="msg" role="status" aria-live="polite"></p>
 </div>
 <script>
 (function () {
   "use strict";
 
   var SIM_ID = "conclusion-osmosis";
-  var KEYS = ["relationship", "figure", "limit"];
-  var ta = document.getElementById("ans"), show = document.getElementById("show");
-  var count = document.getElementById("count"), msg = document.getElementById("msg");
-  var STORE = "hsbio-conclusion-osmosis";
+  var OPTS = [{"text": "Cylinders in the weaker solutions gained mass and those in the stronger ones lost it: +24% in pure water and &minus;20% in 20% sucrose. The line crosses zero at about 10.5% sucrose, so a solution of about that strength matches the solution inside the potato cells. Nothing above 20% sucrose was tested.", "ok": true, "why": "This one says what the results show, backs it with figures from them, and reads the crossing point off the graph, which is the whole reason for drawing it."}, {"text": "The stronger the sucrose solution the more mass the cylinder lost, falling from +24% in pure water to &minus;20% in 20% sucrose. So sucrose solution takes mass out of potato tissue, and the stronger the solution is the more of the cylinder's mass it draws out over the 30 minutes that it sits in the solution.", "ok": false, "why": "Your own results say otherwise. The cylinder in 5% sucrose <i>gained</i> 12%, and the one in 10% sucrose gained 1%. Only the solutions stronger than about 10.5% took mass out."}, {"text": "Five cylinders were cut to the same size, blotted dry, weighed, and left for 30 minutes in sucrose solutions of 0, 5, 10, 15 and 20%. Each one was then blotted and weighed again, and the change in mass worked out as a percentage of the mass it had started with, so that the five could be compared fairly.", "ok": false, "why": "This is the method, written out accurately. It does not say a single thing about what the results show."}];
+  var LETTERS = "ABC";
+  var box = document.getElementById("opts"), msg = document.getElementById("msg");
+  var done = false;
 
-  function words(s) { return s.trim() ? s.trim().split(/\s+/).length : 0; }
-
-  function update() {
-    var n = words(ta.value);
-    count.textContent = n + (n === 1 ? " word" : " words");
-    show.disabled = n < 15;
-    if (n && n < 15) count.textContent += " \u2014 a little more before you compare";
-    try { localStorage.setItem(STORE, ta.value); } catch (e) {}
+  // Fisher-Yates, so the accurate conclusion is in no fixed position.
+  var order = OPTS.map(function (o, i) { return i; });
+  for (var i = order.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1)), t = order[i];
+    order[i] = order[j]; order[j] = t;
   }
-  ta.addEventListener("input", update);
 
-  // a draft survives a reload; it never leaves this browser
-  try {
-    var saved = localStorage.getItem(STORE);
-    if (saved) { ta.value = saved; }
-  } catch (e) {}
-  update();
-
-  show.addEventListener("click", function () {
-    document.getElementById("mine").textContent = ta.value.trim();
-    document.getElementById("rev").hidden = false;
-    msg.textContent = "Read the model answer, then tick whichever of the three your own does.";
-    msg.className = "msg";
-    document.getElementById("rev").scrollIntoView({ block: "start", behavior: "smooth" });
-    reportHeight();
+  order.forEach(function (idx, pos) {
+    var o = OPTS[idx];
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt";
+    b.dataset.i = idx;
+    b.innerHTML = '<span class="ltr">' + LETTERS[pos] + '</span><span>' + o.text + '</span>';
+    box.appendChild(b);
+    var r = document.createElement("p");
+    r.className = "rw";
+    r.id = "rw" + idx;
+    r.hidden = true;
+    box.appendChild(r);
   });
 
-  document.getElementById("clear").addEventListener("click", function () {
-    ta.value = ""; update(); ta.focus();
-    try { localStorage.removeItem(STORE); } catch (e) {}
-  });
+  box.addEventListener("click", function (e) {
+    var b = e.target.closest(".opt");
+    if (!b || done) return;
+    done = true;
+    var chosen = +b.dataset.i;
 
-  var tally = document.getElementById("tally");
-  KEYS.forEach(function (k) {
-    var box = document.getElementById("ck-" + k), lab = document.getElementById("lab-" + k);
-    box.addEventListener("change", function () {
-      lab.classList.toggle("ticked", box.checked);
-      var n = 0;
-      KEYS.forEach(function (j) { if (document.getElementById("ck-" + j).checked) n++; });
-      tally.innerHTML = n === KEYS.length
-        ? "All three. That is what a conclusion needs: what the results show, a figure to back "
-          + "it, and an honest word about what they do not show."
-        : n + " of " + KEYS.length + " ticked. Look at the model again for the ones you left "
-          + "&mdash; the last is the one most people miss.";
-      reportHeight();
+    OPTS.forEach(function (o, idx) {
+      var btn = box.querySelector('.opt[data-i="' + idx + '"]');
+      btn.disabled = true;
+      btn.classList.add(o.ok ? "right" : "wrong");
+      var r = document.getElementById("rw" + idx);
+      r.hidden = false;
+      r.className = "rw " + (o.ok ? "good" : "bad");
+      var head = o.ok ? "The accurate one." : "Not this one.";
+      if (idx === chosen) head = o.ok ? "You picked this one, and it is the accurate one."
+                                      : "You picked this one.";
+      r.innerHTML = "<b>" + head + "</b> " + o.why;
     });
+
+    var right = OPTS[chosen].ok;
+    msg.textContent = right
+      ? "That is the one. Read the other two as well \u2014 each is wrong in a way that is "
+        + "easy to fall into."
+      : "Not that one. The accurate conclusion is marked in green, and every option now says "
+        + "what is right or wrong with it.";
+    msg.className = "msg " + (right ? "good" : "warn");
+    document.getElementById("after").hidden = false;
+    reportHeight();
   });
 
 

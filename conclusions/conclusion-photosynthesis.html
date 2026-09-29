@@ -61,11 +61,15 @@ h1{font-size:17px;margin:0 0 2px}
 .setup{font-size:13.5px;color:var(--muted);margin:0 0 9px}
 .model{font-size:15px;line-height:1.62;margin:0;padding:11px 13px;background:var(--bg);
   border:1px solid var(--line);border-radius:8px}
-.why{list-style:none;padding:0;margin:11px 0 0;display:grid;gap:7px}
-.why li{font-size:13.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);
-  border-left:3px solid var(--accent);border-radius:8px;padding:8px 11px}
-.why q{font-style:italic;color:var(--accent);quotes:"\201C" "\201D"}
-.why b{color:var(--fg);font-weight:650}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:9px;counter-reset:st}
+.steps li{counter-increment:st;position:relative;font-size:14px;line-height:1.55;
+  background:var(--bg);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px 10px 44px}
+.steps li::before{content:counter(st);position:absolute;left:11px;top:10px;width:22px;
+  height:22px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
+  font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.steps b{display:block;color:var(--fg);font-weight:650;font-size:14.5px;margin-bottom:2px}
+.steps span{color:var(--muted)}
 .shape{font-size:13.5px;margin:11px 0 0;padding:9px 11px;border:1px solid var(--warn-line);
   background:var(--warn-bg);color:var(--warn);border-radius:8px}
 .recap{font-size:14px;line-height:1.55;margin:0 0 11px;padding:10px 12px;background:var(--bg);
@@ -94,11 +98,11 @@ h1{font-size:17px;margin:0 0 2px}
 <p class="sub">A conclusion says what the results show. It is not a summary of what you did.</p>
 
 <div class="panel">
-<h2>First, a conclusion that does the job &mdash; Nitrogen on a wheat crop</h2>
-<p class="setup">Plots of wheat were given five amounts of nitrogen fertilizer, and the grain from each plot was weighed at harvest.</p>
-<p class="model">Adding nitrogen from 0 to 120 kg/ha lifted the yield steadily, from 2.0 to 4.0 t/ha. Between 120 and 160 kg/ha the yield stopped climbing and sat at 4.0 t/ha. Nitrogen was therefore what kept the yield down as far as 120 kg/ha, and past that point something else did. The trial cannot say what, because nitrogen was the one thing it changed.</p>
-<ul class="why"><li><b>What the results show.</b> <q>lifted the yield steadily ... stopped climbing and sat at 4.0 t/ha</q> &mdash; The line levels off, and the conclusion says where it levels off rather than treating the whole graph as one rise.</li><li><b>A figure from them.</b> <q>from 0 to 120 kg/ha ... from 2.0 to 4.0 t/ha</q> &mdash; The amounts and the yields, so the reader can see where the change stops.</li><li><b>What they do not show.</b> <q>nitrogen was the one thing it changed</q> &mdash; Something else keeps the yield down above 120 kg/ha, but this trial cannot say what, because it changed nothing else.</li></ul>
-<p class="shape">Your own conclusion has to do those same three things, and it has to fit every one of your readings, not just the first few.</p>
+<h2>How to write a conclusion</h2>
+<p class="setup">Three steps, in this order. They are the same three whatever you
+  investigated.</p>
+<ol class="steps"><li><b>State the overall trend.</b><span>Say what happened to the thing you measured as the thing you changed went up. One sentence, in plain words, and covering the whole range rather than the start of it.</span></li><li><b>Give the data that evidences it.</b><span>Quote figures from your own results, usually one from each end of the range. A direction with no numbers behind it is an opinion, and a reader cannot check it.</span></li><li><b>Point out any exceptions.</b><span>Name any reading that does not follow the trend, say where it is, and say what it does instead. An exception left out quietly is the one thing a reader cannot forgive.</span></li></ol>
+<p class="shape">Now do those three things for your own results. Only one of the three below does all of them, and it has to fit every reading you took.</p>
 </div>
 
 <div class="panel">
@@ -111,8 +115,8 @@ then all three are explained.</p>
 </div>
 
 <div class="panel" id="after" hidden>
-<h2>What that conclusion had to do</h2>
-<ul class="why" id="afterlist"><li><b>What the results show.</b> How the thing that was changed affected the thing that was measured.</li><li><b>A figure from them.</b> A number read off the results, not just a direction.</li><li><b>What they do not show.</b> The edge of what was tested, said out loud.</li></ul>
+<h2>The three steps again</h2>
+<ol class="steps" id="afterlist"><li><b>State the overall trend.</b></li><li><b>Give the data that evidences it.</b></li><li><b>Point out any exceptions.</b></li></ol>
 </div>
 </div>
 <script>

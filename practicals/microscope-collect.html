@@ -88,6 +88,18 @@ th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:1
 th{background:var(--card);font-weight:650}
 th[scope="row"]{text-align:left}
 td.empty{color:var(--muted)}
+.entry{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.entry input{width:92px;padding:8px 10px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted)}
+.entry button{padding:8px 13px;border:1px solid var(--accent);border-radius:8px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
 tr.active th[scope="row"]{color:var(--accent);font-weight:700}
 </style>
 </head>
@@ -135,10 +147,10 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
     <legend>Step 1 &mdash; count the cells in the row</legend>
     <p class="hint">Count along the middle row, from the wall at one end to the wall at the
       other. Cells cut off by the edge of the field of view are not counted.</p>
-    <div class="picks" id="counter" role="group" aria-label="Number of cells counted">
-      <button type="button" id="less">&minus;</button>
-      <button type="button" aria-pressed="true" id="val" disabled>0</button>
-      <button type="button" id="more">+</button>
+    <div class="entry" id="counter">
+      <input type="text" inputmode="numeric" autocomplete="off" spellcheck="false"
+             id="val" aria-label="Number of cells in the row">
+      <span class="unit">cells</span>
       <button type="button" class="primary" id="lockN">Record the count</button>
     </div>
   </fieldset>
@@ -173,33 +185,48 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
 
   var SIM_ID = "practical_microscope-collect";
   var N = 8, ROW = 60, REAL = 0.3;
-  var n = 0, lockedN = false, lockedL = false;
+  var lockedN = false, lockedL = false, tries = 0;
   var msg = document.getElementById("msg"), val = document.getElementById("val");
+  var lockBtn = document.getElementById("lockN");
 
   function say(t, kind) { msg.textContent = t; msg.className = kind ? "msg " + kind : "msg"; }
 
-  function paint() {
-    val.textContent = n;
-    document.getElementById("roN").textContent = n;
-    document.getElementById("less").disabled = lockedN || n <= 0;
-    document.getElementById("more").disabled = lockedN || n >= 14;
-    document.getElementById("lockN").disabled = lockedN || n === 0;
-  }
-  document.getElementById("less").addEventListener("click", function () { n--; paint(); });
-  document.getElementById("more").addEventListener("click", function () { n++; paint(); });
-
-  document.getElementById("lockN").addEventListener("click", function () {
-    if (n !== N) {
-      say("Count again. Start at the wall on the left of the middle row and work across, and "
-          + "leave out any cell the edge of the circle cuts through.", "warn");
+  // The count is typed, not stepped. Stepping to it means nudging a number until it looks
+  // right, which is not counting.
+  function record() {
+    if (lockedN) return;
+    var raw = val.value.trim();
+    val.classList.remove("miss");
+    if (!raw) { say("Type how many cells you counted, then record it.", "warn"); return; }
+    if (!/^\d+$/.test(raw)) {
+      say(/\d/.test(raw) ? "Just the number of cells, with nothing after it."
+                        : "That is not a number. Type the digits you counted.", "warn");
+      val.classList.add("miss");
       return;
     }
-    lockedN = true; paint();
+    var n = parseInt(raw, 10);
+    document.getElementById("roN").textContent = n;
+    if (n !== N) {
+      tries++;
+      val.classList.add("miss"); val.select();
+      say(tries < 2
+        ? n + " is not what is there. Count again along the middle row."
+        : "Start at the wall on the left of the middle row and work across to the wall at the "
+          + "other end. Leave out any cell the edge of the circle cuts through.", "warn");
+      return;
+    }
+    lockedN = true;
+    val.disabled = true; lockBtn.disabled = true;
     var t = document.getElementById("tN");
     t.textContent = N; t.classList.remove("empty");
     say("Recorded. Now measure the row on the page below.", "good");
     reportHeight();
+  }
+  lockBtn.addEventListener("click", record);
+  val.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); record(); }
   });
+  val.addEventListener("input", function () { val.classList.remove("miss"); });
 
   function readRuler(mm) {
     if (!lockedN) { say("Count the cells first.", "warn"); return; }
@@ -219,7 +246,7 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
     tl.textContent = ROW + " mm"; tl.classList.remove("empty");
     tc.textContent = (ROW / N) + " mm"; tc.classList.remove("empty");
     say("Both readings are in the table. A real cell is " + REAL + " mm long, so the drawing "
-        + "is bigger than the cell by some number of times \u2014 that number is the next "
+        + "is bigger than the cell by some number of times \\u2014 that number is the next "
         + "stage's work.", "good");
     reportHeight();
   }
@@ -232,19 +259,20 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
   });
 
   document.getElementById("reset").addEventListener("click", function () {
-    n = 0; lockedN = false; lockedL = false;
+    lockedN = false; lockedL = false; tries = 0;
+    val.value = ""; val.disabled = false; val.classList.remove("miss");
+    lockBtn.disabled = false;
+    document.getElementById("roN").textContent = "0";
     ["tN", "tL", "tC"].forEach(function (id) {
       var e = document.getElementById(id);
-      e.textContent = "\u2014"; e.classList.add("empty");
+      e.textContent = "\\u2014"; e.classList.add("empty");
     });
-    document.getElementById("roL").textContent = "\u2014";
+    document.getElementById("roL").textContent = "\\u2014";
     document.getElementById("pin").setAttribute("opacity", 0);
     document.getElementById("span").setAttribute("opacity", 0);
     say("Count the cells first.");
-    paint(); reportHeight();
+    reportHeight();
   });
-
-  paint();
 
 
   var lastH = 0;

@@ -83,11 +83,18 @@ td.dim{color:var(--muted)}
 .calcrow .lab{flex:1 1 200px;font-size:14.5px}
 .calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;
   color:var(--muted)}
-.spin{display:flex;align-items:center;gap:6px}
-.spin button{width:32px;height:32px;border:1px solid var(--line);border-radius:7px;
-  background:var(--bg);color:var(--fg);font:inherit;font-size:17px;cursor:pointer;line-height:1}
-.spin output{min-width:64px;text-align:center;font-variant-numeric:tabular-nums;
-  font-weight:650;font-size:16px}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:88px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:22px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
 .calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
 .calcrow.done .work{color:var(--good)}
 .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
@@ -108,17 +115,17 @@ the whole field, so the answer will be an estimate, and it has to be written as 
 
 <div class="step" id="s1">
 <h2>Step 1 &mdash; the mean number in one quadrat</h2>
-<div class="calc"><div class="calcrow" id="row-mean"><span class="lab">Mean plants per quadrat</span><span class="work" id="work-mean">(6 + 4 + 7 + 5 + 6 + 3 + 7 + 5 + 8 + 9) &divide; 10</span><span class="spin" id="spin-mean"><button type="button" data-d="-1" aria-label="down">&minus;</button><output></output><button type="button" data-d="1" aria-label="up">+</button></span></div></div>
+<div class="calc"><div class="calcrow" id="row-mean"><span class="lab">Mean plants per quadrat</span><span class="work" id="work-mean">(6 + 4 + 7 + 5 + 6 + 3 + 7 + 5 + 8 + 9) &divide; 10</span><span class="entry" id="spin-mean"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Mean plants per quadrat"><span class="unit">plants</span><button type="button">Check</button></span></div></div>
 </div>
 
 <div class="step" id="s2" hidden>
 <h2>Step 2 &mdash; how many quadrat areas fit in the field</h2>
-<div class="calc"><div class="calcrow" id="row-fit"><span class="lab">Quadrat areas in the field</span><span class="work" id="work-fit">800 m&sup2; &divide; 0.25 m&sup2;</span><span class="spin" id="spin-fit"><button type="button" data-d="-1" aria-label="down">&minus;</button><output></output><button type="button" data-d="1" aria-label="up">+</button></span></div></div>
+<div class="calc"><div class="calcrow" id="row-fit"><span class="lab">Quadrat areas in the field</span><span class="work" id="work-fit">800 m&sup2; &divide; 0.25 m&sup2;</span><span class="entry" id="spin-fit"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Quadrat areas in the field"><span class="unit">quadrats</span><button type="button">Check</button></span></div></div>
 </div>
 
 <div class="step" id="s3" hidden>
 <h2>Step 3 &mdash; the estimate</h2>
-<div class="calc"><div class="calcrow" id="row-est"><span class="lab">Estimated plants in the field</span><span class="work" id="work-est">mean &times; 3,200</span><span class="spin" id="spin-est"><button type="button" data-d="-1" aria-label="down">&minus;</button><output></output><button type="button" data-d="1" aria-label="up">+</button></span></div></div>
+<div class="calc"><div class="calcrow" id="row-est"><span class="lab">Estimated plants in the field</span><span class="work" id="work-est">mean &times; 3,200</span><span class="entry" id="spin-est"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Estimated plants in the field"><span class="unit">plants</span><button type="button">Check</button></span></div></div>
 </div>
 
 <div class="step" id="s4" hidden>
@@ -159,46 +166,89 @@ or two.</button>
 
   var SIM_ID = "skill-population-estimate";
   var MEAN = 6.0, FIT = 3200, EST = 19200;
+  var TOTAL = 60, QA = 0.25, FA = 800;
   var msg = document.getElementById("msg");
   function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
 
-  // A stepper rather than a text box: it can be driven from the keyboard, it cannot be given
-  // nonsense, and the student still has to know the number.
-  function spinner(host, opts) {
-    var v = opts.start, out = host.querySelector("output");
-    function show() { out.textContent = opts.fmt ? opts.fmt(v) : v; out.value = String(v); }
-    host.querySelectorAll("button").forEach(function (b) {
-      b.addEventListener("click", function () {
-        if (host.dataset.locked) return;
-        v = Math.max(opts.min, Math.min(opts.max, v + (+b.dataset.d) * opts.step));
-        v = Math.round(v * 1000) / 1000;
-        show(); opts.onchange && opts.onchange(v);
-      });
+  // DAN'S RULING, 1 OCTOBER: the student types the answer. This replaces a stepper, whose
+  // trouble was that it could be walked to the right number without ever working it out --
+  // nudge, look, nudge again. A box has to be filled in before anything happens.
+  //
+  // The cost of a box is that it can be given nonsense, so this one says what it wants rather
+  // than silently refusing, and the misses are graded: the first says only that it is wrong,
+  // the second names the operation, the third names the operation with the numbers in it. It
+  // never gives the answer, and there is no limit on tries.
+  function entry(host, opts) {
+    var input = host.querySelector("input"), btn = host.querySelector("button");
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, "").replace(/^[x\u00d7]/i, "");
+      input.classList.remove("miss");
+      if (!raw) { opts.onbad("Type your answer in the box, then press Check."); return; }
+      // "6 plants" is a different mistake from "abc", and saying so is the whole point of
+      // letting them type: a stepper could not tell you what you had got wrong.
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? "Just the number, without the units \u2014 they are already printed beside the box."
+          : "That is not a number. Type digits, and a decimal point if you need one.");
+        input.classList.add("miss");
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) < 1e-9) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.fmt ? opts.fmt(v) : v;
+        opts.onright(v);
+      } else {
+        input.classList.add("miss");
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener("click", submit);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); submit(); }
     });
-    show();
-    return { get: function () { return v; }, lock: function () { host.dataset.locked = "1"; } };
+    input.addEventListener("input", function () { input.classList.remove("miss"); });
+    return { focus: function () { input.focus(); } };
   }
 
-  function step(host, want, rowId, nextId, text) {
+  function step(host, want, rowId, nextId, text, hints) {
     var row = document.getElementById(rowId);
-    return spinner(host, { start: want > 100 ? Math.round(want / 2 / 100) * 100 : 0,
-      min: 0, max: want > 100 ? want * 3 : 30, step: want > 100 ? 100 : 0.5,
+    return entry(host, {
+      want: want,
       fmt: function (v) { return v.toLocaleString(); },
-      onchange: function (v) {
-        if (v === want) {
-          row.classList.add("done");
-          if (nextId) document.getElementById(nextId).hidden = false;
-          say(text, "good");
-          reportHeight();
-        } else { row.classList.remove("done"); }
+      onbad: function (m) { say(m, "warn"); reportHeight(); },
+      onright: function () {
+        row.classList.add("done");
+        if (nextId) document.getElementById(nextId).hidden = false;
+        say(text, "good");
+        reportHeight();
+      },
+      onwrong: function (v, n) {
+        say(n === 1 ? v.toLocaleString() + " is not it. Work it out and try again."
+                    : hints[Math.min(n - 2, hints.length - 1)], "warn");
+        reportHeight();
       } });
   }
   step(document.getElementById("spin-mean"), MEAN, "row-mean", "s2",
-       "Right: a mean of " + MEAN + " plants in one quadrat.");
+       "Right: a mean of " + MEAN + " plants in one quadrat.",
+       ["Add the ten counts together, then divide by how many quadrats there were.",
+        "The ten counts add to " + TOTAL + ". Divide that by 10."]);
   step(document.getElementById("spin-fit"), FIT, "row-fit", "s3",
-       FIT.toLocaleString() + " quadrat areas fit in the field.");
+       FIT.toLocaleString() + " quadrat areas fit in the field.",
+       ["Work out the area of one quadrat first, then divide the area of the field by it.",
+        "One quadrat covers " + QA + " m² and the field is " + FA.toLocaleString()
+          + " m². Divide the second by the first."]);
   step(document.getElementById("spin-est"), EST, "row-est", "s4",
-       "That gives an estimate of " + EST.toLocaleString() + " plants.");
+       "That gives an estimate of " + EST.toLocaleString() + " plants.",
+       ["Multiply the mean per quadrat by the number of quadrat areas that fit.",
+        MEAN + " plants in each of " + FIT.toLocaleString() + " quadrat areas."]);
 
   function choose(id, good, bad) {
     Array.prototype.forEach.call(document.querySelectorAll("#" + id + " .choice"), function (b) {

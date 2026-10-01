@@ -83,11 +83,18 @@ td.dim{color:var(--muted)}
 .calcrow .lab{flex:1 1 200px;font-size:14.5px}
 .calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;
   color:var(--muted)}
-.spin{display:flex;align-items:center;gap:6px}
-.spin button{width:32px;height:32px;border:1px solid var(--line);border-radius:7px;
-  background:var(--bg);color:var(--fg);font:inherit;font-size:17px;cursor:pointer;line-height:1}
-.spin output{min-width:64px;text-align:center;font-variant-numeric:tabular-nums;
-  font-weight:650;font-size:16px}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:88px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:22px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
 .calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
 .calcrow.done .work{color:var(--good)}
 .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
@@ -115,7 +122,7 @@ its row.</p>
 <h2>Step 2 &mdash; take the mean without it</h2>
 <p class="ask">At intensity 3 the two counts that agree are 17 and
 19. What is their mean?</p>
-<div class="calc"><div class="calcrow" id="row-mean"><span class="lab">Mean at intensity 3</span><span class="work" id="work-mean">(17 + 19) &divide; 2</span><span class="spin" id="spin-mean"><button type="button" data-d="-1" aria-label="down">&minus;</button><output></output><button type="button" data-d="1" aria-label="up">+</button></span></div></div>
+<div class="calc"><div class="calcrow" id="row-mean"><span class="lab">Mean at intensity 3</span><span class="work" id="work-mean">(17 + 19) &divide; 2</span><span class="entry" id="spin-mean"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Mean at intensity 3"><span class="unit">bubbles</span><button type="button">Check</button></span></div></div>
 </div>
 
 <div class="step" id="s3" hidden>
@@ -140,7 +147,7 @@ every reading counts equally.</button>
   "use strict";
 
   var SIM_ID = "skill-photosynthesis-anomaly";
-  var ROWS = [[1, [5, 7, 6]], [2, [12, 11, 13]], [3, [17, 19, 34]], [4, [23, 25, 24]], [5, [30, 29, 31]], [6, [31, 29, 30]]], AI = 3, AV = 34, WANT = 18.0;
+  var ROWS = [[1, [5, 7, 6]], [2, [12, 11, 13]], [3, [17, 19, 34]], [4, [23, 25, 24]], [5, [30, 29, 31]], [6, [31, 29, 30]]], AI = 3, AV = 34, WANT = 18.0, KEEP = [17, 19];
   var msg = document.getElementById("msg"), stage = 1;
   function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
   function meanOf(cs) { var s = 0; cs.forEach(function (c) { s += c; }); return s / cs.length; }
@@ -177,37 +184,74 @@ every reading counts equally.</button>
     });
   });
 
-  // A stepper rather than a text box: it can be driven from the keyboard, it cannot be given
-  // nonsense, and the student still has to know the number.
-  function spinner(host, opts) {
-    var v = opts.start, out = host.querySelector("output");
-    function show() { out.textContent = opts.fmt ? opts.fmt(v) : v; out.value = String(v); }
-    host.querySelectorAll("button").forEach(function (b) {
-      b.addEventListener("click", function () {
-        if (host.dataset.locked) return;
-        v = Math.max(opts.min, Math.min(opts.max, v + (+b.dataset.d) * opts.step));
-        v = Math.round(v * 1000) / 1000;
-        show(); opts.onchange && opts.onchange(v);
-      });
+  // DAN'S RULING, 1 OCTOBER: the student types the answer. This replaces a stepper, whose
+  // trouble was that it could be walked to the right number without ever working it out --
+  // nudge, look, nudge again. A box has to be filled in before anything happens.
+  //
+  // The cost of a box is that it can be given nonsense, so this one says what it wants rather
+  // than silently refusing, and the misses are graded: the first says only that it is wrong,
+  // the second names the operation, the third names the operation with the numbers in it. It
+  // never gives the answer, and there is no limit on tries.
+  function entry(host, opts) {
+    var input = host.querySelector("input"), btn = host.querySelector("button");
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, "").replace(/^[x\u00d7]/i, "");
+      input.classList.remove("miss");
+      if (!raw) { opts.onbad("Type your answer in the box, then press Check."); return; }
+      // "6 plants" is a different mistake from "abc", and saying so is the whole point of
+      // letting them type: a stepper could not tell you what you had got wrong.
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? "Just the number, without the units \u2014 they are already printed beside the box."
+          : "That is not a number. Type digits, and a decimal point if you need one.");
+        input.classList.add("miss");
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) < 1e-9) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.fmt ? opts.fmt(v) : v;
+        opts.onright(v);
+      } else {
+        input.classList.add("miss");
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener("click", submit);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); submit(); }
     });
-    show();
-    return { get: function () { return v; }, lock: function () { host.dataset.locked = "1"; } };
+    input.addEventListener("input", function () { input.classList.remove("miss"); });
+    return { focus: function () { input.focus(); } };
   }
 
-  var sp = spinner(document.getElementById("spin-mean"),
-                   { start: 10, min: 0, max: 40, step: 0.5,
-                     onchange: function (v) {
-                       var row = document.getElementById("row-mean");
-                       if (v === WANT) {
-                         row.classList.add("done"); sp.lock();
-                         fillMeans();
-                         stage = 3;
-                         document.getElementById("s3").hidden = false;
-                         say("Right: " + WANT + " bubbles in one minute. Every other row keeps "
-                             + "all three counts, because nothing in them stands out.", "good");
-                         reportHeight();
-                       } else { row.classList.remove("done"); }
-                     } });
+  entry(document.getElementById("spin-mean"), {
+    want: WANT,
+    onbad: function (m) { say(m, "warn"); },
+    onright: function () {
+      document.getElementById("row-mean").classList.add("done");
+      fillMeans();
+      stage = 3;
+      document.getElementById("s3").hidden = false;
+      say("Right: " + WANT + " bubbles in one minute. Every other row keeps all three counts, "
+          + "because nothing in them stands out.", "good");
+      reportHeight();
+    },
+    onwrong: function (v, n) {
+      say(n === 1 ? v + " is not the mean of the two counts that agree."
+        : n === 2 ? "Add the two counts that agree with each other, and divide by 2 — not "
+                    + "by 3, because the anomalous one takes no part in it."
+        : "The two counts that agree are " + KEEP[0] + " and " + KEEP[1] + ". Add them and "
+          + "divide by 2.", "warn");
+      reportHeight();
+    } });
 
   Array.prototype.forEach.call(document.querySelectorAll("#c3 .choice"), function (b) {
     b.addEventListener("click", function () {

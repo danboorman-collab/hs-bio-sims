@@ -111,27 +111,36 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
 
   <div class="bench">
     <div class="stage">
-<svg viewBox="0 0 260 230" width="252" role="img" aria-label="A lamp shining through a beaker
-     of water onto a test tube of pondweed standing in a rack. Bubbles rise from the cut end of
-     the stem.">
-  <ellipse cx="34" cy="196" rx="26" ry="3.75" fill="var(--metal)" stroke="var(--ink)"
+<svg viewBox="0 0 260 230" width="252" role="img" aria-label="A lamp shining onto a test tube
+     of pondweed standing in a rack. Bubbles rise from the cut end of the stem.">
+  <!-- The lamp is built the same way as the equipment tile: a weighted disc base, two
+       jointed arms, and a shade whose mouth is the opening, with the bulb carried on a holder
+       inside it rather than floating. It used to be a stick with a dark blob on the end. -->
+  <ellipse cx="44" cy="202" rx="30" ry="4.51" fill="var(--metal)" stroke="var(--ink)"
            stroke-width="3"/>
-  <path d="M8,196 A26,3.75 0 0 0 60,196 L60,191 A26,3.75 0 0 1 8,191 Z" fill="var(--metal)"
+  <path d="M14,202 A30,4.51 0 0 0 74,202 L74,195 A30,4.51 0 0 1 14,195 Z" fill="var(--metal)"
         stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M34,191 L34,150 L58,112" stroke="var(--ink)" stroke-width="3" fill="none"
-        stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M58,112 L88,90 A19,19 0 0 1 98,112 L68,134 Z" fill="var(--dark)"
+  <ellipse cx="44" cy="195" rx="30" ry="4.51" fill="var(--metal)" stroke="var(--ink)"
+           stroke-width="3"/>
+  <path d="M34,206 C24,212 18,214 10,214" fill="none" stroke="var(--ink)" stroke-width="3"
+        stroke-linecap="round"/>
+  <rect x="4" y="210" width="8" height="9" rx="2" fill="var(--dark)" stroke="var(--ink)"
+        stroke-width="1.6"/>
+  <path d="M44,195 L44,150" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M44,150 L78,112" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M81.5,104.5 L135,111 L118,152 L75,119 Z" fill="var(--screen)"
         stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
-  <ellipse cx="83" cy="123" rx="11" ry="15" transform="rotate(-36 83 123)" fill="var(--bg)"
+  <path d="M84,112 L117,130" stroke="var(--ink)" stroke-width="3"
+        stroke-linecap="round"/>
+  <circle cx="117" cy="130" r="8.4" fill="var(--warn-bg)" stroke="var(--warn)"
+          stroke-width="3"/>
+  <ellipse cx="127" cy="131.5" rx="10" ry="23" transform="rotate(22 127 131.5)" fill="none"
            stroke="var(--ink)" stroke-width="3"/>
+  <circle cx="44" cy="150" r="5" fill="var(--bg)" stroke="var(--ink)" stroke-width="3"/>
+  <circle cx="78" cy="112" r="5" fill="var(--bg)" stroke="var(--ink)" stroke-width="3"/>
   <g id="beam" opacity="0.30">
-    <path d="M92,110 L150,96 L150,152 L92,138 Z" fill="var(--warn)"/>
+    <path d="M134,112 L186,104 L186,170 L132,152 Z" fill="var(--warn)"/>
   </g>
-  <path d="M110,96 L110,186 L146,186 L146,96" fill="var(--glass-fill)" stroke="var(--ink)"
-        stroke-width="3" stroke-linejoin="round"/>
-  <path d="M110,110 L110,186 L146,186 L146,110 Z" fill="var(--water)" opacity="0.75"/>
-  <ellipse cx="128" cy="110" rx="18" ry="2.22" fill="var(--water)"/>
-  <path d="M114,124 L114,172" stroke="var(--bg)" stroke-width="2.2" opacity="0.7"/>
   <rect x="164" y="176" width="74" height="7" rx="2" fill="var(--metal)" stroke="var(--ink)"
         stroke-width="1.6"/>
   <rect x="164" y="206" width="74" height="7" rx="2" fill="var(--metal)" stroke="var(--ink)"
@@ -162,8 +171,6 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
   <g id="bubbles"></g>
   <ellipse cx="201" cy="36" rx="15" ry="1.85" fill="var(--bg)" stroke="var(--ink)"
            stroke-width="2.5"/>
-  <ellipse cx="128" cy="96" rx="18" ry="2.22" fill="var(--bg)" stroke="var(--ink)"
-           stroke-width="3"/>
 </svg>
 
       <div class="readouts">

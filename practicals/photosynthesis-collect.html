@@ -88,6 +88,18 @@ th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:1
 th{background:var(--card);font-weight:650}
 th[scope="row"]{text-align:left}
 td.empty{color:var(--muted)}
+.entry{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.entry input{width:92px;padding:8px 10px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted)}
+.entry button{padding:8px 13px;border:1px solid var(--accent);border-radius:8px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
 tr.active th[scope="row"]{color:var(--accent);font-weight:700}
 </style>
 </head>
@@ -128,27 +140,25 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
         stroke-width="1.8"/>
   <rect x="228" y="183" width="6" height="23" fill="var(--metal)" stroke="var(--ink)"
         stroke-width="1.8"/>
-  <path d="M186,36 L186,186 A15,15 0 0 0 216,186 L216,36" fill="var(--glass-fill)"
+  <path d="M186,36 L186,191 A15,15 0 0 0 216,191 L216,36" fill="var(--glass-fill)"
         stroke="var(--glass)" stroke-width="2.4" stroke-linejoin="round"/>
-  <path d="M186,58 L186,186 A15,15 0 0 0 216,186 L216,58 Z" fill="var(--water)"
+  <path d="M186,58 L186,191 A15,15 0 0 0 216,191 L216,58 Z" fill="var(--water)"
         opacity="0.75"/>
   <ellipse cx="201" cy="58" rx="15" ry="3.4" fill="var(--water)"/>
-  <path d="M201,178 L201,72" stroke="var(--good)" stroke-width="2.6" stroke-linecap="round"/>
-  <path d="M195,178 L207,178" stroke="var(--good)" stroke-width="3"
+  <path d="M201,183 L201,72" stroke="var(--good)" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M195,183 L207,183" stroke="var(--good)" stroke-width="3"
         stroke-linecap="round"/>
   <g stroke="var(--good)" stroke-width="1.7" fill="none" stroke-linecap="round">
-    <path d="M201,84 C194,81 191,84 188,81"/><path d="M201,84 C208,81 211,84 214,81"/>
-    <path d="M201,104 C194,101 191,104 188,101"/><path d="M201,104 C208,101 211,104 214,101"/>
-    <path d="M201,124 C194,121 191,124 188,121"/><path d="M201,124 C208,121 211,124 214,121"/>
-    <path d="M201,144 C194,141 191,144 188,141"/><path d="M201,144 C208,141 211,144 214,141"/>
+    <path d="M201,84 C194,81 191,84 190,81"/><path d="M201,84 C208,81 211,84 212,81"/>
+    <path d="M201,104 C194,101 191,104 190,101"/><path d="M201,104 C208,101 211,104 212,101"/>
+    <path d="M201,124 C194,121 191,124 190,121"/><path d="M201,124 C208,121 211,124 212,121"/>
+    <path d="M201,144 C194,141 191,144 190,141"/><path d="M201,144 C208,141 211,144 212,141"/>
   </g>
   <g id="bubbles"></g>
   <ellipse cx="201" cy="36" rx="15" ry="4" fill="var(--bg)" stroke="var(--glass)"
            stroke-width="2.4"/>
   <ellipse cx="128" cy="96" rx="18" ry="4" fill="var(--bg)" stroke="var(--glass)"
            stroke-width="2.4"/>
-  <text x="128" y="204" text-anchor="middle" font-size="10" fill="var(--muted)"
-        font-family="system-ui, sans-serif">heat shield</text>
 </svg>
 
       <div class="readouts">

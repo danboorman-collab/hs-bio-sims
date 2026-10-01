@@ -111,65 +111,92 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
 
   <div class="bench">
     <div class="stage">
-<svg viewBox="0 0 260 230" width="252" role="img" aria-label="A lamp shining onto a test tube
-     of pondweed standing in a rack. Bubbles rise from the cut end of the stem.">
-  <!-- The lamp is built the same way as the equipment tile: a weighted disc base, two
-       jointed arms, and a shade whose mouth is the opening, with the bulb carried on a holder
-       inside it rather than floating. It used to be a stick with a dark blob on the end. -->
-  <ellipse cx="44" cy="202" rx="30" ry="4.51" fill="var(--metal)" stroke="var(--ink)"
+<svg viewBox="0 0 320 236" width="310" role="img" aria-label="A lamp shining through a beaker
+     of water onto a test tube of pondweed standing in a rack. Bubbles rise from the cut end of
+     the stem.">
+  <!-- The beaker is back, and drawn as a beaker. It was a flat-bottomed box with a cylinder
+       top, no spout, no graduations, and nearly as wide as the test tube. A 250 cm3 beaker is
+       about 7 cm across and a boiling tube about 2.5, so it is now 2.5 times the tube's width;
+       the lip is pulled from the rim at its true tangent points; the water surface is an
+       ellipse, because you cannot see down into a cylinder at the rim and edge-on at the
+       surface; and the glass carries one weight from rim to base. -->
+  <line x1="6" y1="211" x2="314" y2="211" stroke="var(--ink)" stroke-width="3"/>
+  <g id="beam" opacity="0.28">
+    <path d="M134,112 L250,104 L250,176 L132,152 Z" fill="var(--warn)"/>
+  </g>
+  <ellipse cx="44" cy="203" rx="30" ry="4.51" fill="var(--metal)" stroke="var(--ink)"
            stroke-width="3"/>
-  <path d="M14,202 A30,4.51 0 0 0 74,202 L74,195 A30,4.51 0 0 1 14,195 Z" fill="var(--metal)"
+  <path d="M14,203 A30,4.51 0 0 0 74,203 L74,196 A30,4.51 0 0 1 14,196 Z" fill="var(--metal)"
         stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
-  <ellipse cx="44" cy="195" rx="30" ry="4.51" fill="var(--metal)" stroke="var(--ink)"
+  <ellipse cx="44" cy="196" rx="30" ry="4.51" fill="var(--metal)" stroke="var(--ink)"
            stroke-width="3"/>
-  <path d="M34,206 C24,212 18,214 10,214" fill="none" stroke="var(--ink)" stroke-width="3"
+  <path d="M34,207 C24,213 18,215 10,215" fill="none" stroke="var(--ink)" stroke-width="3"
         stroke-linecap="round"/>
-  <rect x="4" y="210" width="8" height="9" rx="2" fill="var(--dark)" stroke="var(--ink)"
+  <rect x="4" y="211" width="8" height="9" rx="2" fill="var(--dark)" stroke="var(--ink)"
         stroke-width="1.6"/>
-  <path d="M44,195 L44,150" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M44,196 L44,150" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
   <path d="M44,150 L78,112" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
   <path d="M81.5,104.5 L135,111 L118,152 L75,119 Z" fill="var(--screen)"
         stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M84,112 L117,130" stroke="var(--ink)" stroke-width="3"
-        stroke-linecap="round"/>
+  <path d="M84,112 L117,130" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
   <circle cx="117" cy="130" r="8.4" fill="var(--warn-bg)" stroke="var(--warn)"
           stroke-width="3"/>
   <ellipse cx="127" cy="131.5" rx="10" ry="23" transform="rotate(22 127 131.5)" fill="none"
            stroke="var(--ink)" stroke-width="3"/>
   <circle cx="44" cy="150" r="5" fill="var(--bg)" stroke="var(--ink)" stroke-width="3"/>
   <circle cx="78" cy="112" r="5" fill="var(--bg)" stroke="var(--ink)" stroke-width="3"/>
-  <g id="beam" opacity="0.30">
-    <path d="M134,112 L186,104 L186,170 L132,152 Z" fill="var(--warn)"/>
-  </g>
-  <rect x="164" y="176" width="74" height="7" rx="2" fill="var(--metal)" stroke="var(--ink)"
-        stroke-width="1.6"/>
-  <rect x="164" y="206" width="74" height="7" rx="2" fill="var(--metal)" stroke="var(--ink)"
-        stroke-width="1.6"/>
-  <rect x="168" y="183" width="6" height="23" fill="var(--metal)" stroke="var(--ink)"
-        stroke-width="1.6"/>
-  <rect x="228" y="183" width="6" height="23" fill="var(--metal)" stroke="var(--ink)"
-        stroke-width="1.6"/>
-  <path d="M186,36 L186,191 A15,15 0 0 0 216,191 L216,36" fill="var(--glass-fill)"
+
+  <path d="M130,132 L130,205 A37.5,5.94 0 0 0 205,205 L205,132" fill="var(--glass-fill)"
+        stroke="none"/>
+  <path d="M130,150 L130,205 A37.5,5.94 0 0 0 205,205 L205,150 Z" fill="var(--water)"
+        opacity="0.6"/>
+  <ellipse cx="167.5" cy="150" rx="37.5" ry="5.94" fill="var(--water)" opacity="0.75"/>
+  <path d="M130,132 L130,205 A37.5,5.94 0 0 0 205,205 L205,132" fill="none"
         stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M186,58 L186,191 A15,15 0 0 0 216,191 L216,58 Z" fill="var(--water)"
-        opacity="0.75"/>
-  <ellipse cx="201" cy="58" rx="15" ry="1.85" fill="var(--water)"/>
-  <path d="M201,183 L201,72" stroke="var(--ink)" stroke-width="3" stroke-linecap="butt"/>
-  <path d="M201,183 L201,72" stroke="var(--good)" stroke-width="3" stroke-linecap="butt"/>
-  <g fill="var(--good)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round">
-    <path d="M199.8,84 C195,80 192,79 189,80 C193,83 196,85 199.8,86 Z"/>
-    <path d="M202.2,84 C207,80 210,79 213,80 C209,83 206,85 202.2,86 Z"/>
-    <path d="M199.8,104 C195,100 192,99 189,100 C193,103 196,105 199.8,106 Z"/>
-    <path d="M202.2,104 C207,100 210,99 213,100 C209,103 206,105 202.2,106 Z"/>
-    <path d="M199.8,124 C195,120 192,119 189,120 C193,123 196,125 199.8,126 Z"/>
-    <path d="M202.2,124 C207,120 210,119 213,120 C209,123 206,125 202.2,126 Z"/>
-    <path d="M199.8,144 C195,140 192,139 189,140 C193,143 196,145 199.8,146 Z"/>
-    <path d="M202.2,144 C207,140 210,139 213,140 C209,143 206,145 202.2,146 Z"/>
+  <g stroke="var(--ink)" stroke-width="1.6" opacity="0.8">
+    <path d="M130,164 L146,164 M130,178 L140,178 M130,192 L146,192"/>
   </g>
-  <path d="M196,181 L206,185" stroke="var(--ink)" stroke-width="3" stroke-linecap="butt"/>
-  <path d="M196,181 L206,185" stroke="var(--ink)" stroke-width="3" stroke-linecap="butt"/>
+  <text x="150" y="167" font-size="8" fill="var(--glass)">200</text>
+  <text x="150" y="195" font-size="8" fill="var(--glass)">100</text>
+  <ellipse cx="167.5" cy="132" rx="37.5" ry="5.94" fill="var(--bg)" stroke="var(--ink)"
+           stroke-width="3"/>
+  <path d="M195,127.96 C202,127.4 209,129 217,132 C209,135 202,136.6 195,136.04 Z"
+        fill="var(--bg)" stroke="none"/>
+  <path d="M195,127.96 C202,127.4 209,129 217,132" fill="none" stroke="var(--ink)"
+        stroke-width="3" stroke-linecap="round"/>
+  <path d="M195,136.04 C202,136.6 209,135 217,132" fill="none" stroke="var(--ink)"
+        stroke-width="3" stroke-linecap="round"/>
+  <path d="M136,146 L136,198" stroke="var(--bg)" stroke-width="2.2" opacity="0.75"/>
+
+  <rect x="226" y="174" width="74" height="7" rx="2" fill="var(--metal)" stroke="var(--ink)"
+        stroke-width="1.6"/>
+  <rect x="226" y="204" width="74" height="7" rx="2" fill="var(--metal)" stroke="var(--ink)"
+        stroke-width="1.6"/>
+  <rect x="230" y="181" width="6" height="23" fill="var(--metal)" stroke="var(--ink)"
+        stroke-width="1.6"/>
+  <rect x="290" y="181" width="6" height="23" fill="var(--metal)" stroke="var(--ink)"
+        stroke-width="1.6"/>
+  <path d="M248,36 L248,189 A15,15 0 0 0 278,189 L278,36" fill="var(--glass-fill)"
+        stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M248,58 L248,189 A15,15 0 0 0 278,189 L278,58 Z" fill="var(--water)"
+        opacity="0.75"/>
+  <ellipse cx="263" cy="58" rx="15" ry="1.85" fill="var(--water)"/>
+  <path d="M263,181 L263,72" stroke="var(--ink)" stroke-width="3" stroke-linecap="butt"/>
+  <path d="M263,181 L263,72" stroke="var(--good)" stroke-width="3" stroke-linecap="butt"/>
+  <g fill="var(--good)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round">
+    <path d="M261.8,84 C257,80 254,79 251,80 C255,83 258,85 261.8,86 Z"/>
+    <path d="M264.2,84 C269,80 272,79 275,80 C271,83 268,85 264.2,86 Z"/>
+    <path d="M261.8,104 C257,100 254,99 251,100 C255,103 258,105 261.8,106 Z"/>
+    <path d="M264.2,104 C269,100 272,99 275,100 C271,103 268,105 264.2,106 Z"/>
+    <path d="M261.8,124 C257,120 254,119 251,120 C255,123 258,125 261.8,126 Z"/>
+    <path d="M264.2,124 C269,120 272,119 275,120 C271,123 268,125 264.2,126 Z"/>
+    <path d="M261.8,144 C257,140 254,139 251,140 C255,143 258,145 261.8,146 Z"/>
+    <path d="M264.2,144 C269,140 272,139 275,140 C271,143 268,145 264.2,146 Z"/>
+  </g>
+  <path d="M258,179 L268,183" stroke="var(--ink)" stroke-width="3" stroke-linecap="butt"/>
+  <path d="M258,179 L268,183" stroke="var(--ink)" stroke-width="3" stroke-linecap="butt"/>
   <g id="bubbles"></g>
-  <ellipse cx="201" cy="36" rx="15" ry="1.85" fill="var(--bg)" stroke="var(--ink)"
+  <ellipse cx="263" cy="36" rx="15" ry="1.85" fill="var(--bg)" stroke="var(--ink)"
            stroke-width="2.5"/>
 </svg>
 
@@ -280,8 +307,8 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
 
   function blow() {
     var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    c.setAttribute("cx", 201 + (Math.random() * 10 - 5));
-    c.setAttribute("cy", 172);
+    c.setAttribute("cx", 263 + (Math.random() * 10 - 5));
+    c.setAttribute("cy", 177);
     c.setAttribute("r", 2 + Math.random() * 1.6);
     c.setAttribute("fill", "var(--bubble)");
     c.setAttribute("stroke", "var(--glass)");

@@ -10,7 +10,7 @@
   --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
   --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
   --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
-  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
   --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
   --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
   --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
@@ -23,7 +23,7 @@
     --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
     --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
     --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
-    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
     --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
     --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
     --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
@@ -114,23 +114,23 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
 <svg viewBox="0 0 260 230" width="252" role="img" aria-label="A lamp shining through a beaker
      of water onto a test tube of pondweed standing in a rack. Bubbles rise from the cut end of
      the stem.">
-  <ellipse cx="34" cy="196" rx="26" ry="4.96" fill="var(--metal)" stroke="var(--ink)"
+  <ellipse cx="34" cy="196" rx="26" ry="3.75" fill="var(--metal)" stroke="var(--ink)"
            stroke-width="3"/>
-  <path d="M8,196 A26,4.96 0 0 0 60,196 L60,191 A26,4.96 0 0 1 8,191 Z" fill="var(--metal)"
+  <path d="M8,196 A26,3.75 0 0 0 60,196 L60,191 A26,3.75 0 0 1 8,191 Z" fill="var(--metal)"
         stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
   <path d="M34,191 L34,150 L58,112" stroke="var(--ink)" stroke-width="3" fill="none"
         stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M58,112 L88,90 A19,19 0 0 1 98,112 L68,134 Z" fill="var(--dark)"
         stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
   <ellipse cx="83" cy="123" rx="11" ry="15" transform="rotate(-36 83 123)" fill="var(--bg)"
-           stroke="var(--ink)" stroke-width="3"/>
+           stroke="var(--ink)" stroke-width="1.6"/>
   <g id="beam" opacity="0.30">
     <path d="M92,110 L150,96 L150,152 L92,138 Z" fill="var(--warn)"/>
   </g>
   <path d="M110,96 L110,186 L146,186 L146,96" fill="var(--glass-fill)" stroke="var(--ink)"
         stroke-width="3" stroke-linejoin="round"/>
   <path d="M110,110 L110,186 L146,186 L146,110 Z" fill="var(--water)" opacity="0.75"/>
-  <ellipse cx="128" cy="110" rx="18" ry="3.43" fill="var(--water)"/>
+  <ellipse cx="128" cy="110" rx="18" ry="2.25" fill="var(--water)"/>
   <path d="M114,124 L114,172" stroke="var(--bg)" stroke-width="2.2" opacity="0.7"/>
   <rect x="164" y="176" width="74" height="7" rx="2" fill="var(--metal)" stroke="var(--ink)"
         stroke-width="1.6"/>
@@ -144,7 +144,7 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
         stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
   <path d="M186,58 L186,191 A15,15 0 0 0 216,191 L216,58 Z" fill="var(--water)"
         opacity="0.75"/>
-  <ellipse cx="201" cy="58" rx="15" ry="2.86" fill="var(--water)"/>
+  <ellipse cx="201" cy="58" rx="15" ry="2.25" fill="var(--water)"/>
   <path d="M201,183 L201,72" stroke="var(--ink)" stroke-width="3" stroke-linecap="butt"/>
   <path d="M201,183 L201,72" stroke="var(--ink)" stroke-width="3" stroke-linecap="butt"/>
   <g fill="var(--good)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round">
@@ -160,9 +160,9 @@ tr.active th[scope="row"]{color:var(--accent);font-weight:700}
   <path d="M196,181 L206,185" stroke="var(--ink)" stroke-width="3" stroke-linecap="butt"/>
   <path d="M196,181 L206,185" stroke="var(--ink)" stroke-width="3" stroke-linecap="butt"/>
   <g id="bubbles"></g>
-  <ellipse cx="201" cy="36" rx="15" ry="2.86" fill="var(--bg)" stroke="var(--ink)"
+  <ellipse cx="201" cy="36" rx="15" ry="2.25" fill="var(--bg)" stroke="var(--ink)"
            stroke-width="3"/>
-  <ellipse cx="128" cy="96" rx="18" ry="3.43" fill="var(--bg)" stroke="var(--ink)"
+  <ellipse cx="128" cy="96" rx="18" ry="2.25" fill="var(--bg)" stroke="var(--ink)"
            stroke-width="3"/>
 </svg>
 

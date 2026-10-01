@@ -10,7 +10,7 @@
   --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
   --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
   --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
-  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
   --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
   --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
   --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
@@ -23,7 +23,7 @@
     --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
     --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
     --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
-    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
     --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
     --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
     --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
@@ -86,11 +86,11 @@ h1{font-size:17px;margin:0 0 2px}
   <p class="sub">Choose every piece of equipment this method needs, then check your set-up.</p>
   <div class="brief"><p><b>The method.</b> Pondweed in a test tube of water gives off oxygen when it photosynthesizes, and the oxygen comes off the cut end of the stem as bubbles. The rate is the number of bubbles counted in one minute.</p><p>The lamp has six brightness settings, and the brightness is the one thing that changes. The tube stays the same distance from the lamp every time.</p><p>A bright lamp gives off heat as well as light, and warming the water would change the rate on its own. So a beaker of water stands between the lamp and the tube: it takes the heat out and lets the light through.</p></div>
   <div class="tray" id="tray" role="group" aria-label="Equipment on the bench"><button type="button" class="tile" data-id="lamp" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-<ellipse cx="30" cy="132" rx="24" ry="4.58" fill="var(--metal)" stroke="var(--ink)"
+<ellipse cx="30" cy="132" rx="24" ry="3.37" fill="var(--metal)" stroke="var(--ink)"
          stroke-width="3"/>
-<path d="M6,132 A24,4.58 0 0 0 54,132 L54,126 A24,4.58 0 0 1 6,126 Z" fill="var(--metal)"
+<path d="M6,132 A24,3.37 0 0 0 54,132 L54,126 A24,3.37 0 0 1 6,126 Z" fill="var(--metal)"
       stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
-<ellipse cx="30" cy="126" rx="24" ry="4.58" fill="var(--metal)" stroke="var(--ink)"
+<ellipse cx="30" cy="126" rx="24" ry="3.37" fill="var(--metal)" stroke="var(--ink)"
          stroke-width="3"/>
 <path d="M22,134 C14,140 10,142 4,142" fill="none" stroke="var(--ink)" stroke-width="1.6"
       stroke-linecap="round"/>
@@ -98,12 +98,12 @@ h1{font-size:17px;margin:0 0 2px}
       stroke-width="1.6"/>
 <path d="M30,126 L30,96" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
 <path d="M30,96 L56,62" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
-<path d="M58.7,55.5 L107.6,61.5 L92.4,98.5 L53.4,68.5 Z" fill="var(--dark)"
+<path d="M58.7,55.5 L107.6,61.5 L92.4,98.5 L53.4,68.5 Z" fill="var(--body)"
       stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
 <path d="M61,62 L94,80" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
 <circle cx="94" cy="80" r="7.6" fill="var(--warn-bg)" stroke="var(--ink)" stroke-width="1.6"/>
 <ellipse cx="100" cy="80" rx="9" ry="21" transform="rotate(22 100 80)" fill="none"
-         stroke="var(--ink)" stroke-width="3"/>
+         stroke="var(--ink)" stroke-width="1.6"/>
 <path d="M100,59 A9,21 0 0 0 100,101" transform="rotate(22 100 80)" fill="none"
       stroke="var(--ink)" stroke-width="1.6" opacity="0.4"/>
 <g stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round" opacity="0.75">
@@ -114,8 +114,8 @@ h1{font-size:17px;margin:0 0 2px}
 </svg><span class="nm">Lamp</span><span class="mk"></span></button><button type="button" class="tile" data-id="beaker" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <path d="M29,52 L29,124 Q29,130 35,130 L85,130 Q91,130 91,124 L91,52"
       fill="var(--glass-fill)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
-<path d="M35,125 A25,4.77 0 0 0 85,125" fill="none" stroke="var(--ink)" stroke-width="1.6"
-      opacity="0.55"/>
+<path d="M35,125 A25,4.12 0 0 0 85,125" fill="none" stroke="var(--ink)" stroke-width="1.6"
+      opacity="0.85"/>
 <path d="M35,62 L35,118" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round"
       opacity="0.8"/>
 <g stroke="var(--ink)" stroke-width="1.6" opacity="0.85">
@@ -124,7 +124,7 @@ h1{font-size:17px;margin:0 0 2px}
 <text x="48" y="75" font-size="8" fill="var(--glass)">200</text>
 <text x="48" y="103" font-size="8" fill="var(--glass)">100</text>
 <text x="48" y="122" font-size="7.5" fill="var(--glass)">cm&#179;</text>
-<ellipse cx="60" cy="52" rx="31" ry="5.92" fill="var(--bg)" stroke="var(--ink)"
+<ellipse cx="60" cy="52" rx="31" ry="4.70" fill="var(--bg)" stroke="var(--ink)"
          stroke-width="3"/>
 <!-- The spout is pulled out of the rim band, not pasted onto it. It used to be a flat wedge
      laid over the rim: the inner rim line stopped dead and restarted, leaving a square notch,
@@ -136,16 +136,16 @@ h1{font-size:17px;margin:0 0 2px}
       stroke-linecap="round"/>
 <path d="M33.5,57 C25,55.8 17,53.8 11,52" fill="none" stroke="var(--ink)" stroke-width="3"
       stroke-linecap="round"/>
-<path d="M33.5,47 A31,5.92 0 0 0 33.5,57" fill="none" stroke="var(--ink)" stroke-width="1.6"
-      opacity="0.55"/>
+<path d="M33.5,47 A31,5.27 0 0 0 33.5,57" fill="none" stroke="var(--ink)" stroke-width="1.6"
+      opacity="0.85"/>
 </svg><span class="nm">Beaker of water</span><span class="mk"></span></button><button type="button" class="tile" data-id="test-tube" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <path d="M53,30 L53,116 A7,7 0 0 0 67,116 L67,30" fill="var(--glass-fill)"
-      stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
-<path d="M53,116 A7,1.34 0 0 0 67,116" fill="none" stroke="var(--ink)" stroke-width="1.6"
-      opacity="0.55"/>
+      stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M53,116 A7,1.55 0 0 0 67,116" fill="none" stroke="var(--ink)" stroke-width="1.6"
+      opacity="0.85"/>
 <path d="M56.5,42 L56.5,104" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round"
       opacity="0.8"/>
-<ellipse cx="60" cy="29" rx="8.4" ry="1.60" fill="var(--bg)" stroke="var(--ink)" stroke-width="3"/>
+<ellipse cx="60" cy="29" rx="8.4" ry="1.55" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.6"/>
 </svg><span class="nm">Test tube</span><span class="mk"></span></button><button type="button" class="tile" data-id="pondweed" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <path d="M60,40 C59.6,64 60.2,98 61,126" fill="none" stroke="var(--ink)" stroke-width="3"
       stroke-linecap="butt"/>
@@ -177,9 +177,9 @@ h1{font-size:17px;margin:0 0 2px}
 <path d="M10,54 L22,46 L110,46 L98,54 Z" fill="var(--wood)" stroke="var(--ink)"
       stroke-width="3" stroke-linejoin="round"/>
 <rect x="10" y="54" width="88" height="11" fill="var(--wood)" stroke="var(--ink)" stroke-width="3"/>
-<g fill="var(--bg)" stroke="var(--ink)" stroke-width="1.6">
-<ellipse cx="31" cy="50" rx="6.5" ry="1.24"/><ellipse cx="51" cy="50" rx="6.5" ry="1.24"/>
-<ellipse cx="71" cy="50" rx="6.5" ry="1.24"/><ellipse cx="91" cy="50" rx="6.5" ry="1.24"/>
+<g fill="var(--dark)" stroke="var(--ink)" stroke-width="1.6">
+<ellipse cx="31" cy="50" rx="6.5" ry="1.55"/><ellipse cx="51" cy="50" rx="6.5" ry="1.55"/>
+<ellipse cx="71" cy="50" rx="6.5" ry="1.55"/><ellipse cx="91" cy="50" rx="6.5" ry="1.55"/>
 </g>
 <rect x="14" y="65" width="9" height="38" fill="var(--wood)" stroke="var(--ink)" stroke-width="3"/>
 <rect x="85" y="65" width="9" height="38" fill="var(--wood)" stroke="var(--ink)" stroke-width="3"/>
@@ -211,8 +211,8 @@ h1{font-size:17px;margin:0 0 2px}
 <path d="M96,129 C111,113 109,72 84,55 L76,65 C95,76 97,111 84,123 Z"
       fill="var(--metal)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
 <rect x="24" y="92" width="76" height="7" rx="1.5" fill="var(--metal)"
-      stroke="var(--ink)" stroke-width="3"/>
-<ellipse cx="59" cy="95.5" rx="7" ry="1.34" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.6"/>
+      stroke="var(--ink)" stroke-width="1.6"/>
+<ellipse cx="59" cy="95.5" rx="7" ry="1.55" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.6"/>
 <path d="M42,92 L42,88 Q42,86 45,86 L51,86" fill="none" stroke="var(--ink)" stroke-width="1.6"
       stroke-linecap="round"/>
 <path d="M76,92 L76,88 Q76,86 73,86 L67,86" fill="none" stroke="var(--ink)" stroke-width="1.6"
@@ -220,11 +220,11 @@ h1{font-size:17px;margin:0 0 2px}
 <circle cx="97" cy="106" r="9" fill="var(--bg)" stroke="var(--ink)" stroke-width="3"/>
 <circle cx="97" cy="106" r="4.5" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.6"/>
 <rect x="66" y="54" width="20" height="11" rx="2" fill="var(--metal)"
-      stroke="var(--ink)" stroke-width="3"/>
+      stroke="var(--ink)" stroke-width="1.6"/>
 <rect x="48" y="28" width="22" height="30" rx="2" fill="var(--bg)"
-      stroke="var(--ink)" stroke-width="3"/>
+      stroke="var(--ink)" stroke-width="1.6"/>
 <rect x="52" y="14" width="14" height="16" rx="2" fill="var(--bg)"
-      stroke="var(--ink)" stroke-width="3"/>
+      stroke="var(--ink)" stroke-width="1.6"/>
 <path d="M53,70 L65,70 L62,82 L56,82 Z" fill="var(--bg)" stroke="var(--ink)"
       stroke-width="1.6" stroke-linejoin="round"/>
 <path d="M68,70 L78,70 L76,80 L70,80 Z" fill="var(--bg)" stroke="var(--ink)"
@@ -237,7 +237,7 @@ h1{font-size:17px;margin:0 0 2px}
 <circle cx="73.5" cy="101.6" r="2.4" fill="var(--ink)"/>
 <path d="M50,124 L50,114 M68,124 L68,114" stroke="var(--ink)" stroke-width="3"
       stroke-linecap="round"/>
-<ellipse cx="59" cy="112" rx="10" ry="1.91" fill="var(--metal)" stroke="var(--ink)"
+<ellipse cx="59" cy="112" rx="10" ry="1.55" fill="var(--metal)" stroke="var(--ink)"
          stroke-width="1.6" transform="rotate(-42 59 112)"/>
 <circle cx="50" cy="114" r="2" fill="var(--ink)"/>
 <circle cx="68" cy="114" r="2" fill="var(--ink)"/>
@@ -246,22 +246,22 @@ h1{font-size:17px;margin:0 0 2px}
       stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
 <path d="M55,101 L55,130 M65,101 L65,130" stroke="var(--ink)" stroke-width="3"/>
 <path d="M55,101 L65,101" stroke="var(--ink)" stroke-width="3"/>
-<ellipse cx="60" cy="130" rx="5" ry="2.4" fill="var(--bg)" stroke="var(--ink)" stroke-width="3"/>
-<path d="M55.4,129 A5,2.4 0 0 1 64.6,129" fill="none" stroke="var(--ink)" stroke-width="1.6"
+<ellipse cx="60" cy="130" rx="5" ry="1.55" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.6"/>
+<path d="M55.4,129 A5,1.55 0 0 1 64.6,129" fill="none" stroke="var(--ink)" stroke-width="1.6"
       opacity="0.5"/>
 <path d="M45,54 L58,80" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round"
       opacity="0.8"/>
-<ellipse cx="60" cy="44" rx="33" ry="6.30" fill="var(--bg)" stroke="var(--ink)" stroke-width="3"/>
+<ellipse cx="60" cy="44" rx="33" ry="5.08" fill="var(--bg)" stroke="var(--ink)" stroke-width="3"/>
 </svg><span class="nm">Funnel</span><span class="mk"></span></button><button type="button" class="tile" data-id="petri-dish" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-<path d="M23,95 L23,106 A37,7.06 0 0 0 97,106 L97,95" fill="var(--glass-fill)"
+<path d="M23,95 L23,106 A37,5.85 0 0 0 97,106 L97,95" fill="var(--glass-fill)"
       stroke="var(--ink)" stroke-width="3"/>
-<path d="M26,101 L26,105 A34,6.49 0 0 0 94,105 L94,101" fill="var(--agar)"/>
-<path d="M26,101 A34,6.49 0 0 0 94,101" fill="var(--agar)" opacity="0.9"/>
-<path d="M20,88 L20,93 A40,7.63 0 0 0 100,93 L100,88" fill="var(--glass-fill)" fill-opacity="0.45"
+<path d="M26,101 L26,105 A34,5.27 0 0 0 94,105 L94,101" fill="var(--agar)"/>
+<path d="M26,101 A34,5.27 0 0 0 94,101" fill="var(--agar)" opacity="0.9"/>
+<path d="M20,88 L20,93 A40,6.42 0 0 0 100,93 L100,88" fill="var(--glass-fill)" fill-opacity="0.45"
       stroke="var(--ink)" stroke-width="3"/>
-<ellipse cx="60" cy="88" rx="40" ry="7.63" fill="var(--glass-fill)" fill-opacity="0.45"
+<ellipse cx="60" cy="88" rx="40" ry="6.42" fill="var(--glass-fill)" fill-opacity="0.45"
          stroke="var(--ink)" stroke-width="3"/>
-<path d="M32,84 A40,7.63 0 0 0 46,91" fill="none" stroke="var(--bg)" stroke-width="2.2"
+<path d="M32,84 A40,6.42 0 0 0 46,91" fill="none" stroke="var(--bg)" stroke-width="2.2"
       stroke-linecap="round" opacity="0.85"/>
 </svg><span class="nm">Petri dish</span><span class="mk"></span></button><button type="button" class="tile" data-id="ph-meter" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <path d="M10,84 L62,84 Q66,84 66,88 L66,124 Q66,128 62,128 L10,128
@@ -277,7 +277,7 @@ h1{font-size:17px;margin:0 0 2px}
 <circle cx="66" cy="92" r="3.2" fill="var(--metal)" stroke="var(--ink)" stroke-width="1.6"/>
 <path d="M69,92 C82,80 86,58 90,44" fill="none" stroke="var(--ink)" stroke-width="3"/>
 <rect x="84" y="42" width="13" height="22" rx="3" fill="var(--bg)"
-      stroke="var(--ink)" stroke-width="3"/>
+      stroke="var(--ink)" stroke-width="1.6"/>
 <path d="M86,64 L95,64 L95,104 L86,104 Z" fill="var(--glass-fill)"
       stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
 <circle cx="90.5" cy="110" r="6" fill="var(--glass-fill)" stroke="var(--ink)" stroke-width="3"/>
@@ -288,7 +288,7 @@ h1{font-size:17px;margin:0 0 2px}
 </svg><span class="nm">pH meter</span><span class="mk"></span></button><button type="button" class="tile" data-id="mass-balance" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <path d="M33,79 L87,79 L84,83 L36,83 Z" fill="var(--metal)" stroke="var(--ink)"
       stroke-width="3" stroke-linejoin="round"/>
-<ellipse cx="60" cy="79" rx="27" ry="5.15" fill="var(--metal)" stroke="var(--ink)" stroke-width="3"/>
+<ellipse cx="60" cy="79" rx="27" ry="3.94" fill="var(--metal)" stroke="var(--ink)" stroke-width="3"/>
 <rect x="55" y="83" width="10" height="7" fill="var(--metal)" stroke="var(--ink)" stroke-width="1.6"/>
 <path d="M16,89 L104,89 Q108,89 108,93 L108,120 Q108,124 104,124 L16,124
          Q12,124 12,120 L12,93 Q12,89 16,89 Z"
@@ -308,8 +308,8 @@ h1{font-size:17px;margin:0 0 2px}
 </svg><span class="nm">Mass balance</span><span class="mk"></span></button><button type="button" class="tile" data-id="conical-flask" aria-pressed="false"><svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <path d="M25,132 L46,74 Q50,64 51,56 L51,38 L69,38 L69,56 Q70,64 74,74 L95,132 Z"
       fill="var(--glass-fill)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
-<path d="M29,128 A31,5.92 0 0 0 91,128" fill="none" stroke="var(--ink)" stroke-width="1.6"
-      opacity="0.55"/>
+<path d="M29,128 A31,5.27 0 0 0 91,128" fill="none" stroke="var(--ink)" stroke-width="1.6"
+      opacity="0.85"/>
 <path d="M45,86 L36,122" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round"
       opacity="0.8"/>
 <g stroke="var(--ink)" stroke-width="1.6" opacity="0.8">
@@ -317,7 +317,7 @@ h1{font-size:17px;margin:0 0 2px}
 </g>
 <text x="51" y="111.5" font-size="7.5" fill="var(--glass)">150</text>
 <text x="48" y="121" font-size="7.5" fill="var(--glass)">100 cm&#179;</text>
-<ellipse cx="60" cy="34" rx="9.5" ry="1.81" fill="var(--bg)" stroke="var(--ink)" stroke-width="3"/>
+<ellipse cx="60" cy="34" rx="9.5" ry="1.55" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.6"/>
 </svg><span class="nm">Conical flask</span><span class="mk"></span></button></div>
   <div class="actions">
     <button id="check" class="primary" type="button">Check my set-up</button>
@@ -333,7 +333,7 @@ h1{font-size:17px;margin:0 0 2px}
 
   var SIM_ID = "practical_photosynthesis-equipment";
   var ITEMS = [{"id": "lamp", "name": "Lamp", "needed": true, "why": "Gives the light. Its six settings are the one thing this experiment changes."}, {"id": "beaker", "name": "Beaker of water", "needed": true, "why": "Stands between the lamp and the tube and takes the heat out of the light, so the water around the pondweed stays at the same temperature at every setting."}, {"id": "test-tube", "name": "Test tube", "needed": true, "why": "Holds the water and the pondweed while the bubbles are counted."}, {"id": "pondweed", "name": "Pondweed", "needed": true, "why": "The plant that photosynthesizes. The bubbles come off its cut end, so the cut end faces up the tube where they can be seen."}, {"id": "test-tube-rack", "name": "Test tube rack", "needed": true, "why": "Holds the tube upright and still, so the distance from the lamp does not change between one count and the next."}, {"id": "stopwatch", "name": "Stopwatch", "needed": true, "why": "Times the one minute over which the bubbles are counted."}, {"id": "microscope", "name": "Microscope", "needed": false, "why": "Nothing is viewed under magnification. The bubbles are large enough to count by eye."}, {"id": "funnel", "name": "Funnel", "needed": false, "why": "Nothing is filtered, and nothing is poured into a narrow neck."}, {"id": "petri-dish", "name": "Petri dish", "needed": false, "why": "Nothing is grown. A Petri dish holds a culture, and there is no culture here."}, {"id": "ph-meter", "name": "pH meter", "needed": false, "why": "pH is not what this experiment changes. Light intensity is."}, {"id": "mass-balance", "name": "Mass balance", "needed": false, "why": "Nothing is weighed. The measurement is a count of bubbles."}, {"id": "conical-flask", "name": "Conical flask", "needed": false, "why": "The pondweed goes in a test tube, which is narrow enough for the bubbles to rise in one stream where they can be counted."}];
-  var RIG = "\n<svg viewBox=\"0 0 620 240\" role=\"img\" aria-label=\"A lamp shining through a beaker of water onto\n     a test tube of pondweed standing in a rack. Bubbles rise from the cut end of the stem, and\n     a stopwatch lies on the bench beside the rack.\">\n  <g transform=\"translate(130,6)\">\n  <line x1=\"6\" y1=\"200\" x2=\"294\" y2=\"200\" stroke=\"var(--ink)\" stroke-width=\"3\"/>\n  <ellipse cx=\"38\" cy=\"192\" rx=\"28\" ry=\"5.34\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n           stroke-width=\"3\"/>\n  <path d=\"M10,192 A28,5.34 0 0 0 66,192 L66,186 A28,5.34 0 0 1 10,186 Z\" fill=\"var(--metal)\"\n        stroke=\"var(--ink)\" stroke-width=\"3\" stroke-linejoin=\"round\"/>\n  <ellipse cx=\"38\" cy=\"186\" rx=\"28\" ry=\"5.34\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n           stroke-width=\"3\"/>\n  <path d=\"M38,186 L38,142 L64,104\" stroke=\"var(--ink)\" stroke-width=\"3\" fill=\"none\"\n        stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <circle cx=\"38\" cy=\"142\" r=\"4.4\" fill=\"var(--bg)\" stroke=\"var(--ink)\" stroke-width=\"3\"/>\n  <path d=\"M66.7,97.5 L115.6,103.5 L100.4,140.5 L61.4,110.5 Z\" fill=\"var(--dark)\"\n        stroke=\"var(--ink)\" stroke-width=\"3\" stroke-linejoin=\"round\"/>\n  <ellipse cx=\"108\" cy=\"122\" rx=\"9\" ry=\"21\" transform=\"rotate(22 108 122)\" fill=\"var(--bg)\"\n           stroke=\"var(--ink)\" stroke-width=\"3\"/>\n  <circle cx=\"105\" cy=\"122\" r=\"6.6\" fill=\"var(--warn-bg)\" stroke=\"var(--ink)\"\n          stroke-width=\"1.6\"/>\n  <path d=\"M116,104 L150,110 L150,150 L116,142 Z\" fill=\"var(--warn)\" opacity=\"0.18\"/>\n  <path d=\"M150,110 L206,104 L206,152 L150,150 Z\" fill=\"var(--warn)\" opacity=\"0.13\"/>\n  <path d=\"M150,92 L150,176 L192,176 L192,92\" fill=\"var(--glass-fill)\" stroke=\"var(--ink)\"\n        stroke-width=\"3\" stroke-linejoin=\"round\"/>\n  <path d=\"M150,106 L150,176 L192,176 L192,106 Z\" fill=\"var(--water)\" opacity=\"0.7\"/>\n  <ellipse cx=\"171\" cy=\"106\" rx=\"21\" ry=\"4.01\" fill=\"var(--water)\"/>\n  <ellipse cx=\"171\" cy=\"92\" rx=\"21\" ry=\"4.01\" fill=\"var(--bg)\" stroke=\"var(--ink)\"\n           stroke-width=\"3\"/>\n  <path d=\"M155,120 L155,164\" stroke=\"var(--bg)\" stroke-width=\"2.2\" opacity=\"0.7\"/>\n  <rect x=\"216\" y=\"166\" width=\"72\" height=\"7\" rx=\"2\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n        stroke-width=\"1.6\"/>\n  <rect x=\"216\" y=\"192\" width=\"72\" height=\"7\" rx=\"2\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n        stroke-width=\"1.6\"/>\n  <rect x=\"220\" y=\"173\" width=\"6\" height=\"19\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n        stroke-width=\"1.6\"/>\n  <rect x=\"278\" y=\"173\" width=\"6\" height=\"19\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n        stroke-width=\"1.6\"/>\n  <path d=\"M237,32 L237,176 A15,15 0 0 0 267,176 L267,32\" fill=\"var(--glass-fill)\"\n        stroke=\"var(--ink)\" stroke-width=\"3\" stroke-linejoin=\"round\"/>\n  <path d=\"M237,54 L237,176 A15,15 0 0 0 267,176 L267,54 Z\" fill=\"var(--water)\"\n        opacity=\"0.7\"/>\n  <ellipse cx=\"252\" cy=\"54\" rx=\"15\" ry=\"2.86\" fill=\"var(--water)\"/>\n  <path d=\"M252,168 C251.6,140 252.4,100 253,70\" fill=\"none\" stroke=\"var(--ink)\"\n        stroke-width=\"3\" stroke-linecap=\"round\"/>\n  <g fill=\"var(--good)\" opacity=\"0.92\">\n    <path d=\"M252,84 C246,80 242,78 240,79 C244,83 248,86 252,86 Z\"/>\n    <path d=\"M253,84 C259,80 263,78 265,79 C261,83 257,86 253,86 Z\"/>\n    <path d=\"M252,104 C246,100 242,98 240,99 C244,103 248,106 252,106 Z\"/>\n    <path d=\"M253,104 C259,100 263,98 265,99 C261,103 257,106 253,106 Z\"/>\n    <path d=\"M252,124 C246,120 242,118 240,119 C244,123 248,126 252,126 Z\"/>\n    <path d=\"M253,124 C259,120 263,118 265,119 C261,123 257,126 253,126 Z\"/>\n    <path d=\"M252,144 C246,140 242,138 240,139 C244,143 248,146 252,146 Z\"/>\n    <path d=\"M253,144 C259,140 263,138 265,139 C261,143 257,146 253,146 Z\"/>\n  </g>  <path d=\"M247,166.5 L258,171\" stroke=\"var(--bg)\" stroke-width=\"2.2\"/>\n  <path d=\"M247,166.5 L258,171\" stroke=\"var(--ink)\" stroke-width=\"3\"\n        stroke-linecap=\"round\"/>\n  <g fill=\"var(--bubble)\" stroke=\"var(--ink)\" stroke-width=\"1.6\">\n    <circle cx=\"255\" cy=\"152\" r=\"3\"/><circle cx=\"249\" cy=\"134\" r=\"2.6\"/>\n    <circle cx=\"254\" cy=\"116\" r=\"2.8\"/><circle cx=\"250\" cy=\"96\" r=\"2.4\"/>\n    <circle cx=\"254\" cy=\"76\" r=\"2.6\"/>\n  </g>\n  <ellipse cx=\"252\" cy=\"32\" rx=\"15\" ry=\"2.86\" fill=\"var(--bg)\" stroke=\"var(--ink)\"\n           stroke-width=\"3\"/>\n  <circle cx=\"104\" cy=\"182\" r=\"15\" fill=\"var(--bg)\" stroke=\"var(--ink)\" stroke-width=\"3\"/>\n  <circle cx=\"104\" cy=\"182\" r=\"11\" fill=\"var(--card)\" stroke=\"var(--ink)\" stroke-width=\"1.6\"/>\n  <path d=\"M104,182 L104,174\" stroke=\"var(--ink)\" stroke-width=\"1.6\" stroke-linecap=\"round\"/>\n  <path d=\"M104,182 L110,185\" stroke=\"var(--ink)\" stroke-width=\"1.6\"\n        stroke-linecap=\"round\"/>\n  <rect x=\"100\" y=\"163\" width=\"8\" height=\"5\" rx=\"1.5\" fill=\"var(--ink)\"/>\n  </g>\n<g data-ann=\"1\"><circle cx=\"225\" cy=\"124\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M225,124 L118,40\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"114\" y=\"43.4\" text-anchor=\"end\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">lamp, six settings</text></g><g data-ann=\"1\"><circle cx=\"234\" cy=\"188\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M234,188 L118,196\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"114\" y=\"199.4\" text-anchor=\"end\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">stopwatch</text></g><g data-ann=\"1\"><circle cx=\"301\" cy=\"156\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M301,156 L450,36\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"454\" y=\"39.4\" text-anchor=\"start\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">beaker of water</text></g><g data-ann=\"1\"><circle cx=\"392\" cy=\"126\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M392,126 L450,74\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"454\" y=\"77.4\" text-anchor=\"start\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">test tube</text></g><g data-ann=\"1\"><circle cx=\"383\" cy=\"110\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M383,110 L450,104\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"454\" y=\"107.4\" text-anchor=\"start\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">pondweed</text></g><g data-ann=\"1\"><circle cx=\"384\" cy=\"82\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M384,82 L450,134\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"454\" y=\"137.4\" text-anchor=\"start\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">oxygen bubbles</text></g><g data-ann=\"1\"><circle cx=\"414\" cy=\"186\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M414,186 L450,176\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"454\" y=\"179.4\" text-anchor=\"start\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">test tube rack</text></g>\n</svg>\n", CAP = "The apparatus set up. From the left: the lamp, the beaker of water that takes the heat out of the light, the test tube of pondweed standing in its rack, and the stopwatch. A brighter setting therefore gives more light without also giving more heat.";
+  var RIG = "\n<svg viewBox=\"0 0 620 240\" role=\"img\" aria-label=\"A lamp shining through a beaker of water onto\n     a test tube of pondweed standing in a rack. Bubbles rise from the cut end of the stem, and\n     a stopwatch lies on the bench beside the rack.\">\n  <g transform=\"translate(130,6)\">\n  <line x1=\"6\" y1=\"200\" x2=\"294\" y2=\"200\" stroke=\"var(--ink)\" stroke-width=\"3\"/>\n  <ellipse cx=\"38\" cy=\"192\" rx=\"28\" ry=\"4.13\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n           stroke-width=\"3\"/>\n  <path d=\"M10,192 A28,4.13 0 0 0 66,192 L66,186 A28,4.13 0 0 1 10,186 Z\" fill=\"var(--metal)\"\n        stroke=\"var(--ink)\" stroke-width=\"3\" stroke-linejoin=\"round\"/>\n  <ellipse cx=\"38\" cy=\"186\" rx=\"28\" ry=\"4.13\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n           stroke-width=\"3\"/>\n  <path d=\"M38,186 L38,142 L64,104\" stroke=\"var(--ink)\" stroke-width=\"3\" fill=\"none\"\n        stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <circle cx=\"38\" cy=\"142\" r=\"4.4\" fill=\"var(--bg)\" stroke=\"var(--ink)\" stroke-width=\"3\"/>\n  <path d=\"M66.7,97.5 L115.6,103.5 L100.4,140.5 L61.4,110.5 Z\" fill=\"var(--dark)\"\n        stroke=\"var(--ink)\" stroke-width=\"3\" stroke-linejoin=\"round\"/>\n  <ellipse cx=\"108\" cy=\"122\" rx=\"9\" ry=\"21\" transform=\"rotate(22 108 122)\" fill=\"var(--bg)\"\n           stroke=\"var(--ink)\" stroke-width=\"1.6\"/>\n  <circle cx=\"105\" cy=\"122\" r=\"6.6\" fill=\"var(--warn-bg)\" stroke=\"var(--ink)\"\n          stroke-width=\"1.6\"/>\n  <path d=\"M116,104 L150,110 L150,150 L116,142 Z\" fill=\"var(--warn)\" opacity=\"0.18\"/>\n  <path d=\"M150,110 L206,104 L206,152 L150,150 Z\" fill=\"var(--warn)\" opacity=\"0.13\"/>\n  <path d=\"M150,92 L150,176 L192,176 L192,92\" fill=\"var(--glass-fill)\" stroke=\"var(--ink)\"\n        stroke-width=\"3\" stroke-linejoin=\"round\"/>\n  <path d=\"M150,106 L150,176 L192,176 L192,106 Z\" fill=\"var(--water)\" opacity=\"0.7\"/>\n  <ellipse cx=\"171\" cy=\"106\" rx=\"21\" ry=\"2.79\" fill=\"var(--water)\"/>\n  <ellipse cx=\"171\" cy=\"92\" rx=\"21\" ry=\"2.79\" fill=\"var(--bg)\" stroke=\"var(--ink)\"\n           stroke-width=\"3\"/>\n  <path d=\"M155,120 L155,164\" stroke=\"var(--bg)\" stroke-width=\"2.2\" opacity=\"0.7\"/>\n  <rect x=\"216\" y=\"166\" width=\"72\" height=\"7\" rx=\"2\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n        stroke-width=\"1.6\"/>\n  <rect x=\"216\" y=\"192\" width=\"72\" height=\"7\" rx=\"2\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n        stroke-width=\"1.6\"/>\n  <rect x=\"220\" y=\"173\" width=\"6\" height=\"19\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n        stroke-width=\"1.6\"/>\n  <rect x=\"278\" y=\"173\" width=\"6\" height=\"19\" fill=\"var(--metal)\" stroke=\"var(--ink)\"\n        stroke-width=\"1.6\"/>\n  <path d=\"M237,32 L237,176 A15,15 0 0 0 267,176 L267,32\" fill=\"var(--glass-fill)\"\n        stroke=\"var(--ink)\" stroke-width=\"3\" stroke-linejoin=\"round\"/>\n  <path d=\"M237,54 L237,176 A15,15 0 0 0 267,176 L267,54 Z\" fill=\"var(--water)\"\n        opacity=\"0.7\"/>\n  <ellipse cx=\"252\" cy=\"54\" rx=\"15\" ry=\"2.25\" fill=\"var(--water)\"/>\n  <path d=\"M252,168 C251.6,140 252.4,100 253,70\" fill=\"none\" stroke=\"var(--ink)\"\n        stroke-width=\"3\" stroke-linecap=\"round\"/>\n  <g fill=\"var(--good)\" opacity=\"0.92\">\n    <path d=\"M252,84 C246,80 242,78 240,79 C244,83 248,86 252,86 Z\"/>\n    <path d=\"M253,84 C259,80 263,78 265,79 C261,83 257,86 253,86 Z\"/>\n    <path d=\"M252,104 C246,100 242,98 240,99 C244,103 248,106 252,106 Z\"/>\n    <path d=\"M253,104 C259,100 263,98 265,99 C261,103 257,106 253,106 Z\"/>\n    <path d=\"M252,124 C246,120 242,118 240,119 C244,123 248,126 252,126 Z\"/>\n    <path d=\"M253,124 C259,120 263,118 265,119 C261,123 257,126 253,126 Z\"/>\n    <path d=\"M252,144 C246,140 242,138 240,139 C244,143 248,146 252,146 Z\"/>\n    <path d=\"M253,144 C259,140 263,138 265,139 C261,143 257,146 253,146 Z\"/>\n  </g>  <path d=\"M247,166.5 L258,171\" stroke=\"var(--bg)\" stroke-width=\"2.2\"/>\n  <path d=\"M247,166.5 L258,171\" stroke=\"var(--ink)\" stroke-width=\"3\"\n        stroke-linecap=\"round\"/>\n  <g fill=\"var(--bubble)\" stroke=\"var(--ink)\" stroke-width=\"1.6\">\n    <circle cx=\"255\" cy=\"152\" r=\"3\"/><circle cx=\"249\" cy=\"134\" r=\"2.6\"/>\n    <circle cx=\"254\" cy=\"116\" r=\"2.8\"/><circle cx=\"250\" cy=\"96\" r=\"2.4\"/>\n    <circle cx=\"254\" cy=\"76\" r=\"2.6\"/>\n  </g>\n  <ellipse cx=\"252\" cy=\"32\" rx=\"15\" ry=\"2.25\" fill=\"var(--bg)\" stroke=\"var(--ink)\"\n           stroke-width=\"3\"/>\n  <circle cx=\"104\" cy=\"182\" r=\"15\" fill=\"var(--bg)\" stroke=\"var(--ink)\" stroke-width=\"3\"/>\n  <circle cx=\"104\" cy=\"182\" r=\"11\" fill=\"var(--card)\" stroke=\"var(--ink)\" stroke-width=\"1.6\"/>\n  <path d=\"M104,182 L104,174\" stroke=\"var(--ink)\" stroke-width=\"1.6\" stroke-linecap=\"round\"/>\n  <path d=\"M104,182 L110,185\" stroke=\"var(--ink)\" stroke-width=\"1.6\"\n        stroke-linecap=\"round\"/>\n  <rect x=\"100\" y=\"163\" width=\"8\" height=\"5\" rx=\"1.5\" fill=\"var(--ink)\"/>\n  </g>\n<g data-ann=\"1\"><circle cx=\"225\" cy=\"124\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M225,124 L118,40\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"114\" y=\"43.4\" text-anchor=\"end\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">lamp, six settings</text></g><g data-ann=\"1\"><circle cx=\"234\" cy=\"188\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M234,188 L118,196\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"114\" y=\"199.4\" text-anchor=\"end\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">stopwatch</text></g><g data-ann=\"1\"><circle cx=\"301\" cy=\"156\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M301,156 L450,36\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"454\" y=\"39.4\" text-anchor=\"start\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">beaker of water</text></g><g data-ann=\"1\"><circle cx=\"392\" cy=\"126\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M392,126 L450,74\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"454\" y=\"77.4\" text-anchor=\"start\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">test tube</text></g><g data-ann=\"1\"><circle cx=\"383\" cy=\"110\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M383,110 L450,104\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"454\" y=\"107.4\" text-anchor=\"start\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">pondweed</text></g><g data-ann=\"1\"><circle cx=\"384\" cy=\"82\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M384,82 L450,134\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"454\" y=\"137.4\" text-anchor=\"start\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">oxygen bubbles</text></g><g data-ann=\"1\"><circle cx=\"414\" cy=\"186\" r=\"1.9\" fill=\"var(--muted)\"/><path d=\"M414,186 L450,176\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.6\" opacity=\"0.8\"/><text x=\"454\" y=\"179.4\" text-anchor=\"start\" font-size=\"10.5\" fill=\"var(--muted)\" font-family=\"system-ui, sans-serif\">test tube rack</text></g>\n</svg>\n", CAP = "The apparatus set up. From the left: the lamp, the beaker of water that takes the heat out of the light, the test tube of pondweed standing in its rack, and the stopwatch. A brighter setting therefore gives more light without also giving more heat.";
   var byId = {};
   ITEMS.forEach(function (it) { byId[it.id] = it; });
 

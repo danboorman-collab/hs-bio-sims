@@ -14,4 +14,30 @@ cp "$SRC/Unit 2 Rebuild/sims/bio2-210_osmosis-plot.html"        "$HERE/osmosis-p
 cp "$SRC/Practicals/conclusions/"*.html                          "$HERE/conclusions/"
 cp "$SRC/Practicals/skills/"*.html                               "$HERE/skills/"
 cp "$SRC/Practicals/sims/"*.html                                  "$HERE/practicals/"
+# ---------------------------------------------------------------------------------------
+# AP Biology. Unlike the HS sims, which are served one page at a time to be framed from
+# TimeBack, the AP set carries its own lesson pages, so the whole tree is copied under ap/
+# and reached through ap/index.html. _tools and _review stay out: they are the source and
+# the review scaffolding, not the site.
+# ---------------------------------------------------------------------------------------
+AP="/Users/danboorman/Library/CloudStorage/GoogleDrive-dan.boorman@alpha.school/.shortcut-targets-by-id/1MnpUfejpG-ZKkb-3ULy9UcTdICXBVFqy/Science AP/Biology/AP Practicals"
+rm -rf "$HERE/ap"
+mkdir -p "$HERE/ap"
+cp "$AP/index.html" "$HERE/ap/"
+for d in sims skills conclusions questions; do
+    mkdir -p "$HERE/ap/$d"
+    cp "$AP/$d/"*.html "$HERE/ap/$d/"
+done
+for d in "$AP"/*/; do
+    name="$(basename "$d")"
+    case "$name" in _tools|_review|videos) continue ;; esac
+    [ -f "$d/index.html" ] || continue
+    mkdir -p "$HERE/ap/$name"
+    cp "$d/index.html" "$HERE/ap/$name/"
+done
+# videos are copied only once they exist; a missing one leaves a waiting card and the
+# lesson page still works
+mkdir -p "$HERE/ap/videos"
+cp "$AP/videos/"*.mp4 "$HERE/ap/videos/" 2>/dev/null || true
+
 echo "synced $(find "$HERE" -name '*.html' | wc -l | tr -d ' ') pages"

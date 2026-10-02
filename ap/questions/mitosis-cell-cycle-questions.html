@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eight questions</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.item > h2{font-size:12.5px;margin:0 0 6px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.setup{font-size:14.5px;margin:0 0 9px;color:var(--fg)}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.item table{margin-bottom:10px}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Eight questions</h1>
+<p class="sub">Information Storage and Transmission &middot; Topic 4.6</p>
+<div class="brief"><p>On carrying this investigation out, and on what its results show.
+Each question is marked as soon as it is answered, and every option is explained.</p></div>
+<div class="item" id="q1"><h2>Question 1 of 8</h2><p class="setup">A root tip is stained, squashed on a slide, and 200 cells are scored for the phase each is in.</p><p class="stem">Why is the region just behind the tip examined rather than further up the root?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Further up the root the cells have left the cycle and are lengthening instead. Almost all of them would be in interphase and the mitotic phases would hardly appear."><span class="ltr"></span><span>Because that is where the cells are dividing, so every phase is represented</span></button><button type="button" class="choice" data-ok="0" data-why="Dividing cells near the tip are among the smallest in the root. The cells further up are larger, having lengthened."><span class="ltr"></span><span>Because the cells there are the largest and easiest to see</span></button><button type="button" class="choice" data-ok="0" data-why="The cap does protect the tip, but the region is chosen for what the cells are doing, not for what covers them."><span class="ltr"></span><span>Because the root cap protects the cells behind it from damage</span></button><button type="button" class="choice" data-ok="0" data-why="The stain binds to chromosomes wherever they are. It shows up most clearly where they are condensed, which is in the dividing cells."><span class="ltr"></span><span>Because only the cells near the tip take up the stain</span></button></div></div><div class="item" id="q2"><h2>Question 2 of 8</h2><p class="setup">Of 250 cells scored on one slide, 20 were in metaphase.</p><p class="stem">What percentage of the cells were in metaphase?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="20 divided by 250 is 0.080, and multiplied by 100 that is 8.0%."><span class="ltr"></span><span>8.0%</span></button><button type="button" class="choice" data-ok="0" data-why="That is the count with a percent sign after it. A count is only a percentage directly when the total is 100."><span class="ltr"></span><span>20%</span></button><button type="button" class="choice" data-ok="0" data-why="That is 250 divided by 20, turned into a percentage. The count goes on top and the total underneath."><span class="ltr"></span><span>12.5%</span></button><button type="button" class="choice" data-ok="0" data-why="That is the fraction, 0.080, with a percent sign after it. It still has to be multiplied by 100."><span class="ltr"></span><span>0.08%</span></button></div></div><div class="item" id="q3"><h2>Question 3 of 8</h2><p class="setup">On a slide of onion root tip, 8.0% of the cells were in metaphase. The whole cell cycle in these cells takes 20 hours.</p><p class="stem">How long does metaphase last?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="20 hours is 1200 minutes, and 8.0% of 1200 is 96. A phase catches cells in proportion to how long it lasts, so a share of the cells is a share of the cycle."><span class="ltr"></span><span>96 minutes</span></button><button type="button" class="choice" data-ok="0" data-why="That is 8.0% of 20, which treats the 20 as minutes. The cycle is 20 hours, which has to be turned into minutes first."><span class="ltr"></span><span>1.6 minutes</span></button><button type="button" class="choice" data-ok="0" data-why="That is 8.0% of 2000. 20 hours is 1200 minutes, not 2000."><span class="ltr"></span><span>160 minutes</span></button><button type="button" class="choice" data-ok="0" data-why="That is the cycle divided by 8. The 8.0% is a share to be taken of the cycle, not a number to divide it by."><span class="ltr"></span><span>150 minutes</span></button></div></div><div class="item" id="q4"><h2>Question 4 of 8</h2><p class="setup">A student scores 200 cells and finds 4 in anaphase. A second student scores 20 cells from the same slide and finds 1 in anaphase.</p><p class="stem">Why is the first student's figure the more trustworthy?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="One cell in 20 is 5%; the first student's figure is 2%. In a field of 20 the next count could easily be 0 or 2, which is a twofold difference in the time worked out."><span class="ltr"></span><span>Because a phase this rare swings wildly from one small field to the next</span></button><button type="button" class="choice" data-ok="0" data-why="Both students scored cells from the same slide. What differs is how many."><span class="ltr"></span><span>Because the first student examined more of the root</span></button><button type="button" class="choice" data-ok="0" data-why="Both are round numbers. What matters is that the rarest phase holds only a few cells in a hundred."><span class="ltr"></span><span>Because 200 is a round number and 20 is not</span></button><button type="button" class="choice" data-ok="0" data-why="Anaphase looks the same whether 20 cells or 200 are on the slide. The difficulty is how few of them there are."><span class="ltr"></span><span>Because anaphase cannot be identified reliably in a field of only 20 cells</span></button></div></div><div class="item" id="q5"><h2>Question 5 of 8</h2><p class="setup">A student scores only the cells whose phase can be told at a glance, and leaves out the ones that are hard to call.</p><p class="stem">What effect does that have on the times worked out?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="A cell part-way between two phases is hard to call precisely because it is passing through a short phase quickly. Leaving those out takes cells away from the short phases in particular."><span class="ltr"></span><span>The short phases come out shorter, because the hard cells are mostly in them</span></button><button type="button" class="choice" data-ok="0" data-why="The times are worked out from shares, not from counts, so they always add to the whole cycle. What changes is how the shares are divided up."><span class="ltr"></span><span>Every phase comes out shorter, because fewer cells are counted in all</span></button><button type="button" class="choice" data-ok="0" data-why="Easy cells are kept, so interphase keeps almost all of its cells while the short phases lose some. Interphase's share goes up, not down."><span class="ltr"></span><span>Interphase comes out shorter, because its cells are the easiest to recognize</span></button><button type="button" class="choice" data-ok="0" data-why="They are not spread evenly. Cells are hard to call at the boundaries between phases, and those boundaries matter most to the shortest phases."><span class="ltr"></span><span>Nothing, because the cells that are hard to call are spread evenly between the phases</span></button></div></div><div class="item" id="q6"><h2>Question 6 of 8</h2><p class="setup">A tissue sample is treated with a drug and then scored. Far more of its cells are in metaphase than in an untreated sample of the same tissue, and the other mitotic phases hold fewer cells than before.</p><p class="stem">What does the drug most likely do?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Cells pile up in the phase they cannot get out of, and the phases beyond it empty as nothing arrives in them. That is what a block at the end of metaphase looks like."><span class="ltr"></span><span>It stops cells leaving metaphase</span></button><button type="button" class="choice" data-ok="0" data-why="That would raise all four mitotic phases together. Here the later ones have fallen."><span class="ltr"></span><span>It makes cells enter mitosis more often</span></button><button type="button" class="choice" data-ok="0" data-why="A quicker phase catches fewer cells, not more. The metaphase count would have fallen."><span class="ltr"></span><span>It makes metaphase pass more quickly</span></button><button type="button" class="choice" data-ok="0" data-why="Dead cells would be missing from the count altogether, which would shrink the total rather than pile cells into metaphase."><span class="ltr"></span><span>It kills the cells that reach anaphase</span></button></div></div><div class="item" id="q7"><h2>Question 7 of 8</h2><p class="setup">Two slides of the same kind of tissue are scored. On the first, 6% of cells are in mitosis. On the second, taken from a tumor, 24% are.</p><p class="stem">What does the difference suggest?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="A larger share of cells caught in mitosis means mitosis takes a larger share of the cycle. Usually that is because interphase has been shortened, so the cycle comes round faster."><span class="ltr"></span><span>Cells in the tumor spend a larger share of their cycle dividing</span></button><button type="button" class="choice" data-ok="0" data-why="A share of the cycle is not a length on its own. If the whole cycle is much shorter, mitosis can be a larger share of it and still take less time."><span class="ltr"></span><span>Mitosis takes four times as long in the tumor</span></button><button type="button" class="choice" data-ok="0" data-why="Nothing in a phase count says anything about cell size."><span class="ltr"></span><span>The tumor cells are four times as large</span></button><button type="button" class="choice" data-ok="0" data-why="76% of them are in interphase, which is a stage of the cycle rather than a sign of death."><span class="ltr"></span><span>Three quarters of the tumor cells are dead</span></button></div></div><div class="item" id="q8"><h2>Question 8 of 8</h2><p class="setup">A biologist scores 400 cells from a growing fish fin and finds 352 in interphase, 28 in prophase, 8 in metaphase, 4 in anaphase and 8 in telophase. The cycle in this tissue takes 18 hours.</p><p class="stem">How long does the fin's interphase last?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="352 of 400 is 88%, and 88% of 18 hours is 15.84 hours, or about 15 hours and 50 minutes."><span class="ltr"></span><span>15.8 hours</span></button><button type="button" class="choice" data-ok="0" data-why="That is the time spent in the four phases of mitosis, 48 cells in 400. Interphase is the rest of the cycle."><span class="ltr"></span><span>2.2 hours</span></button><button type="button" class="choice" data-ok="0" data-why="That is 88% treated as 0.88 of 10 hours. The cycle here is 18 hours long."><span class="ltr"></span><span>8.8 hours</span></button><button type="button" class="choice" data-ok="0" data-why="That is the whole cycle. Interphase is the largest part of it but not all of it: 48 of the 400 cells were in mitosis."><span class="ltr"></span><span>18 hours</span></button></div></div>
+<p class="msg" id="msg" role="status" aria-live="polite">Eight questions to answer.</p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "questions-mitosis-cell-cycle";
+  var TOTAL = 8, done = 0, right = 0;
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  [].forEach.call(document.querySelectorAll(".item"), function (item) {
+    choices(item, function (ok) {
+      done++;
+      if (ok) right++;
+      if (done < TOTAL) {
+        say(done + " of " + TOTAL + " answered, " + right + " right so far.");
+      } else {
+        var p = document.createElement("div");
+        p.className = "score";
+        p.innerHTML = "<b>" + right + " of " + TOTAL + "</b> right. Every option is "
+          + "explained above, including the ones you did not choose.";
+        msg.parentNode.insertBefore(p, msg);
+        say("");
+      }
+      reportHeight();
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

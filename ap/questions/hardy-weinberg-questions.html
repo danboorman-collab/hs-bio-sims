@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eight questions</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.item > h2{font-size:12.5px;margin:0 0 6px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.setup{font-size:14.5px;margin:0 0 9px;color:var(--fg)}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.item table{margin-bottom:10px}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Eight questions</h1>
+<p class="sub">Evolution &middot; Topic 7.5</p>
+<div class="brief"><p>On carrying this investigation out, and on what its results show.
+Each question is marked as soon as it is answered, and every option is explained.</p></div>
+<div class="item" id="q1"><h2>Question 1 of 8</h2><p class="setup">A census of a beetle population finds 320 individuals with the genotype RR, 480 with Rr and 200 with rr.</p><p class="stem">What is the frequency of the R allele in this population?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="There are 1000 beetles and so 2000 alleles. The R alleles number twice 320 plus 480, which is 1120, and 1120 divided by 2000 is 0.56."><span class="ltr"></span><span>0.56</span></button><button type="button" class="choice" data-ok="0" data-why="That is the share of the beetles that are RR. An allele frequency counts alleles, and every heterozygote carries one R as well."><span class="ltr"></span><span>0.32</span></button><button type="button" class="choice" data-ok="0" data-why="That is the share of beetles showing the dominant phenotype, 320 plus 480 out of 1000. The heterozygotes carry one R each, not two."><span class="ltr"></span><span>0.80</span></button><button type="button" class="choice" data-ok="0" data-why="That is the number of R alleles. A frequency is that number divided by the number of alleles in all, which is twice the number of beetles."><span class="ltr"></span><span>1120</span></button></div></div><div class="item" id="q2"><h2>Question 2 of 8</h2><p class="setup">In a population at Hardy&ndash;Weinberg equilibrium, the frequency of a recessive allele is 0.30.</p><p class="stem">What proportion of the population is expected to be heterozygous?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="p is 0.70 and q is 0.30, so 2pq is 2 times 0.70 times 0.30, which is 0.42."><span class="ltr"></span><span>0.42</span></button><button type="button" class="choice" data-ok="0" data-why="That is p times q. The heterozygote term carries a 2, because a heterozygote can be made two ways round: the dominant allele from either parent."><span class="ltr"></span><span>0.21</span></button><button type="button" class="choice" data-ok="0" data-why="That is q squared, the proportion expected to be homozygous recessive."><span class="ltr"></span><span>0.09</span></button><button type="button" class="choice" data-ok="0" data-why="That is 2q. The heterozygote term is 2pq, which uses both allele frequencies."><span class="ltr"></span><span>0.60</span></button></div></div><div class="item" id="q3"><h2>Question 3 of 8</h2><p class="setup">A census of 500 snails found 150 with the genotype BB, 200 Bb and 150 bb. p works out at 0.50.</p><p class="stem">How many heterozygous snails does Hardy&ndash;Weinberg equilibrium predict?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="2pq is 2 times 0.50 times 0.50, which is 0.50. That share of 500 snails is 250."><span class="ltr"></span><span>250</span></button><button type="button" class="choice" data-ok="0" data-why="That is p squared times 500, the number of BB snails the model predicts. The heterozygote term carries a 2."><span class="ltr"></span><span>125</span></button><button type="button" class="choice" data-ok="0" data-why="That is how many heterozygotes were counted. The question asks what the model predicts, which is what the count is then compared with."><span class="ltr"></span><span>200</span></button><button type="button" class="choice" data-ok="0" data-why="That is how many snails were counted in the two homozygote classes together. The question asks what the model predicts for the heterozygotes, which is a separate term of p&sup2; + 2pq + q&sup2;."><span class="ltr"></span><span>300</span></button></div></div><div class="item" id="q4"><h2>Question 4 of 8</h2><p class="setup">A chi-square test compares a census against the counts Hardy&ndash;Weinberg predicts. The population was sorted into three genotype classes.</p><p class="stem">How many degrees of freedom does the test have, and what is the critical value at p = 0.05?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Degrees of freedom are the number of classes minus one, and three genotype classes give two. The formula sheet's table gives 5.99 in that column on the 0.05 row."><span class="ltr"></span><span>2 degrees of freedom, critical value 5.99</span></button><button type="button" class="choice" data-ok="0" data-why="One degree of freedom is what two classes give. A genotype census has three classes: both homozygotes and the heterozygote."><span class="ltr"></span><span>1 degree of freedom, critical value 3.84</span></button><button type="button" class="choice" data-ok="0" data-why="Three degrees of freedom would need four classes. There are three genotypes."><span class="ltr"></span><span>3 degrees of freedom, critical value 7.81</span></button><button type="button" class="choice" data-ok="0" data-why="9.21 is the cell for two degrees of freedom on the 0.01 row. Unless a question says otherwise, the 0.05 row is the one to read."><span class="ltr"></span><span>2 degrees of freedom, critical value 9.21</span></button></div></div><div class="item" id="q5"><h2>Question 5 of 8</h2><p class="setup">For the snail census, chi-square came to 20.0 against a critical value of 5.99, and the shortfall falls on the heterozygotes: 200 counted where 250 are predicted.</p><p class="stem">What does this result establish?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="20.0 is above 5.99, so the null hypothesis is rejected and the census does not fit the model. The model holds only where all five of its conditions do, so at least one of them must be broken."><span class="ltr"></span><span>That at least one of the model's five conditions does not hold in this population</span></button><button type="button" class="choice" data-ok="0" data-why="Not necessarily. Non-random mating is one of the five conditions, and it rearranges the genotypes without changing the allele frequencies at all. A rejected test does not by itself show that p is changing."><span class="ltr"></span><span>That the population is evolving</span></button><button type="button" class="choice" data-ok="0" data-why="That would fit the pattern, and so would several other broken conditions. Chi-square says only that the counts do not fit, never which condition is the cause."><span class="ltr"></span><span>That natural selection is acting against the heterozygotes</span></button><button type="button" class="choice" data-ok="0" data-why="500 snails give expected counts of 125, 250 and 125, all comfortably large enough. Sample size is not what the result is pointing at."><span class="ltr"></span><span>That the sample of snails was too small for the model to be tested</span></button></div></div><div class="item" id="q6"><h2>Question 6 of 8</h2><p class="setup">A population of plants has been self-pollinating for many generations. A census finds many more homozygotes and far fewer heterozygotes than Hardy&ndash;Weinberg predicts, and the allele frequencies are unchanged from ten years ago.</p><p class="stem">Which condition of the model does this population break?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Self-pollination is the furthest a population can get from random mating: every homozygote makes only homozygotes of its own kind. It rearranges genotypes without changing allele frequencies, which is why p and q have held steady."><span class="ltr"></span><span>Mating is at random</span></button><button type="button" class="choice" data-ok="0" data-why="Selection changes allele frequencies over generations, and these have not changed. What has changed is how the alleles are paired up."><span class="ltr"></span><span>There is no natural selection</span></button><button type="button" class="choice" data-ok="0" data-why="Nothing here is about numbers, and drift in a small population would move the allele frequencies, which have held steady."><span class="ltr"></span><span>The population is large</span></button><button type="button" class="choice" data-ok="0" data-why="Alleles arriving from elsewhere would usually shift the allele frequencies. These have not shifted."><span class="ltr"></span><span>There is no migration</span></button></div></div><div class="item" id="q7"><h2>Question 7 of 8</h2><p class="setup">In a bird population at Hardy&ndash;Weinberg equilibrium, 16% of the birds show a recessive plumage pattern.</p><p class="stem">What proportion of the birds carry the recessive allele without showing the pattern?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="q squared is 0.16, so q is 0.40 and p is 0.60. The carriers are the heterozygotes, 2pq, which is 2 times 0.60 times 0.40, or 0.48."><span class="ltr"></span><span>0.48</span></button><button type="button" class="choice" data-ok="0" data-why="0.40 is q, the frequency of the recessive allele itself. The carriers are the heterozygotes, and the heterozygote term is 2pq."><span class="ltr"></span><span>0.40</span></button><button type="button" class="choice" data-ok="0" data-why="That is p squared, the share expected to be homozygous dominant. Those birds carry no recessive allele at all."><span class="ltr"></span><span>0.36</span></button><button type="button" class="choice" data-ok="0" data-why="That is everything except the 16% showing the pattern, which lumps the heterozygotes together with the homozygous dominants. Only the heterozygotes carry the allele without showing it."><span class="ltr"></span><span>0.84</span></button></div></div><div class="item" id="q8"><h2>Question 8 of 8</h2><p class="setup">Conservation workers census a population of 90 frogs at a pond and find 9 with the genotype SS, 42 with Ss and 39 with ss. A chi-square test against the Hardy&ndash;Weinberg expectation gives 0.23.</p><p class="stem">Using a critical value of 5.99, what do the workers conclude?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="0.23 is far below 5.99, so the gap between the census and the model is well within what chance would give. That is consistent with equilibrium; it does not prove the five conditions hold."><span class="ltr"></span><span>Fail to reject the null hypothesis: the counts are consistent with equilibrium</span></button><button type="button" class="choice" data-ok="0" data-why="The model predicts far more ss than SS when q is larger than p, which it is here. A difference between two classes is not a departure from the model."><span class="ltr"></span><span>Reject the null hypothesis: there are far more ss frogs than SS frogs</span></button><button type="button" class="choice" data-ok="0" data-why="The verdict is right and the claim is too strong. Failing to reject says only that chance can account for the gap; one census cannot show that nothing is changing."><span class="ltr"></span><span>Fail to reject the null hypothesis, which proves the pond population is not evolving</span></button><button type="button" class="choice" data-ok="0" data-why="There is no threshold at 100. What matters is that each expected count is large enough, and with q near 0.67 all three here are."><span class="ltr"></span><span>The test is invalid, because 90 frogs is fewer than 100</span></button></div></div>
+<p class="msg" id="msg" role="status" aria-live="polite">Eight questions to answer.</p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "questions-hardy-weinberg";
+  var TOTAL = 8, done = 0, right = 0;
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  [].forEach.call(document.querySelectorAll(".item"), function (item) {
+    choices(item, function (ok) {
+      done++;
+      if (ok) right++;
+      if (done < TOTAL) {
+        say(done + " of " + TOTAL + " answered, " + right + " right so far.");
+      } else {
+        var p = document.createElement("div");
+        p.className = "score";
+        p.innerHTML = "<b>" + right + " of " + TOTAL + "</b> right. Every option is "
+          + "explained above, including the ones you did not choose.";
+        msg.parentNode.insertBefore(p, msg);
+        say("");
+      }
+      reportHeight();
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A time turned into a rate</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.step .go{margin-top:11px;padding:8px 14px;border-radius:8px;font:inherit;font-weight:650;
+  cursor:pointer;border:1px solid var(--accent);background:var(--accent);
+  color:var(--accent-fg)}
+.step .go[hidden]{display:none}
+.trail{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 4px}
+.trail i{width:16px;height:4px;border-radius:2px;background:var(--line);display:block}
+.trail i.on{background:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>A time turned into a rate</h1>
+<p class="sub">ET50, the reciprocal that turns it into a rate, and where the light stops being the limiting factor.</p>
+<div class="brief"><p>A disk rises when the oxygen made inside it fills the air spaces the vacuum emptied. ET50 is the time at which half the disks have risen.</p><p>ET50 is a time, and a time runs the opposite way to a rate: the faster the photosynthesis, the shorter the wait. Its reciprocal does not.</p></div>
+<div class="trail" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="step" data-kind="table" data-i="0"><h2>The five intensities</h2><div class="scroll"><table><caption>Time for the fifth of ten leaf disks to rise. No disk rose in 30 minutes in the dark.</caption><thead><tr><th scope="col">Light intensity (&micro;mol photons m&minus;&sup2; s&minus;&sup1;)</th><th scope="col">ET50 (min)</th></tr></thead><tbody><tr><th scope="row">50</th><td class="num">18.0</td></tr><tr><th scope="row">100</th><td class="num">11.0</td></tr><tr><th scope="row">200</th><td class="num">7.5</td></tr><tr><th scope="row">400</th><td class="num">6.0</td></tr><tr><th scope="row">800</th><td class="num">5.6</td></tr></tbody></table></div><button type="button" class="go">Continue</button></div><div class="step" data-kind="num" data-i="1" data-id="r1"><h2>Step 1 &mdash; a rate from a time</h2><p class="ask">If half the disks rise in 10 minutes, half a set rises per 10 minutes, which is 0.1 of a set per minute. Dividing 1 by the time gives the rate.</p><p class="formula">rate = 1 &divide; ET50</p><p class="ask">What is the rate at 50 &micro;mol photons m&minus;&sup2; s&minus;&sup1;, to three significant figures?</p><div class="calc"><div class="calcrow" id="row-r1"><span class="lab">Rate at 50</span><span class="work">1 &divide; 18.0</span><span class="entry" id="spin-r1"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Rate at 50"><span class="unit">per min</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="2" data-id="r5"><h2>Step 2 &mdash; and at the brightest setting</h2><p class="ask">What is the rate at 800 &micro;mol photons m&minus;&sup2; s&minus;&sup1;?</p><div class="calc"><div class="calcrow" id="row-r5"><span class="lab">Rate at 800</span><span class="work">1 &divide; 5.6</span><span class="entry" id="spin-r5"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Rate at 800"><span class="unit">per min</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="table" data-i="3"><h2>All five, both ways round</h2><div class="scroll"><table><caption>ET50 and its reciprocal at five light intensities.</caption><thead><tr><th scope="col">Light intensity</th><th scope="col">ET50 (min)</th><th scope="col">Rate, 1 / ET50 (per min)</th></tr></thead><tbody><tr><th scope="row">50</th><td class="num">18.0</td><td class="num">0.0556</td></tr><tr><th scope="row">100</th><td class="num">11.0</td><td class="num">0.0909</td></tr><tr><th scope="row">200</th><td class="num">7.5</td><td class="num">0.1333</td></tr><tr><th scope="row">400</th><td class="num">6.0</td><td class="num">0.1667</td></tr><tr><th scope="row">800</th><td class="num">5.6</td><td class="num">0.1786</td></tr></tbody></table></div><button type="button" class="go">Continue</button></div><div class="step" data-kind="fig" data-i="4"><h2>Both quantities on one x axis</h2><figure><svg viewBox="0 0 600 330" width="100%" role="img" aria-label="ET50 and Rate, 1 / ET50 on one x axis" xmlns="http://www.w3.org/2000/svg"><title>ET50 and Rate, 1 / ET50 on one x axis</title><desc>Two quantities plotted against the same x axis, each read off its own scale.</desc><g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif"><line x1="62" y1="16" x2="62" y2="276" stroke="var(--fg)" stroke-width="1.4"/><line x1="57" y1="276.0" x2="62" y2="276.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="276.0" x2="508" y2="276.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="280.0" font-size="12" fill="var(--muted)" text-anchor="end">0</text><line x1="57" y1="211.0" x2="62" y2="211.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="211.0" x2="508" y2="211.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="215.0" font-size="12" fill="var(--muted)" text-anchor="end">5</text><line x1="57" y1="146.0" x2="62" y2="146.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="146.0" x2="508" y2="146.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="150.0" font-size="12" fill="var(--muted)" text-anchor="end">10</text><line x1="57" y1="81.0" x2="62" y2="81.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="81.0" x2="508" y2="81.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="85.0" font-size="12" fill="var(--muted)" text-anchor="end">15</text><line x1="57" y1="16.0" x2="62" y2="16.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="16.0" x2="508" y2="16.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="20.0" font-size="12" fill="var(--muted)" text-anchor="end">20</text><text x="16" y="146" font-size="12.5" fill="var(--fg)" text-anchor="middle" transform="rotate(-90 16 146)">ET50 (min)</text><line x1="62" y1="276" x2="508" y2="276" stroke="var(--fg)" stroke-width="1.4"/><text x="106.6" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">50</text><text x="195.8" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">100</text><text x="285.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">200</text><text x="374.2" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">400</text><text x="463.4" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">800</text><text x="285" y="317" font-size="12.5" fill="var(--fg)" text-anchor="middle">Light intensity (&micro;mol m&minus;&sup2; s&minus;&sup1;)</text><line x1="508" y1="16" x2="508" y2="276" stroke="var(--warn)" stroke-width="1.4"/><line x1="508" y1="276.0" x2="513" y2="276.0" stroke="var(--warn)" stroke-width="1.2"/><text x="517" y="280.0" font-size="12" fill="var(--warn)" text-anchor="start">0.00</text><line x1="508" y1="224.0" x2="513" y2="224.0" stroke="var(--warn)" stroke-width="1.2"/><text x="517" y="228.0" font-size="12" fill="var(--warn)" text-anchor="start">0.05</text><line x1="508" y1="172.0" x2="513" y2="172.0" stroke="var(--warn)" stroke-width="1.2"/><text x="517" y="176.0" font-size="12" fill="var(--warn)" text-anchor="start">0.10</text><line x1="508" y1="120.0" x2="513" y2="120.0" stroke="var(--warn)" stroke-width="1.2"/><text x="517" y="124.0" font-size="12" fill="var(--warn)" text-anchor="start">0.15</text><line x1="508" y1="68.0" x2="513" y2="68.0" stroke="var(--warn)" stroke-width="1.2"/><text x="517" y="72.0" font-size="12" fill="var(--warn)" text-anchor="start">0.20</text><line x1="508" y1="16.0" x2="513" y2="16.0" stroke="var(--warn)" stroke-width="1.2"/><text x="517" y="20.0" font-size="12" fill="var(--warn)" text-anchor="start">0.25</text><text x="590" y="146" font-size="12.5" fill="var(--warn)" text-anchor="middle" transform="rotate(90 590 146)">Rate, 1 / ET50 (per min)</text><polyline points="106.6,42.0 195.8,133.0 285.0,178.5 374.2,198.0 463.4,203.2" fill="none" stroke="var(--accent)" stroke-width="1.8"/><circle cx="106.6" cy="42.0" r="4.2" fill="var(--accent)"/><circle cx="195.8" cy="133.0" r="4.2" fill="var(--accent)"/><circle cx="285.0" cy="178.5" r="4.2" fill="var(--accent)"/><circle cx="374.2" cy="198.0" r="4.2" fill="var(--accent)"/><circle cx="463.4" cy="203.2" r="4.2" fill="var(--accent)"/><polyline points="106.6,218.2 195.8,181.5 285.0,137.4 374.2,102.6 463.4,90.3" fill="none" stroke="var(--warn)" stroke-width="1.8"/><rect x="102.6" y="214.2" width="8" height="8" fill="var(--warn)"/><rect x="191.8" y="177.5" width="8" height="8" fill="var(--warn)"/><rect x="281.0" y="133.4" width="8" height="8" fill="var(--warn)"/><rect x="370.2" y="98.6" width="8" height="8" fill="var(--warn)"/><rect x="459.4" y="86.3" width="8" height="8" fill="var(--warn)"/><rect x="258.24" y="22" width="11" height="11" rx="2" fill="var(--accent)"/><text x="275.24" y="31" font-size="12" fill="var(--fg)">ET50</text><rect x="258.24" y="39" width="11" height="11" rx="2" fill="var(--warn)"/><text x="275.24" y="48" font-size="12" fill="var(--fg)">Rate, 1 / ET50</text></g></svg><figcaption>ET50 falls as the light gets brighter; its reciprocal, the rate, rises. Each is read off its own scale.</figcaption></figure><button type="button" class="go">Continue</button></div><div class="step" data-kind="pick" data-i="5"><h2>Step 3 &mdash; why the reciprocal</h2><p class="ask">Why is 1 / ET50 plotted rather than ET50 itself?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="A graph of ET50 slopes the wrong way for a rate. Taking the reciprocal turns the falling curve into a rising one that can be read directly as a rate."><span class="ltr"></span><span>Because a shorter time means a faster rate, so ET50 falls as the rate rises</span></button><button type="button" class="choice" data-ok="0" data-why="The reciprocals are small decimals, which are no easier to plot. The reason is the direction, not the convenience."><span class="ltr"></span><span>Because 1 / ET50 is easier to plot than ET50</span></button><button type="button" class="choice" data-ok="0" data-why="The number of disks is already fixed at ten, and ET50 is defined as the time for half of them, however many there are."><span class="ltr"></span><span>Because dividing by ET50 removes the effect of the number of disks</span></button></div><button type="button" class="go" hidden>Continue</button></div><div class="step" data-kind="num" data-i="6" data-id="rise"><h2>Step 4 &mdash; how much faster</h2><p class="ask">A percent change says how large a rise is compared with what it started from.</p><p class="formula">percent change = (new &minus; old) &divide; old &times; 100</p><p class="ask">By what percentage does the rate rise between 50 and 100 &micro;mol photons m&minus;&sup2; s&minus;&sup1;?</p><div class="calc"><div class="calcrow" id="row-rise"><span class="lab">Rise in rate</span><span class="work">(0.0909 &minus; 0.0556) &divide; 0.0556 &times; 100</span><span class="entry" id="spin-rise"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Rise in rate"><span class="unit">%</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="pick" data-i="7"><h2>Step 5 &mdash; where the curve levels off</h2><p class="ask">Between 400 and 800 &micro;mol photons m&minus;&sup2; s&minus;&sup1; the rate rises by only 7.1%.</p><p class="ask">What does that levelling off show?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Doubling the light barely changes the rate, so something else is setting the ceiling &mdash; the supply of carbon dioxide, the temperature, or how fast the Calvin cycle's enzymes can work."><span class="ltr"></span><span>Light is no longer the factor holding the rate down</span></button><button type="button" class="choice" data-ok="0" data-why="The sodium hydrogen carbonate keeps carbon dioxide in plentiful supply. It is one candidate for the new limit, but the data alone do not say which."><span class="ltr"></span><span>The disks have run out of carbon dioxide</span></button><button type="button" class="choice" data-ok="0" data-why="Bleaching would make the rate fall, not level off, and the rate at the brightest setting is the highest of the five."><span class="ltr"></span><span>The chlorophyll has been bleached by the bright light</span></button></div><button type="button" class="go" hidden>Continue</button></div><div class="step" data-kind="pick" data-i="8"><h2>Step 6 &mdash; the control</h2><p class="ask">No disk rose in 30 minutes in the dark.</p><p class="ask">What does the dark control establish?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Disks treated exactly the same way but kept dark stayed on the bottom. So the rising in the lit beakers can be put down to the one thing that was different."><span class="ltr"></span><span>That a disk rises because of photosynthesis, and not for some other reason</span></button><button type="button" class="choice" data-ok="0" data-why="The light-dependent reactions do stop without light, but that is something the course already knows. The control is there to rule out other reasons a disk might rise."><span class="ltr"></span><span>That photosynthesis stops in the dark</span></button><button type="button" class="choice" data-ok="0" data-why="Every beaker's disks had the air drawn out, lit and dark alike. The control does not test the vacuum."><span class="ltr"></span><span>That the vacuum removed all the air from the disks</span></button></div><button type="button" class="go" hidden>Continue</button></div>
+<div class="verdict" id="verdict" hidden><b>The rate rises steeply from 50 to 200 &micro;mol photons m&minus;&sup2; s&minus;&sup1; and then levels off.</b> Over the steep stretch, light is the factor holding the rate down. Past it, something else is, and the disks alone cannot say what. The dark control is what lets any of it be put down to photosynthesis.</div>
+<p class="msg" id="msg" role="status" aria-live="polite"></p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "skill-photosynthesis-disks";
+  var NUMS = {"r1": {"want": 0.0556, "tol": 0.0006, "dp": 4, "hints": ["Not the rate. Work it out again.", "Divide 1 by the time.", "1 &divide; 18.0."]}, "r5": {"want": 0.1786, "tol": 0.0006, "dp": 4, "hints": ["Not the rate. Work it out again.", "Divide 1 by the time.", "1 &divide; 5.6."]}, "rise": {"want": 63.6, "tol": 1.2, "dp": 1, "hints": ["Not the percent rise. Work it out again.", "Take the first rate away from the second, divide by the first, and multiply by 100.", "The rate rose by 0.0354 per min from 0.0556."]}};
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Dan's ruling, 1 October: the student types the answer. A stepper could be walked to the
+  // right number without ever working it out. The cost of a box is that it can be given
+  // nonsense, so this one says what it wants, and the misses are graded: the first says
+  // only that it is wrong, the second names the operation, the third names it with the
+  // numbers in. It never gives the answer away, and there is no limit on tries.
+  //
+  // AP adds a tolerance. 7.81 and 7.8 are the same answer; 0.47 and 0.4648 may not be. Each
+  // box carries its own accepted range, and each says how many figures it wants.
+  function entry(host, opts) {
+    var input = host.querySelector("input"), btn = host.querySelector("button");
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, "").replace(/^[x×]/i, "")
+                     .replace(/^\+/, "");
+      input.classList.remove("miss");
+      if (!raw) { opts.onbad("Type your answer in the box, then press Check."); return; }
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? "Just the number, without the units — they are already printed beside the box."
+          : "That is not a number. Type digits, and a decimal point if you need one.");
+        input.classList.add("miss");
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) <= opts.tol + 1e-12) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.dp === undefined ? v : v.toFixed(opts.dp);
+        opts.onright(v);
+      } else {
+        input.classList.add("miss");
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener("click", submit);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); submit(); }
+    });
+    input.addEventListener("input", function () { input.classList.remove("miss"); });
+    return { focus: function () { try { input.focus(); } catch (e) {} } };
+  }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  // One step at a time. A student who can see the next question can work backwards from it,
+  // and in a chain of calculations that is the whole answer.
+  var STEPS = [].slice.call(document.querySelectorAll(".step"));
+  var at = 0, opened = false;
+  function openStep(n) {
+    at = n;
+    for (var i = 0; i < STEPS.length; i++) STEPS[i].hidden = i > n;
+    var s = STEPS[n];
+    // On the FIRST call nothing is focused and nothing is scrolled to. This simulation is
+    // framed inside a lesson page, and both focusing a field and scrolling an element into
+    // view inside a frame drag the page around it -- which landed a reader at stage 5 the
+    // moment the lesson opened.
+    if (s && opened) {
+      var inp = s.querySelector("input");
+      if (inp && !inp.disabled) { try { inp.focus(); } catch (e) {} }
+      s.scrollIntoView({ block: "nearest" });
+    }
+    opened = true;
+    reportHeight();
+  }
+  function nextStep() { if (at < STEPS.length - 1) openStep(at + 1); else finish(); }
+
+
+  var PIPS = [].slice.call(document.querySelectorAll(".trail i"));
+  function mark(n) { for (var i = 0; i < PIPS.length; i++) PIPS[i].className = i <= n ? "on" : ""; }
+
+  function finish() {
+    document.getElementById("verdict").hidden = false;
+    say("");
+    reportHeight();
+  }
+
+  STEPS.forEach(function (step, n) {
+    var kind = step.dataset.kind;
+    var go = step.querySelector(".go");
+    if (go) go.addEventListener("click", function () { mark(n); nextStep(); });
+
+    if (kind === "num") {
+      var cfg = NUMS[step.dataset.id];
+      entry(step.querySelector(".entry"), {
+        want: cfg.want, tol: cfg.tol, dp: cfg.dp,
+        onright: function () {
+          step.querySelector(".calcrow").classList.add("done");
+          say("");
+          mark(n);
+          setTimeout(nextStep, 240);
+        },
+        onwrong: function (v, tries) {
+          say(cfg.hints[Math.min(tries, cfg.hints.length) - 1], "warn");
+        },
+        onbad: function (t) { say(t, "warn"); }
+      });
+    } else if (kind === "pick") {
+      choices(step, function (right) {
+        say(right ? "" : "Read the reason beside every option before you go on.",
+            right ? "" : "warn");
+        go.hidden = false;
+        go.focus();
+        reportHeight();
+      });
+    }
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+  openStep(0);
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eight questions</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.item > h2{font-size:12.5px;margin:0 0 6px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.setup{font-size:14.5px;margin:0 0 9px;color:var(--fg)}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.item table{margin-bottom:10px}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Eight questions</h1>
+<p class="sub">Energetics &middot; Topic 2.7</p>
+<div class="brief"><p>On carrying this investigation out, and on what its results show.
+Each question is marked as soon as it is answered, and every option is explained.</p></div>
+<div class="item" id="q1"><h2>Question 1 of 8</h2><p class="setup">Six potato cores are cut from one potato, blotted, weighed, and left for an hour in sucrose solutions from 0.0 to 1.0 M. Each is then blotted again and reweighed.</p><p class="stem">Why is the percent change in mass worked out rather than the change in grams?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Cores cut to the same length still differ in mass. Dividing the change by what the core started at puts all six on the same footing."><span class="ltr"></span><span>Because the same gain in grams means more for a small core than for a large one</span></button><button type="button" class="choice" data-ok="0" data-why="A change in mass can be negative too: it is the final mass minus the starting mass, and that is negative whenever a core loses water."><span class="ltr"></span><span>Because a percentage can be negative and a mass in grams cannot</span></button><button type="button" class="choice" data-ok="0" data-why="The change in grams is what the percentage is worked out from, so the balance has to be good enough for it either way."><span class="ltr"></span><span>Because the balance is not accurate enough to give a change in grams</span></button><button type="button" class="choice" data-ok="0" data-why="The solutions are made up in moles per liter, which is what &Psi;s = &minus;iCRT needs."><span class="ltr"></span><span>Because the sucrose solutions were made up as percentages</span></button></div></div><div class="item" id="q2"><h2>Question 2 of 8</h2><p class="setup">A potato core weighed 4.80 g at the start and 4.32 g after an hour in sucrose solution.</p><p class="stem">What is its percent change in mass?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The core lost 0.48 g. Divided by the starting mass of 4.80 g that is 0.100, and multiplied by 100, &minus;10.0%. The sign says water left the core."><span class="ltr"></span><span>&minus;10.0%</span></button><button type="button" class="choice" data-ok="0" data-why="That is 0.48 divided by the final mass, 4.32. The change is always compared with the mass the core started at."><span class="ltr"></span><span>&minus;11.1%</span></button><button type="button" class="choice" data-ok="0" data-why="That is the change in grams with a percent sign put after it. It still has to be divided by the starting mass and multiplied by 100."><span class="ltr"></span><span>&minus;0.48%</span></button><button type="button" class="choice" data-ok="0" data-why="The size is right and the sign is missing. The core lost mass, so the change is negative, and the sign is what says which way the water went."><span class="ltr"></span><span>10.0%</span></button></div></div><div class="item" id="q3"><h2>Question 3 of 8</h2><p class="setup">A student finds that a best-fit line through six potato cores crosses zero change in mass at 0.36 M sucrose. The solutions were at 25 &deg;C, the ionization constant of sucrose is 1, and R is 0.0831 L&middot;bar/(mol&middot;K).</p><p class="stem">What is the water potential of the potato tissue?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="25 &deg;C is 298 K. &Psi;s = &minus;1 &times; 0.36 &times; 0.0831 &times; 298, which is &minus;8.92 bar. The solutions were in open beakers, so &Psi;p is zero and the tissue's water potential is that solute potential."><span class="ltr"></span><span>&minus;8.92 bar</span></button><button type="button" class="choice" data-ok="0" data-why="That is what comes out if 25 is used instead of 298: the temperature has to be in kelvin, which is the Celsius temperature plus 273."><span class="ltr"></span><span>&minus;0.75 bar</span></button><button type="button" class="choice" data-ok="0" data-why="The size is right and the sign is wrong. The minus sign at the front of &Psi;s = &minus;iCRT makes every solute potential negative."><span class="ltr"></span><span>+8.92 bar</span></button><button type="button" class="choice" data-ok="0" data-why="That is twice the right answer, which is what comes out if i is taken as 2. Sucrose does not split when it dissolves, so i is 1."><span class="ltr"></span><span>&minus;17.8 bar</span></button></div></div><div class="item" id="q4"><h2>Question 4 of 8</h2><p class="setup">Two solutions sit in open beakers at the same temperature. Solution A has a water potential of &minus;4 bar. Solution B has a water potential of &minus;9 bar. A piece of plant tissue at &minus;6 bar is put into each in turn.</p><p class="stem">Which way does water move in each beaker?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Water moves toward the lower water potential &mdash; the one further below zero. &minus;6 is lower than &minus;4, so water enters from A; &minus;9 is lower than &minus;6, so water leaves into B."><span class="ltr"></span><span>Into the tissue in A, and out of the tissue in B</span></button><button type="button" class="choice" data-ok="0" data-why="That is the right rule applied with the signs the wrong way round. &minus;9 bar is further below zero than &minus;6 bar, so it is the lower of the two."><span class="ltr"></span><span>Out of the tissue in A, and into the tissue in B</span></button><button type="button" class="choice" data-ok="0" data-why="Water enters only where the tissue is the lower of the two. In B the solution is lower, at &minus;9 bar."><span class="ltr"></span><span>Into the tissue in both beakers</span></button><button type="button" class="choice" data-ok="0" data-why="Water moves whenever the two water potentials differ, and the tissue's value differs from both of them."><span class="ltr"></span><span>Neither way in either beaker, because the tissue sits between the two values</span></button></div></div><div class="item" id="q5"><h2>Question 5 of 8</h2><p class="setup">A student leaves one set of potato cores unblotted before the final weighing. Every other core is blotted as the method says.</p><p class="stem">What effect does that have on the results from the unblotted cores?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="A film of solution clinging to the surface is weighed along with the core. That adds mass whichever solution the core was in, so it pushes the whole line up and moves the zero crossing to a stronger solution."><span class="ltr"></span><span>Their final masses are too high, so every percent change is shifted upward</span></button><button type="button" class="choice" data-ok="0" data-why="The direction of the shift is backwards. A line pushed upward crosses zero further to the right, at a stronger solution."><span class="ltr"></span><span>Their final masses are too high, so the zero crossing moves to a weaker solution</span></button><button type="button" class="choice" data-ok="0" data-why="Solution on the surface would have to evaporate completely and instantly for that, and in a minute on a balance it does not."><span class="ltr"></span><span>Their final masses are too low, because the solution evaporates from the surface</span></button><button type="button" class="choice" data-ok="0" data-why="Even if it were the same for every core, it would still shift the whole line and so move the zero crossing."><span class="ltr"></span><span>Nothing, because the extra mass is the same for every core</span></button></div></div><div class="item" id="q6"><h2>Question 6 of 8</h2><p class="setup">A walled plant cell with a solute potential of &minus;10 bar is placed in an open beaker of sucrose solution whose water potential is &minus;4 bar. Water enters the cell until its water potential matches the solution's.</p><p class="stem">What pressure potential has the cell wall reached by then?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Water potential is the pressure potential plus the solute potential. At equilibrium the cell is at &minus;4 bar with a solute potential of &minus;10, so &Psi;p is &minus;4 minus &minus;10, which is +6 bar."><span class="ltr"></span><span>+6 bar</span></button><button type="button" class="choice" data-ok="0" data-why="A pressure potential in a walled cell is positive: the wall pushes inward on the contents. The sign comes from &Psi;p = &Psi; &minus; &Psi;s."><span class="ltr"></span><span>&minus;6 bar</span></button><button type="button" class="choice" data-ok="0" data-why="That adds the two values instead of taking one from the other. The equation rearranges to &Psi;p = &Psi; &minus; &Psi;s."><span class="ltr"></span><span>+14 bar</span></button><button type="button" class="choice" data-ok="0" data-why="&Psi;p is zero in the open beaker, where nothing presses on the solution. The cell has a wall, and water entering presses the contents against it."><span class="ltr"></span><span>0 bar</span></button></div></div><div class="item" id="q7"><h2>Question 7 of 8</h2><p class="setup">A class repeats the potato investigation but leaves the cores in the solutions for only ten minutes instead of an hour.</p><p class="stem">What is the most likely effect on the position of the zero crossing?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Ten minutes shrinks every percent change toward zero, which makes the line shallower. A shallower line through the same pattern still crosses zero near the same concentration."><span class="ltr"></span><span>It barely moves, because every core gains or loses less but in the same direction</span></button><button type="button" class="choice" data-ok="0" data-why="Less water leaves the cores in the strong solutions, and less enters in the weak ones. Both ends move toward zero together."><span class="ltr"></span><span>It moves to a weaker solution, because less water has had time to leave</span></button><button type="button" class="choice" data-ok="0" data-why="Not reaching equilibrium flattens the line rather than tilting it. Both ends are cut back in proportion."><span class="ltr"></span><span>It moves to a stronger solution, because the cores have not reached equilibrium</span></button><button type="button" class="choice" data-ok="0" data-why="Cores do change measurably in ten minutes; the changes are simply smaller."><span class="ltr"></span><span>It cannot be read at all, because no core changes in mass in ten minutes</span></button></div></div><div class="item" id="q8"><h2>Question 8 of 8</h2><p class="setup">A student wants to find the water potential of a carrot. They cut six cores, weigh each, and leave them in sodium chloride solutions from 0.0 to 0.6 M at 20 &deg;C. Sodium chloride splits into two ions when it dissolves.</p><p class="stem">What must the student do differently from the potato method?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The ionization constant counts the separate particles one dissolved unit splits into. Sodium chloride gives a sodium ion and a chloride ion, so 0.3 M sodium chloride puts as many particles into the water as 0.6 M sucrose."><span class="ltr"></span><span>Use i = 2 in &Psi;s = &minus;iCRT</span></button><button type="button" class="choice" data-ok="0" data-why="R is a constant, 0.0831 L&middot;bar/(mol&middot;K), whatever is dissolved in the water."><span class="ltr"></span><span>Use a different value of R</span></button><button type="button" class="choice" data-ok="0" data-why="The carrot cores differ in mass just as the potato cores did, so the change still has to be compared with what each core started at."><span class="ltr"></span><span>Work out the change in mass in grams rather than as a percentage</span></button><button type="button" class="choice" data-ok="0" data-why="293 K is the conversion: 20 &deg;C plus 273. The method already converts the temperature; only i changes."><span class="ltr"></span><span>Use 293 K rather than converting the temperature at all</span></button></div></div>
+<p class="msg" id="msg" role="status" aria-live="polite">Eight questions to answer.</p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "questions-diffusion-osmosis";
+  var TOTAL = 8, done = 0, right = 0;
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  [].forEach.call(document.querySelectorAll(".item"), function (item) {
+    choices(item, function (ok) {
+      done++;
+      if (ok) right++;
+      if (done < TOTAL) {
+        say(done + " of " + TOTAL + " answered, " + right + " right so far.");
+      } else {
+        var p = document.createElement("div");
+        p.className = "score";
+        p.innerHTML = "<b>" + right + " of " + TOTAL + "</b> right. Every option is "
+          + "explained above, including the ones you did not choose.";
+        msg.parentNode.insertBefore(p, msg);
+        say("");
+      }
+      reportHeight();
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,1430 @@
+<title>AP Biology: Population growth</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#fbfaf8; --surface:#ffffff; --ink:#1b1e22; --muted:#6f6a63;
+  --line:#e7e2da; --rule:#d8d2c8; --accent:#0e6f66; --accent-soft:#e2efec;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+    --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+  --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1020px;margin:0 auto;padding-inline:20px;padding-block:44px 64px}
+
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6.4vw,44px);line-height:1.12;
+  letter-spacing:-.015em;margin:0 0 14px;text-wrap:balance}
+.lead{font-family:var(--serif);font-size:clamp(17px,2.4vw,20px);line-height:1.5;color:var(--ink);
+  margin:0 0 28px;max-width:56ch}
+.lead em{font-style:italic;color:var(--accent);font-weight:600}
+
+.design{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 40px}
+.design div{flex:1 1 205px;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:14px 16px}
+.design dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 5px}
+.design dd{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
+
+nav.jump{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin:0 0 44px;
+  scrollbar-width:thin}
+nav.jump a{flex:0 0 auto;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;background:var(--surface);white-space:nowrap}
+nav.jump a:hover,nav.jump a:focus-visible{color:var(--accent);border-color:var(--accent)}
+
+section.stage{border-top:1px solid var(--rule);padding-top:26px;margin-top:44px;
+  scroll-margin-top:24px}
+section.stage:first-of-type{margin-top:0}
+.shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+  letter-spacing:.08em}
+.kind{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(21px,3.6vw,27px);line-height:1.2;
+  margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.blurb{color:var(--muted);font-size:15.5px;margin:0 0 20px}
+
+.media{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+video{width:100%;display:block;background:#0b0d10}
+iframe{width:100%;border:0;display:block;background:var(--surface)}
+
+footer{border-top:1px solid var(--rule);margin-top:52px;padding-top:22px;color:var(--muted);
+  font-size:14.5px}
+footer p{margin:0 0 10px;max-width:62ch}
+footer strong{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<style>.waiting{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--muted);font-size:14px}.waiting code{font-size:12.5px}.skillnote{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:12px 14px;margin:0 0 40px;font-size:14.5px}.skillnote b{color:var(--accent)}</style>
+
+<script>
+// Registered before the frames are parsed: a srcdoc frame runs its script during parsing and
+// would otherwise post its height into a page that is not listening yet.
+(function () {
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "sim-height") return;
+    var frames = document.querySelectorAll("iframe");
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].contentWindow === e.source) {
+        frames[i].style.height = e.data.height + "px";
+        return;
+      }
+    }
+  });
+}());
+</script>
+<div class="wrap">
+<p class="eyebrow">AP Biology &middot; Big Idea: Systems Interactions &middot; Topic 8.4</p>
+<h1>Population growth</h1>
+<p class="lead">How does a population grow when its resources are finite? Seven stages, in the order a student works them &mdash; <em>watch, design, collect, watch, analyze, conclude, answer</em>.</p>
+<dl class="design"><div><dt>What we follow</dt><dd>A yeast population in a sealed flask, for sixteen hours</dd></div><div><dt>What we measure</dt><dd>Cell density in million cells per mL, every two hours</dd></div><div><dt>What we work out</dt><dd>r from the straight stretch, K from where the curve levels off</dd></div></dl>
+<p class="skillnote"><b>The analysis skill:</b> The growth constant r from a log plot, the carrying capacity K, and the braking term. <b>The graph:</b> the same counts on a linear scale and on a log scale.</p>
+<nav class="jump" aria-label="The seven stages"><a href="#method">1. Watch the method</a><a href="#design">2. Design the investigation</a><a href="#collect">3. Collect the results</a><a href="#skillvideo">4. Watch how to work the analysis</a><a href="#skill">5. Work the analysis</a><a href="#conclusion">6. Choose the conclusion</a><a href="#questions">7. Answer eight questions</a></nav>
+<section class="stage" id="method"><div class="shead"><span class="num">Stage 1</span><span class="kind">Video &middot; about 85 seconds</span></div><h2>Watch the method</h2><p class="blurb">The apparatus, the one thing that changes, what is held the same, and why the investigation is repeated.</p><div class="media"><div class="waiting"><p><b>This video is still rendering.</b> It drops in as <code>videos/AP U08 -population-growth-method.mp4</code> and the stage works from that moment, with nothing else to change. The prompt it was submitted with is in <code>videos/prompts/</code>.</p></div></div></section>
+<section class="stage" id="design"><div class="shead"><span class="num">Stage 2</span><span class="kind">Simulation &middot; Five decisions</span></div><h2>Design the investigation</h2><p class="blurb">The null hypothesis, what is measured, how many repeats, what is held constant and what the control is. One submission, then every option is marked and explained.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Design the investigation&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.dec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.dec &gt; h2{font-size:12.5px;margin:0 0 4px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.dec &gt; p.ask{margin:0 0 10px;font-size:15px;font-weight:600}
+.dec .choice{cursor:pointer}
+.dec.marked .choice{cursor:default}
+.choice.chosen{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Design the investigation&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Systems Interactions &amp;middot; Topic 8.4&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;A flask of yeast is about to be sampled every two hours. Five decisions first. Choose one answer in each, then submit once.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;dec&quot; id=&quot;dec-question&quot; data-id=&quot;question&quot;&gt;&lt;h2&gt;Decision 1 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Which of these is the testable question?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;It names what is counted, in what, and over what time, so a set of counts can answer it.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;How does the number of yeast cells per mL change over 16 hours in a sealed flask?&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Growth in a flask is exponential for a while and then is not, so the question as written has no single answer. The shape over time is what the counts show.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Do yeast cells grow exponentially?&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Nothing in the question says what would be measured or what would count as big enough.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Is the flask big enough for the yeast?&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-measure&quot; data-id=&quot;measure&quot;&gt;&lt;h2&gt;Decision 2 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;How is the number of cells found at each time?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Counting in a known volume turns a count into a density, which is what can be compared from one time to the next.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;A sample is taken, diluted if it is crowded, and the cells counted in a known volume under the microscope.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A sealed flask does not gain mass as the yeast grows; the carbon comes from the sugar that is already in it.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The flask is weighed, and the gain in mass taken as the growth.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Cloudiness does rise with cell number, but a judgement by eye gives no number that can be plotted or compared between times.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The cloudiness is judged by eye against a white card.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-interval&quot; data-id=&quot;interval&quot;&gt;&lt;h2&gt;Decision 3 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Why are samples taken every two hours rather than once at the start and once at the end?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Two points can be joined by any curve. The levelling off is what shows there is a carrying capacity at all.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the shape of the curve between the two ends is the result.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;No mean is being taken here. Each time has its own count, and what matters is how the counts change.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because two counts would not be enough to work out a mean.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The flask is mixed before each sample is taken. Settling is a reason to mix, not a reason to sample often.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because yeast cells settle, so the count falls if the flask is left alone.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-constant&quot; data-id=&quot;constant&quot;&gt;&lt;h2&gt;Decision 4 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;What is held the same through the 16 hours?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Each of these changes how fast the yeast grows or how many it can support, so a change in any of them would change the shape of the curve.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The temperature, the volume of medium, and the sugar put in at the start.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The number of cells is what is being measured. Samples are kept small so that taking them changes it as little as possible.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The number of cells, so that the samples do not reduce the population.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Topping the sugar up would remove the limit that makes the curve level off, which is the thing the investigation is set up to show.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The sugar concentration, by topping it up as the yeast uses it.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-log&quot; data-id=&quot;log&quot;&gt;&lt;h2&gt;Decision 5 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Why will the counts also be plotted as their natural logarithms?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;The slope of the straight stretch is r, and the point where the data leave it is where the limiting factors begin to bite.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because unchecked growth is a straight line on that scale, so where the line stops being straight is where growth stopped being unchecked.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;These counts run from 0.5 to about 17 million per mL, which fits a linear axis comfortably.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the numbers get too large to plot otherwise.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A logarithm changes the scale. It does not make the counting any more exact.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because a logarithm removes the scatter from the counts.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Choose one answer in each of the
+5 decisions.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;
+  &lt;button id=&quot;submit&quot; type=&quot;button&quot; class=&quot;primary&quot; disabled&gt;Submit all
+  5&lt;/button&gt;
+  &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;design-population-growth&quot;;
+  var TOTAL = 5;
+  var msg = document.getElementById(&quot;msg&quot;);
+  var submit = document.getElementById(&quot;submit&quot;);
+  var marked = false;
+
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  function wire() {
+    [].forEach.call(document.querySelectorAll(&quot;.dec&quot;), function (dec) {
+      var box = dec.querySelector(&quot;.choices&quot;);
+      var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+      btns.forEach(function (b, i) {
+        box.appendChild(b);
+        b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+        b.addEventListener(&quot;click&quot;, function () {
+          if (marked) return;
+          btns.forEach(function (o) { o.classList.remove(&quot;chosen&quot;); });
+          b.classList.add(&quot;chosen&quot;);
+          dec.dataset.chosen = &quot;1&quot;;
+          var done = document.querySelectorAll(&quot;.dec[data-chosen]&quot;).length;
+          submit.disabled = done &lt; TOTAL;
+          say(done &lt; TOTAL
+              ? (TOTAL - done) + &quot; decision&quot; + (TOTAL - done === 1 ? &quot;&quot; : &quot;s&quot;) + &quot; still to make.&quot;
+              : &quot;All &quot; + TOTAL + &quot; chosen. Submit when you are ready \u2014 they cannot be &quot;
+                + &quot;changed afterwards.&quot;);
+        });
+      });
+    });
+  }
+
+  submit.addEventListener(&quot;click&quot;, function () {
+    if (marked) return;
+    marked = true;
+    submit.disabled = true;
+    var right = 0;
+    [].forEach.call(document.querySelectorAll(&quot;.dec&quot;), function (dec) {
+      dec.classList.add(&quot;marked&quot;);
+      [].forEach.call(dec.querySelectorAll(&quot;.choice&quot;), function (o) {
+        o.disabled = true;
+        var ok = o.dataset.ok === &quot;1&quot;;
+        o.classList.add(ok ? &quot;right&quot; : &quot;wrong&quot;);
+        if (ok &amp;&amp; o.classList.contains(&quot;chosen&quot;)) right++;
+        var w = document.createElement(&quot;p&quot;);
+        w.className = &quot;why &quot; + (ok ? &quot;right&quot; : &quot;wrong&quot;);
+        w.textContent = o.dataset.why;
+        o.parentNode.insertBefore(w, o.nextSibling);
+      });
+    });
+    var p = document.createElement(&quot;div&quot;);
+    p.className = &quot;score&quot;;
+    p.innerHTML = &quot;&lt;b&gt;&quot; + right + &quot; of &quot; + TOTAL + &quot;&lt;/b&gt; decisions made the way this &quot;
+      + &quot;investigation was carried out. Every option is explained above, including the ones &quot;
+      + &quot;you did not choose.&quot;;
+    msg.parentNode.insertBefore(p, msg);
+    say(&quot;&quot;);
+    reportHeight();
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+  wire();
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1500" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="collect"><div class="shead"><span class="num">Stage 3</span><span class="kind">Simulation &middot; Fixed readings</span></div><h2>Collect the results</h2><p class="blurb">Work through the conditions and read off what each one gives. Every student meets the same numbers, because a marked question needs one right answer.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Collect the results&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+td.pend{color:var(--muted)}
+td.got{color:var(--fg);font-weight:600}
+tr.running th[scope=row]{color:var(--accent)}
+button.run{padding:5px 11px;border-radius:7px;font:inherit;font-size:13px;cursor:pointer;
+  border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);
+  font-weight:650;white-space:nowrap}
+button.run:disabled{background:var(--bg);color:var(--muted);border-color:var(--line);
+  cursor:default}
+td.cell{cursor:pointer}
+td.cell:hover{background:var(--accent-soft,var(--card))}
+td.cell[data-got]{cursor:default;font-weight:600}
+td.self{background:var(--card);color:var(--muted)}
+.progress{font-size:13px;color:var(--muted);margin-top:10px}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Collect the results&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;One sample from the flask every two hours for sixteen hours.&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;The flask is swirled, a sample is taken and diluted, and the cells are counted in five squares of a haemocytometer grid. Each count below is already the mean of those five squares, turned into cells per mL.&lt;/p&gt;&lt;p&gt;Run a time to see its count.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;scroll&quot;&gt;&lt;table&gt;&lt;caption&gt;Cell density in million cells per mL, at two-hour intervals.&lt;/caption&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Time (hours)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Cell density (million cells/mL)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr id=&quot;r0&quot;&gt;&lt;th scope=&quot;row&quot;&gt;0&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c0-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;0&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r1&quot;&gt;&lt;th scope=&quot;row&quot;&gt;2&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c1-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;1&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r2&quot;&gt;&lt;th scope=&quot;row&quot;&gt;4&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c2-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;2&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r3&quot;&gt;&lt;th scope=&quot;row&quot;&gt;6&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c3-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;3&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r4&quot;&gt;&lt;th scope=&quot;row&quot;&gt;8&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c4-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;4&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r5&quot;&gt;&lt;th scope=&quot;row&quot;&gt;10&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c5-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;5&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r6&quot;&gt;&lt;th scope=&quot;row&quot;&gt;12&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c6-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;6&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r7&quot;&gt;&lt;th scope=&quot;row&quot;&gt;14&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c7-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;7&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r8&quot;&gt;&lt;th scope=&quot;row&quot;&gt;16&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c8-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;8&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Nothing has been run yet.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+  var SIM_ID = &quot;collect-population-growth&quot;;
+
+  var VALS = [[&quot;0.5&quot;], [&quot;1.0&quot;], [&quot;2.0&quot;], [&quot;4.0&quot;], [&quot;7.2&quot;], [&quot;11.4&quot;], [&quot;14.6&quot;], [&quot;16.3&quot;], [&quot;16.9&quot;]];
+  var LEFT = VALS.length;
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+  function runRow(n, btn) {
+    btn.disabled = true;
+    document.getElementById(&quot;r&quot; + n).classList.add(&quot;running&quot;);
+    var vals = VALS[n], k = 0;
+    (function step() {
+      if (k &gt;= vals.length) {
+        document.getElementById(&quot;r&quot; + n).classList.remove(&quot;running&quot;);
+        document.getElementById(&quot;r&quot; + n).classList.add(&quot;done&quot;);
+        LEFT--;
+        say(LEFT ? LEFT + &quot; still to run.&quot; : &quot;Nine counts over sixteen hours. The shape of the curve is what comes next.&quot;, LEFT ? &quot;&quot; : &quot;good&quot;);
+        reportHeight();
+        return;
+      }
+      var td = document.getElementById(&quot;c&quot; + n + &quot;-&quot; + k);
+      td.textContent = vals[k];
+      td.className = &quot;got&quot;;
+      k++;
+      setTimeout(step, 190);
+    }());
+  }
+
+  [].forEach.call(document.querySelectorAll(&quot;button.run&quot;), function (b) {
+    b.addEventListener(&quot;click&quot;, function () { runRow(+b.dataset.row, b); });
+  });
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="700" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="skillvideo"><div class="shead"><span class="num">Stage 4</span><span class="kind">Video &middot; about 85 seconds</span></div><h2>Watch how to work the analysis</h2><p class="blurb">The growth constant r from a log plot, the carrying capacity K, and the braking term.</p><div class="media"><div class="waiting"><p><b>This video is still rendering.</b> It drops in as <code>videos/AP U08 -population-growth-skill.mp4</code> and the stage works from that moment, with nothing else to change. The prompt it was submitted with is in <code>videos/prompts/</code>.</p></div></div></section>
+<section class="stage" id="skill"><div class="shead"><span class="num">Stage 5</span><span class="kind">Simulation &middot; Step by step, typed answers</span></div><h2>Work the analysis</h2><p class="blurb">One step at a time, with your own answer typed into each box. Every miss gets a hint that says more than the last, and none of them gives the answer.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;From a curve to r and K&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.step .go{margin-top:11px;padding:8px 14px;border-radius:8px;font:inherit;font-weight:650;
+  cursor:pointer;border:1px solid var(--accent);background:var(--accent);
+  color:var(--accent-fg)}
+.step .go[hidden]{display:none}
+.trail{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 4px}
+.trail i{width:16px;height:4px;border-radius:2px;background:var(--line);display:block}
+.trail i.on{background:var(--accent)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;From a curve to r and K&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;The straight stretch on a log scale, the growth constant it gives, and the braking term.&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;Unchecked growth multiplies the population by the same factor in every equal stretch of time. That is a curve on an ordinary scale and a straight line on a log scale, which is why the counts are plotted both ways.&lt;/p&gt;&lt;p&gt;Where the log plot stops being straight is where the growth stopped being unchecked.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;trail&quot; aria-hidden=&quot;true&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;
+&lt;div class=&quot;step&quot; data-kind=&quot;table&quot; data-i=&quot;0&quot;&gt;&lt;h2&gt;The counts&lt;/h2&gt;&lt;div class=&quot;scroll&quot;&gt;&lt;table&gt;&lt;caption&gt;Yeast cell density in a sealed flask, sampled every two hours.&lt;/caption&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Time (hours)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;0&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;2&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;4&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;6&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;8&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;10&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;12&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;14&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;16&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Cell density (million cells/mL)&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;0.5&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;1.0&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;2.0&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;4.0&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;7.2&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;11.4&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;14.6&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;16.3&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;16.9&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot;&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;fig&quot; data-i=&quot;1&quot;&gt;&lt;h2&gt;The same counts, two ways&lt;/h2&gt;&lt;figure&gt;&lt;svg viewBox=&quot;0 0 620 300&quot; width=&quot;100%&quot; role=&quot;img&quot; aria-label=&quot;The same counts on a linear scale and on a log scale&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;title&gt;The same counts on a linear scale and on a log scale&lt;/title&gt;&lt;desc&gt;On the left the counts curve and level off. On the right the natural log of the same counts is straight while growth is unchecked, and bends away from the straight line once it is not.&lt;/desc&gt;&lt;g font-family=&quot;-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif&quot;&gt;&lt;line x1=&quot;52&quot; y1=&quot;28&quot; x2=&quot;52&quot; y2=&quot;252&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.4&quot;/&gt;&lt;line x1=&quot;52&quot; y1=&quot;252&quot; x2=&quot;297.0&quot; y2=&quot;252&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.4&quot;/&gt;&lt;line x1=&quot;48&quot; y1=&quot;252.0&quot; x2=&quot;52&quot; y2=&quot;252.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;45&quot; y=&quot;256.0&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;0&lt;/text&gt;&lt;line x1=&quot;48&quot; y1=&quot;196.0&quot; x2=&quot;52&quot; y2=&quot;196.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;45&quot; y=&quot;200.0&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;5&lt;/text&gt;&lt;line x1=&quot;48&quot; y1=&quot;140.0&quot; x2=&quot;52&quot; y2=&quot;140.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;45&quot; y=&quot;144.0&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;10&lt;/text&gt;&lt;line x1=&quot;48&quot; y1=&quot;84.0&quot; x2=&quot;52&quot; y2=&quot;84.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;45&quot; y=&quot;88.0&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;15&lt;/text&gt;&lt;line x1=&quot;48&quot; y1=&quot;28.0&quot; x2=&quot;52&quot; y2=&quot;28.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;45&quot; y=&quot;32.0&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;20&lt;/text&gt;&lt;text x=&quot;52.0&quot; y=&quot;268&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;&lt;text x=&quot;113.2&quot; y=&quot;268&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;4&lt;/text&gt;&lt;text x=&quot;174.5&quot; y=&quot;268&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;8&lt;/text&gt;&lt;text x=&quot;235.8&quot; y=&quot;268&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;12&lt;/text&gt;&lt;text x=&quot;297.0&quot; y=&quot;268&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;16&lt;/text&gt;&lt;text x=&quot;174&quot; y=&quot;290&quot; font-size=&quot;12&quot; fill=&quot;var(--fg)&quot; text-anchor=&quot;middle&quot;&gt;Time (hours)&lt;/text&gt;&lt;text x=&quot;174&quot; y=&quot;18&quot; font-size=&quot;12.5&quot; fill=&quot;var(--fg)&quot; text-anchor=&quot;middle&quot; font-weight=&quot;600&quot;&gt;Cell density&lt;/text&gt;&lt;polyline points=&quot;52.0,246.4 82.6,240.8 113.2,229.6 143.9,207.2 174.5,171.4 205.1,124.3 235.8,88.5 266.4,69.4 297.0,62.7&quot; fill=&quot;none&quot; stroke=&quot;var(--accent)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;circle cx=&quot;52.0&quot; cy=&quot;246.4&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;82.6&quot; cy=&quot;240.8&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;113.2&quot; cy=&quot;229.6&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;143.9&quot; cy=&quot;207.2&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;174.5&quot; cy=&quot;171.4&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;205.1&quot; cy=&quot;124.3&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;235.8&quot; cy=&quot;88.5&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;266.4&quot; cy=&quot;69.4&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;297.0&quot; cy=&quot;62.7&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;line x1=&quot;335.0&quot; y1=&quot;28&quot; x2=&quot;335.0&quot; y2=&quot;252&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.4&quot;/&gt;&lt;line x1=&quot;335.0&quot; y1=&quot;252&quot; x2=&quot;580.0&quot; y2=&quot;252&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.4&quot;/&gt;&lt;line x1=&quot;331.0&quot; y1=&quot;252.0&quot; x2=&quot;335.0&quot; y2=&quot;252.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;328.0&quot; y=&quot;256.0&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;-1&lt;/text&gt;&lt;line x1=&quot;331.0&quot; y1=&quot;207.2&quot; x2=&quot;335.0&quot; y2=&quot;207.2&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;328.0&quot; y=&quot;211.2&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;0&lt;/text&gt;&lt;line x1=&quot;331.0&quot; y1=&quot;162.4&quot; x2=&quot;335.0&quot; y2=&quot;162.4&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;328.0&quot; y=&quot;166.4&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;1&lt;/text&gt;&lt;line x1=&quot;331.0&quot; y1=&quot;117.6&quot; x2=&quot;335.0&quot; y2=&quot;117.6&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;328.0&quot; y=&quot;121.6&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;2&lt;/text&gt;&lt;line x1=&quot;331.0&quot; y1=&quot;72.8&quot; x2=&quot;335.0&quot; y2=&quot;72.8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;328.0&quot; y=&quot;76.8&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;3&lt;/text&gt;&lt;line x1=&quot;331.0&quot; y1=&quot;28.0&quot; x2=&quot;335.0&quot; y2=&quot;28.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;328.0&quot; y=&quot;32.0&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;4&lt;/text&gt;&lt;text x=&quot;335.0&quot; y=&quot;268&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;&lt;text x=&quot;396.2&quot; y=&quot;268&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;4&lt;/text&gt;&lt;text x=&quot;457.5&quot; y=&quot;268&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;8&lt;/text&gt;&lt;text x=&quot;518.8&quot; y=&quot;268&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;12&lt;/text&gt;&lt;text x=&quot;580.0&quot; y=&quot;268&quot; font-size=&quot;11&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;16&lt;/text&gt;&lt;text x=&quot;458&quot; y=&quot;290&quot; font-size=&quot;12&quot; fill=&quot;var(--fg)&quot; text-anchor=&quot;middle&quot;&gt;Time (hours)&lt;/text&gt;&lt;text x=&quot;458&quot; y=&quot;18&quot; font-size=&quot;12.5&quot; fill=&quot;var(--fg)&quot; text-anchor=&quot;middle&quot; font-weight=&quot;600&quot;&gt;Natural log of the same counts&lt;/text&gt;&lt;polyline points=&quot;335.0,238.3 365.6,207.2 396.2,176.1 426.9,145.1 457.5,118.8 488.1,98.2 518.8,87.1 549.4,82.2 580.0,80.5&quot; fill=&quot;none&quot; stroke=&quot;var(--accent)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;line x1=&quot;335.0&quot; y1=&quot;238.3&quot; x2=&quot;542.4&quot; y2=&quot;28.0&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.5&quot; stroke-dasharray=&quot;5 4&quot;/&gt;&lt;text x=&quot;574&quot; y=&quot;42&quot; font-size=&quot;11&quot; fill=&quot;var(--warn)&quot; text-anchor=&quot;end&quot;&gt;unchecked growth&lt;/text&gt;&lt;circle cx=&quot;335.0&quot; cy=&quot;238.3&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;365.6&quot; cy=&quot;207.2&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;396.2&quot; cy=&quot;176.1&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;426.9&quot; cy=&quot;145.1&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;457.5&quot; cy=&quot;118.8&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;488.1&quot; cy=&quot;98.2&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;518.8&quot; cy=&quot;87.1&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;549.4&quot; cy=&quot;82.2&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;circle cx=&quot;580.0&quot; cy=&quot;80.5&quot; r=&quot;3.6&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;text x=&quot;14&quot; y=&quot;140&quot; font-size=&quot;11.5&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot; transform=&quot;rotate(-90 14 140)&quot;&gt;million cells/mL&lt;/text&gt;&lt;/g&gt;&lt;/svg&gt;&lt;figcaption&gt;On the left the counts curve and level off. On the right the natural log of the same counts is straight while growth is unchecked, and bends away from the dashed line once it is not.&lt;/figcaption&gt;&lt;/figure&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot;&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;2&quot; data-id=&quot;dbl&quot;&gt;&lt;h2&gt;Step 1 &amp;mdash; the doubling time&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Over the straight stretch, the density goes 0.5, 1.0, 2.0, 4.0. Each count is twice the one before it.&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;How long does the population take to double over that stretch?&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-dbl&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Doubling time&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;read it off the table&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-dbl&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Doubling time&quot;&gt;&lt;span class=&quot;unit&quot;&gt;hours&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;3&quot; data-id=&quot;r&quot;&gt;&lt;h2&gt;Step 2 &amp;mdash; the growth constant&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;A population growing without check multiplies by e to the power rt. Doubling means that factor is 2, so r is the natural log of 2 divided by the time the doubling took.&lt;/p&gt;&lt;p class=&quot;formula&quot;&gt;r = ln 2 &amp;divide; doubling time&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;What is r, to three significant figures?&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-r&quot;&gt;&lt;span class=&quot;lab&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;0.693 &amp;divide; 2&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-r&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;r&quot;&gt;&lt;span class=&quot;unit&quot;&gt;per hour&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;4&quot; data-id=&quot;k&quot;&gt;&lt;h2&gt;Step 3 &amp;mdash; the carrying capacity&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;The last three counts are within half a million of one another. The value the curve is settling on is the most cells this flask can support: its carrying capacity, K.&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;What is K, to the nearest million cells per mL?&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-k&quot;&gt;&lt;span class=&quot;lab&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;read it off the left-hand graph&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-k&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;K&quot;&gt;&lt;span class=&quot;unit&quot;&gt;million cells/mL&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;5&quot; data-id=&quot;early&quot;&gt;&lt;h2&gt;Step 4 &amp;mdash; the growth rate early on&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;The logistic equation multiplies the unchecked growth rate by a braking term, (K &amp;minus; N) / K. When N is small the brake is near 1 and barely slows anything.&lt;/p&gt;&lt;p class=&quot;formula&quot;&gt;dN/dt = rN &amp;times; (K &amp;minus; N) &amp;divide; K&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;At 6 hours the density was 4.0 million cells/mL. How fast was the population growing then, to two decimal places?&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-early&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Growth rate at 6 hours&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;0.347 &amp;times; 4.0 &amp;times; (17 &amp;minus; 4.0) &amp;divide; 17&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-early&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Growth rate at 6 hours&quot;&gt;&lt;span class=&quot;unit&quot;&gt;million cells/mL per hour&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;6&quot; data-id=&quot;late&quot;&gt;&lt;h2&gt;Step 5 &amp;mdash; and late on&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;At 12 hours the density was 14.6 million cells/mL. How fast was the population growing then?&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-late&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Growth rate at 12 hours&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;0.347 &amp;times; 14.6 &amp;times; (17 &amp;minus; 14.6) &amp;divide; 17&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-late&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Growth rate at 12 hours&quot;&gt;&lt;span class=&quot;unit&quot;&gt;million cells/mL per hour&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;pick&quot; data-i=&quot;7&quot;&gt;&lt;h2&gt;Step 6 &amp;mdash; more cells, slower growth&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;At 12 hours there were 3.6 times as many cells as at 6 hours, and yet the population was growing more slowly.&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;Why?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;At 6 hours the brake was 0.76; at 12 hours it was 0.14. The brake fell faster than the number of cells rose.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the braking term is small when N is close to K&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;r does not change. It is the rate the population would grow at with nothing holding it back, and the braking term is what changes.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because r falls as the population grows&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The population was still growing, so births outnumbered deaths. It was growing more slowly, not shrinking.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the cells have begun to die faster than they divide&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot; hidden&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;pick&quot; data-i=&quot;8&quot;&gt;&lt;h2&gt;Step 7 &amp;mdash; what is doing the braking&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;The flask was sealed, and nothing was added after the start.&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;Which of these is most likely to be setting K here?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;A sealed flask holds a fixed amount of food. As it runs out, fewer cells can divide, which is exactly what a falling growth rate at a high density looks like.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The sugar put in at the start, which is being used up&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A sealed, sterile flask of yeast has no predators in it.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Predators eating the yeast&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;At 17 million cells per mL the yeast occupies a tiny fraction of the liquid. Space is not the limit here; what is dissolved in the liquid is.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The yeast running out of room to float in&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot; hidden&gt;Continue&lt;/button&gt;&lt;/div&gt;
+&lt;div class=&quot;verdict&quot; id=&quot;verdict&quot; hidden&gt;&lt;b&gt;r = 0.347 per hour, K &amp;asymp; 17 million cells/mL.&lt;/b&gt; r comes from the straight stretch of the log plot, where nothing is yet holding the yeast back. K comes from the ordinary plot, where everything is. The braking term (K &amp;minus; N) / K is what turns the first into the second.&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;skill-population-growth&quot;;
+  var NUMS = {&quot;dbl&quot;: {&quot;want&quot;: 2, &quot;tol&quot;: 0, &quot;dp&quot;: 0, &quot;hints&quot;: [&quot;Not the doubling time. Look at the table again.&quot;, &quot;Find how long it takes the count to go from 1.0 to 2.0 million cells/mL.&quot;, &quot;The counts are two hours apart, and each is twice the one before it.&quot;]}, &quot;r&quot;: {&quot;want&quot;: 0.347, &quot;tol&quot;: 0.004, &quot;dp&quot;: 3, &quot;hints&quot;: [&quot;Not r. Work it out again.&quot;, &quot;Divide the natural log of 2 by the doubling time.&quot;, &quot;The natural log of 2 is 0.693. Divide it by 2.&quot;]}, &quot;k&quot;: {&quot;want&quot;: 17.0, &quot;tol&quot;: 0.6, &quot;dp&quot;: 0, &quot;hints&quot;: [&quot;Not K. Read the graph again.&quot;, &quot;Find the density the curve flattens out at.&quot;, &quot;The last count is 16.9 and the curve is still rising very slightly.&quot;]}, &quot;early&quot;: {&quot;want&quot;: 1.06, &quot;tol&quot;: 0.05, &quot;dp&quot;: 2, &quot;hints&quot;: [&quot;Not the growth rate. Work it out again.&quot;, &quot;Multiply r by N, then by the braking term (K &amp;minus; N) divided by K.&quot;, &quot;0.347 &amp;times; 4.0 gives 1.386. The braking term is (17 &amp;minus; 4.0) &amp;divide; 17.&quot;]}, &quot;late&quot;: {&quot;want&quot;: 0.71, &quot;tol&quot;: 0.05, &quot;dp&quot;: 2, &quot;hints&quot;: [&quot;Not the growth rate. Work it out again.&quot;, &quot;Multiply r by N, then by the braking term (K &amp;minus; N) divided by K.&quot;, &quot;The braking term is now (17 &amp;minus; 14.6) &amp;divide; 17, which is 0.141.&quot;]}};
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Dan&#x27;s ruling, 1 October: the student types the answer. A stepper could be walked to the
+  // right number without ever working it out. The cost of a box is that it can be given
+  // nonsense, so this one says what it wants, and the misses are graded: the first says
+  // only that it is wrong, the second names the operation, the third names it with the
+  // numbers in. It never gives the answer away, and there is no limit on tries.
+  //
+  // AP adds a tolerance. 7.81 and 7.8 are the same answer; 0.47 and 0.4648 may not be. Each
+  // box carries its own accepted range, and each says how many figures it wants.
+  function entry(host, opts) {
+    var input = host.querySelector(&quot;input&quot;), btn = host.querySelector(&quot;button&quot;);
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, &quot;&quot;).replace(/^[x×]/i, &quot;&quot;)
+                     .replace(/^\+/, &quot;&quot;);
+      input.classList.remove(&quot;miss&quot;);
+      if (!raw) { opts.onbad(&quot;Type your answer in the box, then press Check.&quot;); return; }
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? &quot;Just the number, without the units — they are already printed beside the box.&quot;
+          : &quot;That is not a number. Type digits, and a decimal point if you need one.&quot;);
+        input.classList.add(&quot;miss&quot;);
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) &lt;= opts.tol + 1e-12) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.dp === undefined ? v : v.toFixed(opts.dp);
+        opts.onright(v);
+      } else {
+        input.classList.add(&quot;miss&quot;);
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener(&quot;click&quot;, submit);
+    input.addEventListener(&quot;keydown&quot;, function (e) {
+      if (e.key === &quot;Enter&quot;) { e.preventDefault(); submit(); }
+    });
+    input.addEventListener(&quot;input&quot;, function () { input.classList.remove(&quot;miss&quot;); });
+    return { focus: function () { try { input.focus(); } catch (e) {} } };
+  }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  // One step at a time. A student who can see the next question can work backwards from it,
+  // and in a chain of calculations that is the whole answer.
+  var STEPS = [].slice.call(document.querySelectorAll(&quot;.step&quot;));
+  var at = 0, opened = false;
+  function openStep(n) {
+    at = n;
+    for (var i = 0; i &lt; STEPS.length; i++) STEPS[i].hidden = i &gt; n;
+    var s = STEPS[n];
+    // On the FIRST call nothing is focused and nothing is scrolled to. This simulation is
+    // framed inside a lesson page, and both focusing a field and scrolling an element into
+    // view inside a frame drag the page around it -- which landed a reader at stage 5 the
+    // moment the lesson opened.
+    if (s &amp;&amp; opened) {
+      var inp = s.querySelector(&quot;input&quot;);
+      if (inp &amp;&amp; !inp.disabled) { try { inp.focus(); } catch (e) {} }
+      s.scrollIntoView({ block: &quot;nearest&quot; });
+    }
+    opened = true;
+    reportHeight();
+  }
+  function nextStep() { if (at &lt; STEPS.length - 1) openStep(at + 1); else finish(); }
+
+
+  var PIPS = [].slice.call(document.querySelectorAll(&quot;.trail i&quot;));
+  function mark(n) { for (var i = 0; i &lt; PIPS.length; i++) PIPS[i].className = i &lt;= n ? &quot;on&quot; : &quot;&quot;; }
+
+  function finish() {
+    document.getElementById(&quot;verdict&quot;).hidden = false;
+    say(&quot;&quot;);
+    reportHeight();
+  }
+
+  STEPS.forEach(function (step, n) {
+    var kind = step.dataset.kind;
+    var go = step.querySelector(&quot;.go&quot;);
+    if (go) go.addEventListener(&quot;click&quot;, function () { mark(n); nextStep(); });
+
+    if (kind === &quot;num&quot;) {
+      var cfg = NUMS[step.dataset.id];
+      entry(step.querySelector(&quot;.entry&quot;), {
+        want: cfg.want, tol: cfg.tol, dp: cfg.dp,
+        onright: function () {
+          step.querySelector(&quot;.calcrow&quot;).classList.add(&quot;done&quot;);
+          say(&quot;&quot;);
+          mark(n);
+          setTimeout(nextStep, 240);
+        },
+        onwrong: function (v, tries) {
+          say(cfg.hints[Math.min(tries, cfg.hints.length) - 1], &quot;warn&quot;);
+        },
+        onbad: function (t) { say(t, &quot;warn&quot;); }
+      });
+    } else if (kind === &quot;pick&quot;) {
+      choices(step, function (right) {
+        say(right ? &quot;&quot; : &quot;Read the reason beside every option before you go on.&quot;,
+            right ? &quot;&quot; : &quot;warn&quot;);
+        go.hidden = false;
+        go.focus();
+        reportHeight();
+      });
+    }
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+  openStep(0);
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1600" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="conclusion"><div class="shead"><span class="num">Stage 6</span><span class="kind">Question &middot; A guide, then one choice</span></div><h2>Choose the conclusion</h2><p class="blurb">What a conclusion has to do &mdash; a claim, the evidence for it, and the reasoning that connects them &mdash; and then three conclusions for your own results.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Choose the conclusion&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.guide{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.guide h2{font-size:12.5px;margin:0 0 9px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.guide ol{margin:0;padding-left:21px}
+.guide li{margin:0 0 9px;font-size:14.5px}
+.guide li:last-child{margin:0}
+.guide li b{display:block;font-size:14.5px}
+.guide li span{color:var(--muted)}
+.bridge{font-size:14.5px;margin:0 0 12px}
+.recap{background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:8px;padding:11px 13px;font-size:14.5px;margin:0 0 14px}
+.recap b{display:block;font-size:12.5px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em;margin-bottom:5px}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.choice{align-items:flex-start}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Choose the conclusion&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Systems Interactions &amp;middot; Topic 8.4&lt;/p&gt;
+
+&lt;div class=&quot;guide&quot;&gt;&lt;h2&gt;What a conclusion has to do&lt;/h2&gt;&lt;ol&gt;&lt;li&gt;&lt;b&gt;Make the claim&lt;/b&gt;&lt;span&gt;Answer the question the investigation asked, in one sentence, with no more certainty than your results carry. Where two error bars overlap or a test fails to reject, say what the data do not show rather than picking the higher number.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the evidence&lt;/b&gt;&lt;span&gt;Quote the numbers from your own results that the claim rests on, with their units: a mean and its error bar, a statistic and its critical value, a five-number summary, a value read off a line. Not a number from the lesson, and not the method.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the reasoning&lt;/b&gt;&lt;span&gt;Say why that evidence supports that claim, and connect it to the biology. This is the step that turns a description of what happened into a conclusion about what it means.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;
+&lt;p class=&quot;bridge&quot;&gt;Three conclusions are offered below. Only one of them makes a claim this investigation&#x27;s results support, backs it with numbers from those results, and says why they support it. Read all three before you choose.&lt;/p&gt;
+&lt;div class=&quot;recap&quot;&gt;&lt;b&gt;Your results&lt;/b&gt;You counted yeast every two hours for sixteen hours in a sealed flask, plotted the counts and their natural logs, found r from the straight stretch of the log plot, and read K off the curve.&lt;/div&gt;
+
+&lt;p class=&quot;stem&quot;&gt;Which of these is a conclusion, and one your own results support?&lt;/p&gt;
+&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;It claims both halves of what the curve shows and names the ceiling, quotes r from the stretch it was measured on and the growth rate once the brake was biting, and reasons through the braking term that connects the two.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The yeast grew without check for about six hours and then more and more slowly, settling near a carrying capacity of 17 million cells/mL. The count doubled every two hours to 4.0 million, giving r = 0.347 per hour, and by 12 hours the braking term had cut the growth rate to 0.72 million cells/mL per hour.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Exponential growth multiplies by the same factor in every equal stretch of time, and after six hours this population did not: the log plot bends away from its own straight line. Rising all the way through is not the same as rising exponentially all the way through.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The yeast population grew exponentially through the sixteen hours, so a flask left longer would hold more yeast still. The count rose from 0.5 to 16.9 million cells/mL, more than thirty times over, and every single count in the series was larger than the one before it, right through to the final sample at sixteen hours.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A conclusion about the quantity that was not measured. Nothing in the method measured the sugar. A sealed flask makes food the likeliest limit, and waste and crowding are candidates too; the counts cannot choose between them.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The yeast used up the sugar in the flask by about twelve hours, so the population could not grow any further. The count levelled off at close to 17 million cells/mL over the last three samples, rising by only 0.6 million in the final two hours, against 4.2 million in the two hours that hold the steepest part of the curve.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;
+
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Choose one.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;conclusion-population-growth&quot;;
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  choices(document.querySelector(&quot;.sim&quot;), function (right) {
+    var p = document.createElement(&quot;div&quot;);
+    p.className = &quot;score&quot;;
+    p.textContent = right
+      ? &quot;That is the one. The reason each of the other two is not a conclusion these &quot;
+        + &quot;results support is written beneath it.&quot;
+      : &quot;Not that one. The conclusion these results support is marked above, and the &quot;
+        + &quot;reason each of the others falls short is written beneath it.&quot;;
+    msg.parentNode.insertBefore(p, msg);
+    say(&quot;&quot;);
+    reportHeight();
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1200" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="questions"><div class="shead"><span class="num">Stage 7</span><span class="kind">Questions &middot; Eight items</span></div><h2>Answer eight questions</h2><p class="blurb">On carrying the investigation out, on what its numbers come to, and on what they do and do not show.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Eight questions&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.item &gt; h2{font-size:12.5px;margin:0 0 6px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.setup{font-size:14.5px;margin:0 0 9px;color:var(--fg)}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.item table{margin-bottom:10px}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Eight questions&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Systems Interactions &amp;middot; Topic 8.4&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;On carrying this investigation out, and on what its results show.
+Each question is marked as soon as it is answered, and every option is explained.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;item&quot; id=&quot;q1&quot;&gt;&lt;h2&gt;Question 1 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;Yeast is grown in a sealed flask of sugar solution and sampled every two hours for sixteen hours. Each sample is diluted and the cells counted under a microscope.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;Why is the flask swirled before each sample is taken?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Cells that have settled leave the liquid above them thinner than the flask as a whole. A sample taken from there gives a count that is too low.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because yeast cells settle, so a sample from a still flask is not representative&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Yeast can ferment without oxygen, and a sealed flask has little to supply. Swirling is there to mix the cells evenly.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because swirling supplies the yeast with the oxygen it needs&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Swirling does break up clumps, which helps the counting, but the reason for it is to make the sample stand for the flask.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because swirling breaks up the clumps so that every cell can divide&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Dissolved sugar does not settle. Cells do.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the sugar settles to the bottom of the flask&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q2&quot;&gt;&lt;h2&gt;Question 2 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;Over the first six hours in a flask, a yeast population rose from 0.4 to 3.2 million cells per mL.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What is the growth constant r over that stretch, if the natural log of 2 is 0.693?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;0.4 to 3.2 million is three doublings, and three doublings in six hours is one doubling every two. r is 0.693 divided by 2.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;0.347 per hour&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is the natural log of 2 itself, which is r only if the population doubles every hour. This one doubles every two.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;0.693 per hour&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is the rise, 2.8 million, divided by six hours. A growth constant is not an increase per hour; it is the rate at which the population multiplies.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;0.467 per hour&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is how many times the population multiplied, 3.2 divided by 0.4. A growth constant is the natural log of that, divided by the time it took.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;8.0 per hour&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q3&quot;&gt;&lt;h2&gt;Question 3 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A population of 300 water fleas is growing with r = 0.12 per day in a tank whose carrying capacity is 1200.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;How fast is the population growing, using dN/dt = rN(K &amp;minus; N)/K?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;rN is 0.12 times 300, which is 36. The braking term is 1200 minus 300, over 1200, which is 0.75. 36 times 0.75 is 27.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;27 water fleas per day&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is rN, the rate with nothing holding the population back. At 300 out of a carrying capacity of 1200 the braking term has already cut it by a quarter.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;36 water fleas per day&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is rN times N over K, which is the braking term the wrong way up. The brake is (K &amp;minus; N) over K, and it is near 1 when the population is small.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;9 water fleas per day&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is rK times the braking term. The equation multiplies r by the population there is, N, not by the carrying capacity.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;108 water fleas per day&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q4&quot;&gt;&lt;h2&gt;Question 4 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A student plots the natural log of a yeast count against time and finds the points lie on a straight line for the first eight hours and then bend away below it.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What does the bend show?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Unchecked growth multiplies by the same factor in every equal stretch of time, which is a straight line on a log scale. Bending below it means each stretch is multiplying by less than the one before.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Growth has stopped being unchecked, so something has begun to limit it&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A falling population would slope downward on the log plot. Bending below a straight line while still rising means growing more slowly, not shrinking.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The population has begun to fall&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Crowded samples are diluted before counting for exactly that reason, and a counting problem would scatter the points rather than bend them one way.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The counting became less accurate as the flask grew crowded&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A log scale is what makes unchecked growth straight in the first place. Straight stays straight on it however large the numbers get.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The log scale compresses large numbers, so the curve must flatten&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q5&quot;&gt;&lt;h2&gt;Question 5 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;Two flasks of yeast are set up with the same starting number of cells. One holds twice as much sugar as the other. Everything else is the same.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What difference would you expect between the two growth curves?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;r is set by how fast the cells divide, which the sugar concentration barely affects while it is plentiful. The carrying capacity is set by how much food there is in all.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The same early slope, but the flask with more sugar levels off higher&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That has it the wrong way round. Twice the food raises the ceiling rather than the early rate, which is already as fast as the cells can divide.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;A steeper early slope in the flask with more sugar, levelling off at the same height&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Carrying capacity is set by the conditions, and the amount of food is one of them.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The same curve in both flasks, because yeast populations always reach the same carrying capacity&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The ceiling rises, but the early slope is set by how fast cells can divide when nothing is short, and sugar is not short in either flask at the start.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;A steeper early slope and a higher ceiling in the flask with more sugar&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q6&quot;&gt;&lt;h2&gt;Question 6 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A yeast population in a sealed flask reaches 17 million cells per mL and stops rising.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What is happening at that point?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;A population stops changing when births and deaths balance, not when either stops. Yeast in a crowded flask goes on dividing while others die.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Cells are still dividing, but as many are dying as are being made&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A population can hold steady with a great deal of dividing going on, as long as the same number of cells is lost.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The cells have stopped dividing altogether&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;At 17 million cells per mL the yeast occupies a tiny fraction of the liquid. What runs short is what is dissolved in it.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The flask has run out of room for any more cells&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The carrying capacity is what the population has risen to meet. In a sealed flask it falls over time, as food is used and waste builds up.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The carrying capacity has risen to meet the population&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q7&quot;&gt;&lt;h2&gt;Question 7 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A field population of rabbits has grown for several years and now sits close to the carrying capacity of its field. A disease kills three quarters of them in one summer.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What happens to the growth rate of the survivors?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;At a quarter of K the braking term is about 0.75 instead of near zero. Fewer rabbits means more grass each, so the population grows faster than it did when it was crowded.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;It rises, because the braking term is large again when N is far below K&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;There are fewer rabbits, so the total number of young is lower. The growth rate per rabbit, which the braking term acts on, goes up.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;It falls, because there are fewer rabbits left to breed&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;r does not change, but the growth rate is rN times the braking term, and both of those have changed.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;It stays the same, because r does not change&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The rise comes from the crowding being relieved, not from which rabbits died. It would happen whichever three quarters were lost.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;It rises, because the disease has removed the weakest rabbits&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q8&quot;&gt;&lt;h2&gt;Question 8 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;Counts of a duckweed population on a pond, in fronds per square meter, are 20, 41, 82, 160, 300, 470, 580, 620 and 630 over sixteen weeks.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What is the carrying capacity of this pond, as these counts show it?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;The last three counts rise by 110, 40 and 10, so the curve is settling. The value it is settling on is the carrying capacity.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;About 630 fronds per square meter&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is roughly the middle of the range, where the population is growing fastest. The carrying capacity is where it stops growing.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;About 300 fronds per square meter&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is twice the last count. Nothing in the counts suggests the population is halfway to its ceiling; they have almost stopped rising.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;About 1260 fronds per square meter&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The last three counts rise by less and less, which is exactly what approaching a ceiling looks like.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;It cannot be read from these counts&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Eight questions to answer.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;questions-population-growth&quot;;
+  var TOTAL = 8, done = 0, right = 0;
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  [].forEach.call(document.querySelectorAll(&quot;.item&quot;), function (item) {
+    choices(item, function (ok) {
+      done++;
+      if (ok) right++;
+      if (done &lt; TOTAL) {
+        say(done + &quot; of &quot; + TOTAL + &quot; answered, &quot; + right + &quot; right so far.&quot;);
+      } else {
+        var p = document.createElement(&quot;div&quot;);
+        p.className = &quot;score&quot;;
+        p.innerHTML = &quot;&lt;b&gt;&quot; + right + &quot; of &quot; + TOTAL + &quot;&lt;/b&gt; right. Every option is &quot;
+          + &quot;explained above, including the ones you did not choose.&quot;;
+        msg.parentNode.insertBefore(p, msg);
+        say(&quot;&quot;);
+      }
+      reportHeight();
+    });
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="3600" loading="lazy" title="Simulation"></iframe></div></section>
+<footer><p><strong>Nothing inside a simulation is marked.</strong> TimeBack cannot see into an iframe, so the simulations are the practical, and what a student is assessed on is the eight questions at the end together with the checkpoints in the lessons this practical belongs to.</p><p><strong>The data was designed, not measured.</strong> The lesson outlines print worked numbers inside their statistics lessons, and a practical reusing those would be one a student could answer from memory. Every reading here was designed to give one clean, defensible verdict, in the units and at the sample sizes the outlines use. <code>_tools/verify.py</code> recomputes every verdict from the readings themselves.</p><p>The analysis skill this practical teaches is <strong>the growth constant r from a log plot, the carrying capacity K, and the braking term</strong>, and no two of the nine practicals teach the same one.</p></footer></div>

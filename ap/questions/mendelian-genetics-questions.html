@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eight questions</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.item > h2{font-size:12.5px;margin:0 0 6px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.setup{font-size:14.5px;margin:0 0 9px;color:var(--fg)}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.item table{margin-bottom:10px}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Eight questions</h1>
+<p class="sub">Information Storage and Transmission &middot; Topic 5.3</p>
+<div class="brief"><p>On carrying this investigation out, and on what its results show.
+Each question is marked as soon as it is answered, and every option is explained.</p></div>
+<div class="item" id="q1"><h2>Question 1 of 8</h2><p class="setup">Two fruit flies heterozygous for body color and for wing shape are crossed. The two genes are on different chromosomes.</p><p class="stem">Which ratio of phenotypes does this cross predict among the offspring?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Each parent makes four kinds of gamete in equal numbers. The sixteen combinations fall into four phenotype classes: nine showing both dominant traits, three showing each one dominant trait, and one showing neither."><span class="ltr"></span><span>9 : 3 : 3 : 1</span></button><button type="button" class="choice" data-ok="0" data-why="That is what a test cross of two genes predicts, where one parent is homozygous recessive for both. Here both parents are heterozygous."><span class="ltr"></span><span>1 : 1 : 1 : 1</span></button><button type="button" class="choice" data-ok="0" data-why="That is the ratio for one gene with two heterozygous parents. Two genes give four phenotype classes, not two."><span class="ltr"></span><span>3 : 1</span></button><button type="button" class="choice" data-ok="0" data-why="That ratio comes from two genes whose products both have to work for one characteristic to appear. These two genes control separate characteristics."><span class="ltr"></span><span>9 : 7</span></button></div></div><div class="item" id="q2"><h2>Question 2 of 8</h2><p class="setup">A grower counts 480 offspring from a cross and sorts them into four phenotype classes before working out what the model predicts for each.</p><p class="stem">How many degrees of freedom does a chi-square test of these counts have?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Degrees of freedom are the number of classes minus one. Once the total and three of the counts are fixed, the fourth is fixed too."><span class="ltr"></span><span>3</span></button><button type="button" class="choice" data-ok="0" data-why="That is the number of classes. One of them is not free to vary, because the total fixes it once the other three are known."><span class="ltr"></span><span>4</span></button><button type="button" class="choice" data-ok="0" data-why="Degrees of freedom count classes, never offspring. The 480 plays no part."><span class="ltr"></span><span>479</span></button><button type="button" class="choice" data-ok="0" data-why="Sixteen is the number of squares in a Punnett square for two genes. It is not the number of classes the offspring are sorted into."><span class="ltr"></span><span>16</span></button></div></div><div class="item" id="q3"><h2>Question 3 of 8</h2><p class="setup">In one phenotype class a grower counted 112 seedlings where the model predicted 120.</p><p class="stem">What does this class contribute to chi-square?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The difference is &minus;8, which squared is 64. Divided by the expected count, 120, that is 0.533."><span class="ltr"></span><span>0.533</span></button><button type="button" class="choice" data-ok="0" data-why="That is the difference, 8, divided by the expected count, 120. The difference has to be squared first, which is what stops a shortfall and an excess cancelling."><span class="ltr"></span><span>0.067</span></button><button type="button" class="choice" data-ok="0" data-why="That is 64 divided by the observed count, 112. Each term is divided by its own expected count, not by what was observed."><span class="ltr"></span><span>0.571</span></button><button type="button" class="choice" data-ok="0" data-why="That is the squared difference. It still has to be divided by the expected count for that class."><span class="ltr"></span><span>64</span></button></div></div><div class="item" id="q4"><h2>Question 4 of 8</h2><p class="setup">A dihybrid cross gave 640 offspring in four phenotype classes. Chi-square for the counts against a 9 : 3 : 3 : 1 model came to 1.51, and the critical value at three degrees of freedom and p = 0.05 is 7.81.</p><p class="stem">What is the verdict?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="1.51 is not larger than 7.81, so the gap between the counts and the model is small enough to be chance."><span class="ltr"></span><span>Fail to reject the null hypothesis: the counts are consistent with 9 : 3 : 3 : 1</span></button><button type="button" class="choice" data-ok="0" data-why="The null hypothesis is rejected only when chi-square is larger than the critical value, and 1.51 is well below 7.81."><span class="ltr"></span><span>Reject the null hypothesis: the counts do not fit 9 : 3 : 3 : 1</span></button><button type="button" class="choice" data-ok="0" data-why="&lsquo;Accept&rsquo; is never one of the two wordings, and failing to reject never shows a model is correct. Other models could fit the same counts."><span class="ltr"></span><span>Accept the null hypothesis: the model is correct</span></button><button type="button" class="choice" data-ok="0" data-why="Chi-square expects the classes to be of different sizes; that is what the ratio predicts. What it needs is for each expected count to be large enough, and all four here are."><span class="ltr"></span><span>The test cannot be used, because the four classes are of very different sizes</span></button></div></div><div class="item" id="q5"><h2>Question 5 of 8</h2><p class="setup">A second cross, between two tomato plants heterozygous for stem color and fruit shape, gave 440 offspring: 300 purple stem with round fruit, 52 purple stem with long fruit, 48 green stem with round fruit and 40 green stem with long fruit. A 9 : 3 : 3 : 1 model predicts 247.5, 82.5, 82.5 and 27.5. Chi-square comes to 42.5.</p><p class="stem">What do these counts show, given a critical value of 7.81 at three degrees of freedom?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="42.5 is far larger than 7.81, so the gap between the counts and the model is too large to be chance. Both classes that match a parent come out above what the model predicts and both of the other two below it, which is the pattern two genes close together on one chromosome give."><span class="ltr"></span><span>Reject the null hypothesis: the offspring do not fit a 9 : 3 : 3 : 1 ratio</span></button><button type="button" class="choice" data-ok="0" data-why="42.5 is larger than the critical value, not smaller. The counts are further from the model than chance would put them."><span class="ltr"></span><span>Fail to reject the null hypothesis: the offspring fit a 9 : 3 : 3 : 1 ratio</span></button><button type="button" class="choice" data-ok="0" data-why="The verdict is right and the reason is backwards. Genes on different chromosomes are what gives 9 : 3 : 3 : 1, and these counts depart from it."><span class="ltr"></span><span>Reject the null hypothesis: the two genes must be on different chromosomes</span></button><button type="button" class="choice" data-ok="0" data-why="What matters is the expected count, not the observed one, and the smallest expected count here is 27.5. A class coming out above or below the count the model puts it at is the result, not a reason to drop the test."><span class="ltr"></span><span>The test is invalid, because the smallest class holds only 40 plants</span></button></div></div><div class="item" id="q6"><h2>Question 6 of 8</h2><p class="setup">A student finishes a chi-square test on a breeding cross, fails to reject the null hypothesis, and writes: &lsquo;This proves the two genes assort independently.&rsquo;</p><p class="stem">What is wrong with that?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="A chi-square test never proves a model. Other models can produce counts just as close to the predicted ratio, and two genes far apart on the same chromosome are one of them."><span class="ltr"></span><span>Failing to reject shows only that chance can account for the gap</span></button><button type="button" class="choice" data-ok="0" data-why="Chi-square below the critical value gives the verdict &lsquo;fail to reject&rsquo;, which is a weaker statement than proof and has to be written as such."><span class="ltr"></span><span>Nothing is wrong, as long as chi-square was below the critical value</span></button><button type="button" class="choice" data-ok="0" data-why="The 0.01 row is a stricter test with a larger critical value, so it would make rejecting harder, not make this claim stronger. Exam questions use the 0.05 row unless they say otherwise."><span class="ltr"></span><span>The student should have used the p = 0.01 row instead</span></button><button type="button" class="choice" data-ok="0" data-why="A breeding cross is one of the standard uses: counts in classes, against a ratio a model predicts."><span class="ltr"></span><span>Chi-square cannot be used on a breeding cross at all</span></button></div></div><div class="item" id="q7"><h2>Question 7 of 8</h2><p class="setup">A breeder repeats the same cross and counts 160 offspring instead of 640. The offspring fall in almost exactly the same proportions as before.</p><p class="stem">What happens to chi-square?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Each term is a squared gap divided by an expected count. Quartering every count quarters each expected count and quarters each squared gap divided by it, so chi-square falls to about a quarter of what it was."><span class="ltr"></span><span>It gets smaller, because each class's gap from its expected count shrinks with the class</span></button><button type="button" class="choice" data-ok="0" data-why="Chi-square is not a comparison of proportions. It compares counts, so the size of the batch changes it."><span class="ltr"></span><span>It stays the same, because the proportions have not changed</span></button><button type="button" class="choice" data-ok="0" data-why="A smaller batch does stray further in proportion, but here the proportions came out the same, and the counts themselves are smaller."><span class="ltr"></span><span>It gets larger, because a smaller batch strays further from the ratio</span></button><button type="button" class="choice" data-ok="0" data-why="160 offspring split 9 : 3 : 3 : 1 puts 10 in the rarest class, which is small but workable. Nothing stops the test being done."><span class="ltr"></span><span>It cannot be worked out, because 160 is too few offspring</span></button></div></div><div class="item" id="q8"><h2>Question 8 of 8</h2><p class="setup">A poultry breeder crosses two birds and predicts that the chicks will be feathered and unfeathered in a 3 : 1 ratio. Of 200 chicks, 142 are feathered and 58 are not. Chi-square for these counts is 1.71.</p><p class="stem">Using a critical value of 3.84 at one degree of freedom, what is the verdict?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The model predicts 150 feathered and 50 unfeathered. 1.71 is not larger than 3.84, so the gap between 142 : 58 and 150 : 50 is small enough to be chance."><span class="ltr"></span><span>Fail to reject the null hypothesis: the chicks are consistent with 3 : 1</span></button><button type="button" class="choice" data-ok="0" data-why="A gap on its own is not a misfit. Chi-square exists to say whether a gap that size is more than chance, and 1.71 against 3.84 says it is not."><span class="ltr"></span><span>Reject the null hypothesis: 58 unfeathered chicks is well above the 50 predicted</span></button><button type="button" class="choice" data-ok="0" data-why="The verdict is right and the reason is not. The batch being large does not decide the verdict; chi-square against the critical value does."><span class="ltr"></span><span>Fail to reject the null hypothesis, because 200 chicks is a large enough batch</span></button><button type="button" class="choice" data-ok="0" data-why="One degree of freedom is what sets the critical value at 3.84. It does not decide the verdict, which comes from comparing chi-square with that value."><span class="ltr"></span><span>Reject the null hypothesis, because two classes give one degree of freedom</span></button></div></div>
+<p class="msg" id="msg" role="status" aria-live="polite">Eight questions to answer.</p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "questions-mendelian-genetics";
+  var TOTAL = 8, done = 0, right = 0;
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  [].forEach.call(document.querySelectorAll(".item"), function (item) {
+    choices(item, function (ok) {
+      done++;
+      if (ok) right++;
+      if (done < TOTAL) {
+        say(done + " of " + TOTAL + " answered, " + right + " right so far.");
+      } else {
+        var p = document.createElement("div");
+        p.className = "score";
+        p.innerHTML = "<b>" + right + " of " + TOTAL + "</b> right. Every option is "
+          + "explained above, including the ones you did not choose.";
+        msg.parentNode.insertBefore(p, msg);
+        say("");
+      }
+      reportHeight();
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

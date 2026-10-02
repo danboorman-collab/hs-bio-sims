@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Does the data fit?</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.step .go{margin-top:11px;padding:8px 14px;border-radius:8px;font:inherit;font-weight:650;
+  cursor:pointer;border:1px solid var(--accent);background:var(--accent);
+  color:var(--accent-fg)}
+.step .go[hidden]{display:none}
+.trail{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 4px}
+.trail i{width:16px;height:4px;border-radius:2px;background:var(--line);display:block}
+.trail i.on{background:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Does the data fit?</h1>
+<p class="sub">Expected counts, chi-square, degrees of freedom, and the verdict.</p>
+<div class="brief"><p>Two flies heterozygous for both genes were crossed. If the two genes are on different chromosomes and each has one dominant allele, the model predicts four phenotype classes in the ratio 9 : 3 : 3 : 1.</p><p>The counts never come out exactly 9 : 3 : 3 : 1. Chi-square puts one number on the gap, and the table says whether a gap that size is more than chance.</p></div>
+<div class="trail" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="step" data-kind="table" data-i="0"><h2>The counts</h2><p class="ask">These are the F2 flies, sorted into the four phenotype classes.</p><div class="scroll"><table><caption>F2 offspring of <em>Drosophila melanogaster</em>, 640 flies in four phenotype classes.</caption><thead><tr><th scope="col">Phenotype class</th><th scope="col">Share the model predicts</th><th scope="col">Flies counted</th></tr></thead><tbody><tr><th scope="row">gray body, normal wings</th><td class="num">9/16</td><td class="num">374</td></tr><tr><th scope="row">gray body, vestigial wings</th><td class="num">3/16</td><td class="num">112</td></tr><tr><th scope="row">ebony body, normal wings</th><td class="num">3/16</td><td class="num">118</td></tr><tr><th scope="row">ebony body, vestigial wings</th><td class="num">1/16</td><td class="num">36</td></tr></tbody></table></div><button type="button" class="go">Continue</button></div><div class="step" data-kind="num" data-i="1" data-id="e1"><h2>Step 1 &mdash; the expected count for the commonest class</h2><p class="ask">An expected count is the share the model predicts, taken of the total counted. It is not rounded to a whole fly: it is what the model predicts, not a count.</p><p class="ask">How many gray normal flies does a 9 : 3 : 3 : 1 model predict out of 640?</p><div class="calc"><div class="calcrow" id="row-e1"><span class="lab">Expected, gray normal</span><span class="work">640 &times; 9/16</span><span class="entry" id="spin-e1"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Expected, gray normal"><span class="unit">flies</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="2" data-id="e4"><h2>Step 2 &mdash; and for the rarest class</h2><p class="ask">How many ebony vestigial flies does the model predict?</p><div class="calc"><div class="calcrow" id="row-e4"><span class="lab">Expected, ebony vestigial</span><span class="work">640 &times; 1/16</span><span class="entry" id="spin-e4"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Expected, ebony vestigial"><span class="unit">flies</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="3" data-id="t1"><h2>Step 3 &mdash; one class's contribution to chi-square</h2><p class="ask">Chi-square takes each class in turn: the observed count minus the expected count, squared, then divided by that class's own expected count. The squaring makes a shortfall count the same as an excess of the same size.</p><p class="formula">&chi;&sup2; = &Sigma; (o &minus; e)&sup2; &divide; e</p><p class="ask">What does the gray normal class contribute to chi-square? Give your answer to three decimal places.</p><div class="calc"><div class="calcrow" id="row-t1"><span class="lab">(374 &minus; 360)&sup2; &divide; 360</span><span class="work">+14&sup2; = 196</span><span class="entry" id="spin-t1"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="(374 &minus; 360)&sup2; &divide; 360"><span class="unit"></span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="table" data-i="4"><h2>All four contributions</h2><p class="ask">Here is the same working for all four classes.</p><div class="scroll"><table><caption>The chi-square working, one line per phenotype class.</caption><thead><tr><th scope="col">Class</th><th scope="col">o</th><th scope="col">e</th><th scope="col">o &minus; e</th><th scope="col">(o &minus; e)&sup2;</th><th scope="col">(o &minus; e)&sup2; &divide; e</th></tr></thead><tbody><tr><th scope="row">gray normal</th><td class="num">374</td><td class="num">360</td><td class="num">+14</td><td class="num">196</td><td class="num">0.544</td></tr><tr><th scope="row">gray vestigial</th><td class="num">112</td><td class="num">120</td><td class="num">-8</td><td class="num">64</td><td class="num">0.533</td></tr><tr><th scope="row">ebony normal</th><td class="num">118</td><td class="num">120</td><td class="num">-2</td><td class="num">4</td><td class="num">0.033</td></tr><tr><th scope="row">ebony vestigial</th><td class="num">36</td><td class="num">40</td><td class="num">-4</td><td class="num">16</td><td class="num">0.400</td></tr></tbody></table></div><button type="button" class="go">Continue</button></div><div class="step" data-kind="num" data-i="5" data-id="chi"><h2>Step 4 &mdash; chi-square</h2><p class="ask">Add the four contributions. What is chi-square, to two decimal places?</p><div class="calc"><div class="calcrow" id="row-chi"><span class="lab">&chi;&sup2;</span><span class="work">0.544 + 0.533 + 0.033 + 0.400</span><span class="entry" id="spin-chi"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="&chi;&sup2;"><span class="unit"></span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="6" data-id="df"><h2>Step 5 &mdash; degrees of freedom</h2><p class="ask">Once the total and all but one of the counts are fixed, the last count is fixed too. The number of classes free to vary is the degrees of freedom: the number of classes minus one. It counts classes, never offspring.</p><p class="ask">How many degrees of freedom does this test have?</p><div class="calc"><div class="calcrow" id="row-df"><span class="lab">Degrees of freedom</span><span class="work">classes &minus; 1</span><span class="entry" id="spin-df"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Degrees of freedom"><span class="unit"></span><button type="button">Check</button></span></div></div><p class="note">The 640 flies play no part. Degrees of freedom count classes.</p></div><div class="step" data-kind="table" data-i="7"><h2>The chi-square table from the formula sheet</h2><p class="ask">Go down the column for your degrees of freedom and along the p = 0.05 row. The 0.01 row is a stricter test, used only when a question says so.</p><div class="scroll"><table><caption>Critical values of chi-square, by degrees of freedom.</caption><thead><tr><th scope="col">p value</th><th scope="col">1</th><th scope="col">2</th><th scope="col">3</th><th scope="col">4</th><th scope="col">5</th><th scope="col">6</th><th scope="col">7</th><th scope="col">8</th></tr></thead><tbody><tr><th scope="row">0.05</th><td class="num">3.84</td><td class="num">5.99</td><td class="num">7.81</td><td class="num">9.49</td><td class="num">11.07</td><td class="num">12.59</td><td class="num">14.07</td><td class="num">15.51</td></tr><tr><th scope="row">0.01</th><td class="num">6.63</td><td class="num">9.21</td><td class="num">11.34</td><td class="num">13.28</td><td class="num">15.09</td><td class="num">16.81</td><td class="num">18.48</td><td class="num">20.09</td></tr></tbody></table></div><button type="button" class="go">Continue</button></div><div class="step" data-kind="num" data-i="8" data-id="crit"><h2>Step 6 &mdash; the critical value</h2><p class="ask">What is the critical value for this test, at p = 0.05?</p><div class="calc"><div class="calcrow" id="row-crit"><span class="lab">Critical value</span><span class="work">read it from the table above</span><span class="entry" id="spin-crit"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Critical value"><span class="unit"></span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="fig" data-i="9"><h2>The counts beside the model</h2><figure><svg viewBox="0 0 600 330" width="100%" role="img" aria-label="Observed counts beside the counts the model predicts" xmlns="http://www.w3.org/2000/svg"><title>Observed counts beside the counts the model predicts</title><desc>One pair of bars for each phenotype class: the count observed, and the count the ratio predicts.</desc><g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif"><line x1="62" y1="16" x2="62" y2="276" stroke="var(--fg)" stroke-width="1.4"/><line x1="57" y1="276.0" x2="62" y2="276.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="276.0" x2="582" y2="276.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="280.0" font-size="12" fill="var(--muted)" text-anchor="end">0</text><line x1="57" y1="224.0" x2="62" y2="224.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="224.0" x2="582" y2="224.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="228.0" font-size="12" fill="var(--muted)" text-anchor="end">100</text><line x1="57" y1="172.0" x2="62" y2="172.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="172.0" x2="582" y2="172.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="176.0" font-size="12" fill="var(--muted)" text-anchor="end">200</text><line x1="57" y1="120.0" x2="62" y2="120.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="120.0" x2="582" y2="120.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="124.0" font-size="12" fill="var(--muted)" text-anchor="end">300</text><line x1="57" y1="68.0" x2="62" y2="68.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="68.0" x2="582" y2="68.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="72.0" font-size="12" fill="var(--muted)" text-anchor="end">400</text><line x1="57" y1="16.0" x2="62" y2="16.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="16.0" x2="582" y2="16.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="20.0" font-size="12" fill="var(--muted)" text-anchor="end">500</text><text x="16" y="146" font-size="12.5" fill="var(--fg)" text-anchor="middle" transform="rotate(-90 16 146)">Number of offspring</text><line x1="62" y1="276" x2="582" y2="276" stroke="var(--fg)" stroke-width="1.4"/><text x="127.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">gray normal</text><text x="257.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">gray vestigial</text><text x="387.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">ebony normal</text><text x="517.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">ebony vestigial</text><text x="322" y="317" font-size="12.5" fill="var(--fg)" text-anchor="middle">Phenotype class</text><rect x="84.0" y="81.5" width="42.0" height="194.5" fill="var(--accent)" opacity="1"/><text x="105.0" y="76.5" font-size="11.5" fill="var(--muted)" text-anchor="middle">374</text><rect x="127.0" y="88.8" width="42.0" height="187.2" fill="var(--muted)" opacity="0.45"/><text x="148.0" y="83.8" font-size="11.5" fill="var(--muted)" text-anchor="middle">360</text><rect x="214.0" y="217.8" width="42.0" height="58.2" fill="var(--accent)" opacity="1"/><text x="235.0" y="212.8" font-size="11.5" fill="var(--muted)" text-anchor="middle">112</text><rect x="257.0" y="213.6" width="42.0" height="62.4" fill="var(--muted)" opacity="0.45"/><text x="278.0" y="208.6" font-size="11.5" fill="var(--muted)" text-anchor="middle">120</text><rect x="344.0" y="214.6" width="42.0" height="61.4" fill="var(--accent)" opacity="1"/><text x="365.0" y="209.6" font-size="11.5" fill="var(--muted)" text-anchor="middle">118</text><rect x="387.0" y="213.6" width="42.0" height="62.4" fill="var(--muted)" opacity="0.45"/><text x="408.0" y="208.6" font-size="11.5" fill="var(--muted)" text-anchor="middle">120</text><rect x="474.0" y="257.3" width="42.0" height="18.7" fill="var(--accent)" opacity="1"/><text x="495.0" y="252.3" font-size="11.5" fill="var(--muted)" text-anchor="middle">36</text><rect x="517.0" y="255.2" width="42.0" height="20.8" fill="var(--muted)" opacity="0.45"/><text x="538.0" y="250.2" font-size="11.5" fill="var(--muted)" text-anchor="middle">40</text><rect x="402" y="20" width="11" height="11" rx="2" fill="var(--accent)"/><text x="419" y="29" font-size="12" fill="var(--fg)">observed</text><rect x="402" y="37" width="11" height="11" rx="2" fill="var(--muted)"/><text x="419" y="46" font-size="12" fill="var(--fg)">expected from the model</text></g></svg><figcaption>The 640 F2 flies, with the count each class was observed to hold beside the count a 9 : 3 : 3 : 1 model predicts.</figcaption></figure><button type="button" class="go">Continue</button></div><div class="step" data-kind="pick" data-i="10"><h2>Step 7 &mdash; the verdict</h2><p class="ask">Chi-square is 1.51 and the critical value at 3 degrees of freedom is 7.81.</p><p class="ask">Which of these is the verdict?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="1.51 is not larger than 7.81, so the gap between the counts and the model is small enough to be chance."><span class="ltr"></span><span>Fail to reject the null hypothesis</span></button><button type="button" class="choice" data-ok="0" data-why="The null hypothesis is rejected only when chi-square is larger than the critical value. 1.51 is smaller than 7.81."><span class="ltr"></span><span>Reject the null hypothesis</span></button><button type="button" class="choice" data-ok="0" data-why="&lsquo;Accept&rsquo; is never one of the two wordings. They are reject, and fail to reject."><span class="ltr"></span><span>Accept the null hypothesis</span></button></div><button type="button" class="go" hidden>Continue</button></div><div class="step" data-kind="pick" data-i="11"><h2>Step 8 &mdash; what the verdict means</h2><p class="ask">What does failing to reject tell the breeder about the 9 : 3 : 3 : 1 model?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Failing to reject says only that chance can account for the gap. Other models could give counts this close to the predicted ratio too."><span class="ltr"></span><span>The counts are consistent with the model, but the model is not proved</span></button><button type="button" class="choice" data-ok="0" data-why="A chi-square test never proves a model. It only fails to find a gap too large for chance."><span class="ltr"></span><span>The model is proved right by this cross</span></button><button type="button" class="choice" data-ok="0" data-why="The counts are consistent with that, which is not the same as showing it. Genes far apart on the same chromosome also give counts close to 9 : 3 : 3 : 1."><span class="ltr"></span><span>The two genes must be on different chromosomes</span></button></div><button type="button" class="go" hidden>Continue</button></div>
+<div class="verdict" id="verdict" hidden><b>&chi;&sup2; = 1.51, below the critical value of 7.81 at 3 degrees of freedom. Fail to reject the null hypothesis.</b> The 640 flies are consistent with a 9 : 3 : 3 : 1 ratio, and so with two genes assorting independently. That is not the same as proving it.</div>
+<p class="msg" id="msg" role="status" aria-live="polite"></p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "skill-mendelian-genetics";
+  var NUMS = {"e1": {"want": 360.0, "tol": 0.5, "dp": 0, "hints": ["Not the expected count. Work it out again.", "Take nine sixteenths of the total counted.", "Multiply 640 by 9, then divide by 16."]}, "e4": {"want": 40.0, "tol": 0.5, "dp": 0, "hints": ["Not the expected count. Work it out again.", "Take one sixteenth of the total counted.", "Divide 640 by 16."]}, "t1": {"want": 0.544, "tol": 0.002, "dp": 3, "hints": ["Not that class's contribution. Work it out again.", "Take the expected count from the observed count, square what is left, then divide by the expected count.", "+14 squared is 196. Divide that by 360."]}, "chi": {"want": 1.51, "tol": 0.015, "dp": 2, "hints": ["Not chi-square. Add them again.", "Add the four numbers in the last column of the table.", "Add 0.544 + 0.533 + 0.033 + 0.400."]}, "df": {"want": 3, "tol": 0, "dp": 0, "hints": ["Not the degrees of freedom. Count again.", "Count the phenotype classes, then subtract one.", "There are 4 classes. Subtract one."]}, "crit": {"want": 7.81, "tol": 0.005, "dp": 2, "hints": ["Not the critical value. Read the table again.", "Go down the column for your degrees of freedom, then along the 0.05 row.", "The column headed 3, and the row labelled 0.05."]}};
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Dan's ruling, 1 October: the student types the answer. A stepper could be walked to the
+  // right number without ever working it out. The cost of a box is that it can be given
+  // nonsense, so this one says what it wants, and the misses are graded: the first says
+  // only that it is wrong, the second names the operation, the third names it with the
+  // numbers in. It never gives the answer away, and there is no limit on tries.
+  //
+  // AP adds a tolerance. 7.81 and 7.8 are the same answer; 0.47 and 0.4648 may not be. Each
+  // box carries its own accepted range, and each says how many figures it wants.
+  function entry(host, opts) {
+    var input = host.querySelector("input"), btn = host.querySelector("button");
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, "").replace(/^[x×]/i, "")
+                     .replace(/^\+/, "");
+      input.classList.remove("miss");
+      if (!raw) { opts.onbad("Type your answer in the box, then press Check."); return; }
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? "Just the number, without the units — they are already printed beside the box."
+          : "That is not a number. Type digits, and a decimal point if you need one.");
+        input.classList.add("miss");
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) <= opts.tol + 1e-12) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.dp === undefined ? v : v.toFixed(opts.dp);
+        opts.onright(v);
+      } else {
+        input.classList.add("miss");
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener("click", submit);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); submit(); }
+    });
+    input.addEventListener("input", function () { input.classList.remove("miss"); });
+    return { focus: function () { try { input.focus(); } catch (e) {} } };
+  }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  // One step at a time. A student who can see the next question can work backwards from it,
+  // and in a chain of calculations that is the whole answer.
+  var STEPS = [].slice.call(document.querySelectorAll(".step"));
+  var at = 0, opened = false;
+  function openStep(n) {
+    at = n;
+    for (var i = 0; i < STEPS.length; i++) STEPS[i].hidden = i > n;
+    var s = STEPS[n];
+    // On the FIRST call nothing is focused and nothing is scrolled to. This simulation is
+    // framed inside a lesson page, and both focusing a field and scrolling an element into
+    // view inside a frame drag the page around it -- which landed a reader at stage 5 the
+    // moment the lesson opened.
+    if (s && opened) {
+      var inp = s.querySelector("input");
+      if (inp && !inp.disabled) { try { inp.focus(); } catch (e) {} }
+      s.scrollIntoView({ block: "nearest" });
+    }
+    opened = true;
+    reportHeight();
+  }
+  function nextStep() { if (at < STEPS.length - 1) openStep(at + 1); else finish(); }
+
+
+  var PIPS = [].slice.call(document.querySelectorAll(".trail i"));
+  function mark(n) { for (var i = 0; i < PIPS.length; i++) PIPS[i].className = i <= n ? "on" : ""; }
+
+  function finish() {
+    document.getElementById("verdict").hidden = false;
+    say("");
+    reportHeight();
+  }
+
+  STEPS.forEach(function (step, n) {
+    var kind = step.dataset.kind;
+    var go = step.querySelector(".go");
+    if (go) go.addEventListener("click", function () { mark(n); nextStep(); });
+
+    if (kind === "num") {
+      var cfg = NUMS[step.dataset.id];
+      entry(step.querySelector(".entry"), {
+        want: cfg.want, tol: cfg.tol, dp: cfg.dp,
+        onright: function () {
+          step.querySelector(".calcrow").classList.add("done");
+          say("");
+          mark(n);
+          setTimeout(nextStep, 240);
+        },
+        onwrong: function (v, tries) {
+          say(cfg.hints[Math.min(tries, cfg.hints.length) - 1], "warn");
+        },
+        onbad: function (t) { say(t, "warn"); }
+      });
+    } else if (kind === "pick") {
+      choices(step, function (right) {
+        say(right ? "" : "Read the reason beside every option before you go on.",
+            right ? "" : "warn");
+        go.hidden = false;
+        go.focus();
+        reportHeight();
+      });
+    }
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+  openStep(0);
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

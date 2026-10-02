@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eight questions</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.item > h2{font-size:12.5px;margin:0 0 6px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.setup{font-size:14.5px;margin:0 0 9px;color:var(--fg)}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.item table{margin-bottom:10px}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Eight questions</h1>
+<p class="sub">Evolution &middot; Topic 7.9</p>
+<div class="brief"><p>On carrying this investigation out, and on what its results show.
+Each question is marked as soon as it is answered, and every option is explained.</p></div>
+<div class="item" id="q1"><h2>Question 1 of 8</h2><p class="setup">A researcher compares the same gene in five species rather than comparing five different genes.</p><p class="stem">Why does the gene have to be the same one in every species?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Comparing one species' cytochrome c oxidase with another's hemoglobin would measure the difference between two proteins, which says nothing about how related the two species are."><span class="ltr"></span><span>Because a difference between two sequences only means anything if the two do the same job</span></button><button type="button" class="choice" data-ok="0" data-why="Length is a practical difficulty, and sequences of different lengths can be aligned. The reason is that two different genes differ for reasons unrelated to ancestry."><span class="ltr"></span><span>Because different genes are different lengths and cannot be lined up</span></button><button type="button" class="choice" data-ok="0" data-why="Whole genomes have been sequenced for all five of these species. The choice is about comparing like with like."><span class="ltr"></span><span>Because only one gene in each species has ever been sequenced</span></button><button type="button" class="choice" data-ok="0" data-why="Genes doing the same job in different species have different sequences, and the size of that difference is the whole measurement."><span class="ltr"></span><span>Because a gene that does the same job must have the same sequence</span></button></div></div><div class="item" id="q2"><h2>Question 2 of 8</h2><p class="setup">Two species' versions of a protein are 92.0% identical over 450 aligned amino acid positions.</p><p class="stem">At how many positions do the two sequences differ?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="100 minus 92.0 is 8.0%, and 8.0% of 450 is 36."><span class="ltr"></span><span>36</span></button><button type="button" class="choice" data-ok="0" data-why="That is the number of positions at which the two are the same, 92.0% of 450."><span class="ltr"></span><span>414</span></button><button type="button" class="choice" data-ok="0" data-why="That is the percentage that differ, not the number of positions. It still has to be taken of the 450 compared."><span class="ltr"></span><span>8</span></button><button type="button" class="choice" data-ok="0" data-why="That is the percent identity with the percent sign dropped. The number of differences depends on how many positions were compared."><span class="ltr"></span><span>92</span></button></div></div><div class="item" id="q3"><h2>Question 3 of 8</h2><p class="setup">Four species are compared. Species W and X share 97% of a sequence, W and Y share 84%, W and Z share 71%, and X and Z share 70%.</p><p class="stem">Which two species share the most recent common ancestor?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="They share more of the sequence than any other pair in the table. Differences build up after two lineages separate, so the pair with the fewest has been apart for the shortest time."><span class="ltr"></span><span>W and X</span></button><button type="button" class="choice" data-ok="0" data-why="They share 71%, the second lowest figure given. That makes them among the most distantly related of the pairs listed."><span class="ltr"></span><span>W and Z</span></button><button type="button" class="choice" data-ok="0" data-why="They share 70%, the lowest figure given, so they are the most distantly related of the pairs listed."><span class="ltr"></span><span>X and Z</span></button><button type="button" class="choice" data-ok="0" data-why="They share 84%, which is more than W and Z but less than W and X."><span class="ltr"></span><span>W and Y</span></button></div></div><div class="item" id="q4"><h2>Question 4 of 8</h2><p class="setup">A cladogram is built from sequence comparisons of five animals. A student points at two species that meet at a node near the right-hand end of the diagram.</p><p class="stem">What does that node represent?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Each node on a cladogram is a point at which one lineage split into two. The species at the tips are the living descendants; the ancestor at the node is extinct."><span class="ltr"></span><span>A common ancestor of those two species, which was neither of them</span></button><button type="button" class="choice" data-ok="0" data-why="Neither living species is the ancestor of the other. They are both descendants of whatever was at the node."><span class="ltr"></span><span>The point at which one of the two species evolved from the other</span></button><button type="button" class="choice" data-ok="0" data-why="A node marks where the lineages split. When reproductive isolation became complete is not something a sequence comparison records."><span class="ltr"></span><span>The moment the two species stopped being able to breed together</span></button><button type="button" class="choice" data-ok="0" data-why="A node is not one of the species on the diagram. It is a point of common ancestry, and no sequence from it exists."><span class="ltr"></span><span>The species whose sequence is most like both of them</span></button></div></div><div class="item" id="q5"><h2>Question 5 of 8</h2><p class="setup">Five species are compared and one of them shares less of the sequence with each of the other four than any of those four share with each other.</p><p class="stem">What is that species called, and what is it for?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Its lineage separated before the others did, so it tells you which end of the tree is older. Without something outside the group, the order of the branches inside it cannot be rooted."><span class="ltr"></span><span>The outgroup, which the branching order of the other four is read against</span></button><button type="button" class="choice" data-ok="0" data-why="The name is right and the job is not. No average is taken; each pair is compared with each other pair."><span class="ltr"></span><span>The outgroup, which supplies the average the other four are compared with</span></button><button type="button" class="choice" data-ok="0" data-why="All five are living species, and none is the ancestor of the others. Sharing less sequence does not mean having changed less."><span class="ltr"></span><span>The ancestor, because it is the least changed of the five</span></button><button type="button" class="choice" data-ok="0" data-why="The distant species is still related to the other four, which is why a shared gene can be compared at all. An unrelated sequence could not be aligned."><span class="ltr"></span><span>The control, because it shows what an unrelated sequence looks like</span></button></div></div><div class="item" id="q6"><h2>Question 6 of 8</h2><p class="setup">A student compares a gene in several mammals and finds that two species with very similar body shapes have quite different sequences, while two that look nothing alike have very similar ones.</p><p class="stem">What is the most likely explanation?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Similar conditions can produce similar body shapes in lineages that separated long ago. The sequences record the ancestry; the shapes record what each lineage has lived through since."><span class="ltr"></span><span>The two that look alike have been shaped by similar surroundings rather than by close ancestry</span></button><button type="button" class="choice" data-ok="0" data-why="Sequence data disagreeing with appearance is a common and informative result, not a sign of error. It is one of the main reasons molecular comparisons are made."><span class="ltr"></span><span>The sequences must have been lined up against one another incorrectly</span></button><button type="button" class="choice" data-ok="0" data-why="Body shape is shaped by the surroundings as well as by ancestry, which is exactly the difficulty molecular comparisons were brought in to get round."><span class="ltr"></span><span>Body shape is a better guide to ancestry than a shared sequence is</span></button><button type="button" class="choice" data-ok="0" data-why="Sequences from different species are routinely very similar. Mouse and human share about 88% of this one."><span class="ltr"></span><span>The two similar sequences must have come from the same species after all</span></button></div></div><div class="item" id="q7"><h2>Question 7 of 8</h2><p class="setup">A researcher knows that a certain protein accumulates differences at a roughly steady rate over long periods, and that two species in a group are known from fossils to have separated 60 million years ago. Their sequences differ at 30 positions.</p><p class="stem">What can the researcher now do that the sequences alone did not allow?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="30 differences in 60 million years is one difference per 2 million years. That rate, taken from a dated fossil, can then be applied to the other pairs' differences."><span class="ltr"></span><span>Estimate how long ago other pairs in the group separated</span></button><button type="button" class="choice" data-ok="0" data-why="The sequences alone already settle that: the pair with the fewest differences. The fossil adds dates, not order."><span class="ltr"></span><span>Work out which two species in the group are most closely related</span></button><button type="button" class="choice" data-ok="0" data-why="That is assumed in order to use the rate, not shown by it. One dated pair cannot test it."><span class="ltr"></span><span>Show that the protein changes at the same rate in every species</span></button><button type="button" class="choice" data-ok="0" data-why="A shared gene doing the same job in both is already evidence of that. The fossil supplies a date."><span class="ltr"></span><span>Prove that the two species share a common ancestor</span></button></div></div><div class="item" id="q8"><h2>Question 8 of 8</h2><p class="setup">Three plant species are compared at the same gene. A and B are 94% identical, A and C are 79% identical, and B and C are 80% identical.</p><p class="stem">Which branching order do these figures support?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="A and B share far more sequence with each other than either shares with C, so they are the closest pair. C shares about the same with both of them, which places its branch below them both."><span class="ltr"></span><span>C branched off first, then A and B separated from each other</span></button><button type="button" class="choice" data-ok="0" data-why="That would need B and C to be the closest pair. They share 80%, the second lowest of the three figures."><span class="ltr"></span><span>A branched off first, then B and C separated from each other</span></button><button type="button" class="choice" data-ok="0" data-why="That would need A and C to be the closest pair, and they share 79%, the lowest of the three figures."><span class="ltr"></span><span>B branched off first, then A and C separated from each other</span></button><button type="button" class="choice" data-ok="0" data-why="94% against 79% and 80% is not close. A and B are plainly the pair that has been apart for the shortest time."><span class="ltr"></span><span>The three separated at the same moment, because all three figures are close</span></button></div></div>
+<p class="msg" id="msg" role="status" aria-live="polite">Eight questions to answer.</p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "questions-molecular-phylogeny";
+  var TOTAL = 8, done = 0, right = 0;
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  [].forEach.call(document.querySelectorAll(".item"), function (item) {
+    choices(item, function (ok) {
+      done++;
+      if (ok) right++;
+      if (done < TOTAL) {
+        say(done + " of " + TOTAL + " answered, " + right + " right so far.");
+      } else {
+        var p = document.createElement("div");
+        p.className = "score";
+        p.innerHTML = "<b>" + right + " of " + TOTAL + "</b> right. Every option is "
+          + "explained above, including the ones you did not choose.";
+        msg.parentNode.insertBefore(p, msg);
+        say("");
+      }
+      reportHeight();
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eight questions</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.item > h2{font-size:12.5px;margin:0 0 6px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.setup{font-size:14.5px;margin:0 0 9px;color:var(--fg)}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.item table{margin-bottom:10px}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Eight questions</h1>
+<p class="sub">Systems Interactions &middot; Topic 8.7</p>
+<div class="brief"><p>On carrying this investigation out, and on what its results show.
+Each question is marked as soon as it is answered, and every option is explained.</p></div>
+<div class="item" id="q1"><h2>Question 1 of 8</h2><p class="setup">A class surveys mayfly nymphs above and below a farm outflow on one stream. They take twelve kick samples at each site, at positions chosen from pairs of random numbers.</p><p class="stem">Why are the positions chosen at random rather than picked by eye?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Gravelly riffles hold more nymphs than silty pools. Choosing where to sample by eye lets the surveyor's expectations decide the result before any counting is done."><span class="ltr"></span><span>Because a surveyor picking by eye tends to choose patches that look promising</span></button><button type="button" class="choice" data-ok="0" data-why="Random positions do not make two stretches of stream alike. They stop the choice of position being made by the surveyor."><span class="ltr"></span><span>Because random positions make the two sites more alike</span></button><button type="button" class="choice" data-ok="0" data-why="Counts vary a great deal from one patch to the next however the positions are chosen, which is why twelve samples are taken at each site rather than one."><span class="ltr"></span><span>Because random sampling removes the need to repeat the samples</span></button><button type="button" class="choice" data-ok="0" data-why="A random position is no more likely to hold nymphs than any other. It is simply not chosen by the person who wants an answer."><span class="ltr"></span><span>Because a random position is more likely to hold mayfly nymphs</span></button></div></div><div class="item" id="q2"><h2>Question 2 of 8</h2><p class="setup">Twelve counts from one site, sorted, are 4, 6, 7, 9, 11, 12, 14, 15, 17, 18, 21 and 29 animals per sample.</p><p class="stem">What is the median of these counts?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="With twelve counts there is no single middle one, so the median is halfway between the sixth and the seventh: halfway between 12 and 14."><span class="ltr"></span><span>13</span></button><button type="button" class="choice" data-ok="0" data-why="That is the sixth count. With an even number of counts the median lies between the two middle ones, not on either of them."><span class="ltr"></span><span>12</span></button><button type="button" class="choice" data-ok="0" data-why="That is the seventh count. The median lies halfway between the sixth and the seventh."><span class="ltr"></span><span>14</span></button><button type="button" class="choice" data-ok="0" data-why="That is close to the mean of the twelve counts. The median is the middle value, which is not the same thing and is not pulled about by the count of 29."><span class="ltr"></span><span>13.6</span></button></div></div><div class="item" id="q3"><h2>Question 3 of 8</h2><p class="setup">Twelve counts from one site, sorted, are 4, 6, 7, 9, 11, 12, 14, 15, 17, 18, 21 and 29 animals per sample.</p><p class="stem">How wide is the box on a box-and-whisker plot of these counts?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The lower quartile is the middle of positions 1 to 6, halfway between 7 and 9, so 8. The upper quartile is the middle of positions 7 to 12, halfway between 17 and 18, so 17.5. The box runs from 8 to 17.5."><span class="ltr"></span><span>9.5 animals per sample</span></button><button type="button" class="choice" data-ok="0" data-why="That is the range, from the smallest count to the largest. The box runs between the two quartiles; the whiskers reach the smallest and largest."><span class="ltr"></span><span>25 animals per sample</span></button><button type="button" class="choice" data-ok="0" data-why="That is the median, the line drawn across the box rather than the width of it."><span class="ltr"></span><span>13 animals per sample</span></button><button type="button" class="choice" data-ok="0" data-why="That is a quarter of the range. A quartile is the middle of half the counts, not a quarter of the distance between the two extremes."><span class="ltr"></span><span>6.25 animals per sample</span></button></div></div><div class="item" id="q4"><h2>Question 4 of 8</h2><p class="setup">Box-and-whisker plots of two sites give these five numbers. Upstream: 18, 22, 26, 30, 38 nymphs per sample. Downstream: 2, 4, 7, 10, 17.</p><p class="stem">Which statement about the two sets of twelve samples is correct?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The downstream whisker reaches 17, the largest count there, and the upstream whisker reaches down to 18. A whisker reaches a real count, so the two sets share no value."><span class="ltr"></span><span>No downstream sample held as many nymphs as the smallest upstream sample</span></button><button type="button" class="choice" data-ok="0" data-why="The downstream upper quartile is 10 and the upstream median is 26, so not one downstream sample reached the upstream median."><span class="ltr"></span><span>At least a quarter of the downstream samples held more nymphs than the upstream median</span></button><button type="button" class="choice" data-ok="0" data-why="A wider box means the middle half of the counts was more spread out, which says how much the stream bed varies rather than how good the counting was."><span class="ltr"></span><span>The upstream samples were less reliable, because their box is wider</span></button><button type="button" class="choice" data-ok="0" data-why="30 is the upper quartile, so a quarter of the samples are above it, not half. Half are above the median, 26."><span class="ltr"></span><span>Exactly half the upstream samples held more than 30 nymphs</span></button></div></div><div class="item" id="q5"><h2>Question 5 of 8</h2><p class="setup">A student draws two box-and-whisker plots whose boxes and whiskers do not overlap, and writes: &lsquo;The difference between the two sites is statistically significant.&rsquo;</p><p class="stem">What is wrong with that?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The overlap rule belongs to &plusmn;2SE error bars, which show the range a true mean is likely to lie in. A box and its whiskers show where the counts themselves fell, which is a different thing."><span class="ltr"></span><span>A whisker reaches a real value, so a box plot describes the counts rather than testing them</span></button><button type="button" class="choice" data-ok="0" data-why="Two sets of counts can fail to overlap and still come from populations whose means are close, especially when few samples were taken. Only a bar built from a standard error carries the rule."><span class="ltr"></span><span>Nothing is wrong: boxes that do not overlap show a significant difference</span></button><button type="button" class="choice" data-ok="0" data-why="A mean on its own settles nothing either. What is missing is a measure of how far a sample mean is likely to sit from the true mean."><span class="ltr"></span><span>The student should have compared the two means instead of the two medians</span></button><button type="button" class="choice" data-ok="0" data-why="They did. Equal sample sizes would not turn a box plot into a test."><span class="ltr"></span><span>The student should have taken the same number of samples at both sites</span></button></div></div><div class="item" id="q6"><h2>Question 6 of 8</h2><p class="setup">The same class finds far fewer mayfly nymphs downstream of a farm outflow than upstream of it, and wants to claim that the outflow caused the difference.</p><p class="stem">What would most strengthen that claim?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Mayfly nymphs respond to all of these. Ruling them out leaves the outflow as the difference between the two stretches that is left to explain the counts."><span class="ltr"></span><span>Showing that the two stretches match in flow, shade, bed material and temperature</span></button><button type="button" class="choice" data-ok="0" data-why="More samples would sharpen the estimate of each site's counts. They would not address the question of what, besides the outflow, differs between the stretches."><span class="ltr"></span><span>Taking twice as many samples at each of the two sites</span></button><button type="button" class="choice" data-ok="0" data-why="A second species would show whether the effect is general. It still would not separate the outflow from everything else that differs between the two stretches."><span class="ltr"></span><span>Counting a second kind of animal as well as mayfly nymphs</span></button><button type="button" class="choice" data-ok="0" data-why="That adds a second condition rather than removing one, and flow is itself one of the things that would need to be held alike."><span class="ltr"></span><span>Repeating the survey on a day when the stream is running higher</span></button></div></div><div class="item" id="q7"><h2>Question 7 of 8</h2><p class="setup">A box-and-whisker plot of yearly percent changes in bird counts at twenty nature reserves has its whole box above a thick line marking zero.</p><p class="stem">What does that tell you about the twenty reserves?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The bottom of the box is the lower quartile, so three quarters of the reserves sit above it. The box being wholly above zero puts all of those above zero too."><span class="ltr"></span><span>At least fifteen of them gained birds over the year</span></button><button type="button" class="choice" data-ok="0" data-why="The lower whisker reaches below the box, down to the smallest change. Nothing in the box's position says where that whisker ends."><span class="ltr"></span><span>All twenty of them gained birds over the year</span></button><button type="button" class="choice" data-ok="0" data-why="The line across a box is the median, and the mean is not drawn on a box plot at all. A few large losses could pull a mean below zero."><span class="ltr"></span><span>The mean change across the twenty reserves was positive</span></button><button type="button" class="choice" data-ok="0" data-why="Half the reserves sit above the median by definition, whatever the plot looks like. It is not something the box's position tells you."><span class="ltr"></span><span>At least ten of them gained more than the median reserve did</span></button></div></div><div class="item" id="q8"><h2>Question 8 of 8</h2><p class="setup">Ecologists survey a seagrass bed before and after a storm, taking fifteen quadrats each time. Before: median 42 shoots per quadrat, quartiles 36 and 50, whiskers 28 and 61. After: median 24, quartiles 19 and 31, whiskers 11 and 44.</p><p class="stem">Which statement do the two plots support?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Every one of the five numbers fell. The upper whisker after the storm reaches 44, which is above the lower quartile of 36 from before it, so the two sets of counts do share a range."><span class="ltr"></span><span>Shoot counts after the storm were lower, with at least one quadrat reaching into the range seen before it</span></button><button type="button" class="choice" data-ok="0" data-why="The upper whisker after the storm reaches 44, and the lower whisker before it reaches down to 28. The two sets of counts overlap."><span class="ltr"></span><span>No quadrat after the storm held as many shoots as the poorest quadrat taken before it</span></button><button type="button" class="choice" data-ok="0" data-why="18 is the drop between the two medians, not a drop applied to each quadrat. The quartiles and the whiskers all moved by different amounts."><span class="ltr"></span><span>The storm reduced the shoot count by exactly 18 shoots in every quadrat</span></button><button type="button" class="choice" data-ok="0" data-why="The box before the storm is 14 shoots wide and the box after it 12, so the middle half of the counts was slightly less spread out afterwards, not more."><span class="ltr"></span><span>The counts after the storm were more spread out than the counts before it</span></button></div></div>
+<p class="msg" id="msg" role="status" aria-live="polite">Eight questions to answer.</p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "questions-ecosystem-disruption";
+  var TOTAL = 8, done = 0, right = 0;
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  [].forEach.call(document.querySelectorAll(".item"), function (item) {
+    choices(item, function (ok) {
+      done++;
+      if (ok) right++;
+      if (done < TOTAL) {
+        say(done + " of " + TOTAL + " answered, " + right + " right so far.");
+      } else {
+        var p = document.createElement("div");
+        p.className = "score";
+        p.innerHTML = "<b>" + right + " of " + TOTAL + "</b> right. Every option is "
+          + "explained above, including the ones you did not choose.";
+        msg.parentNode.insertBefore(p, msg);
+        say("");
+      }
+      reportHeight();
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

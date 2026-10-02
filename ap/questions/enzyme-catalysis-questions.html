@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eight questions</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.item > h2{font-size:12.5px;margin:0 0 6px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.setup{font-size:14.5px;margin:0 0 9px;color:var(--fg)}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.item table{margin-bottom:10px}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Eight questions</h1>
+<p class="sub">Energetics &middot; Topic 3.1-3.2b</p>
+<div class="brief"><p>On carrying this investigation out, and on what its results show.
+Each question is marked as soon as it is answered, and every option is explained.</p></div>
+<div class="item" id="q1"><h2>Question 1 of 8</h2><p class="setup">A class tests whether temperature changes the rate at which catalase releases oxygen from hydrogen peroxide. They set up five tubes at each of five temperatures and read the gas syringe after one minute.</p><p class="stem">Why does the class set up five tubes at each temperature rather than one?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The standard error is the standard deviation divided by the square root of the number of readings, so it needs more than one reading to exist at all. Without it there is no error bar and no way to say whether two means differ."><span class="ltr"></span><span>Because a mean of five readings can carry a standard error, and a single reading cannot</span></button><button type="button" class="choice" data-ok="0" data-why="Repeating does not cancel a mistake that is made the same way every time. What it measures is the tube-to-tube scatter, which is a different thing from an error in reading."><span class="ltr"></span><span>Because five readings cancel out any mistake made in reading the gas syringe</span></button><button type="button" class="choice" data-ok="0" data-why="The rate does fall as the hydrogen peroxide is used up, which is why every tube is read after the same one minute. Repeating does not address that."><span class="ltr"></span><span>Because the rate of an enzyme reaction changes from minute to minute</span></button><button type="button" class="choice" data-ok="0" data-why="A standard deviation can be worked out from two readings. Five is chosen so that the standard error is small enough to be useful."><span class="ltr"></span><span>Because five is the smallest number of readings a standard deviation can be worked out from</span></button></div></div><div class="item" id="q2"><h2>Question 2 of 8</h2><p class="setup">In the same investigation, one tube at each temperature holds hydrogen peroxide with no catalase added. It is read after one minute like all the others.</p><p class="stem">What does that tube establish?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Hydrogen peroxide breaks down slowly on its own, and faster when it is warm. Without this tube, that breakdown would be counted as the enzyme's work and would grow with temperature, exactly as the enzyme's does."><span class="ltr"></span><span>How much oxygen comes off without the enzyme, so the rest can be put down to the enzyme</span></button><button type="button" class="choice" data-ok="0" data-why="A tube that releases no oxygen would show that, but it is not what this tube is for: the point is to measure the release that happens without catalase, not to find none."><span class="ltr"></span><span>That the hydrogen peroxide has not already broken down before the run started</span></button><button type="button" class="choice" data-ok="0" data-why="A leak would be found by sealing the apparatus and watching the plunger, not by leaving the enzyme out of one tube."><span class="ltr"></span><span>That the gas syringe is not leaking</span></button><button type="button" class="choice" data-ok="0" data-why="The thermometer in the bath shows that. This tube differs from the others in what is in it, not in what surrounds it."><span class="ltr"></span><span>That the water bath is holding the temperature steady</span></button></div></div><div class="item" id="q3"><h2>Question 3 of 8</h2><p class="setup">Five tubes of catalase at one temperature released oxygen at 2.6, 3.0, 2.8, 3.1 and 2.5 mL/min.</p><p class="stem">What is the mean rate, to two decimal places?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The five rates add to 14.0 mL/min, and 14.0 divided by 5 is 2.80. The mean is written to one more decimal place than the readings."><span class="ltr"></span><span>2.80 mL/min</span></button><button type="button" class="choice" data-ok="0" data-why="The arithmetic is right, but a mean of several readings is known more precisely than any one of them, so it is written to one more decimal place: 2.80."><span class="ltr"></span><span>2.8 mL/min</span></button><button type="button" class="choice" data-ok="0" data-why="That is the total of the five rates. The mean is that total divided by how many readings there are."><span class="ltr"></span><span>14.0 mL/min</span></button><button type="button" class="choice" data-ok="0" data-why="That is close to the largest of the five readings. The mean uses every reading, not the largest."><span class="ltr"></span><span>3.10 mL/min</span></button></div></div><div class="item" id="q4"><h2>Question 4 of 8</h2><p class="setup">A mean rate of 4.20 mL/min was worked out from six tubes. The standard deviation of those six readings was 0.294 mL/min, and the square root of six is 2.449.</p><p class="stem">Between which values does an error bar of &plusmn;2SE run?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="SE is 0.294 divided by 2.449, which is 0.120 mL/min. 2SE is 0.240, and the bar runs from 4.20 minus 0.240 to 4.20 plus 0.240."><span class="ltr"></span><span>3.96 to 4.44 mL/min</span></button><button type="button" class="choice" data-ok="0" data-why="That is the mean plus and minus the standard deviation, 0.294. The bar uses two standard errors, and the standard error is the standard deviation divided by the square root of the number of readings."><span class="ltr"></span><span>3.91 to 4.49 mL/min</span></button><button type="button" class="choice" data-ok="0" data-why="That is the mean plus and minus one standard error, 0.120. An AP error bar runs two standard errors each way, not one."><span class="ltr"></span><span>4.08 to 4.32 mL/min</span></button><button type="button" class="choice" data-ok="0" data-why="That is the mean plus and minus two standard deviations. Two standard deviations and two standard errors are different quantities; the second is the first divided by the square root of the number of readings."><span class="ltr"></span><span>3.61 to 4.79 mL/min</span></button></div></div><div class="item" id="q5"><h2>Question 5 of 8</h2><p class="setup">Two mean rates are drawn with error bars representing &plusmn;2SE. The first bar runs from 2.90 to 3.42 mL/min. The second runs from 3.31 to 3.95 mL/min.</p><p class="stem">What do these two bars show about the two conditions?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The bottom of the higher bar, 3.31, sits below the top of the lower bar, 3.42, so the bars overlap. Both true means could lie in the shared range, at the same value, so the difference between the two sample means could be chance."><span class="ltr"></span><span>The data do not show a difference between the two rates</span></button><button type="button" class="choice" data-ok="0" data-why="Its sample mean is higher, but a higher sample mean can easily be chance when the two &plusmn;2SE bars overlap. These readings cannot say which condition is the faster."><span class="ltr"></span><span>The second condition gives the higher rate</span></button><button type="button" class="choice" data-ok="0" data-why="Overlapping bars mean no difference has been shown, not that the two are equal. The true means may still differ, and more tubes might show it."><span class="ltr"></span><span>The two rates are the same</span></button><button type="button" class="choice" data-ok="0" data-why="The first bar is 0.52 mL/min long and the second 0.64, so if anything the second is the longer. Bar length also depends on how many readings there were, not on spread alone."><span class="ltr"></span><span>The first condition's readings were more spread out than the second's</span></button></div></div><div class="item" id="q6"><h2>Question 6 of 8</h2><p class="setup">A student measures catalase at 30 &deg;C and at 40 &deg;C, five tubes at each, and finds that the two &plusmn;2SE bars overlap. The student writes: &lsquo;Catalase works at the same rate at 30 &deg;C and 40 &deg;C.&rsquo;</p><p class="stem">What is wrong with that statement?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Each bar is the range its true mean is likely to lie in. Overlapping bars leave the question open: the two true means may still differ, and more tubes would shorten both bars and might then show it."><span class="ltr"></span><span>Overlapping bars show that no difference has been found, not that there is none</span></button><button type="button" class="choice" data-ok="0" data-why="The bars overlapping means the two true means could be equal. Could be is not the same as are."><span class="ltr"></span><span>Nothing is wrong: overlapping bars mean the two true means are equal</span></button><button type="button" class="choice" data-ok="0" data-why="Overlap of standard-deviation bars says nothing about whether two means differ. The overlap rule belongs to &plusmn;2SE bars."><span class="ltr"></span><span>The student should have used error bars of one standard deviation instead</span></button><button type="button" class="choice" data-ok="0" data-why="Five tubes gave a usable bar at both temperatures. What the bars then showed was that these data do not separate the two rates."><span class="ltr"></span><span>Five tubes is too few for any comparison to be made</span></button></div></div><div class="item" id="q7"><h2>Question 7 of 8</h2><p class="setup">A class repeats the catalase investigation with twenty tubes at each temperature instead of five. The spread of the readings comes out much the same as before.</p><p class="stem">What happens to the error bars?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The standard error is the standard deviation divided by the square root of the number of readings. Twenty readings put a larger number underneath, so SE falls, and so does 2SE."><span class="ltr"></span><span>They get shorter, so a difference that was hidden before might now show</span></button><button type="button" class="choice" data-ok="0" data-why="Shorter bars may separate two means that overlapped before, or may not. Nothing about having more readings decides the answer in advance."><span class="ltr"></span><span>They get shorter, which proves that the two conditions really do differ</span></button><button type="button" class="choice" data-ok="0" data-why="The standard deviation has not changed, but the standard error depends on the number of readings as well, and that has."><span class="ltr"></span><span>They stay the same, because the spread of the readings has not changed</span></button><button type="button" class="choice" data-ok="0" data-why="More readings may stretch the range of the readings themselves, but the standard error is about the mean, and it falls as the number of readings rises."><span class="ltr"></span><span>They get longer, because twenty readings include more extreme values</span></button></div></div><div class="item" id="q8"><h2>Question 8 of 8</h2><p class="setup">A different class measures how fast a protease from pineapple digests gelatin at two pH values, six tubes at each. At pH 5 the mean is 1.84 mg/min with a &plusmn;2SE bar from 1.70 to 1.98. At pH 7 the mean is 2.06 mg/min with a bar from 1.92 to 2.20.</p><p class="stem">What is the verdict on the null hypothesis that pH makes no difference to the rate?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The bottom of the higher bar, 1.92, sits below the top of the lower bar, 1.98, so the two bars share that range. The difference between 1.84 and 2.06 mg/min could be chance."><span class="ltr"></span><span>Fail to reject it: the bars overlap between 1.92 and 1.98 mg/min</span></button><button type="button" class="choice" data-ok="0" data-why="A difference between two sample means is not enough on its own. The two bars overlap, so that difference could be chance."><span class="ltr"></span><span>Reject it: the mean at pH 7 is higher than the mean at pH 5</span></button><button type="button" class="choice" data-ok="0" data-why="Bar length is not what the rule is about. What matters is whether the bottom of the higher bar sits below the top of the lower one, and here it does."><span class="ltr"></span><span>Reject it: the two bars are the same length, so the comparison is fair</span></button><button type="button" class="choice" data-ok="0" data-why="&lsquo;Accept&rsquo; is never one of the two verdict wordings, and overlapping bars do not show that two rates are the same."><span class="ltr"></span><span>Accept it: the two rates are the same</span></button></div></div>
+<p class="msg" id="msg" role="status" aria-live="polite">Eight questions to answer.</p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "questions-enzyme-catalysis";
+  var TOTAL = 8, done = 0, right = 0;
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  [].forEach.call(document.querySelectorAll(".item"), function (item) {
+    choices(item, function (ok) {
+      done++;
+      if (ok) right++;
+      if (done < TOTAL) {
+        say(done + " of " + TOTAL + " answered, " + right + " right so far.");
+      } else {
+        var p = document.createElement("div");
+        p.className = "score";
+        p.innerHTML = "<b>" + right + " of " + TOTAL + "</b> right. Every option is "
+          + "explained above, including the ones you did not choose.";
+        msg.parentNode.insertBefore(p, msg);
+        say("");
+      }
+      reportHeight();
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

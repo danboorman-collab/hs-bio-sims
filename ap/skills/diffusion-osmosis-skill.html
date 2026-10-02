@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From six masses to a water potential</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.step .go{margin-top:11px;padding:8px 14px;border-radius:8px;font:inherit;font-weight:650;
+  cursor:pointer;border:1px solid var(--accent);background:var(--accent);
+  color:var(--accent-fg)}
+.step .go[hidden]{display:none}
+.trail{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 4px}
+.trail i{width:16px;height:4px;border-radius:2px;background:var(--line);display:block}
+.trail i.on{background:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>From six masses to a water potential</h1>
+<p class="sub">Percent change in mass, a best-fit line, its zero crossing, and &Psi;<sub>s</sub> = &minus;iCRT.</p>
+<div class="brief"><p>A core gains mass when water moves into it and loses mass when water moves out. Somewhere between the six solutions there is one whose water potential matches the potato's, and in that one the core would neither gain nor lose.</p><p>That concentration is not one of the six. It is read off the line through them.</p></div>
+<div class="trail" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="step" data-kind="table" data-i="0"><h2>The six cores</h2><div class="scroll"><table><caption>Potato cores in sucrose solutions at 22 &deg;C, masses in grams.</caption><thead><tr><th scope="col">Sucrose (M)</th><th scope="col">Mass at the start (g)</th><th scope="col">Mass after 1 hour (g)</th></tr></thead><tbody><tr><th scope="row">0.0</th><td class="num">5.000</td><td class="num">5.915</td></tr><tr><th scope="row">0.2</th><td class="num">5.000</td><td class="num">5.480</td></tr><tr><th scope="row">0.4</th><td class="num">5.000</td><td class="num">5.110</td></tr><tr><th scope="row">0.6</th><td class="num">5.000</td><td class="num">4.710</td></tr><tr><th scope="row">0.8</th><td class="num">5.000</td><td class="num">4.280</td></tr><tr><th scope="row">1.0</th><td class="num">5.000</td><td class="num">3.905</td></tr></tbody></table></div><button type="button" class="go">Continue</button></div><div class="step" data-kind="num" data-i="1" data-id="p0"><h2>Step 1 &mdash; percent change for the first core</h2><p class="ask">A gain of 1 g means more for a small core than for a large one, so the change is compared with the mass the core started at. Keep the sign: it says which way the water went.</p><p class="formula">percent change = (final &minus; initial) &divide; initial &times; 100</p><p class="ask">What is the percent change in mass of the core in distilled water, to one decimal place?</p><div class="calc"><div class="calcrow" id="row-p0"><span class="lab">Percent change, 0.0 M</span><span class="work">(5.915 &minus; 5.000) &divide; 5.000 &times; 100</span><span class="entry" id="spin-p0"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Percent change, 0.0 M"><span class="unit">%</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="2" data-id="p5"><h2>Step 2 &mdash; and for the last core</h2><p class="ask">This core lost mass, so the answer is negative. Write the minus sign in.</p><p class="ask">What is the percent change in mass of the core in 1.0 M sucrose?</p><div class="calc"><div class="calcrow" id="row-p5"><span class="lab">Percent change, 1.0 M</span><span class="work">(3.905 &minus; 5.000) &divide; 5.000 &times; 100</span><span class="entry" id="spin-p5"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Percent change, 1.0 M"><span class="unit">%</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="table" data-i="3"><h2>All six, as percent changes</h2><div class="scroll"><table><caption>Percent change in mass of each potato core after an hour at 22 &deg;C.</caption><thead><tr><th scope="col">Sucrose (M)</th><th scope="col">0.0</th><th scope="col">0.2</th><th scope="col">0.4</th><th scope="col">0.6</th><th scope="col">0.8</th><th scope="col">1.0</th></tr></thead><tbody><tr><th scope="row">Change in mass (%)</th><td class="num">+18.3</td><td class="num">+9.6</td><td class="num">+2.2</td><td class="num">-5.8</td><td class="num">-14.4</td><td class="num">-21.9</td></tr></tbody></table></div><button type="button" class="go">Continue</button></div><div class="step" data-kind="fig" data-i="4"><h2>The six points, with one best-fit line</h2><figure><svg viewBox="0 0 600 330" width="100%" role="img" aria-label="Change in mass against Sucrose concentration, with one best-fit straight line" xmlns="http://www.w3.org/2000/svg"><title>Change in mass against Sucrose concentration, with one best-fit straight line</title><desc>Six points, one per core, with a single best-fit line drawn through them and the concentration at which it crosses zero marked.</desc><g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif"><line x1="62" y1="16" x2="62" y2="276" stroke="var(--fg)" stroke-width="1.4"/><line x1="57" y1="276.0" x2="62" y2="276.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="276.0" x2="582" y2="276.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="280.0" font-size="12" fill="var(--muted)" text-anchor="end">-40</text><line x1="57" y1="211.0" x2="62" y2="211.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="211.0" x2="582" y2="211.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="215.0" font-size="12" fill="var(--muted)" text-anchor="end">-20</text><line x1="57" y1="146.0" x2="62" y2="146.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="146.0" x2="582" y2="146.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="150.0" font-size="12" fill="var(--muted)" text-anchor="end">0</text><line x1="57" y1="81.0" x2="62" y2="81.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="81.0" x2="582" y2="81.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="85.0" font-size="12" fill="var(--muted)" text-anchor="end">20</text><line x1="57" y1="16.0" x2="62" y2="16.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="16.0" x2="582" y2="16.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="20.0" font-size="12" fill="var(--muted)" text-anchor="end">40</text><line x1="62" y1="146.0" x2="582" y2="146.0" stroke="var(--fg)" stroke-width="1.8"/><text x="16" y="146" font-size="12.5" fill="var(--fg)" text-anchor="middle" transform="rotate(-90 16 146)">Change in mass (%)</text><line x1="62" y1="276" x2="582" y2="276" stroke="var(--fg)" stroke-width="1.4"/><line x1="62.0" y1="16" x2="62.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="88.0" y1="16" x2="88.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="114.0" y1="16" x2="114.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="140.0" y1="16" x2="140.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="166.0" y1="16" x2="166.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="192.0" y1="16" x2="192.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="218.0" y1="16" x2="218.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="244.0" y1="16" x2="244.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="270.0" y1="16" x2="270.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="296.0" y1="16" x2="296.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="322.0" y1="16" x2="322.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="348.0" y1="16" x2="348.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="374.0" y1="16" x2="374.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="400.0" y1="16" x2="400.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="426.0" y1="16" x2="426.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="452.0" y1="16" x2="452.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="478.0" y1="16" x2="478.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="504.0" y1="16" x2="504.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="530.0" y1="16" x2="530.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="556.0" y1="16" x2="556.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="582.0" y1="16" x2="582.0" y2="276" stroke="var(--line)" stroke-width="0.6"/><line x1="62.0" y1="16" x2="62.0" y2="276" stroke="var(--line)" stroke-width="1"/><line x1="62.0" y1="276" x2="62.0" y2="281" stroke="var(--fg)" stroke-width="1.2"/><text x="62.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">0</text><line x1="166.0" y1="16" x2="166.0" y2="276" stroke="var(--line)" stroke-width="1"/><line x1="166.0" y1="276" x2="166.0" y2="281" stroke="var(--fg)" stroke-width="1.2"/><text x="166.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">0.2</text><line x1="270.0" y1="16" x2="270.0" y2="276" stroke="var(--line)" stroke-width="1"/><line x1="270.0" y1="276" x2="270.0" y2="281" stroke="var(--fg)" stroke-width="1.2"/><text x="270.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">0.4</text><line x1="374.0" y1="16" x2="374.0" y2="276" stroke="var(--line)" stroke-width="1"/><line x1="374.0" y1="276" x2="374.0" y2="281" stroke="var(--fg)" stroke-width="1.2"/><text x="374.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">0.6</text><line x1="478.0" y1="16" x2="478.0" y2="276" stroke="var(--line)" stroke-width="1"/><line x1="478.0" y1="276" x2="478.0" y2="281" stroke="var(--fg)" stroke-width="1.2"/><text x="478.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">0.8</text><line x1="582.0" y1="16" x2="582.0" y2="276" stroke="var(--line)" stroke-width="1"/><line x1="582.0" y1="276" x2="582.0" y2="281" stroke="var(--fg)" stroke-width="1.2"/><text x="582.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">1</text><text x="322" y="317" font-size="12.5" fill="var(--fg)" text-anchor="middle">Sucrose concentration (M)</text><line x1="62.0" y1="87.3" x2="582.0" y2="217.7" stroke="var(--accent)" stroke-width="1.8"/><line x1="296.1" y1="146.0" x2="296.1" y2="276" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="4 4"/><circle cx="296.1" cy="146.0" r="5" fill="none" stroke="var(--warn)" stroke-width="2"/><circle cx="62.0" cy="86.5" r="4.2" fill="var(--fg)"/><circle cx="166.0" cy="114.8" r="4.2" fill="var(--fg)"/><circle cx="270.0" cy="138.8" r="4.2" fill="var(--fg)"/><circle cx="374.0" cy="164.8" r="4.2" fill="var(--fg)"/><circle cx="478.0" cy="192.8" r="4.2" fill="var(--fg)"/><circle cx="582.0" cy="217.2" r="4.2" fill="var(--fg)"/><rect x="352" y="22" width="11" height="11" rx="2" fill="var(--fg)"/><text x="369" y="31" font-size="12" fill="var(--fg)">one potato core</text><rect x="352" y="39" width="11" height="11" rx="2" fill="var(--accent)"/><text x="369" y="48" font-size="12" fill="var(--fg)">best-fit line</text><rect x="352" y="56" width="11" height="11" rx="2" fill="var(--warn)"/><text x="369" y="65" font-size="12" fill="var(--fg)">where the line crosses zero</text></g></svg><figcaption>One straight best-fit line through all six points. The points scatter either side of it, which is why a line is drawn rather than two points joined.</figcaption></figure><button type="button" class="go">Continue</button></div><div class="step" data-kind="num" data-i="5" data-id="cross"><h2>Step 3 &mdash; read the zero crossing</h2><p class="ask">Where the line crosses zero, a core would neither gain nor lose mass. So at that concentration the solution's water potential and the potato's are the same.</p><p class="ask">At what sucrose concentration does the best-fit line cross zero? Read it to the nearest 0.01 M.</p><div class="calc"><div class="calcrow" id="row-cross"><span class="lab">Concentration at zero change</span><span class="work">read it off the graph</span><span class="entry" id="spin-cross"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Concentration at zero change"><span class="unit">M</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="6" data-id="kelvin"><h2>Step 4 &mdash; the temperature in kelvin</h2><p class="ask">The equation needs a temperature in kelvin, which counts up from the coldest anything can be. The steps are the size of a Celsius degree, so add 273.</p><p class="ask">The solutions were at 22 &deg;C. What is that in kelvin?</p><div class="calc"><div class="calcrow" id="row-kelvin"><span class="lab">Temperature</span><span class="work">22 + 273</span><span class="entry" id="spin-kelvin"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Temperature"><span class="unit">K</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="7" data-id="psi"><h2>Step 5 &mdash; the solute potential</h2><p class="ask">i is the number of particles one dissolved unit splits into, and sucrose does not split, so i = 1. R is the pressure constant from the formula sheet, 0.0831 L&middot;bar/(mol&middot;K). The minus sign at the front makes every answer negative, as a solute potential must be.</p><p class="formula">&Psi;<sub>s</sub> = &minus;iCRT</p><p class="ask">What is the solute potential of the solution at the zero crossing, to one decimal place? Write the minus sign in.</p><div class="calc"><div class="calcrow" id="row-psi"><span class="lab">&Psi;<sub>s</sub></span><span class="work">&minus;1 &times; 0.45 &times; 0.0831 &times; 295</span><span class="entry" id="spin-psi"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="&Psi;<sub>s</sub>"><span class="unit">bar</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="pick" data-i="8"><h2>Step 6 &mdash; from the solution to the potato</h2><p class="ask">The solutions sat in open beakers.</p><p class="ask">What is the water potential of the potato tissue?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Water potential is the pressure potential plus the solute potential. Nothing presses on an open beaker, so the solution's water potential is its solute potential, and at the zero crossing the potato's water potential matches it."><span class="ltr"></span><span>-11.0 bar, because an open solution has &Psi;<sub>p</sub> = 0, so its &Psi; is its &Psi;<sub>s</sub></span></button><button type="button" class="choice" data-ok="0" data-why="The potato's pressure potential is not its solute potential. The reason the two water potentials are equal is that water stopped moving."><span class="ltr"></span><span>-11.0 bar, because the potato's pressure potential is the same as its solute potential</span></button><button type="button" class="choice" data-ok="0" data-why="A water potential is negative in both directions. Water moves toward the lower value, and there is no sign change across a membrane."><span class="ltr"></span><span>11.0 bar, because the potato is on the other side of the membrane</span></button></div><button type="button" class="go" hidden>Continue</button></div><div class="step" data-kind="pick" data-i="9"><h2>Step 7 &mdash; predict</h2><p class="ask">A fresh core from the same potato is put into 0.2 M sucrose at 22 &deg;C, whose water potential is -4.9 bar.</p><p class="ask">Which way does water move?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Water moves toward the lower water potential &mdash; the one further below zero. The core is at -11.0 bar and the solution at -4.9 bar, so the core is the lower of the two and water moves into it."><span class="ltr"></span><span>Into the core</span></button><button type="button" class="choice" data-ok="0" data-why="-11.0 bar is further below zero than -4.9 bar, so the core is the lower of the two. Water moves toward the lower value, not away from it."><span class="ltr"></span><span>Out of the core</span></button><button type="button" class="choice" data-ok="0" data-why="Equilibrium needs the two water potentials to be equal, and -11.0 bar is not -4.9 bar."><span class="ltr"></span><span>Neither way: the core is at equilibrium</span></button></div><button type="button" class="go" hidden>Continue</button></div>
+<div class="verdict" id="verdict" hidden><b>The line crosses zero at 0.45 M, which at 22 &deg;C is a water potential of -11.0 bar.</b> That is the potato tissue's own water potential. Six masses, one line, and a value that none of the six solutions measured directly.</div>
+<p class="msg" id="msg" role="status" aria-live="polite"></p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "skill-diffusion-osmosis";
+  var NUMS = {"p0": {"want": 18.3, "tol": 0.06, "dp": 1, "hints": ["Not the percent change. Work it out again.", "Take the starting mass from the final mass, divide by the starting mass, then multiply by 100.", "The core gained 0.915 g. Divide that by 5.000 and multiply by 100."]}, "p5": {"want": -21.9, "tol": 0.06, "dp": 1, "hints": ["Not the percent change. Work it out again.", "The core lost mass, so the change is negative. Divide it by the starting mass and multiply by 100.", "The core lost 1.095 g. Divide &minus;1.095 by 5.000 and multiply by 100."]}, "cross": {"want": 0.45, "tol": 0.015, "dp": 2, "hints": ["Not where the line crosses. Read the graph again.", "Find where the best-fit line meets the thick zero line, then read straight down to the x axis.", "It lies between 0.4 M and 0.5 M, nearer the middle than either end."]}, "kelvin": {"want": 295, "tol": 0, "dp": 0, "hints": ["Not the temperature in kelvin. Work it out again.", "Add 273 to the Celsius temperature.", "22 + 273."]}, "psi": {"want": -11.0, "tol": 0.4, "dp": 1, "hints": ["Not the solute potential. Work it out again.", "Multiply i by the concentration by R by the temperature in kelvin, then put a minus sign in front.", "1 &times; 0.45 &times; 0.0831 &times; 295, and then make it negative."]}};
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Dan's ruling, 1 October: the student types the answer. A stepper could be walked to the
+  // right number without ever working it out. The cost of a box is that it can be given
+  // nonsense, so this one says what it wants, and the misses are graded: the first says
+  // only that it is wrong, the second names the operation, the third names it with the
+  // numbers in. It never gives the answer away, and there is no limit on tries.
+  //
+  // AP adds a tolerance. 7.81 and 7.8 are the same answer; 0.47 and 0.4648 may not be. Each
+  // box carries its own accepted range, and each says how many figures it wants.
+  function entry(host, opts) {
+    var input = host.querySelector("input"), btn = host.querySelector("button");
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, "").replace(/^[x×]/i, "")
+                     .replace(/^\+/, "");
+      input.classList.remove("miss");
+      if (!raw) { opts.onbad("Type your answer in the box, then press Check."); return; }
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? "Just the number, without the units — they are already printed beside the box."
+          : "That is not a number. Type digits, and a decimal point if you need one.");
+        input.classList.add("miss");
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) <= opts.tol + 1e-12) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.dp === undefined ? v : v.toFixed(opts.dp);
+        opts.onright(v);
+      } else {
+        input.classList.add("miss");
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener("click", submit);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); submit(); }
+    });
+    input.addEventListener("input", function () { input.classList.remove("miss"); });
+    return { focus: function () { try { input.focus(); } catch (e) {} } };
+  }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  // One step at a time. A student who can see the next question can work backwards from it,
+  // and in a chain of calculations that is the whole answer.
+  var STEPS = [].slice.call(document.querySelectorAll(".step"));
+  var at = 0, opened = false;
+  function openStep(n) {
+    at = n;
+    for (var i = 0; i < STEPS.length; i++) STEPS[i].hidden = i > n;
+    var s = STEPS[n];
+    // On the FIRST call nothing is focused and nothing is scrolled to. This simulation is
+    // framed inside a lesson page, and both focusing a field and scrolling an element into
+    // view inside a frame drag the page around it -- which landed a reader at stage 5 the
+    // moment the lesson opened.
+    if (s && opened) {
+      var inp = s.querySelector("input");
+      if (inp && !inp.disabled) { try { inp.focus(); } catch (e) {} }
+      s.scrollIntoView({ block: "nearest" });
+    }
+    opened = true;
+    reportHeight();
+  }
+  function nextStep() { if (at < STEPS.length - 1) openStep(at + 1); else finish(); }
+
+
+  var PIPS = [].slice.call(document.querySelectorAll(".trail i"));
+  function mark(n) { for (var i = 0; i < PIPS.length; i++) PIPS[i].className = i <= n ? "on" : ""; }
+
+  function finish() {
+    document.getElementById("verdict").hidden = false;
+    say("");
+    reportHeight();
+  }
+
+  STEPS.forEach(function (step, n) {
+    var kind = step.dataset.kind;
+    var go = step.querySelector(".go");
+    if (go) go.addEventListener("click", function () { mark(n); nextStep(); });
+
+    if (kind === "num") {
+      var cfg = NUMS[step.dataset.id];
+      entry(step.querySelector(".entry"), {
+        want: cfg.want, tol: cfg.tol, dp: cfg.dp,
+        onright: function () {
+          step.querySelector(".calcrow").classList.add("done");
+          say("");
+          mark(n);
+          setTimeout(nextStep, 240);
+        },
+        onwrong: function (v, tries) {
+          say(cfg.hints[Math.min(tries, cfg.hints.length) - 1], "warn");
+        },
+        onbad: function (t) { say(t, "warn"); }
+      });
+    } else if (kind === "pick") {
+      choices(step, function (right) {
+        say(right ? "" : "Read the reason beside every option before you go on.",
+            right ? "" : "warn");
+        go.hidden = false;
+        go.focus();
+        reportHeight();
+      });
+    }
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+  openStep(0);
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

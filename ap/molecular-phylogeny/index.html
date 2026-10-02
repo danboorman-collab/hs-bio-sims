@@ -1,0 +1,1425 @@
+<title>AP Biology: Molecular phylogeny</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#fbfaf8; --surface:#ffffff; --ink:#1b1e22; --muted:#6f6a63;
+  --line:#e7e2da; --rule:#d8d2c8; --accent:#0e6f66; --accent-soft:#e2efec;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+    --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+  --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1020px;margin:0 auto;padding-inline:20px;padding-block:44px 64px}
+
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6.4vw,44px);line-height:1.12;
+  letter-spacing:-.015em;margin:0 0 14px;text-wrap:balance}
+.lead{font-family:var(--serif);font-size:clamp(17px,2.4vw,20px);line-height:1.5;color:var(--ink);
+  margin:0 0 28px;max-width:56ch}
+.lead em{font-style:italic;color:var(--accent);font-weight:600}
+
+.design{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 40px}
+.design div{flex:1 1 205px;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:14px 16px}
+.design dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 5px}
+.design dd{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
+
+nav.jump{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin:0 0 44px;
+  scrollbar-width:thin}
+nav.jump a{flex:0 0 auto;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;background:var(--surface);white-space:nowrap}
+nav.jump a:hover,nav.jump a:focus-visible{color:var(--accent);border-color:var(--accent)}
+
+section.stage{border-top:1px solid var(--rule);padding-top:26px;margin-top:44px;
+  scroll-margin-top:24px}
+section.stage:first-of-type{margin-top:0}
+.shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+  letter-spacing:.08em}
+.kind{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(21px,3.6vw,27px);line-height:1.2;
+  margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.blurb{color:var(--muted);font-size:15.5px;margin:0 0 20px}
+
+.media{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+video{width:100%;display:block;background:#0b0d10}
+iframe{width:100%;border:0;display:block;background:var(--surface)}
+
+footer{border-top:1px solid var(--rule);margin-top:52px;padding-top:22px;color:var(--muted);
+  font-size:14.5px}
+footer p{margin:0 0 10px;max-width:62ch}
+footer strong{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<style>.waiting{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--muted);font-size:14px}.waiting code{font-size:12.5px}.skillnote{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:12px 14px;margin:0 0 40px;font-size:14.5px}.skillnote b{color:var(--accent)}</style>
+
+<script>
+// Registered before the frames are parsed: a srcdoc frame runs its script during parsing and
+// would otherwise post its height into a page that is not listening yet.
+(function () {
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "sim-height") return;
+    var frames = document.querySelectorAll("iframe");
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].contentWindow === e.source) {
+        frames[i].style.height = e.data.height + "px";
+        return;
+      }
+    }
+  });
+}());
+</script>
+<div class="wrap">
+<p class="eyebrow">AP Biology &middot; Big Idea: Evolution &middot; Topic 7.9</p>
+<h1>Molecular phylogeny</h1>
+<p class="lead">In what order did five species' lineages separate? Seven stages, in the order a student works them &mdash; <em>watch, design, collect, watch, analyze, conclude, answer</em>.</p>
+<dl class="design"><div><dt>What we compare</dt><dd>The same 513 amino acids of one protein, in five species</dd></div><div><dt>What we measure</dt><dd>The percent of positions at which each pair is identical</dd></div><div><dt>What we build</dt><dd>One branching order that fits all ten comparisons</dd></div></dl>
+<p class="skillnote"><b>The analysis skill:</b> Percent identity into a number of differences, and a branching order. <b>The graph:</b> a cladogram.</p>
+<nav class="jump" aria-label="The seven stages"><a href="#method">1. Watch the method</a><a href="#design">2. Design the investigation</a><a href="#collect">3. Collect the results</a><a href="#skillvideo">4. Watch how to work the analysis</a><a href="#skill">5. Work the analysis</a><a href="#conclusion">6. Choose the conclusion</a><a href="#questions">7. Answer eight questions</a></nav>
+<section class="stage" id="method"><div class="shead"><span class="num">Stage 1</span><span class="kind">Video &middot; about 85 seconds</span></div><h2>Watch the method</h2><p class="blurb">The apparatus, the one thing that changes, what is held the same, and why the investigation is repeated.</p><div class="media"><div class="waiting"><p><b>This video is still rendering.</b> It drops in as <code>videos/AP U07 -molecular-phylogeny-method.mp4</code> and the stage works from that moment, with nothing else to change. The prompt it was submitted with is in <code>videos/prompts/</code>.</p></div></div></section>
+<section class="stage" id="design"><div class="shead"><span class="num">Stage 2</span><span class="kind">Simulation &middot; Five decisions</span></div><h2>Design the investigation</h2><p class="blurb">The null hypothesis, what is measured, how many repeats, what is held constant and what the control is. One submission, then every option is marked and explained.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Design the investigation&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.dec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.dec &gt; h2{font-size:12.5px;margin:0 0 4px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.dec &gt; p.ask{margin:0 0 10px;font-size:15px;font-weight:600}
+.dec .choice{cursor:pointer}
+.dec.marked .choice{cursor:default}
+.choice.chosen{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Design the investigation&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Evolution &amp;middot; Topic 7.9&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;A gene has been sequenced in five species. Five decisions first. Choose one answer in each, then submit once.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;dec&quot; id=&quot;dec-gene&quot; data-id=&quot;gene&quot;&gt;&lt;h2&gt;Decision 1 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Why is the same gene compared in all five species rather than five different genes?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Comparing one species&#x27; cytochrome c oxidase with another&#x27;s hemoglobin would measure the difference between two proteins, not between two species.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because a difference between two sequences only means something if the two sequences do the same job in both species.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Every one of these species has thousands of genes. The point is to compare like with like.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because every species has only one gene that can be sequenced.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Length is a practical difficulty. The reason is that two different genes would differ for reasons that have nothing to do with how related the species are.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the five genes would be of different lengths.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-measure&quot; data-id=&quot;measure&quot;&gt;&lt;h2&gt;Decision 2 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;What is compared between each pair of species?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;It turns two long sequences into one number, and the same number can be found for every pair.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The percentage of positions at which the two sequences are identical.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Two sequences of the same length can differ at every position, and two of different lengths can be nearly identical over the part they share.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The total length of each sequence.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Two sequences can hold the same amino acids in a different order, which would look identical by that measure and is not.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The number of times each amino acid appears in each sequence.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-more&quot; data-id=&quot;more&quot;&gt;&lt;h2&gt;Decision 3 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Two species share more of this sequence than two others do. What does that suggest?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Differences build up after two lineages separate, so the longer ago they separated the more differences there has been time for.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;That they share a more recent common ancestor.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Two species living side by side may be only distantly related, and two closely related ones may live oceans apart.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;That they live in the same place.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Neither living species is the ancestor of the other. They share an ancestor, which is a different claim.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;That one evolved from the other.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-out&quot; data-id=&quot;out&quot;&gt;&lt;h2&gt;Decision 4 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Why is one species known to be distantly related included at all?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Without it, nothing says which end of the tree is the older. It is the comparison that roots the diagram.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the branching order of the others can only be read against something outside the group.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A cladogram can be drawn for three species. The distant one is there to root the tree, not to make up a number.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because five is the smallest number of species a cladogram can be drawn for.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;No average is taken. Each pair is compared with each other pair.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because it supplies the average that the other four are compared with.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-limit&quot; data-id=&quot;limit&quot;&gt;&lt;h2&gt;Decision 5 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;What can this comparison not settle?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Turning differences into years needs a rate, and a rate has to come from fossils or from another dated source outside the sequences.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;How long ago in years any two of the species last shared an ancestor.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is exactly what the comparison does settle: the pair sharing the most sequence.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Which two of the five species are most closely related.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A gene shared by all five, doing the same job in all five, is itself evidence of common ancestry.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Whether all five species share a common ancestor.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Choose one answer in each of the
+5 decisions.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;
+  &lt;button id=&quot;submit&quot; type=&quot;button&quot; class=&quot;primary&quot; disabled&gt;Submit all
+  5&lt;/button&gt;
+  &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;design-molecular-phylogeny&quot;;
+  var TOTAL = 5;
+  var msg = document.getElementById(&quot;msg&quot;);
+  var submit = document.getElementById(&quot;submit&quot;);
+  var marked = false;
+
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  function wire() {
+    [].forEach.call(document.querySelectorAll(&quot;.dec&quot;), function (dec) {
+      var box = dec.querySelector(&quot;.choices&quot;);
+      var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+      btns.forEach(function (b, i) {
+        box.appendChild(b);
+        b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+        b.addEventListener(&quot;click&quot;, function () {
+          if (marked) return;
+          btns.forEach(function (o) { o.classList.remove(&quot;chosen&quot;); });
+          b.classList.add(&quot;chosen&quot;);
+          dec.dataset.chosen = &quot;1&quot;;
+          var done = document.querySelectorAll(&quot;.dec[data-chosen]&quot;).length;
+          submit.disabled = done &lt; TOTAL;
+          say(done &lt; TOTAL
+              ? (TOTAL - done) + &quot; decision&quot; + (TOTAL - done === 1 ? &quot;&quot; : &quot;s&quot;) + &quot; still to make.&quot;
+              : &quot;All &quot; + TOTAL + &quot; chosen. Submit when you are ready \u2014 they cannot be &quot;
+                + &quot;changed afterwards.&quot;);
+        });
+      });
+    });
+  }
+
+  submit.addEventListener(&quot;click&quot;, function () {
+    if (marked) return;
+    marked = true;
+    submit.disabled = true;
+    var right = 0;
+    [].forEach.call(document.querySelectorAll(&quot;.dec&quot;), function (dec) {
+      dec.classList.add(&quot;marked&quot;);
+      [].forEach.call(dec.querySelectorAll(&quot;.choice&quot;), function (o) {
+        o.disabled = true;
+        var ok = o.dataset.ok === &quot;1&quot;;
+        o.classList.add(ok ? &quot;right&quot; : &quot;wrong&quot;);
+        if (ok &amp;&amp; o.classList.contains(&quot;chosen&quot;)) right++;
+        var w = document.createElement(&quot;p&quot;);
+        w.className = &quot;why &quot; + (ok ? &quot;right&quot; : &quot;wrong&quot;);
+        w.textContent = o.dataset.why;
+        o.parentNode.insertBefore(w, o.nextSibling);
+      });
+    });
+    var p = document.createElement(&quot;div&quot;);
+    p.className = &quot;score&quot;;
+    p.innerHTML = &quot;&lt;b&gt;&quot; + right + &quot; of &quot; + TOTAL + &quot;&lt;/b&gt; decisions made the way this &quot;
+      + &quot;investigation was carried out. Every option is explained above, including the ones &quot;
+      + &quot;you did not choose.&quot;;
+    msg.parentNode.insertBefore(p, msg);
+    say(&quot;&quot;);
+    reportHeight();
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+  wire();
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1500" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="collect"><div class="shead"><span class="num">Stage 3</span><span class="kind">Simulation &middot; Fixed readings</span></div><h2>Collect the results</h2><p class="blurb">Work through the conditions and read off what each one gives. Every student meets the same numbers, because a marked question needs one right answer.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Collect the results&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+td.pend{color:var(--muted)}
+td.got{color:var(--fg);font-weight:600}
+tr.running th[scope=row]{color:var(--accent)}
+button.run{padding:5px 11px;border-radius:7px;font:inherit;font-size:13px;cursor:pointer;
+  border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);
+  font-weight:650;white-space:nowrap}
+button.run:disabled{background:var(--bg);color:var(--muted);border-color:var(--line);
+  cursor:default}
+td.cell{cursor:pointer}
+td.cell:hover{background:var(--accent-soft,var(--card))}
+td.cell[data-got]{cursor:default;font-weight:600}
+td.self{background:var(--card);color:var(--muted)}
+.progress{font-size:13px;color:var(--muted);margin-top:10px}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Collect the results&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Every species&#x27; sequence compared with every other species&#x27; sequence.&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;The same 513 amino acids of cytochrome c oxidase subunit I were lined up for all five species. Each comparison counts the positions at which two sequences carry the same amino acid.&lt;/p&gt;&lt;p&gt;Click a cell to run that comparison.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;scroll&quot;&gt;&lt;table&gt;&lt;caption&gt;Percent of the 513 aligned positions at which two sequences are identical.&lt;/caption&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;human&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;chimpanzee&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;mouse&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;chicken&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;zebrafish&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;human&lt;/th&gt;&lt;td class=&quot;self&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; id=&quot;m0-1&quot; data-i=&quot;0&quot; data-j=&quot;1&quot;&gt;compare&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; id=&quot;m0-2&quot; data-i=&quot;0&quot; data-j=&quot;2&quot;&gt;compare&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; id=&quot;m0-3&quot; data-i=&quot;0&quot; data-j=&quot;3&quot;&gt;compare&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; id=&quot;m0-4&quot; data-i=&quot;0&quot; data-j=&quot;4&quot;&gt;compare&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;chimpanzee&lt;/th&gt;&lt;td class=&quot;dim&quot; id=&quot;m0-1-mirror&quot;&gt;&amp;middot;&lt;/td&gt;&lt;td class=&quot;self&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; id=&quot;m1-2&quot; data-i=&quot;1&quot; data-j=&quot;2&quot;&gt;compare&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; id=&quot;m1-3&quot; data-i=&quot;1&quot; data-j=&quot;3&quot;&gt;compare&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; id=&quot;m1-4&quot; data-i=&quot;1&quot; data-j=&quot;4&quot;&gt;compare&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;mouse&lt;/th&gt;&lt;td class=&quot;dim&quot; id=&quot;m0-2-mirror&quot;&gt;&amp;middot;&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m1-2-mirror&quot;&gt;&amp;middot;&lt;/td&gt;&lt;td class=&quot;self&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; id=&quot;m2-3&quot; data-i=&quot;2&quot; data-j=&quot;3&quot;&gt;compare&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; id=&quot;m2-4&quot; data-i=&quot;2&quot; data-j=&quot;4&quot;&gt;compare&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;chicken&lt;/th&gt;&lt;td class=&quot;dim&quot; id=&quot;m0-3-mirror&quot;&gt;&amp;middot;&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m1-3-mirror&quot;&gt;&amp;middot;&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m2-3-mirror&quot;&gt;&amp;middot;&lt;/td&gt;&lt;td class=&quot;self&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; id=&quot;m3-4&quot; data-i=&quot;3&quot; data-j=&quot;4&quot;&gt;compare&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;zebrafish&lt;/th&gt;&lt;td class=&quot;dim&quot; id=&quot;m0-4-mirror&quot;&gt;&amp;middot;&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m1-4-mirror&quot;&gt;&amp;middot;&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m2-4-mirror&quot;&gt;&amp;middot;&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m3-4-mirror&quot;&gt;&amp;middot;&lt;/td&gt;&lt;td class=&quot;self&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Nothing has been run yet.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+  var SIM_ID = &quot;collect-molecular-phylogeny&quot;;
+
+  var PAIRS = {&quot;0-1&quot;: 99.2, &quot;0-2&quot;: 88.5, &quot;0-3&quot;: 78.0, &quot;0-4&quot;: 68.4, &quot;1-2&quot;: 88.3, &quot;1-3&quot;: 77.8, &quot;1-4&quot;: 68.2, &quot;2-3&quot;: 78.4, &quot;2-4&quot;: 68.8, &quot;3-4&quot;: 70.1};
+  var LEFT = Object.keys(PAIRS).length;
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+  function reveal(td) {
+    if (td.dataset.got) return;
+    var key = td.dataset.i + &quot;-&quot; + td.dataset.j;
+    td.dataset.got = &quot;1&quot;;
+    td.textContent = PAIRS[key].toFixed(1) + &quot;%&quot;;
+    var mirror = document.getElementById(&quot;m&quot; + key + &quot;-mirror&quot;);
+    if (mirror) { mirror.textContent = PAIRS[key].toFixed(1) + &quot;%&quot;; mirror.className = &quot;num&quot;; }
+    LEFT--;
+    say(LEFT ? LEFT + &quot; comparison&quot; + (LEFT === 1 ? &quot;&quot; : &quot;s&quot;) + &quot; still to run.&quot;
+      : &quot;All ten comparisons are made. Reading a branching order out of them comes next.&quot;, LEFT ? &quot;&quot; : &quot;good&quot;);
+    reportHeight();
+  }
+
+  [].forEach.call(document.querySelectorAll(&quot;td.cell&quot;), function (td) {
+    td.addEventListener(&quot;click&quot;, function () { reveal(td); });
+    td.addEventListener(&quot;keydown&quot;, function (e) {
+      if (e.key === &quot;Enter&quot; || e.key === &quot; &quot;) { e.preventDefault(); reveal(td); }
+    });
+  });
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="700" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="skillvideo"><div class="shead"><span class="num">Stage 4</span><span class="kind">Video &middot; about 85 seconds</span></div><h2>Watch how to work the analysis</h2><p class="blurb">Percent identity into a number of differences, and a branching order.</p><div class="media"><div class="waiting"><p><b>This video is still rendering.</b> It drops in as <code>videos/AP U07 -molecular-phylogeny-skill.mp4</code> and the stage works from that moment, with nothing else to change. The prompt it was submitted with is in <code>videos/prompts/</code>.</p></div></div></section>
+<section class="stage" id="skill"><div class="shead"><span class="num">Stage 5</span><span class="kind">Simulation &middot; Step by step, typed answers</span></div><h2>Work the analysis</h2><p class="blurb">One step at a time, with your own answer typed into each box. Every miss gets a hint that says more than the last, and none of them gives the answer.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;From a table of percentages to a tree&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.step .go{margin-top:11px;padding:8px 14px;border-radius:8px;font:inherit;font-weight:650;
+  cursor:pointer;border:1px solid var(--accent);background:var(--accent);
+  color:var(--accent-fg)}
+.step .go[hidden]{display:none}
+.trail{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 4px}
+.trail i{width:16px;height:4px;border-radius:2px;background:var(--line);display:block}
+.trail i.on{background:var(--accent)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;From a table of percentages to a tree&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Counting differences, finding the outgroup, and reading one branching order out of ten comparisons.&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;The same 513 amino acids of cytochrome c oxidase subunit I were compared in all five species. Two species that share more of the sequence have had less time apart since their lineages separated.&lt;/p&gt;&lt;p&gt;Ten comparisons, and only one branching order fits all ten.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;trail&quot; aria-hidden=&quot;true&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;
+&lt;div class=&quot;step&quot; data-kind=&quot;table&quot; data-i=&quot;0&quot;&gt;&lt;h2&gt;The ten comparisons&lt;/h2&gt;&lt;div class=&quot;scroll&quot;&gt;&lt;table&gt;&lt;caption&gt;Percent of the 513 aligned positions at which two sequences carry the same amino acid.&lt;/caption&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;human&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;chimpanzee&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;mouse&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;chicken&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;zebrafish&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;human&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;99.2&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;88.5&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;78.0&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;68.4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;chimpanzee&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;99.2&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;88.3&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;77.8&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;68.2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;mouse&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;88.5&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;88.3&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;78.4&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;68.8&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;chicken&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;78.0&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;77.8&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;78.4&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;70.1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;zebrafish&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;68.4&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;68.2&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;68.8&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;70.1&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot;&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;1&quot; data-id=&quot;diff&quot;&gt;&lt;h2&gt;Step 1 &amp;mdash; from a percentage to a count&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;A percent identity of 90% over 500 positions means the two sequences differ at 10% of them, which is 50 positions.&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;At how many positions do the human and mouse sequences differ? Give a whole number of positions.&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-diff&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Positions that differ, human and mouse&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;513 &amp;times; (100 &amp;minus; 88.5)%&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-diff&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Positions that differ, human and mouse&quot;&gt;&lt;span class=&quot;unit&quot;&gt;positions&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;2&quot; data-id=&quot;diff2&quot;&gt;&lt;h2&gt;Step 2 &amp;mdash; a more distant pair&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;At how many positions do the chimpanzee and zebrafish sequences differ?&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-diff2&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Positions that differ, chimpanzee and zebrafish&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;513 &amp;times; (100 &amp;minus; 68.2)%&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-diff2&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Positions that differ, chimpanzee and zebrafish&quot;&gt;&lt;span class=&quot;unit&quot;&gt;positions&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;pick&quot; data-i=&quot;3&quot;&gt;&lt;h2&gt;Step 3 &amp;mdash; the closest pair&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Which two species share the most recent common ancestor?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;They share 99.2% of the sequence, the highest of the ten comparisons. Differences build up after two lineages separate, so the pair with the fewest has had the least time apart.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Human and chimpanzee&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;They share 78.4%, which is well below the highest figure in the table.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Mouse and chicken&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;They share 70.1%. That is higher than either shares with the mammals, which places them, but it is not the closest pair.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Chicken and zebrafish&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot; hidden&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;pick&quot; data-i=&quot;4&quot;&gt;&lt;h2&gt;Step 4 &amp;mdash; the outgroup&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Which species is the outgroup &amp;mdash; the one the branching order of the other four is read against?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;It shares less of the sequence with each of the other four than any of them share with each other, so its lineage separated first. That is what makes it the thing the rest are measured against.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Zebrafish&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The chicken shares 70.1% with the zebrafish and around 78.4% with the mammals, so it sits between them. It is not the most distant.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Chicken&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The mouse shares 88.5% with the human, higher than anything the chicken or the zebrafish reaches. It belongs with the other mammals.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Mouse&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot; hidden&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;pick&quot; data-i=&quot;5&quot;&gt;&lt;h2&gt;Step 5 &amp;mdash; the branching order&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Build the order from the closest pair outwards: join the two that share most, then join the next nearest to that pair, and so on.&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;Which branching order fits all ten comparisons?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Human and chimpanzee join first. The mouse joins that pair next, because it shares more with both of them than the chicken does. The chicken joins those three, and the zebrafish branches off first of all.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;(((human, chimpanzee), mouse), chicken), zebrafish&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The chicken shares about 78.0% with the human and the mouse about 88.5%. The mouse is the nearer of the two, so it joins the primates first.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;(((human, chimpanzee), chicken), mouse), zebrafish&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Human and chimpanzee share 99.2%, far more than any other pair. Nothing can come between them.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;(((mouse, chicken), human), chimpanzee), zebrafish&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot; hidden&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;fig&quot; data-i=&quot;6&quot;&gt;&lt;h2&gt;The tree those ten comparisons give&lt;/h2&gt;&lt;figure&gt;&lt;svg viewBox=&quot;0 0 600 286&quot; width=&quot;100%&quot; role=&quot;img&quot; aria-label=&quot;A cladogram of the five species&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;title&gt;A cladogram of the five species&lt;/title&gt;&lt;desc&gt;A branching diagram. The two species that share the most sequence join at the dot furthest to the right.&lt;/desc&gt;&lt;g font-family=&quot;-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif&quot;&gt;&lt;text x=&quot;462&quot; y=&quot;60&quot; font-size=&quot;13.5&quot; fill=&quot;var(--fg)&quot;&gt;zebrafish&lt;/text&gt;&lt;text x=&quot;462&quot; y=&quot;106&quot; font-size=&quot;13.5&quot; fill=&quot;var(--fg)&quot;&gt;chicken&lt;/text&gt;&lt;text x=&quot;462&quot; y=&quot;152&quot; font-size=&quot;13.5&quot; fill=&quot;var(--fg)&quot;&gt;mouse&lt;/text&gt;&lt;text x=&quot;462&quot; y=&quot;198&quot; font-size=&quot;13.5&quot; fill=&quot;var(--fg)&quot;&gt;chimpanzee&lt;/text&gt;&lt;text x=&quot;462&quot; y=&quot;244&quot; font-size=&quot;13.5&quot; fill=&quot;var(--fg)&quot;&gt;human&lt;/text&gt;&lt;line x1=&quot;60.0&quot; y1=&quot;56&quot; x2=&quot;60.0&quot; y2=&quot;171.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;line x1=&quot;60.0&quot; y1=&quot;56&quot; x2=&quot;450&quot; y2=&quot;56&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;line x1=&quot;60.0&quot; y1=&quot;171.0&quot; x2=&quot;155.0&quot; y2=&quot;171.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;circle cx=&quot;60.0&quot; cy=&quot;171.0&quot; r=&quot;3.4&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;line x1=&quot;155.0&quot; y1=&quot;102&quot; x2=&quot;155.0&quot; y2=&quot;194.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;line x1=&quot;155.0&quot; y1=&quot;102&quot; x2=&quot;450&quot; y2=&quot;102&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;line x1=&quot;155.0&quot; y1=&quot;194.0&quot; x2=&quot;250.0&quot; y2=&quot;194.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;circle cx=&quot;155.0&quot; cy=&quot;194.0&quot; r=&quot;3.4&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;line x1=&quot;250.0&quot; y1=&quot;148&quot; x2=&quot;250.0&quot; y2=&quot;217.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;line x1=&quot;250.0&quot; y1=&quot;148&quot; x2=&quot;450&quot; y2=&quot;148&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;line x1=&quot;250.0&quot; y1=&quot;217.0&quot; x2=&quot;345.0&quot; y2=&quot;217.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;circle cx=&quot;250.0&quot; cy=&quot;217.0&quot; r=&quot;3.4&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;line x1=&quot;345.0&quot; y1=&quot;194&quot; x2=&quot;345.0&quot; y2=&quot;240.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;line x1=&quot;345.0&quot; y1=&quot;194&quot; x2=&quot;450&quot; y2=&quot;194&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;line x1=&quot;345.0&quot; y1=&quot;240.0&quot; x2=&quot;450.0&quot; y2=&quot;240.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;circle cx=&quot;345.0&quot; cy=&quot;240.0&quot; r=&quot;3.4&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;line x1=&quot;345.0&quot; y1=&quot;240&quot; x2=&quot;450&quot; y2=&quot;240&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;text x=&quot;24&quot; y=&quot;272&quot; font-size=&quot;11.5&quot; fill=&quot;var(--muted)&quot;&gt;Each dot is a common ancestor. Time runs left to right.&lt;/text&gt;&lt;/g&gt;&lt;/svg&gt;&lt;figcaption&gt;A cladogram of the five species. Each dot is a common ancestor; the two species that share the most sequence join at the dot furthest to the right.&lt;/figcaption&gt;&lt;/figure&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot;&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;pick&quot; data-i=&quot;7&quot;&gt;&lt;h2&gt;Step 6 &amp;mdash; what the tree does not say&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;A student reads the diagram and says: &amp;lsquo;So the mouse evolved from the chicken.&amp;rsquo;&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;Is the student right?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Neither living species is the ancestor of the other. What the diagram says is that the mouse and the chicken share an ancestor, at the dot where their lines meet, and that ancestor was neither a mouse nor a chicken.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;No&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A cladogram joins living species at their common ancestors. It never puts one living species at the root of another.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Yes&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot; hidden&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;pick&quot; data-i=&quot;8&quot;&gt;&lt;h2&gt;Step 7 &amp;mdash; and what it cannot settle&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;What would these ten comparisons on their own not be enough to work out?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Turning a number of differences into a number of years needs a rate, and a rate has to be fixed by something outside the sequences, such as a dated fossil.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;How many millions of years ago any two of the species last shared an ancestor&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is exactly what they settle: the pair sharing the most sequence.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Which pair of species shares the most recent common ancestor&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A gene present in all five, doing the same job in all five, is itself evidence that they do.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Whether all five species share a common ancestor&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot; hidden&gt;Continue&lt;/button&gt;&lt;/div&gt;
+&lt;div class=&quot;verdict&quot; id=&quot;verdict&quot; hidden&gt;&lt;b&gt;(((human, chimpanzee), mouse), chicken), zebrafish.&lt;/b&gt; Human and mouse differ at about 59 of the 513 positions; chimpanzee and zebrafish at about 163. The order of the branches comes out of the ten comparisons. The dates on them do not: those need a rate from somewhere else.&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;skill-molecular-phylogeny&quot;;
+  var NUMS = {&quot;diff&quot;: {&quot;want&quot;: 59, &quot;tol&quot;: 1, &quot;dp&quot;: 0, &quot;hints&quot;: [&quot;Not the number of differences. Work it out again.&quot;, &quot;Take the percent identity from 100 to get the percent that differ, then take that share of the number of positions compared.&quot;, &quot;11.5% of 513.&quot;]}, &quot;diff2&quot;: {&quot;want&quot;: 163, &quot;tol&quot;: 2, &quot;dp&quot;: 0, &quot;hints&quot;: [&quot;Not the number of differences. Work it out again.&quot;, &quot;Take the percent identity from 100, then take that share of the number of positions compared.&quot;, &quot;31.8% of 513.&quot;]}};
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Dan&#x27;s ruling, 1 October: the student types the answer. A stepper could be walked to the
+  // right number without ever working it out. The cost of a box is that it can be given
+  // nonsense, so this one says what it wants, and the misses are graded: the first says
+  // only that it is wrong, the second names the operation, the third names it with the
+  // numbers in. It never gives the answer away, and there is no limit on tries.
+  //
+  // AP adds a tolerance. 7.81 and 7.8 are the same answer; 0.47 and 0.4648 may not be. Each
+  // box carries its own accepted range, and each says how many figures it wants.
+  function entry(host, opts) {
+    var input = host.querySelector(&quot;input&quot;), btn = host.querySelector(&quot;button&quot;);
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, &quot;&quot;).replace(/^[x×]/i, &quot;&quot;)
+                     .replace(/^\+/, &quot;&quot;);
+      input.classList.remove(&quot;miss&quot;);
+      if (!raw) { opts.onbad(&quot;Type your answer in the box, then press Check.&quot;); return; }
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? &quot;Just the number, without the units — they are already printed beside the box.&quot;
+          : &quot;That is not a number. Type digits, and a decimal point if you need one.&quot;);
+        input.classList.add(&quot;miss&quot;);
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) &lt;= opts.tol + 1e-12) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.dp === undefined ? v : v.toFixed(opts.dp);
+        opts.onright(v);
+      } else {
+        input.classList.add(&quot;miss&quot;);
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener(&quot;click&quot;, submit);
+    input.addEventListener(&quot;keydown&quot;, function (e) {
+      if (e.key === &quot;Enter&quot;) { e.preventDefault(); submit(); }
+    });
+    input.addEventListener(&quot;input&quot;, function () { input.classList.remove(&quot;miss&quot;); });
+    return { focus: function () { try { input.focus(); } catch (e) {} } };
+  }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  // One step at a time. A student who can see the next question can work backwards from it,
+  // and in a chain of calculations that is the whole answer.
+  var STEPS = [].slice.call(document.querySelectorAll(&quot;.step&quot;));
+  var at = 0, opened = false;
+  function openStep(n) {
+    at = n;
+    for (var i = 0; i &lt; STEPS.length; i++) STEPS[i].hidden = i &gt; n;
+    var s = STEPS[n];
+    // On the FIRST call nothing is focused and nothing is scrolled to. This simulation is
+    // framed inside a lesson page, and both focusing a field and scrolling an element into
+    // view inside a frame drag the page around it -- which landed a reader at stage 5 the
+    // moment the lesson opened.
+    if (s &amp;&amp; opened) {
+      var inp = s.querySelector(&quot;input&quot;);
+      if (inp &amp;&amp; !inp.disabled) { try { inp.focus(); } catch (e) {} }
+      s.scrollIntoView({ block: &quot;nearest&quot; });
+    }
+    opened = true;
+    reportHeight();
+  }
+  function nextStep() { if (at &lt; STEPS.length - 1) openStep(at + 1); else finish(); }
+
+
+  var PIPS = [].slice.call(document.querySelectorAll(&quot;.trail i&quot;));
+  function mark(n) { for (var i = 0; i &lt; PIPS.length; i++) PIPS[i].className = i &lt;= n ? &quot;on&quot; : &quot;&quot;; }
+
+  function finish() {
+    document.getElementById(&quot;verdict&quot;).hidden = false;
+    say(&quot;&quot;);
+    reportHeight();
+  }
+
+  STEPS.forEach(function (step, n) {
+    var kind = step.dataset.kind;
+    var go = step.querySelector(&quot;.go&quot;);
+    if (go) go.addEventListener(&quot;click&quot;, function () { mark(n); nextStep(); });
+
+    if (kind === &quot;num&quot;) {
+      var cfg = NUMS[step.dataset.id];
+      entry(step.querySelector(&quot;.entry&quot;), {
+        want: cfg.want, tol: cfg.tol, dp: cfg.dp,
+        onright: function () {
+          step.querySelector(&quot;.calcrow&quot;).classList.add(&quot;done&quot;);
+          say(&quot;&quot;);
+          mark(n);
+          setTimeout(nextStep, 240);
+        },
+        onwrong: function (v, tries) {
+          say(cfg.hints[Math.min(tries, cfg.hints.length) - 1], &quot;warn&quot;);
+        },
+        onbad: function (t) { say(t, &quot;warn&quot;); }
+      });
+    } else if (kind === &quot;pick&quot;) {
+      choices(step, function (right) {
+        say(right ? &quot;&quot; : &quot;Read the reason beside every option before you go on.&quot;,
+            right ? &quot;&quot; : &quot;warn&quot;);
+        go.hidden = false;
+        go.focus();
+        reportHeight();
+      });
+    }
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+  openStep(0);
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1600" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="conclusion"><div class="shead"><span class="num">Stage 6</span><span class="kind">Question &middot; A guide, then one choice</span></div><h2>Choose the conclusion</h2><p class="blurb">What a conclusion has to do &mdash; a claim, the evidence for it, and the reasoning that connects them &mdash; and then three conclusions for your own results.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Choose the conclusion&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.guide{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.guide h2{font-size:12.5px;margin:0 0 9px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.guide ol{margin:0;padding-left:21px}
+.guide li{margin:0 0 9px;font-size:14.5px}
+.guide li:last-child{margin:0}
+.guide li b{display:block;font-size:14.5px}
+.guide li span{color:var(--muted)}
+.bridge{font-size:14.5px;margin:0 0 12px}
+.recap{background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:8px;padding:11px 13px;font-size:14.5px;margin:0 0 14px}
+.recap b{display:block;font-size:12.5px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em;margin-bottom:5px}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.choice{align-items:flex-start}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Choose the conclusion&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Evolution &amp;middot; Topic 7.9&lt;/p&gt;
+
+&lt;div class=&quot;guide&quot;&gt;&lt;h2&gt;What a conclusion has to do&lt;/h2&gt;&lt;ol&gt;&lt;li&gt;&lt;b&gt;Make the claim&lt;/b&gt;&lt;span&gt;Answer the question the investigation asked, in one sentence, with no more certainty than your results carry. Where two error bars overlap or a test fails to reject, say what the data do not show rather than picking the higher number.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the evidence&lt;/b&gt;&lt;span&gt;Quote the numbers from your own results that the claim rests on, with their units: a mean and its error bar, a statistic and its critical value, a five-number summary, a value read off a line. Not a number from the lesson, and not the method.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the reasoning&lt;/b&gt;&lt;span&gt;Say why that evidence supports that claim, and connect it to the biology. This is the step that turns a description of what happened into a conclusion about what it means.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;
+&lt;p class=&quot;bridge&quot;&gt;Three conclusions are offered below. Only one of them makes a claim this investigation&#x27;s results support, backs it with numbers from those results, and says why they support it. Read all three before you choose.&lt;/p&gt;
+&lt;div class=&quot;recap&quot;&gt;&lt;b&gt;Your results&lt;/b&gt;You compared the same 513 amino acids of cytochrome c oxidase subunit I in five species, ten pairs in all, and built a branching order from the percent identities.&lt;/div&gt;
+
+&lt;p class=&quot;stem&quot;&gt;Which of these is a conclusion, and one your own results support?&lt;/p&gt;
+&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;It claims the branching order the whole table gives, quotes the highest comparison and the range that places the outgroup, and reasons from the fact that differences accumulate after two lineages separate.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The five species branch in the order zebrafish, then chicken, then mouse, then human and chimpanzee together. Human and chimpanzee share 99.2% of the sequence, the highest of the ten comparisons, and the zebrafish shares less with each of the other four, 68.2% to 68.8%, than any of them share with each other.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The claim is right and one piece of its evidence is wrong. The chicken&#x27;s closest match is the mouse at 78.4%, and the zebrafish&#x27;s is the chicken at 70.1%, so the human is not what every other species is most similar to. A comparison has to be read both ways round.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Human and chimpanzee are the most closely related of the five species, so they shared a common ancestor more recently than any other pair. The human sequence is the one each of the other four species is most similar to, and the human and chimpanzee sequences differ at only about four of the 513 positions compared.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A figure read along one row only. 78.4% is the chicken&#x27;s best match, but the mouse&#x27;s best match is the human at 88.5%, which is higher. Both rows have to be read before a pair can be called the closest.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The mouse is more closely related to the chicken than to the human, so the mammals do not form a group of their own on this tree. The mouse and chicken sequences are 78.4% identical, which is the highest figure anywhere in the chicken&#x27;s row and higher than the chicken reaches with either primate.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;
+
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Choose one.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;conclusion-molecular-phylogeny&quot;;
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  choices(document.querySelector(&quot;.sim&quot;), function (right) {
+    var p = document.createElement(&quot;div&quot;);
+    p.className = &quot;score&quot;;
+    p.textContent = right
+      ? &quot;That is the one. The reason each of the other two is not a conclusion these &quot;
+        + &quot;results support is written beneath it.&quot;
+      : &quot;Not that one. The conclusion these results support is marked above, and the &quot;
+        + &quot;reason each of the others falls short is written beneath it.&quot;;
+    msg.parentNode.insertBefore(p, msg);
+    say(&quot;&quot;);
+    reportHeight();
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1200" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="questions"><div class="shead"><span class="num">Stage 7</span><span class="kind">Questions &middot; Eight items</span></div><h2>Answer eight questions</h2><p class="blurb">On carrying the investigation out, on what its numbers come to, and on what they do and do not show.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Eight questions&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.item &gt; h2{font-size:12.5px;margin:0 0 6px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.setup{font-size:14.5px;margin:0 0 9px;color:var(--fg)}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.item table{margin-bottom:10px}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Eight questions&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Evolution &amp;middot; Topic 7.9&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;On carrying this investigation out, and on what its results show.
+Each question is marked as soon as it is answered, and every option is explained.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;item&quot; id=&quot;q1&quot;&gt;&lt;h2&gt;Question 1 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A researcher compares the same gene in five species rather than comparing five different genes.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;Why does the gene have to be the same one in every species?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Comparing one species&#x27; cytochrome c oxidase with another&#x27;s hemoglobin would measure the difference between two proteins, which says nothing about how related the two species are.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because a difference between two sequences only means anything if the two do the same job&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Length is a practical difficulty, and sequences of different lengths can be aligned. The reason is that two different genes differ for reasons unrelated to ancestry.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because different genes are different lengths and cannot be lined up&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Whole genomes have been sequenced for all five of these species. The choice is about comparing like with like.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because only one gene in each species has ever been sequenced&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Genes doing the same job in different species have different sequences, and the size of that difference is the whole measurement.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because a gene that does the same job must have the same sequence&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q2&quot;&gt;&lt;h2&gt;Question 2 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;Two species&#x27; versions of a protein are 92.0% identical over 450 aligned amino acid positions.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;At how many positions do the two sequences differ?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;100 minus 92.0 is 8.0%, and 8.0% of 450 is 36.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;36&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is the number of positions at which the two are the same, 92.0% of 450.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;414&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is the percentage that differ, not the number of positions. It still has to be taken of the 450 compared.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;8&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is the percent identity with the percent sign dropped. The number of differences depends on how many positions were compared.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;92&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q3&quot;&gt;&lt;h2&gt;Question 3 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;Four species are compared. Species W and X share 97% of a sequence, W and Y share 84%, W and Z share 71%, and X and Z share 70%.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;Which two species share the most recent common ancestor?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;They share more of the sequence than any other pair in the table. Differences build up after two lineages separate, so the pair with the fewest has been apart for the shortest time.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;W and X&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;They share 71%, the second lowest figure given. That makes them among the most distantly related of the pairs listed.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;W and Z&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;They share 70%, the lowest figure given, so they are the most distantly related of the pairs listed.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;X and Z&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;They share 84%, which is more than W and Z but less than W and X.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;W and Y&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q4&quot;&gt;&lt;h2&gt;Question 4 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A cladogram is built from sequence comparisons of five animals. A student points at two species that meet at a node near the right-hand end of the diagram.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What does that node represent?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Each node on a cladogram is a point at which one lineage split into two. The species at the tips are the living descendants; the ancestor at the node is extinct.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;A common ancestor of those two species, which was neither of them&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Neither living species is the ancestor of the other. They are both descendants of whatever was at the node.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The point at which one of the two species evolved from the other&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A node marks where the lineages split. When reproductive isolation became complete is not something a sequence comparison records.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The moment the two species stopped being able to breed together&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A node is not one of the species on the diagram. It is a point of common ancestry, and no sequence from it exists.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The species whose sequence is most like both of them&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q5&quot;&gt;&lt;h2&gt;Question 5 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;Five species are compared and one of them shares less of the sequence with each of the other four than any of those four share with each other.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What is that species called, and what is it for?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Its lineage separated before the others did, so it tells you which end of the tree is older. Without something outside the group, the order of the branches inside it cannot be rooted.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The outgroup, which the branching order of the other four is read against&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The name is right and the job is not. No average is taken; each pair is compared with each other pair.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The outgroup, which supplies the average the other four are compared with&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;All five are living species, and none is the ancestor of the others. Sharing less sequence does not mean having changed less.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The ancestor, because it is the least changed of the five&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The distant species is still related to the other four, which is why a shared gene can be compared at all. An unrelated sequence could not be aligned.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The control, because it shows what an unrelated sequence looks like&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q6&quot;&gt;&lt;h2&gt;Question 6 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A student compares a gene in several mammals and finds that two species with very similar body shapes have quite different sequences, while two that look nothing alike have very similar ones.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What is the most likely explanation?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Similar conditions can produce similar body shapes in lineages that separated long ago. The sequences record the ancestry; the shapes record what each lineage has lived through since.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The two that look alike have been shaped by similar surroundings rather than by close ancestry&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Sequence data disagreeing with appearance is a common and informative result, not a sign of error. It is one of the main reasons molecular comparisons are made.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The sequences must have been lined up against one another incorrectly&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Body shape is shaped by the surroundings as well as by ancestry, which is exactly the difficulty molecular comparisons were brought in to get round.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Body shape is a better guide to ancestry than a shared sequence is&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Sequences from different species are routinely very similar. Mouse and human share about 88% of this one.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The two similar sequences must have come from the same species after all&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q7&quot;&gt;&lt;h2&gt;Question 7 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A researcher knows that a certain protein accumulates differences at a roughly steady rate over long periods, and that two species in a group are known from fossils to have separated 60 million years ago. Their sequences differ at 30 positions.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What can the researcher now do that the sequences alone did not allow?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;30 differences in 60 million years is one difference per 2 million years. That rate, taken from a dated fossil, can then be applied to the other pairs&#x27; differences.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Estimate how long ago other pairs in the group separated&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The sequences alone already settle that: the pair with the fewest differences. The fossil adds dates, not order.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Work out which two species in the group are most closely related&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is assumed in order to use the rate, not shown by it. One dated pair cannot test it.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Show that the protein changes at the same rate in every species&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A shared gene doing the same job in both is already evidence of that. The fossil supplies a date.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Prove that the two species share a common ancestor&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q8&quot;&gt;&lt;h2&gt;Question 8 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;Three plant species are compared at the same gene. A and B are 94% identical, A and C are 79% identical, and B and C are 80% identical.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;Which branching order do these figures support?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;A and B share far more sequence with each other than either shares with C, so they are the closest pair. C shares about the same with both of them, which places its branch below them both.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;C branched off first, then A and B separated from each other&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That would need B and C to be the closest pair. They share 80%, the second lowest of the three figures.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;A branched off first, then B and C separated from each other&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That would need A and C to be the closest pair, and they share 79%, the lowest of the three figures.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;B branched off first, then A and C separated from each other&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;94% against 79% and 80% is not close. A and B are plainly the pair that has been apart for the shortest time.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The three separated at the same moment, because all three figures are close&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Eight questions to answer.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;questions-molecular-phylogeny&quot;;
+  var TOTAL = 8, done = 0, right = 0;
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  [].forEach.call(document.querySelectorAll(&quot;.item&quot;), function (item) {
+    choices(item, function (ok) {
+      done++;
+      if (ok) right++;
+      if (done &lt; TOTAL) {
+        say(done + &quot; of &quot; + TOTAL + &quot; answered, &quot; + right + &quot; right so far.&quot;);
+      } else {
+        var p = document.createElement(&quot;div&quot;);
+        p.className = &quot;score&quot;;
+        p.innerHTML = &quot;&lt;b&gt;&quot; + right + &quot; of &quot; + TOTAL + &quot;&lt;/b&gt; right. Every option is &quot;
+          + &quot;explained above, including the ones you did not choose.&quot;;
+        msg.parentNode.insertBefore(p, msg);
+        say(&quot;&quot;);
+      }
+      reportHeight();
+    });
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="3600" loading="lazy" title="Simulation"></iframe></div></section>
+<footer><p><strong>Nothing inside a simulation is marked.</strong> TimeBack cannot see into an iframe, so the simulations are the practical, and what a student is assessed on is the eight questions at the end together with the checkpoints in the lessons this practical belongs to.</p><p><strong>The data was designed, not measured.</strong> The lesson outlines print worked numbers inside their statistics lessons, and a practical reusing those would be one a student could answer from memory. Every reading here was designed to give one clean, defensible verdict, in the units and at the sample sizes the outlines use. <code>_tools/verify.py</code> recomputes every verdict from the readings themselves.</p><p>The analysis skill this practical teaches is <strong>percent identity into a number of differences, and a branching order</strong>, and no two of the nine practicals teach the same one.</p></footer></div>

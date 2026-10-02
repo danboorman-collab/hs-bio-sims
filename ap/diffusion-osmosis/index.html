@@ -1,0 +1,1430 @@
+<title>AP Biology: Diffusion and osmosis</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#fbfaf8; --surface:#ffffff; --ink:#1b1e22; --muted:#6f6a63;
+  --line:#e7e2da; --rule:#d8d2c8; --accent:#0e6f66; --accent-soft:#e2efec;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+    --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+  --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1020px;margin:0 auto;padding-inline:20px;padding-block:44px 64px}
+
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6.4vw,44px);line-height:1.12;
+  letter-spacing:-.015em;margin:0 0 14px;text-wrap:balance}
+.lead{font-family:var(--serif);font-size:clamp(17px,2.4vw,20px);line-height:1.5;color:var(--ink);
+  margin:0 0 28px;max-width:56ch}
+.lead em{font-style:italic;color:var(--accent);font-weight:600}
+
+.design{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 40px}
+.design div{flex:1 1 205px;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:14px 16px}
+.design dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 5px}
+.design dd{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
+
+nav.jump{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin:0 0 44px;
+  scrollbar-width:thin}
+nav.jump a{flex:0 0 auto;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;background:var(--surface);white-space:nowrap}
+nav.jump a:hover,nav.jump a:focus-visible{color:var(--accent);border-color:var(--accent)}
+
+section.stage{border-top:1px solid var(--rule);padding-top:26px;margin-top:44px;
+  scroll-margin-top:24px}
+section.stage:first-of-type{margin-top:0}
+.shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+  letter-spacing:.08em}
+.kind{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(21px,3.6vw,27px);line-height:1.2;
+  margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.blurb{color:var(--muted);font-size:15.5px;margin:0 0 20px}
+
+.media{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+video{width:100%;display:block;background:#0b0d10}
+iframe{width:100%;border:0;display:block;background:var(--surface)}
+
+footer{border-top:1px solid var(--rule);margin-top:52px;padding-top:22px;color:var(--muted);
+  font-size:14.5px}
+footer p{margin:0 0 10px;max-width:62ch}
+footer strong{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<style>.waiting{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--muted);font-size:14px}.waiting code{font-size:12.5px}.skillnote{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:12px 14px;margin:0 0 40px;font-size:14.5px}.skillnote b{color:var(--accent)}</style>
+
+<script>
+// Registered before the frames are parsed: a srcdoc frame runs its script during parsing and
+// would otherwise post its height into a page that is not listening yet.
+(function () {
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "sim-height") return;
+    var frames = document.querySelectorAll("iframe");
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].contentWindow === e.source) {
+        frames[i].style.height = e.data.height + "px";
+        return;
+      }
+    }
+  });
+}());
+</script>
+<div class="wrap">
+<p class="eyebrow">AP Biology &middot; Big Idea: Energetics &middot; Topic 2.7</p>
+<h1>Diffusion and osmosis</h1>
+<p class="lead">What is the water potential of a piece of potato tissue? Seven stages, in the order a student works them &mdash; <em>watch, design, collect, watch, analyze, conclude, answer</em>.</p>
+<dl class="design"><div><dt>What we change</dt><dd>The sucrose concentration: 0.0 to 1.0 M, six solutions</dd></div><div><dt>What we measure</dt><dd>The mass of each core before and after an hour, in grams</dd></div><div><dt>What we work out</dt><dd>The concentration at which a core neither gains nor loses</dd></div></dl>
+<p class="skillnote"><b>The analysis skill:</b> Percent change in mass, a best-fit line, its zero crossing, and &Psi;<sub>s</sub> = &minus;iCRT. <b>The graph:</b> a scatter plot with one best-fit straight line.</p>
+<nav class="jump" aria-label="The seven stages"><a href="#method">1. Watch the method</a><a href="#design">2. Design the investigation</a><a href="#collect">3. Collect the results</a><a href="#skillvideo">4. Watch how to work the analysis</a><a href="#skill">5. Work the analysis</a><a href="#conclusion">6. Choose the conclusion</a><a href="#questions">7. Answer eight questions</a></nav>
+<section class="stage" id="method"><div class="shead"><span class="num">Stage 1</span><span class="kind">Video &middot; about 85 seconds</span></div><h2>Watch the method</h2><p class="blurb">The apparatus, the one thing that changes, what is held the same, and why the investigation is repeated.</p><div class="media"><div class="waiting"><p><b>This video is still rendering.</b> It drops in as <code>videos/AP U02 -diffusion-osmosis-method.mp4</code> and the stage works from that moment, with nothing else to change. The prompt it was submitted with is in <code>videos/prompts/</code>.</p></div></div></section>
+<section class="stage" id="design"><div class="shead"><span class="num">Stage 2</span><span class="kind">Simulation &middot; Five decisions</span></div><h2>Design the investigation</h2><p class="blurb">The null hypothesis, what is measured, how many repeats, what is held constant and what the control is. One submission, then every option is marked and explained.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Design the investigation&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.dec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.dec &gt; h2{font-size:12.5px;margin:0 0 4px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.dec &gt; p.ask{margin:0 0 10px;font-size:15px;font-weight:600}
+.dec .choice{cursor:pointer}
+.dec.marked .choice{cursor:default}
+.choice.chosen{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Design the investigation&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Energetics &amp;middot; Topic 2.7&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;Six potato cores are about to go into six sucrose solutions. Five decisions first. Choose one answer in each, then submit once.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;dec&quot; id=&quot;dec-question&quot; data-id=&quot;question&quot;&gt;&lt;h2&gt;Decision 1 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Which of these is the testable question?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;That concentration is the one whose water potential matches the potato&#x27;s, which is what the investigation sets out to find.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;At what sucrose concentration does a potato core neither gain nor lose mass?&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The investigation measures water moving, not sucrose. A core&#x27;s mass changes because water enters or leaves it.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Does sucrose move into a potato core?&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Hypertonic is a comparison between two solutions, so the question is incomplete until it says hypertonic to what.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Is a potato cell hypertonic?&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-measure&quot; data-id=&quot;measure&quot;&gt;&lt;h2&gt;Decision 2 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;What is calculated from each core&#x27;s two masses?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Cores do not all start at the same mass, so a gain of 1 g means more for a small core than for a large one.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The percent change in mass: the change divided by the starting mass, times 100.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A gain of 1.5 g means more for a small core than for a large one, so the change has to be compared with what the core started at.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The change in mass in grams, with the sign kept.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Cores cut to the same length still differ in mass, and the final mass on its own does not say which way the water went.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The final mass, because every core started at the same mass.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-constant&quot; data-id=&quot;constant&quot;&gt;&lt;h2&gt;Decision 3 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Which of these has to be kept the same for every core?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Each of these changes how much water moves, and the temperature appears in &amp;Psi;s = &amp;minus;iCRT as well.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The length and diameter of the core, the volume of solution, the time and the temperature.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Cores from one potato still differ in size, and a larger core takes longer to come to equilibrium.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The volume of solution only, because the cores come from the same potato.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The sucrose concentration is the one thing deliberately changed. Keeping it the same would leave nothing to plot against.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The sucrose concentration, because that is what the water potential depends on.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-blot&quot; data-id=&quot;blot&quot;&gt;&lt;h2&gt;Decision 4 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Why is each core blotted before its final mass is taken?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;The mass is meant to be the core&#x27;s. A film of liquid on the surface adds mass that nothing moved across a membrane.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because solution clinging to the outside is weighed as though it were water the core had taken in.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Anything on the surface adds mass. It cannot make the core weigh less.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because sucrose on the surface would make the core look lighter than it is.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is a practical nuisance, not the reason. The reason is that the liquid is weighed along with the core.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because a wet core slips on the balance pan.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; id=&quot;dec-zero&quot; data-id=&quot;zero&quot;&gt;&lt;h2&gt;Decision 5 of 5&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Why is a core put into distilled water, at 0.0 M?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;The answer is read off where the line crosses zero, so the points have to lie on both sides of zero for the crossing to be inside the data.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the line has to be drawn across a range wide enough to cross zero, and 0.0 M gives the largest gain.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;0.0 M is one more level of the concentration being changed. It is the end of the range, not a control.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because distilled water is the control, and a control must be included.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A core in distilled water gains as much water as it can. The potato&#x27;s water potential is read where the line crosses zero, not at the end of the range.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the core in distilled water shows the potato&#x27;s own water potential directly.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Choose one answer in each of the
+5 decisions.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;
+  &lt;button id=&quot;submit&quot; type=&quot;button&quot; class=&quot;primary&quot; disabled&gt;Submit all
+  5&lt;/button&gt;
+  &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;design-diffusion-osmosis&quot;;
+  var TOTAL = 5;
+  var msg = document.getElementById(&quot;msg&quot;);
+  var submit = document.getElementById(&quot;submit&quot;);
+  var marked = false;
+
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  function wire() {
+    [].forEach.call(document.querySelectorAll(&quot;.dec&quot;), function (dec) {
+      var box = dec.querySelector(&quot;.choices&quot;);
+      var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+      btns.forEach(function (b, i) {
+        box.appendChild(b);
+        b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+        b.addEventListener(&quot;click&quot;, function () {
+          if (marked) return;
+          btns.forEach(function (o) { o.classList.remove(&quot;chosen&quot;); });
+          b.classList.add(&quot;chosen&quot;);
+          dec.dataset.chosen = &quot;1&quot;;
+          var done = document.querySelectorAll(&quot;.dec[data-chosen]&quot;).length;
+          submit.disabled = done &lt; TOTAL;
+          say(done &lt; TOTAL
+              ? (TOTAL - done) + &quot; decision&quot; + (TOTAL - done === 1 ? &quot;&quot; : &quot;s&quot;) + &quot; still to make.&quot;
+              : &quot;All &quot; + TOTAL + &quot; chosen. Submit when you are ready \u2014 they cannot be &quot;
+                + &quot;changed afterwards.&quot;);
+        });
+      });
+    });
+  }
+
+  submit.addEventListener(&quot;click&quot;, function () {
+    if (marked) return;
+    marked = true;
+    submit.disabled = true;
+    var right = 0;
+    [].forEach.call(document.querySelectorAll(&quot;.dec&quot;), function (dec) {
+      dec.classList.add(&quot;marked&quot;);
+      [].forEach.call(dec.querySelectorAll(&quot;.choice&quot;), function (o) {
+        o.disabled = true;
+        var ok = o.dataset.ok === &quot;1&quot;;
+        o.classList.add(ok ? &quot;right&quot; : &quot;wrong&quot;);
+        if (ok &amp;&amp; o.classList.contains(&quot;chosen&quot;)) right++;
+        var w = document.createElement(&quot;p&quot;);
+        w.className = &quot;why &quot; + (ok ? &quot;right&quot; : &quot;wrong&quot;);
+        w.textContent = o.dataset.why;
+        o.parentNode.insertBefore(w, o.nextSibling);
+      });
+    });
+    var p = document.createElement(&quot;div&quot;);
+    p.className = &quot;score&quot;;
+    p.innerHTML = &quot;&lt;b&gt;&quot; + right + &quot; of &quot; + TOTAL + &quot;&lt;/b&gt; decisions made the way this &quot;
+      + &quot;investigation was carried out. Every option is explained above, including the ones &quot;
+      + &quot;you did not choose.&quot;;
+    msg.parentNode.insertBefore(p, msg);
+    say(&quot;&quot;);
+    reportHeight();
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+  wire();
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1500" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="collect"><div class="shead"><span class="num">Stage 3</span><span class="kind">Simulation &middot; Fixed readings</span></div><h2>Collect the results</h2><p class="blurb">Work through the conditions and read off what each one gives. Every student meets the same numbers, because a marked question needs one right answer.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Collect the results&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+td.pend{color:var(--muted)}
+td.got{color:var(--fg);font-weight:600}
+tr.running th[scope=row]{color:var(--accent)}
+button.run{padding:5px 11px;border-radius:7px;font:inherit;font-size:13px;cursor:pointer;
+  border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);
+  font-weight:650;white-space:nowrap}
+button.run:disabled{background:var(--bg);color:var(--muted);border-color:var(--line);
+  cursor:default}
+td.cell{cursor:pointer}
+td.cell:hover{background:var(--accent-soft,var(--card))}
+td.cell[data-got]{cursor:default;font-weight:600}
+td.self{background:var(--card);color:var(--muted)}
+.progress{font-size:13px;color:var(--muted);margin-top:10px}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Collect the results&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;One potato core in each of six sucrose solutions, weighed before and after.&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;Each core was cut to the same length and diameter, blotted, and weighed. After an hour in its solution it was blotted again and reweighed.&lt;/p&gt;&lt;p&gt;Run a solution to see its core&#x27;s two masses.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;scroll&quot;&gt;&lt;table&gt;&lt;caption&gt;Masses in grams, to the nearest 0.005 g. One core per solution.&lt;/caption&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Sucrose concentration (M)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Mass at the start (g)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Mass after 1 hour (g)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr id=&quot;r0&quot;&gt;&lt;th scope=&quot;row&quot;&gt;0.0&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c0-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;pend&quot; id=&quot;c0-1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;0&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r1&quot;&gt;&lt;th scope=&quot;row&quot;&gt;0.2&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c1-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;pend&quot; id=&quot;c1-1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;1&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r2&quot;&gt;&lt;th scope=&quot;row&quot;&gt;0.4&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c2-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;pend&quot; id=&quot;c2-1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;2&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r3&quot;&gt;&lt;th scope=&quot;row&quot;&gt;0.6&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c3-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;pend&quot; id=&quot;c3-1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;3&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r4&quot;&gt;&lt;th scope=&quot;row&quot;&gt;0.8&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c4-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;pend&quot; id=&quot;c4-1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;4&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;r5&quot;&gt;&lt;th scope=&quot;row&quot;&gt;1.0&lt;/th&gt;&lt;td class=&quot;pend&quot; id=&quot;c5-0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;pend&quot; id=&quot;c5-1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td&gt;&lt;button class=&quot;run&quot; type=&quot;button&quot; data-row=&quot;5&quot;&gt;Run&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Nothing has been run yet.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+  var SIM_ID = &quot;collect-diffusion-osmosis&quot;;
+
+  var VALS = [[&quot;5.000&quot;, &quot;5.915&quot;], [&quot;5.000&quot;, &quot;5.480&quot;], [&quot;5.000&quot;, &quot;5.110&quot;], [&quot;5.000&quot;, &quot;4.710&quot;], [&quot;5.000&quot;, &quot;4.280&quot;], [&quot;5.000&quot;, &quot;3.905&quot;]];
+  var LEFT = VALS.length;
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+  function runRow(n, btn) {
+    btn.disabled = true;
+    document.getElementById(&quot;r&quot; + n).classList.add(&quot;running&quot;);
+    var vals = VALS[n], k = 0;
+    (function step() {
+      if (k &gt;= vals.length) {
+        document.getElementById(&quot;r&quot; + n).classList.remove(&quot;running&quot;);
+        document.getElementById(&quot;r&quot; + n).classList.add(&quot;done&quot;);
+        LEFT--;
+        say(LEFT ? LEFT + &quot; still to run.&quot; : &quot;Six cores, each with the mass it started at and the mass it ended at. The percent change in mass comes next.&quot;, LEFT ? &quot;&quot; : &quot;good&quot;);
+        reportHeight();
+        return;
+      }
+      var td = document.getElementById(&quot;c&quot; + n + &quot;-&quot; + k);
+      td.textContent = vals[k];
+      td.className = &quot;got&quot;;
+      k++;
+      setTimeout(step, 190);
+    }());
+  }
+
+  [].forEach.call(document.querySelectorAll(&quot;button.run&quot;), function (b) {
+    b.addEventListener(&quot;click&quot;, function () { runRow(+b.dataset.row, b); });
+  });
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="700" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="skillvideo"><div class="shead"><span class="num">Stage 4</span><span class="kind">Video &middot; about 85 seconds</span></div><h2>Watch how to work the analysis</h2><p class="blurb">Percent change in mass, a best-fit line, its zero crossing, and &Psi;<sub>s</sub> = &minus;iCRT.</p><div class="media"><div class="waiting"><p><b>This video is still rendering.</b> It drops in as <code>videos/AP U02 -diffusion-osmosis-skill.mp4</code> and the stage works from that moment, with nothing else to change. The prompt it was submitted with is in <code>videos/prompts/</code>.</p></div></div></section>
+<section class="stage" id="skill"><div class="shead"><span class="num">Stage 5</span><span class="kind">Simulation &middot; Step by step, typed answers</span></div><h2>Work the analysis</h2><p class="blurb">One step at a time, with your own answer typed into each box. Every miss gets a hint that says more than the last, and none of them gives the answer.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;From six masses to a water potential&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.step .go{margin-top:11px;padding:8px 14px;border-radius:8px;font:inherit;font-weight:650;
+  cursor:pointer;border:1px solid var(--accent);background:var(--accent);
+  color:var(--accent-fg)}
+.step .go[hidden]{display:none}
+.trail{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 4px}
+.trail i{width:16px;height:4px;border-radius:2px;background:var(--line);display:block}
+.trail i.on{background:var(--accent)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;From six masses to a water potential&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Percent change in mass, a best-fit line, its zero crossing, and &amp;Psi;&lt;sub&gt;s&lt;/sub&gt; = &amp;minus;iCRT.&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;A core gains mass when water moves into it and loses mass when water moves out. Somewhere between the six solutions there is one whose water potential matches the potato&#x27;s, and in that one the core would neither gain nor lose.&lt;/p&gt;&lt;p&gt;That concentration is not one of the six. It is read off the line through them.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;trail&quot; aria-hidden=&quot;true&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;
+&lt;div class=&quot;step&quot; data-kind=&quot;table&quot; data-i=&quot;0&quot;&gt;&lt;h2&gt;The six cores&lt;/h2&gt;&lt;div class=&quot;scroll&quot;&gt;&lt;table&gt;&lt;caption&gt;Potato cores in sucrose solutions at 22 &amp;deg;C, masses in grams.&lt;/caption&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Sucrose (M)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Mass at the start (g)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Mass after 1 hour (g)&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;0.0&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;5.000&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;5.915&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;0.2&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;5.000&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;5.480&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;0.4&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;5.000&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;5.110&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;0.6&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;5.000&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;4.710&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;0.8&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;5.000&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;4.280&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;1.0&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;5.000&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;3.905&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot;&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;1&quot; data-id=&quot;p0&quot;&gt;&lt;h2&gt;Step 1 &amp;mdash; percent change for the first core&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;A gain of 1 g means more for a small core than for a large one, so the change is compared with the mass the core started at. Keep the sign: it says which way the water went.&lt;/p&gt;&lt;p class=&quot;formula&quot;&gt;percent change = (final &amp;minus; initial) &amp;divide; initial &amp;times; 100&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;What is the percent change in mass of the core in distilled water, to one decimal place?&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-p0&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Percent change, 0.0 M&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;(5.915 &amp;minus; 5.000) &amp;divide; 5.000 &amp;times; 100&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-p0&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Percent change, 0.0 M&quot;&gt;&lt;span class=&quot;unit&quot;&gt;%&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;2&quot; data-id=&quot;p5&quot;&gt;&lt;h2&gt;Step 2 &amp;mdash; and for the last core&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;This core lost mass, so the answer is negative. Write the minus sign in.&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;What is the percent change in mass of the core in 1.0 M sucrose?&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-p5&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Percent change, 1.0 M&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;(3.905 &amp;minus; 5.000) &amp;divide; 5.000 &amp;times; 100&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-p5&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Percent change, 1.0 M&quot;&gt;&lt;span class=&quot;unit&quot;&gt;%&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;table&quot; data-i=&quot;3&quot;&gt;&lt;h2&gt;All six, as percent changes&lt;/h2&gt;&lt;div class=&quot;scroll&quot;&gt;&lt;table&gt;&lt;caption&gt;Percent change in mass of each potato core after an hour at 22 &amp;deg;C.&lt;/caption&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Sucrose (M)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;0.0&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;0.2&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;0.4&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;0.6&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;0.8&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;1.0&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Change in mass (%)&lt;/th&gt;&lt;td class=&quot;num&quot;&gt;+18.3&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;+9.6&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;+2.2&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;-5.8&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;-14.4&lt;/td&gt;&lt;td class=&quot;num&quot;&gt;-21.9&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot;&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;fig&quot; data-i=&quot;4&quot;&gt;&lt;h2&gt;The six points, with one best-fit line&lt;/h2&gt;&lt;figure&gt;&lt;svg viewBox=&quot;0 0 600 330&quot; width=&quot;100%&quot; role=&quot;img&quot; aria-label=&quot;Change in mass against Sucrose concentration, with one best-fit straight line&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;title&gt;Change in mass against Sucrose concentration, with one best-fit straight line&lt;/title&gt;&lt;desc&gt;Six points, one per core, with a single best-fit line drawn through them and the concentration at which it crosses zero marked.&lt;/desc&gt;&lt;g font-family=&quot;-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif&quot;&gt;&lt;line x1=&quot;62&quot; y1=&quot;16&quot; x2=&quot;62&quot; y2=&quot;276&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.4&quot;/&gt;&lt;line x1=&quot;57&quot; y1=&quot;276.0&quot; x2=&quot;62&quot; y2=&quot;276.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.2&quot;/&gt;&lt;line x1=&quot;62&quot; y1=&quot;276.0&quot; x2=&quot;582&quot; y2=&quot;276.0&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;1&quot;/&gt;&lt;text x=&quot;53&quot; y=&quot;280.0&quot; font-size=&quot;12&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;-40&lt;/text&gt;&lt;line x1=&quot;57&quot; y1=&quot;211.0&quot; x2=&quot;62&quot; y2=&quot;211.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.2&quot;/&gt;&lt;line x1=&quot;62&quot; y1=&quot;211.0&quot; x2=&quot;582&quot; y2=&quot;211.0&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;1&quot;/&gt;&lt;text x=&quot;53&quot; y=&quot;215.0&quot; font-size=&quot;12&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;-20&lt;/text&gt;&lt;line x1=&quot;57&quot; y1=&quot;146.0&quot; x2=&quot;62&quot; y2=&quot;146.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.2&quot;/&gt;&lt;line x1=&quot;62&quot; y1=&quot;146.0&quot; x2=&quot;582&quot; y2=&quot;146.0&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;1&quot;/&gt;&lt;text x=&quot;53&quot; y=&quot;150.0&quot; font-size=&quot;12&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;0&lt;/text&gt;&lt;line x1=&quot;57&quot; y1=&quot;81.0&quot; x2=&quot;62&quot; y2=&quot;81.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.2&quot;/&gt;&lt;line x1=&quot;62&quot; y1=&quot;81.0&quot; x2=&quot;582&quot; y2=&quot;81.0&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;1&quot;/&gt;&lt;text x=&quot;53&quot; y=&quot;85.0&quot; font-size=&quot;12&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;20&lt;/text&gt;&lt;line x1=&quot;57&quot; y1=&quot;16.0&quot; x2=&quot;62&quot; y2=&quot;16.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.2&quot;/&gt;&lt;line x1=&quot;62&quot; y1=&quot;16.0&quot; x2=&quot;582&quot; y2=&quot;16.0&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;1&quot;/&gt;&lt;text x=&quot;53&quot; y=&quot;20.0&quot; font-size=&quot;12&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;end&quot;&gt;40&lt;/text&gt;&lt;line x1=&quot;62&quot; y1=&quot;146.0&quot; x2=&quot;582&quot; y2=&quot;146.0&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;text x=&quot;16&quot; y=&quot;146&quot; font-size=&quot;12.5&quot; fill=&quot;var(--fg)&quot; text-anchor=&quot;middle&quot; transform=&quot;rotate(-90 16 146)&quot;&gt;Change in mass (%)&lt;/text&gt;&lt;line x1=&quot;62&quot; y1=&quot;276&quot; x2=&quot;582&quot; y2=&quot;276&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.4&quot;/&gt;&lt;line x1=&quot;62.0&quot; y1=&quot;16&quot; x2=&quot;62.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;88.0&quot; y1=&quot;16&quot; x2=&quot;88.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;114.0&quot; y1=&quot;16&quot; x2=&quot;114.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;140.0&quot; y1=&quot;16&quot; x2=&quot;140.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;166.0&quot; y1=&quot;16&quot; x2=&quot;166.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;192.0&quot; y1=&quot;16&quot; x2=&quot;192.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;218.0&quot; y1=&quot;16&quot; x2=&quot;218.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;244.0&quot; y1=&quot;16&quot; x2=&quot;244.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;270.0&quot; y1=&quot;16&quot; x2=&quot;270.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;296.0&quot; y1=&quot;16&quot; x2=&quot;296.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;322.0&quot; y1=&quot;16&quot; x2=&quot;322.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;348.0&quot; y1=&quot;16&quot; x2=&quot;348.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;374.0&quot; y1=&quot;16&quot; x2=&quot;374.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;400.0&quot; y1=&quot;16&quot; x2=&quot;400.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;426.0&quot; y1=&quot;16&quot; x2=&quot;426.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;452.0&quot; y1=&quot;16&quot; x2=&quot;452.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;478.0&quot; y1=&quot;16&quot; x2=&quot;478.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;504.0&quot; y1=&quot;16&quot; x2=&quot;504.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;530.0&quot; y1=&quot;16&quot; x2=&quot;530.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;556.0&quot; y1=&quot;16&quot; x2=&quot;556.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;582.0&quot; y1=&quot;16&quot; x2=&quot;582.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;0.6&quot;/&gt;&lt;line x1=&quot;62.0&quot; y1=&quot;16&quot; x2=&quot;62.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;1&quot;/&gt;&lt;line x1=&quot;62.0&quot; y1=&quot;276&quot; x2=&quot;62.0&quot; y2=&quot;281&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.2&quot;/&gt;&lt;text x=&quot;62.0&quot; y=&quot;295&quot; font-size=&quot;12&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;&lt;line x1=&quot;166.0&quot; y1=&quot;16&quot; x2=&quot;166.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;1&quot;/&gt;&lt;line x1=&quot;166.0&quot; y1=&quot;276&quot; x2=&quot;166.0&quot; y2=&quot;281&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.2&quot;/&gt;&lt;text x=&quot;166.0&quot; y=&quot;295&quot; font-size=&quot;12&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;0.2&lt;/text&gt;&lt;line x1=&quot;270.0&quot; y1=&quot;16&quot; x2=&quot;270.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;1&quot;/&gt;&lt;line x1=&quot;270.0&quot; y1=&quot;276&quot; x2=&quot;270.0&quot; y2=&quot;281&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.2&quot;/&gt;&lt;text x=&quot;270.0&quot; y=&quot;295&quot; font-size=&quot;12&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;0.4&lt;/text&gt;&lt;line x1=&quot;374.0&quot; y1=&quot;16&quot; x2=&quot;374.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;1&quot;/&gt;&lt;line x1=&quot;374.0&quot; y1=&quot;276&quot; x2=&quot;374.0&quot; y2=&quot;281&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.2&quot;/&gt;&lt;text x=&quot;374.0&quot; y=&quot;295&quot; font-size=&quot;12&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;0.6&lt;/text&gt;&lt;line x1=&quot;478.0&quot; y1=&quot;16&quot; x2=&quot;478.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;1&quot;/&gt;&lt;line x1=&quot;478.0&quot; y1=&quot;276&quot; x2=&quot;478.0&quot; y2=&quot;281&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.2&quot;/&gt;&lt;text x=&quot;478.0&quot; y=&quot;295&quot; font-size=&quot;12&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;0.8&lt;/text&gt;&lt;line x1=&quot;582.0&quot; y1=&quot;16&quot; x2=&quot;582.0&quot; y2=&quot;276&quot; stroke=&quot;var(--line)&quot; stroke-width=&quot;1&quot;/&gt;&lt;line x1=&quot;582.0&quot; y1=&quot;276&quot; x2=&quot;582.0&quot; y2=&quot;281&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;1.2&quot;/&gt;&lt;text x=&quot;582.0&quot; y=&quot;295&quot; font-size=&quot;12&quot; fill=&quot;var(--muted)&quot; text-anchor=&quot;middle&quot;&gt;1&lt;/text&gt;&lt;text x=&quot;322&quot; y=&quot;317&quot; font-size=&quot;12.5&quot; fill=&quot;var(--fg)&quot; text-anchor=&quot;middle&quot;&gt;Sucrose concentration (M)&lt;/text&gt;&lt;line x1=&quot;62.0&quot; y1=&quot;87.3&quot; x2=&quot;582.0&quot; y2=&quot;217.7&quot; stroke=&quot;var(--accent)&quot; stroke-width=&quot;1.8&quot;/&gt;&lt;line x1=&quot;296.1&quot; y1=&quot;146.0&quot; x2=&quot;296.1&quot; y2=&quot;276&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.5&quot; stroke-dasharray=&quot;4 4&quot;/&gt;&lt;circle cx=&quot;296.1&quot; cy=&quot;146.0&quot; r=&quot;5&quot; fill=&quot;none&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;2&quot;/&gt;&lt;circle cx=&quot;62.0&quot; cy=&quot;86.5&quot; r=&quot;4.2&quot; fill=&quot;var(--fg)&quot;/&gt;&lt;circle cx=&quot;166.0&quot; cy=&quot;114.8&quot; r=&quot;4.2&quot; fill=&quot;var(--fg)&quot;/&gt;&lt;circle cx=&quot;270.0&quot; cy=&quot;138.8&quot; r=&quot;4.2&quot; fill=&quot;var(--fg)&quot;/&gt;&lt;circle cx=&quot;374.0&quot; cy=&quot;164.8&quot; r=&quot;4.2&quot; fill=&quot;var(--fg)&quot;/&gt;&lt;circle cx=&quot;478.0&quot; cy=&quot;192.8&quot; r=&quot;4.2&quot; fill=&quot;var(--fg)&quot;/&gt;&lt;circle cx=&quot;582.0&quot; cy=&quot;217.2&quot; r=&quot;4.2&quot; fill=&quot;var(--fg)&quot;/&gt;&lt;rect x=&quot;352&quot; y=&quot;22&quot; width=&quot;11&quot; height=&quot;11&quot; rx=&quot;2&quot; fill=&quot;var(--fg)&quot;/&gt;&lt;text x=&quot;369&quot; y=&quot;31&quot; font-size=&quot;12&quot; fill=&quot;var(--fg)&quot;&gt;one potato core&lt;/text&gt;&lt;rect x=&quot;352&quot; y=&quot;39&quot; width=&quot;11&quot; height=&quot;11&quot; rx=&quot;2&quot; fill=&quot;var(--accent)&quot;/&gt;&lt;text x=&quot;369&quot; y=&quot;48&quot; font-size=&quot;12&quot; fill=&quot;var(--fg)&quot;&gt;best-fit line&lt;/text&gt;&lt;rect x=&quot;352&quot; y=&quot;56&quot; width=&quot;11&quot; height=&quot;11&quot; rx=&quot;2&quot; fill=&quot;var(--warn)&quot;/&gt;&lt;text x=&quot;369&quot; y=&quot;65&quot; font-size=&quot;12&quot; fill=&quot;var(--fg)&quot;&gt;where the line crosses zero&lt;/text&gt;&lt;/g&gt;&lt;/svg&gt;&lt;figcaption&gt;One straight best-fit line through all six points. The points scatter either side of it, which is why a line is drawn rather than two points joined.&lt;/figcaption&gt;&lt;/figure&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot;&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;5&quot; data-id=&quot;cross&quot;&gt;&lt;h2&gt;Step 3 &amp;mdash; read the zero crossing&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;Where the line crosses zero, a core would neither gain nor lose mass. So at that concentration the solution&#x27;s water potential and the potato&#x27;s are the same.&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;At what sucrose concentration does the best-fit line cross zero? Read it to the nearest 0.01 M.&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-cross&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Concentration at zero change&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;read it off the graph&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-cross&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Concentration at zero change&quot;&gt;&lt;span class=&quot;unit&quot;&gt;M&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;6&quot; data-id=&quot;kelvin&quot;&gt;&lt;h2&gt;Step 4 &amp;mdash; the temperature in kelvin&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;The equation needs a temperature in kelvin, which counts up from the coldest anything can be. The steps are the size of a Celsius degree, so add 273.&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;The solutions were at 22 &amp;deg;C. What is that in kelvin?&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-kelvin&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Temperature&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;22 + 273&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-kelvin&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Temperature&quot;&gt;&lt;span class=&quot;unit&quot;&gt;K&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;num&quot; data-i=&quot;7&quot; data-id=&quot;psi&quot;&gt;&lt;h2&gt;Step 5 &amp;mdash; the solute potential&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;i is the number of particles one dissolved unit splits into, and sucrose does not split, so i = 1. R is the pressure constant from the formula sheet, 0.0831 L&amp;middot;bar/(mol&amp;middot;K). The minus sign at the front makes every answer negative, as a solute potential must be.&lt;/p&gt;&lt;p class=&quot;formula&quot;&gt;&amp;Psi;&lt;sub&gt;s&lt;/sub&gt; = &amp;minus;iCRT&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;What is the solute potential of the solution at the zero crossing, to one decimal place? Write the minus sign in.&lt;/p&gt;&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-psi&quot;&gt;&lt;span class=&quot;lab&quot;&gt;&amp;Psi;&lt;sub&gt;s&lt;/sub&gt;&lt;/span&gt;&lt;span class=&quot;work&quot;&gt;&amp;minus;1 &amp;times; 0.45 &amp;times; 0.0831 &amp;times; 295&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-psi&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;&amp;Psi;&lt;sub&gt;s&lt;/sub&gt;&quot;&gt;&lt;span class=&quot;unit&quot;&gt;bar&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;pick&quot; data-i=&quot;8&quot;&gt;&lt;h2&gt;Step 6 &amp;mdash; from the solution to the potato&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;The solutions sat in open beakers.&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;What is the water potential of the potato tissue?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Water potential is the pressure potential plus the solute potential. Nothing presses on an open beaker, so the solution&#x27;s water potential is its solute potential, and at the zero crossing the potato&#x27;s water potential matches it.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;-11.0 bar, because an open solution has &amp;Psi;&lt;sub&gt;p&lt;/sub&gt; = 0, so its &amp;Psi; is its &amp;Psi;&lt;sub&gt;s&lt;/sub&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The potato&#x27;s pressure potential is not its solute potential. The reason the two water potentials are equal is that water stopped moving.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;-11.0 bar, because the potato&#x27;s pressure potential is the same as its solute potential&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A water potential is negative in both directions. Water moves toward the lower value, and there is no sign change across a membrane.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;11.0 bar, because the potato is on the other side of the membrane&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot; hidden&gt;Continue&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; data-kind=&quot;pick&quot; data-i=&quot;9&quot;&gt;&lt;h2&gt;Step 7 &amp;mdash; predict&lt;/h2&gt;&lt;p class=&quot;ask&quot;&gt;A fresh core from the same potato is put into 0.2 M sucrose at 22 &amp;deg;C, whose water potential is -4.9 bar.&lt;/p&gt;&lt;p class=&quot;ask&quot;&gt;Which way does water move?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Water moves toward the lower water potential &amp;mdash; the one further below zero. The core is at -11.0 bar and the solution at -4.9 bar, so the core is the lower of the two and water moves into it.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Into the core&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;-11.0 bar is further below zero than -4.9 bar, so the core is the lower of the two. Water moves toward the lower value, not away from it.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Out of the core&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Equilibrium needs the two water potentials to be equal, and -11.0 bar is not -4.9 bar.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Neither way: the core is at equilibrium&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;go&quot; hidden&gt;Continue&lt;/button&gt;&lt;/div&gt;
+&lt;div class=&quot;verdict&quot; id=&quot;verdict&quot; hidden&gt;&lt;b&gt;The line crosses zero at 0.45 M, which at 22 &amp;deg;C is a water potential of -11.0 bar.&lt;/b&gt; That is the potato tissue&#x27;s own water potential. Six masses, one line, and a value that none of the six solutions measured directly.&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;skill-diffusion-osmosis&quot;;
+  var NUMS = {&quot;p0&quot;: {&quot;want&quot;: 18.3, &quot;tol&quot;: 0.06, &quot;dp&quot;: 1, &quot;hints&quot;: [&quot;Not the percent change. Work it out again.&quot;, &quot;Take the starting mass from the final mass, divide by the starting mass, then multiply by 100.&quot;, &quot;The core gained 0.915 g. Divide that by 5.000 and multiply by 100.&quot;]}, &quot;p5&quot;: {&quot;want&quot;: -21.9, &quot;tol&quot;: 0.06, &quot;dp&quot;: 1, &quot;hints&quot;: [&quot;Not the percent change. Work it out again.&quot;, &quot;The core lost mass, so the change is negative. Divide it by the starting mass and multiply by 100.&quot;, &quot;The core lost 1.095 g. Divide &amp;minus;1.095 by 5.000 and multiply by 100.&quot;]}, &quot;cross&quot;: {&quot;want&quot;: 0.45, &quot;tol&quot;: 0.015, &quot;dp&quot;: 2, &quot;hints&quot;: [&quot;Not where the line crosses. Read the graph again.&quot;, &quot;Find where the best-fit line meets the thick zero line, then read straight down to the x axis.&quot;, &quot;It lies between 0.4 M and 0.5 M, nearer the middle than either end.&quot;]}, &quot;kelvin&quot;: {&quot;want&quot;: 295, &quot;tol&quot;: 0, &quot;dp&quot;: 0, &quot;hints&quot;: [&quot;Not the temperature in kelvin. Work it out again.&quot;, &quot;Add 273 to the Celsius temperature.&quot;, &quot;22 + 273.&quot;]}, &quot;psi&quot;: {&quot;want&quot;: -11.0, &quot;tol&quot;: 0.4, &quot;dp&quot;: 1, &quot;hints&quot;: [&quot;Not the solute potential. Work it out again.&quot;, &quot;Multiply i by the concentration by R by the temperature in kelvin, then put a minus sign in front.&quot;, &quot;1 &amp;times; 0.45 &amp;times; 0.0831 &amp;times; 295, and then make it negative.&quot;]}};
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Dan&#x27;s ruling, 1 October: the student types the answer. A stepper could be walked to the
+  // right number without ever working it out. The cost of a box is that it can be given
+  // nonsense, so this one says what it wants, and the misses are graded: the first says
+  // only that it is wrong, the second names the operation, the third names it with the
+  // numbers in. It never gives the answer away, and there is no limit on tries.
+  //
+  // AP adds a tolerance. 7.81 and 7.8 are the same answer; 0.47 and 0.4648 may not be. Each
+  // box carries its own accepted range, and each says how many figures it wants.
+  function entry(host, opts) {
+    var input = host.querySelector(&quot;input&quot;), btn = host.querySelector(&quot;button&quot;);
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, &quot;&quot;).replace(/^[x×]/i, &quot;&quot;)
+                     .replace(/^\+/, &quot;&quot;);
+      input.classList.remove(&quot;miss&quot;);
+      if (!raw) { opts.onbad(&quot;Type your answer in the box, then press Check.&quot;); return; }
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? &quot;Just the number, without the units — they are already printed beside the box.&quot;
+          : &quot;That is not a number. Type digits, and a decimal point if you need one.&quot;);
+        input.classList.add(&quot;miss&quot;);
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) &lt;= opts.tol + 1e-12) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.dp === undefined ? v : v.toFixed(opts.dp);
+        opts.onright(v);
+      } else {
+        input.classList.add(&quot;miss&quot;);
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener(&quot;click&quot;, submit);
+    input.addEventListener(&quot;keydown&quot;, function (e) {
+      if (e.key === &quot;Enter&quot;) { e.preventDefault(); submit(); }
+    });
+    input.addEventListener(&quot;input&quot;, function () { input.classList.remove(&quot;miss&quot;); });
+    return { focus: function () { try { input.focus(); } catch (e) {} } };
+  }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  // One step at a time. A student who can see the next question can work backwards from it,
+  // and in a chain of calculations that is the whole answer.
+  var STEPS = [].slice.call(document.querySelectorAll(&quot;.step&quot;));
+  var at = 0, opened = false;
+  function openStep(n) {
+    at = n;
+    for (var i = 0; i &lt; STEPS.length; i++) STEPS[i].hidden = i &gt; n;
+    var s = STEPS[n];
+    // On the FIRST call nothing is focused and nothing is scrolled to. This simulation is
+    // framed inside a lesson page, and both focusing a field and scrolling an element into
+    // view inside a frame drag the page around it -- which landed a reader at stage 5 the
+    // moment the lesson opened.
+    if (s &amp;&amp; opened) {
+      var inp = s.querySelector(&quot;input&quot;);
+      if (inp &amp;&amp; !inp.disabled) { try { inp.focus(); } catch (e) {} }
+      s.scrollIntoView({ block: &quot;nearest&quot; });
+    }
+    opened = true;
+    reportHeight();
+  }
+  function nextStep() { if (at &lt; STEPS.length - 1) openStep(at + 1); else finish(); }
+
+
+  var PIPS = [].slice.call(document.querySelectorAll(&quot;.trail i&quot;));
+  function mark(n) { for (var i = 0; i &lt; PIPS.length; i++) PIPS[i].className = i &lt;= n ? &quot;on&quot; : &quot;&quot;; }
+
+  function finish() {
+    document.getElementById(&quot;verdict&quot;).hidden = false;
+    say(&quot;&quot;);
+    reportHeight();
+  }
+
+  STEPS.forEach(function (step, n) {
+    var kind = step.dataset.kind;
+    var go = step.querySelector(&quot;.go&quot;);
+    if (go) go.addEventListener(&quot;click&quot;, function () { mark(n); nextStep(); });
+
+    if (kind === &quot;num&quot;) {
+      var cfg = NUMS[step.dataset.id];
+      entry(step.querySelector(&quot;.entry&quot;), {
+        want: cfg.want, tol: cfg.tol, dp: cfg.dp,
+        onright: function () {
+          step.querySelector(&quot;.calcrow&quot;).classList.add(&quot;done&quot;);
+          say(&quot;&quot;);
+          mark(n);
+          setTimeout(nextStep, 240);
+        },
+        onwrong: function (v, tries) {
+          say(cfg.hints[Math.min(tries, cfg.hints.length) - 1], &quot;warn&quot;);
+        },
+        onbad: function (t) { say(t, &quot;warn&quot;); }
+      });
+    } else if (kind === &quot;pick&quot;) {
+      choices(step, function (right) {
+        say(right ? &quot;&quot; : &quot;Read the reason beside every option before you go on.&quot;,
+            right ? &quot;&quot; : &quot;warn&quot;);
+        go.hidden = false;
+        go.focus();
+        reportHeight();
+      });
+    }
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+  openStep(0);
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1600" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="conclusion"><div class="shead"><span class="num">Stage 6</span><span class="kind">Question &middot; A guide, then one choice</span></div><h2>Choose the conclusion</h2><p class="blurb">What a conclusion has to do &mdash; a claim, the evidence for it, and the reasoning that connects them &mdash; and then three conclusions for your own results.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Choose the conclusion&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.guide{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.guide h2{font-size:12.5px;margin:0 0 9px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.guide ol{margin:0;padding-left:21px}
+.guide li{margin:0 0 9px;font-size:14.5px}
+.guide li:last-child{margin:0}
+.guide li b{display:block;font-size:14.5px}
+.guide li span{color:var(--muted)}
+.bridge{font-size:14.5px;margin:0 0 12px}
+.recap{background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:8px;padding:11px 13px;font-size:14.5px;margin:0 0 14px}
+.recap b{display:block;font-size:12.5px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em;margin-bottom:5px}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.choice{align-items:flex-start}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Choose the conclusion&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Energetics &amp;middot; Topic 2.7&lt;/p&gt;
+
+&lt;div class=&quot;guide&quot;&gt;&lt;h2&gt;What a conclusion has to do&lt;/h2&gt;&lt;ol&gt;&lt;li&gt;&lt;b&gt;Make the claim&lt;/b&gt;&lt;span&gt;Answer the question the investigation asked, in one sentence, with no more certainty than your results carry. Where two error bars overlap or a test fails to reject, say what the data do not show rather than picking the higher number.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the evidence&lt;/b&gt;&lt;span&gt;Quote the numbers from your own results that the claim rests on, with their units: a mean and its error bar, a statistic and its critical value, a five-number summary, a value read off a line. Not a number from the lesson, and not the method.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the reasoning&lt;/b&gt;&lt;span&gt;Say why that evidence supports that claim, and connect it to the biology. This is the step that turns a description of what happened into a conclusion about what it means.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;
+&lt;p class=&quot;bridge&quot;&gt;Three conclusions are offered below. Only one of them makes a claim this investigation&#x27;s results support, backs it with numbers from those results, and says why they support it. Read all three before you choose.&lt;/p&gt;
+&lt;div class=&quot;recap&quot;&gt;&lt;b&gt;Your results&lt;/b&gt;You put six potato cores in sucrose solutions from 0.0 to 1.0 M at 22 &amp;deg;C, worked out the percent change in mass of each, drew one best-fit line through the six points and read off where it crossed zero: 0.45 M.&lt;/div&gt;
+
+&lt;p class=&quot;stem&quot;&gt;Which of these is a conclusion, and one your own results support?&lt;/p&gt;
+&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;It claims a value for the tissue, quotes the crossing the whole line gives and the equation that turns it into bars, and reasons through the step that makes the two equal &amp;mdash; a core that neither gains nor loses is at the same water potential as what surrounds it.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The potato tissue had a water potential of &amp;minus;11.0 bar at 22 &amp;deg;C, the same as the solution in which a core neither gains nor loses water. The best-fit line through all six cores crossed zero at 0.45 M, and &amp;Psi;s = &amp;minus;iCRT gives 0.45 M sucrose a solute potential of &amp;minus;11.0 bar at 295 K, with &amp;Psi;p = 0 in an open beaker.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The claim is right and the evidence does not support it. The smallest measured change is the nearest of six points, not the crossing, and a point is not a line. Reading the crossing off the best fit is what makes all six cores count toward the answer.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;The potato tissue had a water potential of &amp;minus;11.0 bar at 22 &amp;deg;C, so water would leave a core placed in any solution stronger than 0.45 M. The core in 0.4 M sucrose changed in mass by only +2.2%, the smallest change of the six, and 0.4 M lies nearer to the zero crossing than any of the other five concentrations.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A conclusion about the quantity that was not measured. What crossed the membranes was water, moving out of the cores in the stronger solutions and into them in the weaker ones. Nothing in the method measures sucrose at all.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Sucrose moved into the potato cores from the stronger solutions, so those cores lost mass while the ones in weak solutions gained it. The core in 1.0 M sucrose lost 21.9% of its mass over the hour and the core in distilled water gained 18.3%, a difference of just over 40 percentage points across the range.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;
+
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Choose one.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;conclusion-diffusion-osmosis&quot;;
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  choices(document.querySelector(&quot;.sim&quot;), function (right) {
+    var p = document.createElement(&quot;div&quot;);
+    p.className = &quot;score&quot;;
+    p.textContent = right
+      ? &quot;That is the one. The reason each of the other two is not a conclusion these &quot;
+        + &quot;results support is written beneath it.&quot;
+      : &quot;Not that one. The conclusion these results support is marked above, and the &quot;
+        + &quot;reason each of the others falls short is written beneath it.&quot;;
+    msg.parentNode.insertBefore(p, msg);
+    say(&quot;&quot;);
+    reportHeight();
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1200" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="questions"><div class="shead"><span class="num">Stage 7</span><span class="kind">Questions &middot; Eight items</span></div><h2>Answer eight questions</h2><p class="blurb">On carrying the investigation out, on what its numbers come to, and on what they do and do not show.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Eight questions&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step &gt; h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.item &gt; h2{font-size:12.5px;margin:0 0 6px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.setup{font-size:14.5px;margin:0 0 9px;color:var(--fg)}
+.stem{font-size:15.5px;font-weight:600;margin:0 0 11px}
+.item table{margin-bottom:10px}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Eight questions&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Energetics &amp;middot; Topic 2.7&lt;/p&gt;
+&lt;div class=&quot;brief&quot;&gt;&lt;p&gt;On carrying this investigation out, and on what its results show.
+Each question is marked as soon as it is answered, and every option is explained.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;item&quot; id=&quot;q1&quot;&gt;&lt;h2&gt;Question 1 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;Six potato cores are cut from one potato, blotted, weighed, and left for an hour in sucrose solutions from 0.0 to 1.0 M. Each is then blotted again and reweighed.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;Why is the percent change in mass worked out rather than the change in grams?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Cores cut to the same length still differ in mass. Dividing the change by what the core started at puts all six on the same footing.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the same gain in grams means more for a small core than for a large one&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A change in mass can be negative too: it is the final mass minus the starting mass, and that is negative whenever a core loses water.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because a percentage can be negative and a mass in grams cannot&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The change in grams is what the percentage is worked out from, so the balance has to be good enough for it either way.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the balance is not accurate enough to give a change in grams&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The solutions are made up in moles per liter, which is what &amp;Psi;s = &amp;minus;iCRT needs.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Because the sucrose solutions were made up as percentages&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q2&quot;&gt;&lt;h2&gt;Question 2 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A potato core weighed 4.80 g at the start and 4.32 g after an hour in sucrose solution.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What is its percent change in mass?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;The core lost 0.48 g. Divided by the starting mass of 4.80 g that is 0.100, and multiplied by 100, &amp;minus;10.0%. The sign says water left the core.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;&amp;minus;10.0%&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is 0.48 divided by the final mass, 4.32. The change is always compared with the mass the core started at.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;&amp;minus;11.1%&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is the change in grams with a percent sign put after it. It still has to be divided by the starting mass and multiplied by 100.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;&amp;minus;0.48%&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The size is right and the sign is missing. The core lost mass, so the change is negative, and the sign is what says which way the water went.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;10.0%&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q3&quot;&gt;&lt;h2&gt;Question 3 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A student finds that a best-fit line through six potato cores crosses zero change in mass at 0.36 M sucrose. The solutions were at 25 &amp;deg;C, the ionization constant of sucrose is 1, and R is 0.0831 L&amp;middot;bar/(mol&amp;middot;K).&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What is the water potential of the potato tissue?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;25 &amp;deg;C is 298 K. &amp;Psi;s = &amp;minus;1 &amp;times; 0.36 &amp;times; 0.0831 &amp;times; 298, which is &amp;minus;8.92 bar. The solutions were in open beakers, so &amp;Psi;p is zero and the tissue&#x27;s water potential is that solute potential.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;&amp;minus;8.92 bar&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is what comes out if 25 is used instead of 298: the temperature has to be in kelvin, which is the Celsius temperature plus 273.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;&amp;minus;0.75 bar&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The size is right and the sign is wrong. The minus sign at the front of &amp;Psi;s = &amp;minus;iCRT makes every solute potential negative.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;+8.92 bar&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is twice the right answer, which is what comes out if i is taken as 2. Sucrose does not split when it dissolves, so i is 1.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;&amp;minus;17.8 bar&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q4&quot;&gt;&lt;h2&gt;Question 4 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;Two solutions sit in open beakers at the same temperature. Solution A has a water potential of &amp;minus;4 bar. Solution B has a water potential of &amp;minus;9 bar. A piece of plant tissue at &amp;minus;6 bar is put into each in turn.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;Which way does water move in each beaker?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Water moves toward the lower water potential &amp;mdash; the one further below zero. &amp;minus;6 is lower than &amp;minus;4, so water enters from A; &amp;minus;9 is lower than &amp;minus;6, so water leaves into B.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Into the tissue in A, and out of the tissue in B&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That is the right rule applied with the signs the wrong way round. &amp;minus;9 bar is further below zero than &amp;minus;6 bar, so it is the lower of the two.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Out of the tissue in A, and into the tissue in B&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Water enters only where the tissue is the lower of the two. In B the solution is lower, at &amp;minus;9 bar.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Into the tissue in both beakers&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Water moves whenever the two water potentials differ, and the tissue&#x27;s value differs from both of them.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Neither way in either beaker, because the tissue sits between the two values&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q5&quot;&gt;&lt;h2&gt;Question 5 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A student leaves one set of potato cores unblotted before the final weighing. Every other core is blotted as the method says.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What effect does that have on the results from the unblotted cores?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;A film of solution clinging to the surface is weighed along with the core. That adds mass whichever solution the core was in, so it pushes the whole line up and moves the zero crossing to a stronger solution.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Their final masses are too high, so every percent change is shifted upward&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The direction of the shift is backwards. A line pushed upward crosses zero further to the right, at a stronger solution.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Their final masses are too high, so the zero crossing moves to a weaker solution&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Solution on the surface would have to evaporate completely and instantly for that, and in a minute on a balance it does not.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Their final masses are too low, because the solution evaporates from the surface&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Even if it were the same for every core, it would still shift the whole line and so move the zero crossing.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Nothing, because the extra mass is the same for every core&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q6&quot;&gt;&lt;h2&gt;Question 6 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A walled plant cell with a solute potential of &amp;minus;10 bar is placed in an open beaker of sucrose solution whose water potential is &amp;minus;4 bar. Water enters the cell until its water potential matches the solution&#x27;s.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What pressure potential has the cell wall reached by then?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Water potential is the pressure potential plus the solute potential. At equilibrium the cell is at &amp;minus;4 bar with a solute potential of &amp;minus;10, so &amp;Psi;p is &amp;minus;4 minus &amp;minus;10, which is +6 bar.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;+6 bar&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;A pressure potential in a walled cell is positive: the wall pushes inward on the contents. The sign comes from &amp;Psi;p = &amp;Psi; &amp;minus; &amp;Psi;s.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;&amp;minus;6 bar&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;That adds the two values instead of taking one from the other. The equation rearranges to &amp;Psi;p = &amp;Psi; &amp;minus; &amp;Psi;s.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;+14 bar&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;&amp;Psi;p is zero in the open beaker, where nothing presses on the solution. The cell has a wall, and water entering presses the contents against it.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;0 bar&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q7&quot;&gt;&lt;h2&gt;Question 7 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A class repeats the potato investigation but leaves the cores in the solutions for only ten minutes instead of an hour.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What is the most likely effect on the position of the zero crossing?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;Ten minutes shrinks every percent change toward zero, which makes the line shallower. A shallower line through the same pattern still crosses zero near the same concentration.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;It barely moves, because every core gains or loses less but in the same direction&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Less water leaves the cores in the strong solutions, and less enters in the weak ones. Both ends move toward zero together.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;It moves to a weaker solution, because less water has had time to leave&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Not reaching equilibrium flattens the line rather than tilting it. Both ends are cut back in proportion.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;It moves to a stronger solution, because the cores have not reached equilibrium&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;Cores do change measurably in ten minutes; the changes are simply smaller.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;It cannot be read at all, because no core changes in mass in ten minutes&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;item&quot; id=&quot;q8&quot;&gt;&lt;h2&gt;Question 8 of 8&lt;/h2&gt;&lt;p class=&quot;setup&quot;&gt;A student wants to find the water potential of a carrot. They cut six cores, weigh each, and leave them in sodium chloride solutions from 0.0 to 0.6 M at 20 &amp;deg;C. Sodium chloride splits into two ions when it dissolves.&lt;/p&gt;&lt;p class=&quot;stem&quot;&gt;What must the student do differently from the potato method?&lt;/p&gt;&lt;div class=&quot;choices&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot; data-why=&quot;The ionization constant counts the separate particles one dissolved unit splits into. Sodium chloride gives a sodium ion and a chloride ion, so 0.3 M sodium chloride puts as many particles into the water as 0.6 M sucrose.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Use i = 2 in &amp;Psi;s = &amp;minus;iCRT&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;R is a constant, 0.0831 L&amp;middot;bar/(mol&amp;middot;K), whatever is dissolved in the water.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Use a different value of R&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;The carrot cores differ in mass just as the potato cores did, so the change still has to be compared with what each core started at.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Work out the change in mass in grams rather than as a percentage&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot; data-why=&quot;293 K is the conversion: 20 &amp;deg;C plus 273. The method already converts the temperature; only i changes.&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;&lt;/span&gt;&lt;span&gt;Use 293 K rather than converting the temperature at all&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Eight questions to answer.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;questions-diffusion-osmosis&quot;;
+  var TOTAL = 8, done = 0, right = 0;
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(&quot;.choices&quot;);
+    var btns = shuffle([].slice.call(box.querySelectorAll(&quot;.choice&quot;)));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCDE&quot;.charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        if (box.dataset.done) return;
+        box.dataset.done = &quot;1&quot;;
+        var right = b.dataset.ok === &quot;1&quot;;
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          if (o === b) o.classList.add(&quot;picked&quot;);
+          var w = document.createElement(&quot;p&quot;);
+          w.className = &quot;why &quot; + (o.dataset.ok === &quot;1&quot; ? &quot;right&quot; : &quot;wrong&quot;);
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  [].forEach.call(document.querySelectorAll(&quot;.item&quot;), function (item) {
+    choices(item, function (ok) {
+      done++;
+      if (ok) right++;
+      if (done &lt; TOTAL) {
+        say(done + &quot; of &quot; + TOTAL + &quot; answered, &quot; + right + &quot; right so far.&quot;);
+      } else {
+        var p = document.createElement(&quot;div&quot;);
+        p.className = &quot;score&quot;;
+        p.innerHTML = &quot;&lt;b&gt;&quot; + right + &quot; of &quot; + TOTAL + &quot;&lt;/b&gt; right. Every option is &quot;
+          + &quot;explained above, including the ones you did not choose.&quot;;
+        msg.parentNode.insertBefore(p, msg);
+        say(&quot;&quot;);
+      }
+      reportHeight();
+    });
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="3600" loading="lazy" title="Simulation"></iframe></div></section>
+<footer><p><strong>Nothing inside a simulation is marked.</strong> TimeBack cannot see into an iframe, so the simulations are the practical, and what a student is assessed on is the eight questions at the end together with the checkpoints in the lessons this practical belongs to.</p><p><strong>The data was designed, not measured.</strong> The lesson outlines print worked numbers inside their statistics lessons, and a practical reusing those would be one a student could answer from memory. Every reading here was designed to give one clean, defensible verdict, in the units and at the sample sizes the outlines use. <code>_tools/verify.py</code> recomputes every verdict from the readings themselves.</p><p>The analysis skill this practical teaches is <strong>percent change in mass, a best-fit line, its zero crossing, and &Psi;<sub>s</sub> = &minus;iCRT</strong>, and no two of the nine practicals teach the same one.</p></footer></div>

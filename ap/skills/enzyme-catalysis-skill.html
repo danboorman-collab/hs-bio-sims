@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How far off might the mean be?</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.step .go{margin-top:11px;padding:8px 14px;border-radius:8px;font:inherit;font-weight:650;
+  cursor:pointer;border:1px solid var(--accent);background:var(--accent);
+  color:var(--accent-fg)}
+.step .go[hidden]{display:none}
+.trail{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 4px}
+.trail i{width:16px;height:4px;border-radius:2px;background:var(--line);display:block}
+.trail i.on{background:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>How far off might the mean be?</h1>
+<p class="sub">Mean, standard deviation, standard error, and whether two means really differ.</p>
+<div class="brief"><p>Five tubes at one temperature give five rates that are close but not equal. Their mean is an estimate of the true mean &mdash; the rate the mean would reach if the rate were measured in endless tubes.</p><p>You will work the 40 &deg;C tubes right through by hand. The other four temperatures have been worked the same way and are given to you.</p></div>
+<div class="trail" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="step" data-kind="table" data-i="0"><h2>The five tubes you are going to work</h2><p class="ask">These are the five rates measured at 40 &deg;C.</p><div class="scroll"><table><caption>Rate of oxygen release at 40 &deg;C, in mL/min.</caption><thead><tr><th scope="col">Tube</th><th scope="col">Rate (mL/min)</th></tr></thead><tbody><tr><th scope="row">Tube 1</th><td class="num">3.5</td></tr><tr><th scope="row">Tube 2</th><td class="num">4.0</td></tr><tr><th scope="row">Tube 3</th><td class="num">3.7</td></tr><tr><th scope="row">Tube 4</th><td class="num">3.9</td></tr><tr><th scope="row">Tube 5</th><td class="num">3.6</td></tr></tbody></table></div><button type="button" class="go">Continue</button></div><div class="step" data-kind="num" data-i="1" data-id="mean"><h2>Step 1 &mdash; the mean</h2><p class="ask">The mean is the one rate that stands for all five tubes: add the readings up and divide the total by how many there are.</p><p class="formula">x&#772; = &Sigma;x<sub>i</sub> &divide; n</p><p class="ask">What is the mean rate of the five tubes?</p><div class="calc"><div class="calcrow" id="row-mean"><span class="lab">Mean rate at 40 &deg;C</span><span class="work">3.5 + 4.0 + 3.7 + 3.9 + 3.6 = 18.7</span><span class="entry" id="spin-mean"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Mean rate at 40 &deg;C"><span class="unit">mL/min</span><button type="button">Check</button></span></div></div><p class="note">The mean is written to one more decimal place than the readings, because the mean of several readings is known more precisely than any one of them.</p></div><div class="step" data-kind="num" data-i="2" data-id="sd"><h2>Step 2 &mdash; the standard deviation</h2><p class="ask">The standard deviation, s, says how far a single reading typically sits from the mean. Take each reading away from the mean, square what is left, add the squares, divide by one less than the number of readings, and take the square root.</p><p class="formula">s = &radic;( &Sigma;(x<sub>i</sub> &minus; x&#772;)&sup2; &divide; (n &minus; 1) )</p><p class="ask">What is the standard deviation of the five rates, to three significant figures?</p><div class="calc"><div class="calcrow" id="row-sd"><span class="lab">Standard deviation, s</span><span class="work">&Sigma;(x&minus;x&#772;)&sup2; = 0.172</span><span class="entry" id="spin-sd"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Standard deviation, s"><span class="unit">mL/min</span><button type="button">Check</button></span></div></div><p class="note">The divisor is n &minus; 1, not n. That is how the AP formula sheet prints it.</p></div><div class="step" data-kind="num" data-i="3" data-id="se"><h2>Step 3 &mdash; the standard error of the mean</h2><p class="ask">The five readings are scattered, so the five-tube mean can land a little above or below the true mean. The standard error measures how far off it is likely to be: a wider spread makes it larger, and more tubes make it smaller.</p><p class="formula">SE = s &divide; &radic;n</p><p class="ask">What is the standard error of the mean, to three significant figures?</p><div class="calc"><div class="calcrow" id="row-se"><span class="lab">Standard error, SE</span><span class="work">0.207 &divide; &radic;5</span><span class="entry" id="spin-se"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Standard error, SE"><span class="unit">mL/min</span><button type="button">Check</button></span></div></div><p class="note">&lsquo;Error&rsquo; here means the chance miss between a sample mean and the true mean. It is not a mistake in reading the gas syringe.</p></div><div class="step" data-kind="num" data-i="4" data-id="twose"><h2>Step 4 &mdash; two standard errors</h2><p class="ask">An AP graph draws its error bars two standard errors above the mean and two below. That range is where the true mean is likely to lie, and it is called a 95% confidence interval.</p><p class="ask">What is 2SE?</p><div class="calc"><div class="calcrow" id="row-twose"><span class="lab">2SE</span><span class="work">2 &times; 0.0927</span><span class="entry" id="spin-twose"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="2SE"><span class="unit">mL/min</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="5" data-id="lo"><h2>Step 5 &mdash; the bottom of the error bar</h2><p class="ask">The error bar runs from the mean minus 2SE to the mean plus 2SE.</p><p class="formula">bar ends = x&#772; &plusmn; 2SE</p><p class="ask">At what value does the bottom of the error bar sit?</p><div class="calc"><div class="calcrow" id="row-lo"><span class="lab">Lower end of the bar</span><span class="work">3.74 &minus; 0.185</span><span class="entry" id="spin-lo"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Lower end of the bar"><span class="unit">mL/min</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="6" data-id="hi"><h2>Step 6 &mdash; the top of the error bar</h2><p class="ask">And at what value does the top of the error bar sit?</p><div class="calc"><div class="calcrow" id="row-hi"><span class="lab">Upper end of the bar</span><span class="work">3.74 + 0.185</span><span class="entry" id="spin-hi"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Upper end of the bar"><span class="unit">mL/min</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="table" data-i="7"><h2>All five temperatures</h2><p class="ask">Here are the other four temperatures, worked the same way. Your 40 &deg;C row is in the middle.</p><div class="scroll"><table><caption>Mean rate of oxygen release at each temperature, with the standard deviation, the standard error and the two ends of a &plusmn;2SE error bar. All in mL/min.</caption><thead><tr><th scope="col">Temperature (&deg;C)</th><th scope="col">Mean (mL/min)</th><th scope="col">s</th><th scope="col">SE</th><th scope="col">2SE</th><th scope="col">Bar runs from</th><th scope="col">to</th></tr></thead><tbody><tr><th scope="row">20</th><td class="num">2.00</td><td class="num">0.158</td><td class="num">0.0707</td><td class="num">0.141</td><td class="num">1.86</td><td class="num">2.14</td></tr><tr><th scope="row">30</th><td class="num">3.50</td><td class="num">0.212</td><td class="num">0.0949</td><td class="num">0.190</td><td class="num">3.31</td><td class="num">3.69</td></tr><tr><th scope="row">40</th><td class="num">3.74</td><td class="num">0.207</td><td class="num">0.0927</td><td class="num">0.185</td><td class="num">3.55</td><td class="num">3.93</td></tr><tr><th scope="row">50</th><td class="num">1.58</td><td class="num">0.164</td><td class="num">0.0735</td><td class="num">0.147</td><td class="num">1.43</td><td class="num">1.73</td></tr><tr><th scope="row">60</th><td class="num">0.20</td><td class="num">0.071</td><td class="num">0.0316</td><td class="num">0.063</td><td class="num">0.14</td><td class="num">0.26</td></tr></tbody></table></div><button type="button" class="go">Continue</button></div><div class="step" data-kind="fig" data-i="8"><h2>The five means, drawn with their error bars</h2><figure><svg viewBox="0 0 600 330" width="100%" role="img" aria-label="Mean mean rate of oxygen release against temperature, with error bars representing plus or minus two standard errors" xmlns="http://www.w3.org/2000/svg"><title>Mean mean rate of oxygen release against temperature, with error bars representing plus or minus two standard errors</title><desc>Each point is the mean of five tubes. The bar through each point runs two standard errors above the mean and two below.</desc><g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif"><line x1="62" y1="16" x2="62" y2="276" stroke="var(--fg)" stroke-width="1.4"/><line x1="57" y1="276.0" x2="62" y2="276.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="276.0" x2="582" y2="276.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="280.0" font-size="12" fill="var(--muted)" text-anchor="end">0</text><line x1="57" y1="224.0" x2="62" y2="224.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="224.0" x2="582" y2="224.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="228.0" font-size="12" fill="var(--muted)" text-anchor="end">1</text><line x1="57" y1="172.0" x2="62" y2="172.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="172.0" x2="582" y2="172.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="176.0" font-size="12" fill="var(--muted)" text-anchor="end">2</text><line x1="57" y1="120.0" x2="62" y2="120.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="120.0" x2="582" y2="120.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="124.0" font-size="12" fill="var(--muted)" text-anchor="end">3</text><line x1="57" y1="68.0" x2="62" y2="68.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="68.0" x2="582" y2="68.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="72.0" font-size="12" fill="var(--muted)" text-anchor="end">4</text><line x1="57" y1="16.0" x2="62" y2="16.0" stroke="var(--fg)" stroke-width="1.2"/><line x1="62" y1="16.0" x2="582" y2="16.0" stroke="var(--line)" stroke-width="1"/><text x="53" y="20.0" font-size="12" fill="var(--muted)" text-anchor="end">5</text><text x="16" y="146" font-size="12.5" fill="var(--fg)" text-anchor="middle" transform="rotate(-90 16 146)">Mean rate of oxygen release (mL/min)</text><line x1="62" y1="276" x2="582" y2="276" stroke="var(--fg)" stroke-width="1.4"/><text x="114.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">20</text><text x="218.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">30</text><text x="322.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">40</text><text x="426.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">50</text><text x="530.0" y="295" font-size="12" fill="var(--muted)" text-anchor="middle">60</text><text x="322" y="317" font-size="12.5" fill="var(--fg)" text-anchor="middle">Temperature (&deg;C)</text><rect x="204.0" y="84.1" width="132.0" height="7.0" fill="var(--warn)" fill-opacity="0.18" stroke="var(--warn)" stroke-width="1.2" stroke-dasharray="4 3"/><text x="344.0" y="91.6" font-size="11.5" fill="var(--warn)">the range the two bars share</text><polyline points="114.0,172.0 218.0,94.0 322.0,81.5 426.0,193.8 530.0,265.6" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 4"/><line x1="114.0" y1="179.4" x2="114.0" y2="164.6" stroke="var(--accent)" stroke-width="1.8"/><line x1="107.0" y1="179.4" x2="121.0" y2="179.4" stroke="var(--accent)" stroke-width="1.8"/><line x1="107.0" y1="164.6" x2="121.0" y2="164.6" stroke="var(--accent)" stroke-width="1.8"/><circle cx="114.0" cy="172.0" r="4.4" fill="var(--accent)"/><line x1="218.0" y1="103.9" x2="218.0" y2="84.1" stroke="var(--accent)" stroke-width="1.8"/><line x1="211.0" y1="103.9" x2="225.0" y2="103.9" stroke="var(--accent)" stroke-width="1.8"/><line x1="211.0" y1="84.1" x2="225.0" y2="84.1" stroke="var(--accent)" stroke-width="1.8"/><circle cx="218.0" cy="94.0" r="4.4" fill="var(--accent)"/><line x1="322.0" y1="91.2" x2="322.0" y2="71.9" stroke="var(--accent)" stroke-width="1.8"/><line x1="315.0" y1="91.2" x2="329.0" y2="91.2" stroke="var(--accent)" stroke-width="1.8"/><line x1="315.0" y1="71.9" x2="329.0" y2="71.9" stroke="var(--accent)" stroke-width="1.8"/><circle cx="322.0" cy="81.5" r="4.4" fill="var(--accent)"/><line x1="426.0" y1="201.5" x2="426.0" y2="186.2" stroke="var(--accent)" stroke-width="1.8"/><line x1="419.0" y1="201.5" x2="433.0" y2="201.5" stroke="var(--accent)" stroke-width="1.8"/><line x1="419.0" y1="186.2" x2="433.0" y2="186.2" stroke="var(--accent)" stroke-width="1.8"/><circle cx="426.0" cy="193.8" r="4.4" fill="var(--accent)"/><line x1="530.0" y1="268.9" x2="530.0" y2="262.3" stroke="var(--accent)" stroke-width="1.8"/><line x1="523.0" y1="268.9" x2="537.0" y2="268.9" stroke="var(--accent)" stroke-width="1.8"/><line x1="523.0" y1="262.3" x2="537.0" y2="262.3" stroke="var(--accent)" stroke-width="1.8"/><circle cx="530.0" cy="265.6" r="4.4" fill="var(--accent)"/></g></svg><figcaption>Mean rate of oxygen release at five temperatures. Error bars represent &plusmn;2SE, n = 5. The shaded strip is the range the 30 &deg;C and 40 &deg;C bars share.</figcaption></figure><button type="button" class="go">Continue</button></div><div class="step" data-kind="pick" data-i="9"><h2>Step 7 &mdash; do two bars overlap?</h2><p class="ask">The 30 &deg;C bar runs from 3.31 to 3.69 mL/min. The 40 &deg;C bar runs from 3.55 to 3.93 mL/min. Both represent &plusmn;2SE.</p><p class="ask">Do the 30 &deg;C and 40 &deg;C bars overlap?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Bars overlap when the bottom of the higher bar sits below the top of the lower bar. The 40 &deg;C bar's bottom is 3.55 mL/min and the 30 &deg;C bar's top is 3.69 mL/min. 3.55 sits below 3.69, so they overlap."><span class="ltr"></span><span>Yes</span></button><button type="button" class="choice" data-ok="0" data-why="Compare the bottom of the higher bar with the top of the lower bar, not the two means and not the two tops. 3.55 sits below 3.69."><span class="ltr"></span><span>No</span></button></div><button type="button" class="go" hidden>Continue</button></div><div class="step" data-kind="pick" data-i="10"><h2>Step 8 &mdash; what the overlap shows</h2><p class="ask">The two bars overlap, sharing the range 3.55 to 3.69 mL/min.</p><p class="ask">Which of these do the data show about the rates at 30 &deg;C and 40 &deg;C?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Each bar is the range its true mean is likely to lie in. The two bars overlap, so both true means could lie in the shared range, at the same value. So the difference between 3.50 and 3.74 mL/min could be chance."><span class="ltr"></span><span>The data do not show a difference between the two rates</span></button><button type="button" class="choice" data-ok="0" data-why="Overlapping bars leave the question open. The two true means may still differ, and more tubes might show it. Overlap means &lsquo;no difference shown&rsquo;, not &lsquo;the same&rsquo;."><span class="ltr"></span><span>The rate is the same at 30 &deg;C and at 40 &deg;C</span></button><button type="button" class="choice" data-ok="0" data-why="A higher sample mean can easily be chance when the two &plusmn;2SE bars overlap. These five tubes cannot say which of the two is the faster."><span class="ltr"></span><span>The rate is higher at 40 &deg;C than at 30 &deg;C</span></button></div><button type="button" class="go" hidden>Continue</button></div><div class="step" data-kind="pick" data-i="11"><h2>Step 9 &mdash; a pair that does not overlap</h2><p class="ask">The 20 &deg;C bar runs from 1.86 to 2.14 mL/min, and the 30 &deg;C bar from 3.31 to 3.69 mL/min.</p><p class="ask">What is the verdict on the null hypothesis for 20 &deg;C against 30 &deg;C?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The 20 &deg;C bar's top, 2.14 mL/min, sits below the 30 &deg;C bar's bottom, 3.31 mL/min, so the bars do not overlap. The two true means are then very unlikely to be the same, so the difference is very unlikely to be chance."><span class="ltr"></span><span>Reject the null hypothesis: temperature changed the rate</span></button><button type="button" class="choice" data-ok="0" data-why="That is the verdict when the bars overlap. These two are clear of each other, with 1.17 mL/min of space between them."><span class="ltr"></span><span>Fail to reject the null hypothesis: the data do not show a difference</span></button><button type="button" class="choice" data-ok="0" data-why="&lsquo;Accept&rsquo; is never one of the two wordings. The verdict is always reject, or fail to reject."><span class="ltr"></span><span>Accept the null hypothesis: the rates are equal</span></button></div><button type="button" class="go" hidden>Continue</button></div>
+<div class="verdict" id="verdict" hidden><b>Both verdicts, from one set of tubes.</b> Between 20 and 30 &deg;C the bars are clear of each other, so the null hypothesis is rejected and temperature changed the rate. Between 30 and 40 &deg;C they overlap, so these five tubes cannot say which temperature is the faster &mdash; which is also the honest answer about where catalase's optimum lies.</div>
+<p class="msg" id="msg" role="status" aria-live="polite"></p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "skill-enzyme-catalysis";
+  var NUMS = {"mean": {"want": 3.74, "tol": 0.005, "dp": 2, "hints": ["Not the mean. Work it out again.", "Add the five rates together, then divide the total by five.", "The five rates add to 18.7. Divide that by 5."]}, "sd": {"want": 0.207, "tol": 0.002, "dp": 3, "hints": ["Not the standard deviation. Work it out again.", "Square each reading's distance from the mean, add the squares, divide by four, then take the square root.", "The squared distances add to 0.172. Divide by 4, then take the square root."]}, "se": {"want": 0.0927, "tol": 0.0006, "dp": 4, "hints": ["Not the standard error. Work it out again.", "Divide the standard deviation by the square root of the number of readings.", "Divide 0.207 by &radic;5, which is about 2.236."]}, "twose": {"want": 0.1855, "tol": 0.0012, "dp": 4, "hints": ["Not 2SE. Work it out again.", "Double the standard error.", "Multiply 0.0927 by 2."]}, "lo": {"want": 3.55, "tol": 0.012, "dp": 2, "hints": ["Not the lower end. Work it out again.", "Take 2SE away from the mean.", "Take 0.185 away from 3.74."]}, "hi": {"want": 3.93, "tol": 0.012, "dp": 2, "hints": ["Not the upper end. Work it out again.", "Add 2SE to the mean.", "Add 0.185 to 3.74."]}};
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Dan's ruling, 1 October: the student types the answer. A stepper could be walked to the
+  // right number without ever working it out. The cost of a box is that it can be given
+  // nonsense, so this one says what it wants, and the misses are graded: the first says
+  // only that it is wrong, the second names the operation, the third names it with the
+  // numbers in. It never gives the answer away, and there is no limit on tries.
+  //
+  // AP adds a tolerance. 7.81 and 7.8 are the same answer; 0.47 and 0.4648 may not be. Each
+  // box carries its own accepted range, and each says how many figures it wants.
+  function entry(host, opts) {
+    var input = host.querySelector("input"), btn = host.querySelector("button");
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, "").replace(/^[x×]/i, "")
+                     .replace(/^\+/, "");
+      input.classList.remove("miss");
+      if (!raw) { opts.onbad("Type your answer in the box, then press Check."); return; }
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? "Just the number, without the units — they are already printed beside the box."
+          : "That is not a number. Type digits, and a decimal point if you need one.");
+        input.classList.add("miss");
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) <= opts.tol + 1e-12) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.dp === undefined ? v : v.toFixed(opts.dp);
+        opts.onright(v);
+      } else {
+        input.classList.add("miss");
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener("click", submit);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); submit(); }
+    });
+    input.addEventListener("input", function () { input.classList.remove("miss"); });
+    return { focus: function () { try { input.focus(); } catch (e) {} } };
+  }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  // One step at a time. A student who can see the next question can work backwards from it,
+  // and in a chain of calculations that is the whole answer.
+  var STEPS = [].slice.call(document.querySelectorAll(".step"));
+  var at = 0, opened = false;
+  function openStep(n) {
+    at = n;
+    for (var i = 0; i < STEPS.length; i++) STEPS[i].hidden = i > n;
+    var s = STEPS[n];
+    // On the FIRST call nothing is focused and nothing is scrolled to. This simulation is
+    // framed inside a lesson page, and both focusing a field and scrolling an element into
+    // view inside a frame drag the page around it -- which landed a reader at stage 5 the
+    // moment the lesson opened.
+    if (s && opened) {
+      var inp = s.querySelector("input");
+      if (inp && !inp.disabled) { try { inp.focus(); } catch (e) {} }
+      s.scrollIntoView({ block: "nearest" });
+    }
+    opened = true;
+    reportHeight();
+  }
+  function nextStep() { if (at < STEPS.length - 1) openStep(at + 1); else finish(); }
+
+
+  var PIPS = [].slice.call(document.querySelectorAll(".trail i"));
+  function mark(n) { for (var i = 0; i < PIPS.length; i++) PIPS[i].className = i <= n ? "on" : ""; }
+
+  function finish() {
+    document.getElementById("verdict").hidden = false;
+    say("");
+    reportHeight();
+  }
+
+  STEPS.forEach(function (step, n) {
+    var kind = step.dataset.kind;
+    var go = step.querySelector(".go");
+    if (go) go.addEventListener("click", function () { mark(n); nextStep(); });
+
+    if (kind === "num") {
+      var cfg = NUMS[step.dataset.id];
+      entry(step.querySelector(".entry"), {
+        want: cfg.want, tol: cfg.tol, dp: cfg.dp,
+        onright: function () {
+          step.querySelector(".calcrow").classList.add("done");
+          say("");
+          mark(n);
+          setTimeout(nextStep, 240);
+        },
+        onwrong: function (v, tries) {
+          say(cfg.hints[Math.min(tries, cfg.hints.length) - 1], "warn");
+        },
+        onbad: function (t) { say(t, "warn"); }
+      });
+    } else if (kind === "pick") {
+      choices(step, function (right) {
+        say(right ? "" : "Read the reason beside every option before you go on.",
+            right ? "" : "warn");
+        go.hidden = false;
+        go.focus();
+        reportHeight();
+      });
+    }
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+  openStep(0);
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

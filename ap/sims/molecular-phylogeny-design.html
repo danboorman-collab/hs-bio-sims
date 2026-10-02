@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Design the investigation</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.dec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.dec > h2{font-size:12.5px;margin:0 0 4px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.dec > p.ask{margin:0 0 10px;font-size:15px;font-weight:600}
+.dec .choice{cursor:pointer}
+.dec.marked .choice{cursor:default}
+.choice.chosen{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Design the investigation</h1>
+<p class="sub">Evolution &middot; Topic 7.9</p>
+<div class="brief"><p>A gene has been sequenced in five species. Five decisions first. Choose one answer in each, then submit once.</p></div>
+<div class="dec" id="dec-gene" data-id="gene"><h2>Decision 1 of 5</h2><p class="ask">Why is the same gene compared in all five species rather than five different genes?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Comparing one species' cytochrome c oxidase with another's hemoglobin would measure the difference between two proteins, not between two species."><span class="ltr"></span><span>Because a difference between two sequences only means something if the two sequences do the same job in both species.</span></button><button type="button" class="choice" data-ok="0" data-why="Every one of these species has thousands of genes. The point is to compare like with like."><span class="ltr"></span><span>Because every species has only one gene that can be sequenced.</span></button><button type="button" class="choice" data-ok="0" data-why="Length is a practical difficulty. The reason is that two different genes would differ for reasons that have nothing to do with how related the species are."><span class="ltr"></span><span>Because the five genes would be of different lengths.</span></button></div></div><div class="dec" id="dec-measure" data-id="measure"><h2>Decision 2 of 5</h2><p class="ask">What is compared between each pair of species?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="It turns two long sequences into one number, and the same number can be found for every pair."><span class="ltr"></span><span>The percentage of positions at which the two sequences are identical.</span></button><button type="button" class="choice" data-ok="0" data-why="Two sequences of the same length can differ at every position, and two of different lengths can be nearly identical over the part they share."><span class="ltr"></span><span>The total length of each sequence.</span></button><button type="button" class="choice" data-ok="0" data-why="Two sequences can hold the same amino acids in a different order, which would look identical by that measure and is not."><span class="ltr"></span><span>The number of times each amino acid appears in each sequence.</span></button></div></div><div class="dec" id="dec-more" data-id="more"><h2>Decision 3 of 5</h2><p class="ask">Two species share more of this sequence than two others do. What does that suggest?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Differences build up after two lineages separate, so the longer ago they separated the more differences there has been time for."><span class="ltr"></span><span>That they share a more recent common ancestor.</span></button><button type="button" class="choice" data-ok="0" data-why="Two species living side by side may be only distantly related, and two closely related ones may live oceans apart."><span class="ltr"></span><span>That they live in the same place.</span></button><button type="button" class="choice" data-ok="0" data-why="Neither living species is the ancestor of the other. They share an ancestor, which is a different claim."><span class="ltr"></span><span>That one evolved from the other.</span></button></div></div><div class="dec" id="dec-out" data-id="out"><h2>Decision 4 of 5</h2><p class="ask">Why is one species known to be distantly related included at all?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Without it, nothing says which end of the tree is the older. It is the comparison that roots the diagram."><span class="ltr"></span><span>Because the branching order of the others can only be read against something outside the group.</span></button><button type="button" class="choice" data-ok="0" data-why="A cladogram can be drawn for three species. The distant one is there to root the tree, not to make up a number."><span class="ltr"></span><span>Because five is the smallest number of species a cladogram can be drawn for.</span></button><button type="button" class="choice" data-ok="0" data-why="No average is taken. Each pair is compared with each other pair."><span class="ltr"></span><span>Because it supplies the average that the other four are compared with.</span></button></div></div><div class="dec" id="dec-limit" data-id="limit"><h2>Decision 5 of 5</h2><p class="ask">What can this comparison not settle?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Turning differences into years needs a rate, and a rate has to come from fossils or from another dated source outside the sequences."><span class="ltr"></span><span>How long ago in years any two of the species last shared an ancestor.</span></button><button type="button" class="choice" data-ok="0" data-why="That is exactly what the comparison does settle: the pair sharing the most sequence."><span class="ltr"></span><span>Which two of the five species are most closely related.</span></button><button type="button" class="choice" data-ok="0" data-why="A gene shared by all five, doing the same job in all five, is itself evidence of common ancestry."><span class="ltr"></span><span>Whether all five species share a common ancestor.</span></button></div></div>
+<p class="msg" id="msg" role="status" aria-live="polite">Choose one answer in each of the
+5 decisions.</p>
+<div class="actions">
+  <button id="submit" type="button" class="primary" disabled>Submit all
+  5</button>
+  <button id="reset" type="button">Start again</button>
+</div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "design-molecular-phylogeny";
+  var TOTAL = 5;
+  var msg = document.getElementById("msg");
+  var submit = document.getElementById("submit");
+  var marked = false;
+
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  function wire() {
+    [].forEach.call(document.querySelectorAll(".dec"), function (dec) {
+      var box = dec.querySelector(".choices");
+      var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+      btns.forEach(function (b, i) {
+        box.appendChild(b);
+        b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+        b.addEventListener("click", function () {
+          if (marked) return;
+          btns.forEach(function (o) { o.classList.remove("chosen"); });
+          b.classList.add("chosen");
+          dec.dataset.chosen = "1";
+          var done = document.querySelectorAll(".dec[data-chosen]").length;
+          submit.disabled = done < TOTAL;
+          say(done < TOTAL
+              ? (TOTAL - done) + " decision" + (TOTAL - done === 1 ? "" : "s") + " still to make."
+              : "All " + TOTAL + " chosen. Submit when you are ready \u2014 they cannot be "
+                + "changed afterwards.");
+        });
+      });
+    });
+  }
+
+  submit.addEventListener("click", function () {
+    if (marked) return;
+    marked = true;
+    submit.disabled = true;
+    var right = 0;
+    [].forEach.call(document.querySelectorAll(".dec"), function (dec) {
+      dec.classList.add("marked");
+      [].forEach.call(dec.querySelectorAll(".choice"), function (o) {
+        o.disabled = true;
+        var ok = o.dataset.ok === "1";
+        o.classList.add(ok ? "right" : "wrong");
+        if (ok && o.classList.contains("chosen")) right++;
+        var w = document.createElement("p");
+        w.className = "why " + (ok ? "right" : "wrong");
+        w.textContent = o.dataset.why;
+        o.parentNode.insertBefore(w, o.nextSibling);
+      });
+    });
+    var p = document.createElement("div");
+    p.className = "score";
+    p.innerHTML = "<b>" + right + " of " + TOTAL + "</b> decisions made the way this "
+      + "investigation was carried out. Every option is explained above, including the ones "
+      + "you did not choose.";
+    msg.parentNode.insertBefore(p, msg);
+    say("");
+    reportHeight();
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+  wire();
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

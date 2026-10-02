@@ -1,0 +1,155 @@
+<title>AP Biology practicals</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#fbfaf8; --surface:#ffffff; --ink:#1b1e22; --muted:#6f6a63;
+  --line:#e7e2da; --rule:#d8d2c8; --accent:#0e6f66; --accent-soft:#e2efec;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+    --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+  --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1020px;margin:0 auto;padding-inline:20px;padding-block:44px 64px}
+
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6.4vw,44px);line-height:1.12;
+  letter-spacing:-.015em;margin:0 0 14px;text-wrap:balance}
+.lead{font-family:var(--serif);font-size:clamp(17px,2.4vw,20px);line-height:1.5;color:var(--ink);
+  margin:0 0 28px;max-width:56ch}
+.lead em{font-style:italic;color:var(--accent);font-weight:600}
+
+.design{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 40px}
+.design div{flex:1 1 205px;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:14px 16px}
+.design dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 5px}
+.design dd{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
+
+nav.jump{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin:0 0 44px;
+  scrollbar-width:thin}
+nav.jump a{flex:0 0 auto;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;background:var(--surface);white-space:nowrap}
+nav.jump a:hover,nav.jump a:focus-visible{color:var(--accent);border-color:var(--accent)}
+
+section.stage{border-top:1px solid var(--rule);padding-top:26px;margin-top:44px;
+  scroll-margin-top:24px}
+section.stage:first-of-type{margin-top:0}
+.shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+  letter-spacing:.08em}
+.kind{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(21px,3.6vw,27px);line-height:1.2;
+  margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.blurb{color:var(--muted);font-size:15.5px;margin:0 0 20px}
+
+.media{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+video{width:100%;display:block;background:#0b0d10}
+iframe{width:100%;border:0;display:block;background:var(--surface)}
+
+footer{border-top:1px solid var(--rule);margin-top:52px;padding-top:22px;color:var(--muted);
+  font-size:14.5px}
+footer p{margin:0 0 10px;max-width:62ch}
+footer strong{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<style>
+table.set{border-collapse:collapse;width:100%;margin:0 0 40px;font-size:14.5px}
+table.set th,table.set td{border-bottom:1px solid var(--line);padding:11px 10px;
+  text-align:left;vertical-align:top}
+table.set th{font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--rule)}
+table.set td.n{font-family:var(--mono);color:var(--muted);width:28px}
+table.set a{color:var(--ink);text-decoration:none;border-bottom:2px solid var(--accent-soft)}
+table.set a:hover{border-bottom-color:var(--accent)}
+.dim{color:var(--muted);font-size:13.5px}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 7px;
+  white-space:nowrap}
+h2.sec{font-family:var(--serif);font-size:24px;margin:44px 0 12px}
+</style>
+
+<script>
+// Registered before the frames are parsed: a srcdoc frame runs its script during parsing and
+// would otherwise post its height into a page that is not listening yet.
+(function () {
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "sim-height") return;
+    var frames = document.querySelectorAll("iframe");
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].contentWindow === e.source) {
+        frames[i].style.height = e.data.height + "px";
+        return;
+      }
+    }
+  });
+}());
+</script>
+<div class="wrap">
+<p class="eyebrow">AP Biology &middot; Required practicals</p>
+<h1>Nine lab simulations</h1>
+<p class="lead">Two investigations for each of the four Big Ideas, and a different piece of
+AP data handling in every one. The 2025 CED prescribes no list of labs &mdash; it asks for
+25% of instructional time on lab work and <em>at least two investigations per Big
+Idea</em> &mdash; so these were chosen to cover the four Big Ideas twice and to put the
+statistics the course teaches somewhere a student can use them.</p>
+
+<table class="set">
+<thead><tr><th></th><th>Practical</th><th>Big Idea</th><th>Analysis skill</th>
+<th>Graph</th></tr></thead>
+<tbody><tr><td class="n">1</td><td><a href="enzyme-catalysis/index.html"><b>Enzyme catalysis</b></a> <span class="tag">core four</span><br><span class="dim">Does temperature change the rate of an enzyme-catalyzed reaction?</span></td><td>Energetics<br><span class="dim">Topic 3.1-3.2b</span></td><td>Mean, standard deviation, standard error, and the overlap of error bars</td><td>A line of means with &plusmn;2SE error bars</td></tr><tr><td class="n">2</td><td><a href="mendelian-genetics/index.html"><b>Mendelian genetics</b></a> <span class="tag">core four</span><br><span class="dim">Do the offspring of a dihybrid cross fit a 9 : 3 : 3 : 1 ratio?</span></td><td>Information Storage and Transmission<br><span class="dim">Topic 5.3</span></td><td>Chi-square: expected counts, degrees of freedom, critical value, verdict</td><td>Observed counts beside the counts the model predicts</td></tr><tr><td class="n">3</td><td><a href="hardy-weinberg/index.html"><b>Hardy&ndash;Weinberg equilibrium</b></a> <span class="tag">core four</span><br><span class="dim">Is this population's gene pool behaving as the model says an undisturbed one would?</span></td><td>Evolution<br><span class="dim">Topic 7.5</span></td><td>p and q from a census, the expected genotype counts, and chi-square against them</td><td>A census beside the Hardy&ndash;Weinberg expectation</td></tr><tr><td class="n">4</td><td><a href="ecosystem-disruption/index.html"><b>Ecosystem disruption</b></a> <span class="tag">core four</span><br><span class="dim">Does the number of mayfly nymphs differ above and below a farm outflow?</span></td><td>Systems Interactions<br><span class="dim">Topic 8.7</span></td><td>Median, quartiles, a five-number summary, and what a box plot can and cannot say</td><td>Two box-and-whisker plots on one axis</td></tr><tr><td class="n">5</td><td><a href="diffusion-osmosis/index.html"><b>Diffusion and osmosis</b></a><br><span class="dim">What is the water potential of a piece of potato tissue?</span></td><td>Energetics<br><span class="dim">Topic 2.7</span></td><td>Percent change in mass, a best-fit line, its zero crossing, and &Psi;<sub>s</sub> = &minus;iCRT</td><td>A scatter plot with one best-fit straight line</td></tr><tr><td class="n">6</td><td><a href="photosynthesis-disks/index.html"><b>Photosynthesis</b></a><br><span class="dim">How does light intensity change the rate of photosynthesis?</span></td><td>Energetics<br><span class="dim">Topic 3.4</span></td><td>ET50, the reciprocal that turns a time into a rate, and a limiting factor</td><td>Two quantities on one x axis, each with its own scale</td></tr><tr><td class="n">7</td><td><a href="population-growth/index.html"><b>Population growth</b></a><br><span class="dim">How does a population grow when its resources are finite?</span></td><td>Systems Interactions<br><span class="dim">Topic 8.4</span></td><td>The growth constant r from a log plot, the carrying capacity K, and the braking term</td><td>The same counts on a linear scale and on a log scale</td></tr><tr><td class="n">8</td><td><a href="molecular-phylogeny/index.html"><b>Molecular phylogeny</b></a><br><span class="dim">In what order did five species' lineages separate?</span></td><td>Evolution<br><span class="dim">Topic 7.9</span></td><td>Percent identity into a number of differences, and a branching order</td><td>A cladogram</td></tr><tr><td class="n">9</td><td><a href="mitosis-cell-cycle/index.html"><b>Mitosis and the cell cycle</b></a><br><span class="dim">How long does a cell spend in each phase of its cycle?</span></td><td>Information Storage and Transmission<br><span class="dim">Topic 4.6</span></td><td>Counts into shares, shares into times, and what the method assumes</td><td>A pie chart of the cycle</td></tr></tbody></table>
+
+<h2 class="sec">What every one of them has</h2>
+<p>Seven stages, in the order a student works them: <strong>watch the method</strong>,
+<strong>design the investigation</strong>, <strong>collect the results</strong>,
+<strong>watch the analysis skill</strong>, <strong>work the analysis skill</strong>,
+<strong>choose the conclusion</strong>, <strong>answer eight questions</strong>.</p>
+<p>Stage 2 is a set of decisions rather than an equipment tray, because AP's Science
+Practice 3 asks for the null hypothesis, the variables, the replicates and the control, and
+four of these nine have no bench to lay out. Stage 3 produces replicates, because a standard
+error needs more than one reading. Stage 5 asks for typed answers with a stated tolerance.
+Stage 6 follows Science Practice 6: a claim, the evidence for it, and the reasoning that
+connects them.</p>
+
+<h2 class="sec">Where the numbers come from</h2>
+<p><strong>Every data set was designed.</strong> The lesson outlines print worked numbers
+inside their statistics lessons &mdash; catalase at 25, 35 and 40 &deg;C in mL/min, a potato
+crossing zero at 0.38 M, 88 against 112 flies &mdash; and a practical reusing those would be
+one a student could answer from memory. So each set here was designed to give one clean,
+defensible verdict, in the units, at the sample sizes and with the conventions the outlines
+use, and deliberately different from the numbers they print.</p>
+<p>Six checks run on every build. <code>verify.py</code> recomputes each data set's design
+target from the readings. <code>tolerance_check.py</code> walks each chain the way a student
+carrying three significant figures would and confirms every box still accepts the answer.
+<code>item_math_check.py</code> reworks the arithmetic of every calculation item.
+<code>number_check.py</code> looks for every number in every student-facing string in the
+data behind it. <code>conclusion_check.py</code> and <code>question_check.py</code> screen
+the items for the tells that give a key away.</p>
+
+<h2 class="sec">The videos</h2>
+<p>Two per practical, at about 85 seconds each. The enzyme pair was submitted first so that
+the house style can be checked against a finished render before the other sixteen are
+committed; a render takes between fifty minutes and four and a half hours. The prompts are
+in <code>videos/prompts/</code> and
+<code>python3 _tools/ap_videos.py submit all</code> fires the rest.</p>
+<table class="set"><thead><tr><th>Video</th><th>State</th></tr></thead>
+<tbody><tr><td>AP U03 -enzyme-catalysis-method</td><td>submitted</td></tr><tr><td>AP U03 -enzyme-catalysis-skill</td><td>submitted</td></tr><tr><td>AP U05 -mendelian-genetics-method</td><td>not yet submitted</td></tr><tr><td>AP U05 -mendelian-genetics-skill</td><td>not yet submitted</td></tr><tr><td>AP U07 -hardy-weinberg-method</td><td>not yet submitted</td></tr><tr><td>AP U07 -hardy-weinberg-skill</td><td>not yet submitted</td></tr><tr><td>AP U08 -ecosystem-disruption-method</td><td>not yet submitted</td></tr><tr><td>AP U08 -ecosystem-disruption-skill</td><td>not yet submitted</td></tr><tr><td>AP U02 -diffusion-osmosis-method</td><td>not yet submitted</td></tr><tr><td>AP U02 -diffusion-osmosis-skill</td><td>not yet submitted</td></tr><tr><td>AP U03 -photosynthesis-disks-method</td><td>not yet submitted</td></tr><tr><td>AP U03 -photosynthesis-disks-skill</td><td>not yet submitted</td></tr><tr><td>AP U08 -population-growth-method</td><td>not yet submitted</td></tr><tr><td>AP U08 -population-growth-skill</td><td>not yet submitted</td></tr><tr><td>AP U07 -molecular-phylogeny-method</td><td>not yet submitted</td></tr><tr><td>AP U07 -molecular-phylogeny-skill</td><td>not yet submitted</td></tr><tr><td>AP U04 -mitosis-cell-cycle-method</td><td>not yet submitted</td></tr><tr><td>AP U04 -mitosis-cell-cycle-skill</td><td>not yet submitted</td></tr></tbody></table>
+</div>

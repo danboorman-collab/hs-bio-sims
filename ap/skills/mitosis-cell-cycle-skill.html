@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From counts to times</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.step .go{margin-top:11px;padding:8px 14px;border-radius:8px;font:inherit;font-weight:650;
+  cursor:pointer;border:1px solid var(--accent);background:var(--accent);
+  color:var(--accent-fg)}
+.step .go[hidden]{display:none}
+.trail{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 4px}
+.trail i{width:16px;height:4px;border-radius:2px;background:var(--line);display:block}
+.trail i.on{background:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>From counts to times</h1>
+<p class="sub">A share of the cells, a share of the cycle, and the minutes each phase takes.</p>
+<div class="brief"><p>Every cell on the slide was fixed at the same moment, wherever it happened to be in its cycle. A phase that lasts longer catches more cells in it.</p><p>So the share of the cells found in a phase is the share of the cycle that phase takes &mdash; which turns a count into a time, once the length of the cycle is known from elsewhere.</p></div>
+<div class="trail" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="step" data-kind="table" data-i="0"><h2>The 200 cells</h2><div class="scroll"><table><caption>Cells scored in each phase, from 200 cells of an onion root tip, <em>Allium cepa</em>.</caption><thead><tr><th scope="col">Phase</th><th scope="col">Cells counted</th></tr></thead><tbody><tr><th scope="row">Interphase</th><td class="num">142</td></tr><tr><th scope="row">Prophase</th><td class="num">30</td></tr><tr><th scope="row">Metaphase</th><td class="num">12</td></tr><tr><th scope="row">Anaphase</th><td class="num">6</td></tr><tr><th scope="row">Telophase</th><td class="num">10</td></tr></tbody></table></div><button type="button" class="go">Continue</button></div><div class="step" data-kind="num" data-i="1" data-id="pint"><h2>Step 1 &mdash; a count as a percent</h2><p class="ask">A percent is a count out of a hundred, so a count out of any other total has to be turned into one before two slides can be compared.</p><p class="formula">percent = count &divide; total &times; 100</p><p class="ask">What percent of the cells were in interphase?</p><div class="calc"><div class="calcrow" id="row-pint"><span class="lab">Percent in interphase</span><span class="work">142 &divide; 200 &times; 100</span><span class="entry" id="spin-pint"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Percent in interphase"><span class="unit">%</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="2" data-id="pana"><h2>Step 2 &mdash; and the shortest phase</h2><p class="ask">What percent of the cells were in anaphase?</p><div class="calc"><div class="calcrow" id="row-pana"><span class="lab">Percent in anaphase</span><span class="work">6 &divide; 200 &times; 100</span><span class="entry" id="spin-pana"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Percent in anaphase"><span class="unit">%</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="3" data-id="cyc"><h2>Step 3 &mdash; the cycle in minutes</h2><p class="ask">The share has to be taken of something to become a time. For these root-tip cells the whole cycle is known to take 24 hours.</p><p class="ask">How many minutes is 24 hours?</p><div class="calc"><div class="calcrow" id="row-cyc"><span class="lab">The whole cycle</span><span class="work">24 &times; 60</span><span class="entry" id="spin-cyc"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="The whole cycle"><span class="unit">min</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="4" data-id="tint"><h2>Step 4 &mdash; the time in interphase</h2><p class="formula">time in a phase = percent &divide; 100 &times; cycle length</p><p class="ask">How many minutes does interphase take, to one decimal place?</p><div class="calc"><div class="calcrow" id="row-tint"><span class="lab">Time in interphase</span><span class="work">71.0% &times; 1440</span><span class="entry" id="spin-tint"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Time in interphase"><span class="unit">min</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="num" data-i="5" data-id="tana"><h2>Step 5 &mdash; the time in anaphase</h2><p class="ask">And how many minutes does anaphase take?</p><div class="calc"><div class="calcrow" id="row-tana"><span class="lab">Time in anaphase</span><span class="work">3.0% &times; 1440</span><span class="entry" id="spin-tana"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Time in anaphase"><span class="unit">min</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="table" data-i="6"><h2>All five phases</h2><div class="scroll"><table><caption>Each phase as a share of 200 cells, and as a share of a 24-hour cycle.</caption><thead><tr><th scope="col">Phase</th><th scope="col">Cells</th><th scope="col">Percent of cells</th><th scope="col">Time (min)</th></tr></thead><tbody><tr><th scope="row">Interphase</th><td class="num">142</td><td class="num">71.0</td><td class="num">1022.4</td></tr><tr><th scope="row">Prophase</th><td class="num">30</td><td class="num">15.0</td><td class="num">216.0</td></tr><tr><th scope="row">Metaphase</th><td class="num">12</td><td class="num">6.0</td><td class="num">86.4</td></tr><tr><th scope="row">Anaphase</th><td class="num">6</td><td class="num">3.0</td><td class="num">43.2</td></tr><tr><th scope="row">Telophase</th><td class="num">10</td><td class="num">5.0</td><td class="num">72.0</td></tr></tbody></table></div><button type="button" class="go">Continue</button></div><div class="step" data-kind="fig" data-i="7"><h2>The cycle as a circle</h2><figure><svg viewBox="0 0 600 300" width="100%" role="img" aria-label="The cell cycle" xmlns="http://www.w3.org/2000/svg"><title>The cell cycle</title><desc>A circle divided into one slice per phase, each slice as large a share of the circle as that phase is of the cycle.</desc><g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif"><path d="M168 150 L168.0 38.0 A112 112 0 1 1 59.5 177.9 Z" fill="var(--accent)" opacity="0.8" stroke="var(--bg)" stroke-width="1.6"/><path d="M168 150 L59.5 177.9 A112 112 0 0 1 81.7 78.6 Z" fill="var(--warn)" opacity="0.8" stroke="var(--bg)" stroke-width="1.6"/><path d="M168 150 L81.7 78.6 A112 112 0 0 1 114.0 51.9 Z" fill="var(--good)" opacity="0.8" stroke="var(--bg)" stroke-width="1.6"/><path d="M168 150 L114.0 51.9 A112 112 0 0 1 133.4 43.5 Z" fill="var(--bad)" opacity="0.8" stroke="var(--bg)" stroke-width="1.6"/><path d="M168 150 L133.4 43.5 A112 112 0 0 1 168.0 38.0 Z" fill="var(--glass)" opacity="0.8" stroke="var(--bg)" stroke-width="1.6"/><rect x="330" y="45" width="13" height="13" rx="3" fill="var(--accent)" opacity="0.8"/><text x="352" y="56" font-size="13" fill="var(--fg)">Interphase</text><text x="580" y="56" font-size="13" fill="var(--muted)" text-anchor="end">71.0%</text><rect x="330" y="71" width="13" height="13" rx="3" fill="var(--warn)" opacity="0.8"/><text x="352" y="82" font-size="13" fill="var(--fg)">Prophase</text><text x="580" y="82" font-size="13" fill="var(--muted)" text-anchor="end">15.0%</text><rect x="330" y="97" width="13" height="13" rx="3" fill="var(--good)" opacity="0.8"/><text x="352" y="108" font-size="13" fill="var(--fg)">Metaphase</text><text x="580" y="108" font-size="13" fill="var(--muted)" text-anchor="end">6.0%</text><rect x="330" y="123" width="13" height="13" rx="3" fill="var(--bad)" opacity="0.8"/><text x="352" y="134" font-size="13" fill="var(--fg)">Anaphase</text><text x="580" y="134" font-size="13" fill="var(--muted)" text-anchor="end">3.0%</text><rect x="330" y="149" width="13" height="13" rx="3" fill="var(--glass)" opacity="0.8"/><text x="352" y="160" font-size="13" fill="var(--fg)">Telophase</text><text x="580" y="160" font-size="13" fill="var(--muted)" text-anchor="end">5.0%</text></g></svg><figcaption>Each slice is as large a share of the circle as that phase is of the cycle. Interphase takes 71% of it.</figcaption></figure><button type="button" class="go">Continue</button></div><div class="step" data-kind="num" data-i="8" data-id="tmit"><h2>Step 6 &mdash; how long mitosis takes</h2><p class="ask">Mitosis is the four phases that are not interphase.</p><p class="ask">How many minutes does the whole of mitosis take?</p><div class="calc"><div class="calcrow" id="row-tmit"><span class="lab">Time in mitosis</span><span class="work">(30 + 12 + 6 + 10) &divide; 200 &times; 1440</span><span class="entry" id="spin-tmit"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Time in mitosis"><span class="unit">min</span><button type="button">Check</button></span></div></div></div><div class="step" data-kind="pick" data-i="9"><h2>Step 7 &mdash; a treated root</h2><p class="ask">A second root tip from the same batch was left overnight in a solution of colchicine. Of 200 cells scored on it, 96 were in metaphase, against 12 on the untreated slide.</p><p class="ask">What does that suggest colchicine does?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Cells pile up in the phase they cannot get out of. A much larger share of the cells caught in metaphase means metaphase has become a much larger share of the cycle, which is what a block at the end of metaphase would do."><span class="ltr"></span><span>It stops cells leaving metaphase</span></button><button type="button" class="choice" data-ok="0" data-why="That would raise every mitotic phase, not metaphase alone. Here the other three would have risen too."><span class="ltr"></span><span>It makes cells enter mitosis more often</span></button><button type="button" class="choice" data-ok="0" data-why="A faster phase catches fewer cells, not more. The count would have fallen."><span class="ltr"></span><span>It makes metaphase happen faster</span></button></div><button type="button" class="go" hidden>Continue</button></div><div class="step" data-kind="pick" data-i="10"><h2>Step 8 &mdash; what the method assumes</h2><p class="ask">The share of cells in a phase gives the share of the cycle only if one thing is true of the tissue. Which?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="If they divided in step, every cell in a field would be in the same phase at the same moment, and the counts would say when the slide was made rather than how long each phase lasts."><span class="ltr"></span><span>The cells are dividing steadily and not in step with one another</span></button><button type="button" class="choice" data-ok="0" data-why="Cells do grow through the cycle, but their size plays no part in the count. What matters is which phase each one was in."><span class="ltr"></span><span>Every cell on the slide is the same size</span></button><button type="button" class="choice" data-ok="0" data-why="That is exactly what must not be true. Cells starting together would be in step, and the method depends on their not being."><span class="ltr"></span><span>The cells all started their cycle at the same moment</span></button></div><button type="button" class="go" hidden>Continue</button></div>
+<div class="verdict" id="verdict" hidden><b>Interphase 1022 minutes, and the whole of mitosis 418.</b> 200 cells, frozen at one moment, give the length of every phase &mdash; but only because the cycle length was known from elsewhere, and only because the cells in a root tip divide steadily rather than in step.</div>
+<p class="msg" id="msg" role="status" aria-live="polite"></p>
+<div class="actions"><button id="reset" type="button">Start again</button></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "skill-mitosis-cell-cycle";
+  var NUMS = {"pint": {"want": 71.0, "tol": 0.05, "dp": 1, "hints": ["Not the percent. Work it out again.", "Divide the count by the total scored, then multiply by 100.", "142 &divide; 200, then &times; 100."]}, "pana": {"want": 3.0, "tol": 0.05, "dp": 1, "hints": ["Not the percent. Work it out again.", "Divide the count by the total scored, then multiply by 100.", "6 &divide; 200, then &times; 100."]}, "cyc": {"want": 1440, "tol": 0, "dp": 0, "hints": ["Not the cycle length in minutes. Work it out again.", "Multiply the number of hours by 60.", "24 &times; 60."]}, "tint": {"want": 1022.4, "tol": 1.0, "dp": 1, "hints": ["Not the time in interphase. Work it out again.", "Turn the percent into a fraction, then take that fraction of the cycle length.", "71.0 &divide; 100 &times; 1440."]}, "tana": {"want": 43.2, "tol": 0.5, "dp": 1, "hints": ["Not the time in anaphase. Work it out again.", "Turn the percent into a fraction, then take that fraction of the cycle length.", "3.0 &divide; 100 &times; 1440."]}, "tmit": {"want": 417.6, "tol": 1.0, "dp": 1, "hints": ["Not the time in mitosis. Work it out again.", "Add the four counts that are not interphase, divide by the total, and take that share of the cycle.", "58 cells out of 200, of 1440 minutes."]}};
+  var msg = document.getElementById("msg");
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Dan's ruling, 1 October: the student types the answer. A stepper could be walked to the
+  // right number without ever working it out. The cost of a box is that it can be given
+  // nonsense, so this one says what it wants, and the misses are graded: the first says
+  // only that it is wrong, the second names the operation, the third names it with the
+  // numbers in. It never gives the answer away, and there is no limit on tries.
+  //
+  // AP adds a tolerance. 7.81 and 7.8 are the same answer; 0.47 and 0.4648 may not be. Each
+  // box carries its own accepted range, and each says how many figures it wants.
+  function entry(host, opts) {
+    var input = host.querySelector("input"), btn = host.querySelector("button");
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, "").replace(/^[x×]/i, "")
+                     .replace(/^\+/, "");
+      input.classList.remove("miss");
+      if (!raw) { opts.onbad("Type your answer in the box, then press Check."); return; }
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? "Just the number, without the units — they are already printed beside the box."
+          : "That is not a number. Type digits, and a decimal point if you need one.");
+        input.classList.add("miss");
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) <= opts.tol + 1e-12) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.dp === undefined ? v : v.toFixed(opts.dp);
+        opts.onright(v);
+      } else {
+        input.classList.add("miss");
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener("click", submit);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); submit(); }
+    });
+    input.addEventListener("input", function () { input.classList.remove("miss"); });
+    return { focus: function () { try { input.focus(); } catch (e) {} } };
+  }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  // One step at a time. A student who can see the next question can work backwards from it,
+  // and in a chain of calculations that is the whole answer.
+  var STEPS = [].slice.call(document.querySelectorAll(".step"));
+  var at = 0, opened = false;
+  function openStep(n) {
+    at = n;
+    for (var i = 0; i < STEPS.length; i++) STEPS[i].hidden = i > n;
+    var s = STEPS[n];
+    // On the FIRST call nothing is focused and nothing is scrolled to. This simulation is
+    // framed inside a lesson page, and both focusing a field and scrolling an element into
+    // view inside a frame drag the page around it -- which landed a reader at stage 5 the
+    // moment the lesson opened.
+    if (s && opened) {
+      var inp = s.querySelector("input");
+      if (inp && !inp.disabled) { try { inp.focus(); } catch (e) {} }
+      s.scrollIntoView({ block: "nearest" });
+    }
+    opened = true;
+    reportHeight();
+  }
+  function nextStep() { if (at < STEPS.length - 1) openStep(at + 1); else finish(); }
+
+
+  var PIPS = [].slice.call(document.querySelectorAll(".trail i"));
+  function mark(n) { for (var i = 0; i < PIPS.length; i++) PIPS[i].className = i <= n ? "on" : ""; }
+
+  function finish() {
+    document.getElementById("verdict").hidden = false;
+    say("");
+    reportHeight();
+  }
+
+  STEPS.forEach(function (step, n) {
+    var kind = step.dataset.kind;
+    var go = step.querySelector(".go");
+    if (go) go.addEventListener("click", function () { mark(n); nextStep(); });
+
+    if (kind === "num") {
+      var cfg = NUMS[step.dataset.id];
+      entry(step.querySelector(".entry"), {
+        want: cfg.want, tol: cfg.tol, dp: cfg.dp,
+        onright: function () {
+          step.querySelector(".calcrow").classList.add("done");
+          say("");
+          mark(n);
+          setTimeout(nextStep, 240);
+        },
+        onwrong: function (v, tries) {
+          say(cfg.hints[Math.min(tries, cfg.hints.length) - 1], "warn");
+        },
+        onbad: function (t) { say(t, "warn"); }
+      });
+    } else if (kind === "pick") {
+      choices(step, function (right) {
+        say(right ? "" : "Read the reason beside every option before you go on.",
+            right ? "" : "warn");
+        go.hidden = false;
+        go.focus();
+        reportHeight();
+      });
+    }
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+  openStep(0);
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

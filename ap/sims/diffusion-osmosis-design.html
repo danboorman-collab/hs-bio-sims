@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Design the investigation</title>
+<style>
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step > h2{font-size:12.5px;margin:0 0 9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.045em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+.step p.ask:last-child{margin-bottom:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 10px}
+
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:2px 0 0}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--bg);font-weight:650}
+th[scope=row]{text-align:left;white-space:nowrap}
+td.dim{color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums}
+tr.done td{background:var(--good-bg)}
+.scroll{overflow-x:auto}
+
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 210px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  color:var(--muted);flex:0 1 auto}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:92px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:20px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%;
+  display:flex;gap:9px;align-items:flex-start}
+.choice .ltr{font-weight:700;color:var(--muted);min-width:14px}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice.picked{box-shadow:inset 0 0 0 2px currentColor}
+.why{font-size:13.5px;margin:6px 0 0;padding-left:23px;color:var(--muted)}
+.why.right{color:var(--good)} .why.wrong{color:var(--bad)}
+
+figure{margin:12px 0 0}
+figure svg{display:block}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+.verdict{margin-top:12px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--good-bg);border:1px solid var(--good-line)}
+.verdict b{color:var(--good)}
+.note{margin-top:10px;font-size:13.5px;background:var(--warn-bg);color:var(--warn);
+  border:1px solid var(--warn-line);border-radius:8px;padding:9px 11px}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;text-align:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px;
+  margin:10px 0}
+
+.dec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;
+  margin:0 0 12px}
+.dec > h2{font-size:12.5px;margin:0 0 4px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.dec > p.ask{margin:0 0 10px;font-size:15px;font-weight:600}
+.dec .choice{cursor:pointer}
+.dec.marked .choice{cursor:default}
+.choice.chosen{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.score{margin-top:14px;font-size:15px;border-radius:9px;padding:11px 13px;
+  background:var(--card);border:1px solid var(--line)}
+.score b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="sim">
+<h1>Design the investigation</h1>
+<p class="sub">Energetics &middot; Topic 2.7</p>
+<div class="brief"><p>Six potato cores are about to go into six sucrose solutions. Five decisions first. Choose one answer in each, then submit once.</p></div>
+<div class="dec" id="dec-question" data-id="question"><h2>Decision 1 of 5</h2><p class="ask">Which of these is the testable question?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="That concentration is the one whose water potential matches the potato's, which is what the investigation sets out to find."><span class="ltr"></span><span>At what sucrose concentration does a potato core neither gain nor lose mass?</span></button><button type="button" class="choice" data-ok="0" data-why="The investigation measures water moving, not sucrose. A core's mass changes because water enters or leaves it."><span class="ltr"></span><span>Does sucrose move into a potato core?</span></button><button type="button" class="choice" data-ok="0" data-why="Hypertonic is a comparison between two solutions, so the question is incomplete until it says hypertonic to what."><span class="ltr"></span><span>Is a potato cell hypertonic?</span></button></div></div><div class="dec" id="dec-measure" data-id="measure"><h2>Decision 2 of 5</h2><p class="ask">What is calculated from each core's two masses?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Cores do not all start at the same mass, so a gain of 1 g means more for a small core than for a large one."><span class="ltr"></span><span>The percent change in mass: the change divided by the starting mass, times 100.</span></button><button type="button" class="choice" data-ok="0" data-why="A gain of 1.5 g means more for a small core than for a large one, so the change has to be compared with what the core started at."><span class="ltr"></span><span>The change in mass in grams, with the sign kept.</span></button><button type="button" class="choice" data-ok="0" data-why="Cores cut to the same length still differ in mass, and the final mass on its own does not say which way the water went."><span class="ltr"></span><span>The final mass, because every core started at the same mass.</span></button></div></div><div class="dec" id="dec-constant" data-id="constant"><h2>Decision 3 of 5</h2><p class="ask">Which of these has to be kept the same for every core?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="Each of these changes how much water moves, and the temperature appears in &Psi;s = &minus;iCRT as well."><span class="ltr"></span><span>The length and diameter of the core, the volume of solution, the time and the temperature.</span></button><button type="button" class="choice" data-ok="0" data-why="Cores from one potato still differ in size, and a larger core takes longer to come to equilibrium."><span class="ltr"></span><span>The volume of solution only, because the cores come from the same potato.</span></button><button type="button" class="choice" data-ok="0" data-why="The sucrose concentration is the one thing deliberately changed. Keeping it the same would leave nothing to plot against."><span class="ltr"></span><span>The sucrose concentration, because that is what the water potential depends on.</span></button></div></div><div class="dec" id="dec-blot" data-id="blot"><h2>Decision 4 of 5</h2><p class="ask">Why is each core blotted before its final mass is taken?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The mass is meant to be the core's. A film of liquid on the surface adds mass that nothing moved across a membrane."><span class="ltr"></span><span>Because solution clinging to the outside is weighed as though it were water the core had taken in.</span></button><button type="button" class="choice" data-ok="0" data-why="Anything on the surface adds mass. It cannot make the core weigh less."><span class="ltr"></span><span>Because sucrose on the surface would make the core look lighter than it is.</span></button><button type="button" class="choice" data-ok="0" data-why="That is a practical nuisance, not the reason. The reason is that the liquid is weighed along with the core."><span class="ltr"></span><span>Because a wet core slips on the balance pan.</span></button></div></div><div class="dec" id="dec-zero" data-id="zero"><h2>Decision 5 of 5</h2><p class="ask">Why is a core put into distilled water, at 0.0 M?</p><div class="choices"><button type="button" class="choice" data-ok="1" data-why="The answer is read off where the line crosses zero, so the points have to lie on both sides of zero for the crossing to be inside the data."><span class="ltr"></span><span>Because the line has to be drawn across a range wide enough to cross zero, and 0.0 M gives the largest gain.</span></button><button type="button" class="choice" data-ok="0" data-why="0.0 M is one more level of the concentration being changed. It is the end of the range, not a control."><span class="ltr"></span><span>Because distilled water is the control, and a control must be included.</span></button><button type="button" class="choice" data-ok="0" data-why="A core in distilled water gains as much water as it can. The potato's water potential is read where the line crosses zero, not at the end of the range."><span class="ltr"></span><span>Because the core in distilled water shows the potato's own water potential directly.</span></button></div></div>
+<p class="msg" id="msg" role="status" aria-live="polite">Choose one answer in each of the
+5 decisions.</p>
+<div class="actions">
+  <button id="submit" type="button" class="primary" disabled>Submit all
+  5</button>
+  <button id="reset" type="button">Start again</button>
+</div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  var SIM_ID = "design-diffusion-osmosis";
+  var TOTAL = 5;
+  var msg = document.getElementById("msg");
+  var submit = document.getElementById("submit");
+  var marked = false;
+
+  function say(t, k) { msg.textContent = t; msg.className = k ? "msg " + k : "msg"; }
+
+
+  // Shuffle in the browser, then write the letters on. The key is keyed on data-id, so
+  // where it lands never matters -- and it never lands at A twice running for the same
+  // student, which is what a fixed order would guarantee.
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function choices(host, onDone) {
+    var box = host.querySelector(".choices");
+    var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+    btns.forEach(function (b, i) {
+      box.appendChild(b);
+      b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+    });
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (box.dataset.done) return;
+        box.dataset.done = "1";
+        var right = b.dataset.ok === "1";
+        btns.forEach(function (o) {
+          o.disabled = true;
+          o.classList.add(o.dataset.ok === "1" ? "right" : "wrong");
+          if (o === b) o.classList.add("picked");
+          var w = document.createElement("p");
+          w.className = "why " + (o.dataset.ok === "1" ? "right" : "wrong");
+          w.textContent = o.dataset.why;
+          o.parentNode.insertBefore(w, o.nextSibling);
+        });
+        onDone(right);
+      });
+    });
+  }
+
+
+  function wire() {
+    [].forEach.call(document.querySelectorAll(".dec"), function (dec) {
+      var box = dec.querySelector(".choices");
+      var btns = shuffle([].slice.call(box.querySelectorAll(".choice")));
+      btns.forEach(function (b, i) {
+        box.appendChild(b);
+        b.querySelector(".ltr").textContent = "ABCDE".charAt(i);
+        b.addEventListener("click", function () {
+          if (marked) return;
+          btns.forEach(function (o) { o.classList.remove("chosen"); });
+          b.classList.add("chosen");
+          dec.dataset.chosen = "1";
+          var done = document.querySelectorAll(".dec[data-chosen]").length;
+          submit.disabled = done < TOTAL;
+          say(done < TOTAL
+              ? (TOTAL - done) + " decision" + (TOTAL - done === 1 ? "" : "s") + " still to make."
+              : "All " + TOTAL + " chosen. Submit when you are ready \u2014 they cannot be "
+                + "changed afterwards.");
+        });
+      });
+    });
+  }
+
+  submit.addEventListener("click", function () {
+    if (marked) return;
+    marked = true;
+    submit.disabled = true;
+    var right = 0;
+    [].forEach.call(document.querySelectorAll(".dec"), function (dec) {
+      dec.classList.add("marked");
+      [].forEach.call(dec.querySelectorAll(".choice"), function (o) {
+        o.disabled = true;
+        var ok = o.dataset.ok === "1";
+        o.classList.add(ok ? "right" : "wrong");
+        if (ok && o.classList.contains("chosen")) right++;
+        var w = document.createElement("p");
+        w.className = "why " + (ok ? "right" : "wrong");
+        w.textContent = o.dataset.why;
+        o.parentNode.insertBefore(w, o.nextSibling);
+      });
+    });
+    var p = document.createElement("div");
+    p.className = "score";
+    p.innerHTML = "<b>" + right + " of " + TOTAL + "</b> decisions made the way this "
+      + "investigation was carried out. Every option is explained above, including the ones "
+      + "you did not choose.";
+    msg.parentNode.insertBefore(p, msg);
+    say("");
+    reportHeight();
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    location.reload();
+  });
+
+  wire();
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(".sim") || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h < 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:"sim-height", sim:SIM_ID, height:h }, "*"); } catch (e) {}
+  }
+  window.addEventListener("resize", reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener("load", reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+</script>
+</body>
+</html>

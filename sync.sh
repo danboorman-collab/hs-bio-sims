@@ -45,4 +45,31 @@ for v in "$AP/videos/"*.mp4; do
     cp "$v" "$HERE/ap/videos/" 2>/dev/null || true
 done
 
+# ---------------------------------------------------------------------------------------
+# HS Biology, as whole practicals. The pages above this are individual simulations, served
+# one at a time to be framed from TimeBack. These six are the self-contained lesson pages,
+# the same shape as the AP set, reached through hs/index.html.
+#
+# Each HS practical keeps its own videos/ folder beside its page and refers to it as
+# videos/x.mp4, so that folder is copied next to the page rather than pooled. The AP set
+# pools its videos at the package root and says ../videos/x.mp4; copying one layout into
+# the other's shape is what breaks the links.
+# ---------------------------------------------------------------------------------------
+rm -rf "$HERE/hs"
+mkdir -p "$HERE/hs"
+cp "$SRC/Practicals/index.html" "$HERE/hs/"
+hs_page () {   # <slug> <the self-contained page, relative to SRC>
+    local dir
+    dir="$(dirname "$SRC/$2")"
+    mkdir -p "$HERE/hs/$1"
+    cp "$SRC/$2" "$HERE/hs/$1/index.html"
+    [ -d "$dir/videos" ] && cp -R "$dir/videos" "$HERE/hs/$1/"
+}
+hs_page enzyme-temperature       "Unit 1 Rebuild/Practicals/enzyme-temperature/artifact.html"
+hs_page osmosis-potato           "Unit 2 Rebuild/Practicals/osmosis-potato/lesson.html"
+hs_page photosynthesis-light     "Practicals/photosynthesis-light/lesson.html"
+hs_page microscope-magnification "Practicals/microscope-magnification/lesson.html"
+hs_page population-quadrats      "Practicals/population-quadrats/lesson.html"
+hs_page biodiversity-forests     "Practicals/biodiversity-forests/lesson.html"
+
 echo "synced $(find "$HERE" -name '*.html' | wc -l | tr -d ' ') pages"

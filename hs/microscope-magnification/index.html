@@ -1,0 +1,1588 @@
+<title>HS Biology: Cells under the microscope</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#fbfaf8; --surface:#ffffff; --ink:#1b1e22; --muted:#6f6a63;
+  --line:#e7e2da; --rule:#d8d2c8; --accent:#0e6f66; --accent-soft:#e2efec;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+    --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+  --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1020px;margin:0 auto;padding-inline:20px;padding-block:44px 64px}
+
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6.4vw,44px);line-height:1.12;
+  letter-spacing:-.015em;margin:0 0 14px;text-wrap:balance}
+.lead{font-family:var(--serif);font-size:clamp(17px,2.4vw,20px);line-height:1.5;color:var(--ink);
+  margin:0 0 28px;max-width:56ch}
+.lead em{font-style:italic;color:var(--accent);font-weight:600}
+
+.design{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 40px}
+.design div{flex:1 1 205px;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:14px 16px}
+.design dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 5px}
+.design dd{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
+
+nav.jump{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin:0 0 44px;
+  scrollbar-width:thin}
+nav.jump a{flex:0 0 auto;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;background:var(--surface);white-space:nowrap}
+nav.jump a:hover,nav.jump a:focus-visible{color:var(--accent);border-color:var(--accent)}
+
+section.stage{border-top:1px solid var(--rule);padding-top:26px;margin-top:44px;
+  scroll-margin-top:24px}
+section.stage:first-of-type{margin-top:0}
+.shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+  letter-spacing:.08em}
+.kind{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(21px,3.6vw,27px);line-height:1.2;
+  margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.blurb{color:var(--muted);font-size:15.5px;margin:0 0 20px}
+
+.media{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+video{width:100%;display:block;background:#0b0d10}
+iframe{width:100%;border:0;display:block;background:var(--surface)}
+
+footer{border-top:1px solid var(--rule);margin-top:52px;padding-top:22px;color:var(--muted);
+  font-size:14.5px}
+footer p{margin:0 0 10px;max-width:62ch}
+footer strong{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<style>.waiting{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--muted);font-size:14px}.waiting code{font-size:12.5px}</style>
+
+<script>
+// Registered before the frames are parsed: a srcdoc frame runs its script during parsing and
+// would otherwise post its height into a page that is not listening yet.
+(function () {
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "sim-height") return;
+    var frames = document.querySelectorAll("iframe");
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].contentWindow === e.source) {
+        frames[i].style.height = e.data.height + "px";
+        return;
+      }
+    }
+  });
+}());
+</script>
+<div class="wrap">
+<p class="eyebrow">Required practical &middot; High School Biology</p>
+<h1>Cells under the microscope</h1>
+<p class="lead">How much larger than the real cell is a drawing of it? Seven stages, in the order a student works through them &mdash; <em>watch, set up, measure, calculate, conclude, answer</em>.</p>
+<dl class="design"><div><dt>What we prepare</dt><dd>A slide of onion epidermis, one cell thick, stained with iodine</dd></div><div><dt>What we measure</dt><dd>The row of cells as drawn, and the real length of one cell</dd></div><div><dt>What we work out</dt><dd>The magnification of the drawing, which carries no units</dd></div></dl>
+<nav class="jump" aria-label="The seven stages"><a href="#method">1. Watch the method</a><a href="#equipment">2. Set out the equipment</a><a href="#collect">3. Collect the results</a><a href="#skillvideo">4. Watch how to calculate magnification</a><a href="#skill">5. Work out the magnification</a><a href="#conclusion">6. Choose the conclusion</a><a href="#questions">7. Answer eight questions</a></nav>
+<section class="stage" id="method"><div class="shead"><span class="num">Stage 1</span><span class="kind">Video &middot; 86 seconds</span></div><h2>Watch the method</h2><p class="blurb">Peeling the epidermis, staining it, and lowering the coverslip from one edge so no air is trapped under it.</p><div class="media"><video controls preload="metadata" playsinline src="videos/microscope-method.mp4"></video></div></section>
+<section class="stage" id="equipment"><div class="shead"><span class="num">Stage 2</span><span class="kind">Simulation &middot; Fourteen pieces on the bench</span></div><h2>Set out the equipment</h2><p class="blurb">Choose every piece the method needs. One submission, then every piece is marked and explained.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Set out the equipment&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.tray{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.tile{background:var(--card);border:2px solid var(--line);border-radius:10px;
+  padding:6px 4px 4px;cursor:pointer;font:inherit;color:var(--fg);display:flex;
+  flex-direction:column;gap:2px;align-items:center;text-align:center}
+.tile svg{width:100%;height:auto;max-width:86px;display:block}
+.tile .nm{font-size:12px;line-height:1.25;font-weight:600}
+.tile[aria-pressed=&quot;true&quot;]{border-color:var(--accent);background:var(--bg);
+  box-shadow:inset 0 0 0 2px var(--accent)}
+.tile .mk{font-size:11px;font-weight:700;min-height:14px}
+.tile.hit{border-color:var(--good-line);background:var(--good-bg)}
+.tile.hit .mk{color:var(--good)}
+.tile.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.tile.miss .mk{color:var(--bad)}
+.tile.over{border-color:var(--warn-line);background:var(--warn-bg)}
+.tile.over .mk{color:var(--warn)}
+.tile:disabled{cursor:default}
+.why{margin-top:14px;display:grid;gap:8px}
+.why h2{font-size:13px;margin:0;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.why ul{margin:0;padding-left:18px} .why li{font-size:13.5px;margin-bottom:5px}
+.why li b{font-weight:650}
+.rig{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px}
+.rig svg{width:100%;height:auto;display:block;border-radius:6px}
+.rig .cap{font-size:12.5px;color:var(--muted);padding-top:6px}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+  &lt;h1&gt;Set out the equipment&lt;/h1&gt;
+  &lt;p class=&quot;sub&quot;&gt;Choose every piece of equipment this method needs, then check your set-up.&lt;/p&gt;
+  &lt;div class=&quot;brief&quot;&gt;&lt;p&gt;&lt;b&gt;The method.&lt;/b&gt; The skin lining the inner curve of an onion scale is one cell thick, which is thin enough to see through. Peeling a piece of it off and mounting it on a slide gives a view of cells with nothing in front of them.&lt;/p&gt;&lt;p&gt;The peel is almost colorless, so one drop of iodine stain is added to give the structures inside the cells some color.&lt;/p&gt;&lt;p&gt;The coverslip goes on last, and it goes on from one edge rather than flat, so the glass pushes the air out ahead of itself instead of trapping it over the specimen.&lt;/p&gt;&lt;/div&gt;
+  &lt;div class=&quot;tray&quot; id=&quot;tray&quot; role=&quot;group&quot; aria-label=&quot;Equipment on the bench&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;onion&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M60,30 C60,30 44,36 33,52 C22,68 21,90 27,103 C34,118 46,126 60,126
+         C74,126 86,118 93,103 C99,90 98,68 87,52 C76,36 60,30 60,30 Z&quot;
+      fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M60,30 C60,30 44,36 33,52 C22,68 21,90 27,103&quot; fill=&quot;none&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; opacity=&quot;0.45&quot;/&gt;
+&lt;path d=&quot;M60,34 C51,38 42,54 36,70 C31,83 32,98 40,112&quot; fill=&quot;none&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M60,34 C69,38 78,54 84,70 C89,83 88,98 80,112&quot; fill=&quot;none&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M60,40 C53,45 47,59 43,73 C39,85 40,99 46,113&quot; fill=&quot;none&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M60,40 C67,45 73,59 77,73 C81,85 80,99 74,113&quot; fill=&quot;none&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M60,48 C55,53 52,65 50,77 C48,88 49,102 53,114&quot; fill=&quot;none&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M60,48 C65,53 68,65 70,77 C72,88 71,102 67,114&quot; fill=&quot;none&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M60,56 C57,62 56,72 56,82 C56,94 57,106 59,115&quot; fill=&quot;none&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M60,56 C63,62 64,72 64,82 C64,94 63,106 61,115&quot; fill=&quot;none&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M60,30 C58,26 57,22 56,16&quot; fill=&quot;none&quot; stroke=&quot;var(--good)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M60,30 C62,25 64,21 67,17&quot; fill=&quot;none&quot; stroke=&quot;var(--good)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M46,114 C52,118 68,118 74,114 C76,118 76,122 74,124 C68,128 52,128 46,124
+         C44,122 44,118 46,114 Z&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; stroke-linecap=&quot;round&quot; fill=&quot;none&quot;&gt;
+  &lt;path d=&quot;M51,127 C48,132 45,135 42,138&quot;/&gt;&lt;path d=&quot;M57,128 C56,133 55,136 54,141&quot;/&gt;
+  &lt;path d=&quot;M63,128 C64,133 65,136 66,141&quot;/&gt;&lt;path d=&quot;M69,127 C72,132 75,135 78,138&quot;/&gt;
+&lt;/g&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Onion&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;forceps&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M46,26 C46,14 74,14 74,26 L71,34 L69,26 C69,21 51,21 51,26 L49,34 Z&quot;
+      fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M49,32 L44,72 L52,116 L54.6,130 L57.4,129.4 L55.6,115 L53,72 L54,32 Z&quot;
+      fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M71,32 L76,72 L68,116 L65.4,130 L62.6,129.4 L64.4,115 L67,72 L66,32 Z&quot;
+      fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M50,44 L47,70&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.75&quot;/&gt;
+&lt;path d=&quot;M70,44 L73,70&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.75&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;&gt;
+  &lt;path d=&quot;M53.4,116 L56.2,116&quot;/&gt;&lt;path d=&quot;M53.9,120 L56.7,120&quot;/&gt;
+  &lt;path d=&quot;M54.4,124 L57.2,124&quot;/&gt;
+  &lt;path d=&quot;M63.8,116 L66.6,116&quot;/&gt;&lt;path d=&quot;M63.3,120 L66.1,120&quot;/&gt;
+  &lt;path d=&quot;M62.8,124 L65.6,124&quot;/&gt;
+&lt;/g&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Forceps&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;slide&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M10,58 L104,46 L110,80 L16,92 Z&quot; fill=&quot;var(--glass-fill)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot; opacity=&quot;0.9&quot;/&gt;
+&lt;path d=&quot;M16,92 L16,96 L110,84 L110,80&quot; fill=&quot;var(--glass-fill)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M10,58 L10,62 L16,96&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M10,58 L34,55 L40,89 L16,92 Z&quot; fill=&quot;var(--card)&quot; stroke=&quot;none&quot; opacity=&quot;0.8&quot;/&gt;
+&lt;g fill=&quot;var(--glass)&quot; opacity=&quot;0.45&quot;&gt;
+  &lt;circle cx=&quot;15&quot; cy=&quot;64&quot; r=&quot;1.1&quot;/&gt;&lt;circle cx=&quot;21&quot; cy=&quot;61&quot; r=&quot;1.1&quot;/&gt;
+  &lt;circle cx=&quot;27&quot; cy=&quot;59&quot; r=&quot;1.1&quot;/&gt;&lt;circle cx=&quot;18&quot; cy=&quot;72&quot; r=&quot;1.1&quot;/&gt;
+  &lt;circle cx=&quot;24&quot; cy=&quot;69&quot; r=&quot;1.1&quot;/&gt;&lt;circle cx=&quot;30&quot; cy=&quot;66&quot; r=&quot;1.1&quot;/&gt;
+  &lt;circle cx=&quot;21&quot; cy=&quot;80&quot; r=&quot;1.1&quot;/&gt;&lt;circle cx=&quot;27&quot; cy=&quot;77&quot; r=&quot;1.1&quot;/&gt;
+  &lt;circle cx=&quot;33&quot; cy=&quot;75&quot; r=&quot;1.1&quot;/&gt;&lt;circle cx=&quot;24&quot; cy=&quot;87&quot; r=&quot;1.1&quot;/&gt;
+  &lt;circle cx=&quot;30&quot; cy=&quot;84&quot; r=&quot;1.1&quot;/&gt;&lt;circle cx=&quot;36&quot; cy=&quot;82&quot; r=&quot;1.1&quot;/&gt;
+&lt;/g&gt;
+&lt;path d=&quot;M58,56 L88,52 L91,74 L61,78 Z&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot;/&gt;
+&lt;ellipse cx=&quot;74.5&quot; cy=&quot;64.5&quot; rx=&quot;11&quot; ry=&quot;7&quot; fill=&quot;var(--warn)&quot; opacity=&quot;0.3&quot;/&gt;
+&lt;path d=&quot;M46,54 L52,88&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.8&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Microscope slide&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;dropper&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M44,16 C36,16 34,22 34,28 C34,36 40,42 44,42 L64,42 C68,42 74,36 74,28
+         C74,22 72,16 64,16 Z&quot; fill=&quot;var(--screen)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M42,42 L66,42 L66,48 L42,48 Z&quot; fill=&quot;var(--screen)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M48,48 L48,104 L52.6,124&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linejoin=&quot;round&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M60,48 L60,104 L55.4,124&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linejoin=&quot;round&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M48,48 L60,48 L60,104 L55.4,124 L52.6,124 L48,104 Z&quot; fill=&quot;var(--glass-fill)&quot;
+      opacity=&quot;0.45&quot;/&gt;
+&lt;path d=&quot;M48,62 L60,62 L60,104 L55.4,122 L52.6,122 L48,104 Z&quot; fill=&quot;var(--warn)&quot;
+      opacity=&quot;0.6&quot;/&gt;
+&lt;path d=&quot;M48,62 L60,62&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M50,54 L50,98&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.8&quot;/&gt;
+&lt;path d=&quot;M54,128 C51.4,131.6 50.4,134.4 50.4,136.4 A3.6,3.6 0 0 0 57.6,136.4
+         C57.6,134.4 56.6,131.6 54,128 Z&quot; fill=&quot;var(--warn)&quot; opacity=&quot;0.6&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Dropper of iodine&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;mounting-needle&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M59.2,22 L60.8,22 L61.2,76 L58.8,76 Z&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M60,15 L60.8,22 L59.2,22 Z&quot; fill=&quot;var(--ink)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M54,76 L66,76 L66,84 L54,84 Z&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M55,86 C55,84 65,84 65,86 L66.5,122 C66.5,130 53.5,130 53.5,122 Z&quot;
+      fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M53.5,120 C53.5,128 66.5,128 66.5,120&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; opacity=&quot;0.7&quot;/&gt;
+&lt;path d=&quot;M55,84 C55,86 65,86 65,84&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      opacity=&quot;0.7&quot;/&gt;
+&lt;path d=&quot;M54.6,98 C58,99 62,99 65.4,98&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; opacity=&quot;0.5&quot;/&gt;
+&lt;path d=&quot;M57,88 L57,124&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.4&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Mounting needle&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;coverslip&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M30,44 L94,36 L98,80 L34,88 Z&quot; fill=&quot;var(--glass-fill)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M34,88 L34,90 L98,82 L98,80&quot; fill=&quot;var(--glass-fill)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M30,44 L30,46 L34,90&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M44,42 L48,86&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.75&quot;/&gt;
+&lt;path d=&quot;M74,39 L78,83&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.5&quot;/&gt;
+&lt;path d=&quot;M104,34 L104,92&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1&quot; data-ann=&quot;1&quot;
+      stroke-dasharray=&quot;3 3&quot; opacity=&quot;0.7&quot;/&gt;
+&lt;path d=&quot;M100,110 L100,112&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1&quot; data-ann=&quot;1&quot;/&gt;
+&lt;path d=&quot;M36,112 L100,104&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M36,112 L100,104 L100,105.4 L36,113.4 Z&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;text x=&quot;68&quot; y=&quot;128&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot;
+      data-ann=&quot;1&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;22 mm, and this thin&lt;/text&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Coverslip&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;goggles&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M7,61 Q12,53 18,53 L22,53 M113,61 Q108,53 102,53 L98,53&quot; fill=&quot;none&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M7,61 Q2,74 7,87 Q12,95 18,95 L22,95 M113,61 Q118,74 113,87 Q108,95 102,95 L98,95&quot;
+      fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M12,70 Q12,50 34,48 L86,48 Q108,50 108,70 Q108,98 86,101 L70,101 Q60,90 50,101
+         L34,101 Q12,98 12,70 Z&quot;
+      fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M21,71 Q21,58 37,57 L83,57 Q99,58 99,71 Q99,92 83,94 L68,94 Q60,85 52,94
+         L37,94 Q21,92 21,71 Z&quot;
+      fill=&quot;var(--lens)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M30,62 L46,54&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; opacity=&quot;0.75&quot;/&gt;
+&lt;path d=&quot;M14,62 Q18,58 22,62 Q18,66 14,62 Z&quot; fill=&quot;var(--dark)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M14,80 Q18,76 22,80 Q18,84 14,80 Z&quot; fill=&quot;var(--dark)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M98,62 Q102,58 106,62 Q102,66 98,62 Z&quot; fill=&quot;var(--dark)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M98,80 Q102,76 106,80 Q102,84 98,80 Z&quot; fill=&quot;var(--dark)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Safety goggles&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;microscope&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M16,136 L104,136 L98,123 L42,123 Q28,123 22,130 Z&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M96,129 C111,113 109,72 84,55 L76,65 C95,76 97,111 84,123 Z&quot;
+      fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;24&quot; y=&quot;92&quot; width=&quot;76&quot; height=&quot;7&quot; rx=&quot;1.5&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;ellipse cx=&quot;59&quot; cy=&quot;95.5&quot; rx=&quot;7&quot; ry=&quot;1.34&quot; fill=&quot;var(--body)&quot; stroke=&quot;none&quot;/&gt;
+&lt;path d=&quot;M42,96 L42,88 Q42,86 45,86 L51,86&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M76,96 L76,88 Q76,86 73,86 L67,86&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;97&quot; cy=&quot;106&quot; r=&quot;9&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;circle cx=&quot;97&quot; cy=&quot;106&quot; r=&quot;4.5&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;rect x=&quot;66&quot; y=&quot;54&quot; width=&quot;20&quot; height=&quot;11&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;48&quot; y=&quot;28&quot; width=&quot;22&quot; height=&quot;30&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;52&quot; y=&quot;14&quot; width=&quot;14&quot; height=&quot;16&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M53,70 L65,70 L62,82 L56,82 Z&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M68,70 L78,70 L76,80 L70,80 Z&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M47,58 L71,58 L79,70 L39,70 Z&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M51,100 L67,100 L63,111 L55,111 Z&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M62,104 L72,102&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;73.5&quot; cy=&quot;101.6&quot; r=&quot;2.4&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;path d=&quot;M54,124 L54,99 L64,99 L64,124 Z&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M52,99 L66,99&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M56,92 L56,99 M62,92 L62,99&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.6&quot;
+      opacity=&quot;0.75&quot;/&gt;
+&lt;path d=&quot;M56,86 L56,92 M62,86 L62,92&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.6&quot;
+      opacity=&quot;0.55&quot;/&gt;
+&lt;path d=&quot;M59,124 L59,130 L76,130&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;ellipse cx=&quot;76&quot; cy=&quot;119&quot; rx=&quot;7.5&quot; ry=&quot;7.5&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+         stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M76,126.5 L76,130&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;circle cx=&quot;76&quot; cy=&quot;130&quot; r=&quot;2.2&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;path d=&quot;M71.5,116 L80.5,113&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.8&quot;/&gt;
+&lt;path d=&quot;M69,116 L60,124&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.65&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Microscope&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;hotplate&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;rect x=&quot;18&quot; y=&quot;72&quot; width=&quot;84&quot; height=&quot;12&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M22,84 L22,116 Q22,120 26,120 L94,120 Q98,120 98,116 L98,84 Z&quot;
+      fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;76&quot; cy=&quot;101&quot; r=&quot;8&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M76,101 L70.5,96.5&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; stroke-linecap=&quot;round&quot; opacity=&quot;0.85&quot;&gt;
+&lt;path d=&quot;M64.5,107 L62.5,109 M63,97.5 L60.6,96 M68.5,90.5 L67,88.2 M76,88 L76,85.3
+         M83.5,90.5 L85,88.2 M89,97.5 L91.4,96 M87.5,107 L89.5,109&quot;/&gt;
+&lt;/g&gt;
+&lt;text x=&quot;60&quot; y=&quot;118&quot; font-size=&quot;7&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;end&quot;&gt;&amp;#176;C&lt;/text&gt;
+&lt;circle cx=&quot;36&quot; cy=&quot;101&quot; r=&quot;4.5&quot; fill=&quot;var(--warm)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;rect x=&quot;28&quot; y=&quot;120&quot; width=&quot;12&quot; height=&quot;5&quot; rx=&quot;1.5&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;rect x=&quot;80&quot; y=&quot;120&quot; width=&quot;12&quot; height=&quot;5&quot; rx=&quot;1.5&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;path d=&quot;M98,110 C110,110 114,120 116,132&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Hotplate&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;stopwatch&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;6&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;55&quot; y=&quot;46&quot; width=&quot;10&quot; height=&quot;11&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;rect x=&quot;82&quot; y=&quot;58&quot; width=&quot;9&quot; height=&quot;7&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; transform=&quot;rotate(38 86 61)&quot;/&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;36&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;33&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.75&quot;&gt;&lt;path d=&quot;M63.0,63.7 L63.2,61.2 M65.9,64.1 L66.4,61.7 M68.8,64.9 L69.6,62.5 M71.6,66.0 L72.6,63.7 M76.8,68.9 L78.2,66.9 M79.1,70.8 L80.7,69.0 M81.2,72.9 L83.0,71.3 M83.1,75.2 L85.1,73.8 M86.0,80.4 L88.3,79.4 M87.1,83.2 L89.5,82.4 M87.9,86.1 L90.3,85.6 M88.3,89.0 L90.8,88.8 M88.3,95.0 L90.8,95.2 M87.9,97.9 L90.3,98.4 M87.1,100.8 L89.5,101.6 M86.0,103.6 L88.3,104.6 M83.1,108.8 L85.1,110.2 M81.2,111.1 L83.0,112.7 M79.1,113.2 L80.7,115.0 M76.8,115.1 L78.2,117.1 M71.6,118.0 L72.6,120.3 M68.8,119.1 L69.6,121.5 M65.9,119.9 L66.4,122.3 M63.0,120.3 L63.2,122.8 M57.0,120.3 L56.8,122.8 M54.1,119.9 L53.6,122.3 M51.2,119.1 L50.4,121.5 M48.4,118.0 L47.4,120.3 M43.2,115.1 L41.8,117.1 M40.9,113.2 L39.3,115.0 M38.8,111.1 L37.0,112.7 M36.9,108.8 L34.9,110.2 M34.0,103.6 L31.7,104.6 M32.9,100.8 L30.5,101.6 M32.1,97.9 L29.7,98.4 M31.7,95.0 L29.2,95.2 M31.7,89.0 L29.2,88.8 M32.1,86.1 L29.7,85.6 M32.9,83.2 L30.5,82.4 M34.0,80.4 L31.7,79.4 M36.9,75.2 L34.9,73.8 M38.8,72.9 L37.0,71.3 M40.9,70.8 L39.3,69.0 M43.2,68.9 L41.8,66.9 M48.4,66.0 L47.4,63.7 M51.2,64.9 L50.4,62.5 M54.1,64.1 L53.6,61.7 M57.0,63.7 L56.8,61.2&quot;/&gt;&lt;/g&gt;&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; stroke-linecap=&quot;round&quot;&gt;&lt;path d=&quot;M60.0,66.0 L60.0,61.0 M73.0,69.5 L75.5,65.2 M82.5,79.0 L86.8,76.5 M86.0,92.0 L91.0,92.0 M82.5,105.0 L86.8,107.5 M73.0,114.5 L75.5,118.8 M60.0,118.0 L60.0,123.0 M47.0,114.5 L44.5,118.8 M37.5,105.0 L33.2,107.5 M34.0,92.0 L29.0,92.0 M37.5,79.0 L33.2,76.5 M47.0,69.5 L44.5,65.2&quot;/&gt;&lt;/g&gt;&lt;text x=&quot;70.8&quot; y=&quot;75.2&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;5&lt;/text&gt;&lt;text x=&quot;78.6&quot; y=&quot;83.0&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;10&lt;/text&gt;&lt;text x=&quot;81.5&quot; y=&quot;93.8&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;15&lt;/text&gt;&lt;text x=&quot;78.6&quot; y=&quot;104.5&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;&lt;text x=&quot;70.8&quot; y=&quot;112.4&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;25&lt;/text&gt;&lt;text x=&quot;60.0&quot; y=&quot;115.3&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;30&lt;/text&gt;&lt;text x=&quot;49.2&quot; y=&quot;112.4&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;35&lt;/text&gt;&lt;text x=&quot;41.4&quot; y=&quot;104.5&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;40&lt;/text&gt;&lt;text x=&quot;38.5&quot; y=&quot;93.8&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;45&lt;/text&gt;&lt;text x=&quot;41.4&quot; y=&quot;83.0&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;50&lt;/text&gt;&lt;text x=&quot;49.2&quot; y=&quot;75.2&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;55&lt;/text&gt;&lt;text x=&quot;60.0&quot; y=&quot;72.3&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;60&lt;/text&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;104&quot; r=&quot;6&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;&gt;
+&lt;path d=&quot;M60,99 L60,100.6 M65,104 L63.4,104 M60,109 L60,107.4 M55,104 L56.6,104&quot;/&gt;
+&lt;/g&gt;
+&lt;path d=&quot;M60,104 L62.6,101.4&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M53.2,93.8 L88.0,84.5&quot; stroke=&quot;var(--warm)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;2.6&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Stopwatch&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;funnel&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M27,44 L93,44 L65,101 L55,101 Z&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M55,101 L55,130 M65,101 L65,130&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M55,101 L65,101&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;130&quot; rx=&quot;5&quot; ry=&quot;0.95&quot; fill=&quot;var(--body)&quot; stroke=&quot;none&quot;/&gt;
+&lt;path d=&quot;M55.4,129 A5,0.95 0 0 1 64.6,129&quot; fill=&quot;var(--body)&quot; stroke=&quot;none&quot;
+      opacity=&quot;0.5&quot;/&gt;
+&lt;path d=&quot;M45,54 L58,80&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot;
+      opacity=&quot;0.8&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;44&quot; rx=&quot;33&quot; ry=&quot;5.08&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Funnel&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;conical-flask&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M25,132 L46,74 Q50,64 51,56 L51,34 L69,34 L69,56 Q70,64 74,74 L95,132 Z&quot;
+      fill=&quot;var(--glass-fill)&quot; stroke=&quot;none&quot;/&gt;
+&lt;path d=&quot;M51,34 L51,56 Q50,64 46,74 L25,132 L95,132 L74,74 Q70,64 69,56 L69,34&quot;
+      fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M29,128 A31,5.27 0 0 0 91,128&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      opacity=&quot;0.85&quot;/&gt;
+&lt;path d=&quot;M45,86 L36,122&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot;
+      opacity=&quot;0.8&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;&gt;
+&lt;path d=&quot;M34,109 L48,109 M31,118 L45,118&quot;/&gt;
+&lt;/g&gt;
+&lt;text x=&quot;51&quot; y=&quot;111.5&quot; font-size=&quot;7.5&quot; fill=&quot;var(--glass)&quot;&gt;150&lt;/text&gt;
+&lt;text x=&quot;48&quot; y=&quot;121&quot; font-size=&quot;7.5&quot; fill=&quot;var(--glass)&quot;&gt;100 cm&amp;#179;&lt;/text&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;34&quot; rx=&quot;9.5&quot; ry=&quot;1.29&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+         stroke-width=&quot;1.3&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Conical flask&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;ph-meter&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M10,84 L62,84 Q66,84 66,88 L66,124 Q66,128 62,128 L10,128
+         Q6,128 6,124 L6,88 Q6,84 10,84 Z&quot;
+      fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;11&quot; y=&quot;88&quot; width=&quot;46&quot; height=&quot;17&quot; rx=&quot;2&quot; fill=&quot;var(--dark)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;text x=&quot;34&quot; y=&quot;101&quot; font-size=&quot;11.5&quot; fill=&quot;var(--screen)&quot; text-anchor=&quot;middle&quot;
+      font-family=&quot;ui-monospace,Menlo,Consolas,monospace&quot;&gt;7.00&lt;/text&gt;
+&lt;text x=&quot;14&quot; y=&quot;120&quot; font-size=&quot;8.5&quot; fill=&quot;var(--ink)&quot;&gt;pH&lt;/text&gt;
+&lt;rect x=&quot;30&quot; y=&quot;111&quot; width=&quot;12&quot; height=&quot;8&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;rect x=&quot;46&quot; y=&quot;111&quot; width=&quot;12&quot; height=&quot;8&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;circle cx=&quot;66&quot; cy=&quot;92&quot; r=&quot;3.2&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M69,92 C82,80 86,58 90,44&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;84&quot; y=&quot;42&quot; width=&quot;13&quot; height=&quot;22&quot; rx=&quot;3&quot; fill=&quot;var(--bg)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M86,64 L95,64 L95,104 L86,104 Z&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;90.5&quot; cy=&quot;110&quot; r=&quot;6&quot; fill=&quot;var(--glass-fill)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M88,107 A3,3 0 0 1 90.5,106&quot; fill=&quot;none&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M86,96 L95,96&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;/&gt;
+&lt;path d=&quot;M88,72 L88,92&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; opacity=&quot;0.8&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;pH meter&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;mass-balance&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M33,79 L87,79 L84,83 L36,83 Z&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;79&quot; rx=&quot;27&quot; ry=&quot;3.94&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;55&quot; y=&quot;83&quot; width=&quot;10&quot; height=&quot;7&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M16,89 L104,89 Q108,89 108,93 L108,120 Q108,124 104,124 L16,124
+         Q12,124 12,120 L12,93 Q12,89 16,89 Z&quot;
+      fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;60&quot; y=&quot;94&quot; width=&quot;42&quot; height=&quot;17&quot; rx=&quot;2&quot; fill=&quot;var(--dark)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;text x=&quot;81&quot; y=&quot;107&quot; font-size=&quot;11&quot; fill=&quot;var(--screen)&quot; text-anchor=&quot;middle&quot;
+      font-family=&quot;ui-monospace,Menlo,Consolas,monospace&quot;&gt;0.00 g&lt;/text&gt;
+&lt;rect x=&quot;19&quot; y=&quot;96&quot; width=&quot;17&quot; height=&quot;9&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;rect x=&quot;40&quot; y=&quot;96&quot; width=&quot;17&quot; height=&quot;9&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;text x=&quot;27.5&quot; y=&quot;102.8&quot; font-size=&quot;5.5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;ON&lt;/text&gt;
+&lt;text x=&quot;48.5&quot; y=&quot;102.8&quot; font-size=&quot;5.5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;TARE&lt;/text&gt;
+&lt;circle cx=&quot;30&quot; cy=&quot;115&quot; r=&quot;5&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;circle cx=&quot;30&quot; cy=&quot;115&quot; r=&quot;1.8&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;rect x=&quot;20&quot; y=&quot;124&quot; width=&quot;9&quot; height=&quot;6&quot; rx=&quot;1.5&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;rect x=&quot;91&quot; y=&quot;124&quot; width=&quot;9&quot; height=&quot;6&quot; rx=&quot;1.5&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Mass balance&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;
+  &lt;div class=&quot;actions&quot;&gt;
+    &lt;button id=&quot;check&quot; class=&quot;primary&quot; type=&quot;button&quot;&gt;Check my set-up&lt;/button&gt;
+    &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Nothing chosen yet.&lt;/p&gt;
+  &lt;div class=&quot;why&quot; id=&quot;why&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;rig&quot; id=&quot;rig&quot; hidden&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_microscope-equipment&quot;;
+  var ITEMS = [{&quot;id&quot;: &quot;onion&quot;, &quot;name&quot;: &quot;Onion&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;The specimen. The skin lining the inner curve of a scale is one cell thick, so it is thin enough to see through.&quot;}, {&quot;id&quot;: &quot;forceps&quot;, &quot;name&quot;: &quot;Forceps&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Grip the edge of the peel and lift it off the scale in one piece. Fingers would tear it.&quot;}, {&quot;id&quot;: &quot;slide&quot;, &quot;name&quot;: &quot;Microscope slide&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;The flat glass the peel lies on. Everything else is built up on top of it.&quot;}, {&quot;id&quot;: &quot;dropper&quot;, &quot;name&quot;: &quot;Dropper of iodine&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Puts one drop of stain on the peel. Without it the cells are almost colorless and their structures cannot be made out.&quot;}, {&quot;id&quot;: &quot;mounting-needle&quot;, &quot;name&quot;: &quot;Mounting needle&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Props the coverslip up at one edge so it can be lowered slowly, and teases the peel flat if it folds.&quot;}, {&quot;id&quot;: &quot;coverslip&quot;, &quot;name&quot;: &quot;Coverslip&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;The thin square of glass that goes over the specimen. It holds the peel flat and keeps the stain off the objective lens.&quot;}, {&quot;id&quot;: &quot;goggles&quot;, &quot;name&quot;: &quot;Safety goggles&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Iodine stains skin and eyes. They go on before the stain comes out, not after.&quot;}, {&quot;id&quot;: &quot;microscope&quot;, &quot;name&quot;: &quot;Microscope&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Magnifies the cells. The lowest power goes on first, and the focus moves the lens away from the slide, never toward it.&quot;}, {&quot;id&quot;: &quot;hotplate&quot;, &quot;name&quot;: &quot;Hotplate&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is heated. The peel is mounted cold.&quot;}, {&quot;id&quot;: &quot;stopwatch&quot;, &quot;name&quot;: &quot;Stopwatch&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing here is timed. The slide is ready when the coverslip is down.&quot;}, {&quot;id&quot;: &quot;funnel&quot;, &quot;name&quot;: &quot;Funnel&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is filtered. The stain goes on one drop at a time, straight from the dropper.&quot;}, {&quot;id&quot;: &quot;conical-flask&quot;, &quot;name&quot;: &quot;Conical flask&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is mixed or held in bulk. The whole specimen fits under a coverslip.&quot;}, {&quot;id&quot;: &quot;ph-meter&quot;, &quot;name&quot;: &quot;pH meter&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;pH has nothing to do with making a slide.&quot;}, {&quot;id&quot;: &quot;mass-balance&quot;, &quot;name&quot;: &quot;Mass balance&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is weighed. A piece of onion peel is chosen for being thin, not for its mass.&quot;}];
+  var RIG = &quot;\n&lt;svg viewBox=\&quot;0 0 600 220\&quot; role=\&quot;img\&quot; aria-label=\&quot;A microscope slide on the bench. A piece of\n     onion peel lies flat in a drop of iodine, and a coverslip is being lowered onto it from one\n     edge, propped on a mounting needle.\&quot;&gt;\n  &lt;g transform=\&quot;translate(120,8)\&quot;&gt;\n  &lt;line x1=\&quot;10\&quot; y1=\&quot;168\&quot; x2=\&quot;290\&quot; y2=\&quot;168\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot;/&gt;\n  &lt;path d=\&quot;M28,132 L28,140 L262,140 L262,132 Z\&quot; fill=\&quot;var(--glass-fill)\&quot;\n        stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;\n  &lt;path d=\&quot;M28,128 L262,128 L262,132 L28,132 Z\&quot; fill=\&quot;var(--glass-fill)\&quot;\n        stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot; stroke-linejoin=\&quot;round\&quot; opacity=\&quot;0.8\&quot;/&gt;\n  &lt;path d=\&quot;M28,128 L86,128 L86,140 L28,140 Z\&quot; fill=\&quot;var(--card)\&quot; stroke=\&quot;var(--ink)\&quot;\n        stroke-width=\&quot;1.6\&quot;/&gt;\n  &lt;g stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.6\&quot;&gt;\n    &lt;path d=\&quot;M38,128 L38,140\&quot;/&gt;&lt;path d=\&quot;M48,128 L48,140\&quot;/&gt;&lt;path d=\&quot;M58,128 L58,140\&quot;/&gt;\n    &lt;path d=\&quot;M68,128 L68,140\&quot;/&gt;&lt;path d=\&quot;M78,128 L78,140\&quot;/&gt;\n  &lt;/g&gt;\n  &lt;path d=\&quot;M128,128 C128,119 198,119 198,128 Z\&quot; fill=\&quot;var(--warn)\&quot; opacity=\&quot;0.45\&quot;/&gt;\n  &lt;path d=\&quot;M134,127 L192,127\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot;\n        stroke-linecap=\&quot;round\&quot;/&gt;\n  &lt;path d=\&quot;M118,127 L176,95 L179,100 L121,132 Z\&quot; fill=\&quot;var(--glass-fill)\&quot;\n        stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.6\&quot; stroke-linejoin=\&quot;round\&quot; opacity=\&quot;0.85\&quot;/&gt;\n  &lt;path d=\&quot;M189,87 L186,93 L179,100 L176,95 L183,89 Z\&quot; fill=\&quot;var(--metal)\&quot;\n        stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.6\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;\n  &lt;path d=\&quot;M189,87 L218,67\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot; stroke-linecap=\&quot;round\&quot;/&gt;\n  &lt;path d=\&quot;M189,87 L218,67\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.6\&quot;/&gt;\n  &lt;path d=\&quot;M158,78 A46,46 0 0 1 183,112\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--accent)\&quot;\n        stroke-width=\&quot;3\&quot; stroke-dasharray=\&quot;5 4\&quot;/&gt;\n  &lt;path d=\&quot;M183,112 L178,106 M183,112 L186,105\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--accent)\&quot;\n        stroke-width=\&quot;3\&quot; stroke-linecap=\&quot;round\&quot;/&gt;\n  &lt;/g&gt;\n&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;177\&quot; cy=\&quot;142\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M177,142 L100,180\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;96\&quot; y=\&quot;183.4\&quot; text-anchor=\&quot;end\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;frosted end&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;325\&quot; cy=\&quot;87\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M325,87 L450,46\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;454\&quot; y=\&quot;49.4\&quot; text-anchor=\&quot;start\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;mounting needle&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;270\&quot; cy=\&quot;120\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M270,120 L450,78\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;454\&quot; y=\&quot;81.4\&quot; text-anchor=\&quot;start\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;coverslip&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;310\&quot; cy=\&quot;130\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M310,130 L450,110\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;454\&quot; y=\&quot;113.4\&quot; text-anchor=\&quot;start\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;drop of iodine&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;270\&quot; cy=\&quot;135\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M270,135 L450,142\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;454\&quot; y=\&quot;145.4\&quot; text-anchor=\&quot;start\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;onion peel&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;370\&quot; cy=\&quot;142\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M370,142 L450,174\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;454\&quot; y=\&quot;177.4\&quot; text-anchor=\&quot;start\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;microscope slide&lt;/text&gt;&lt;/g&gt;\n&lt;/svg&gt;\n&quot;, CAP = &quot;The slide being made up. The peel lies flat in a drop of iodine, and the coverslip rests on the glass at the near edge of the drop, propped on the mounting needle. Lowering it sweeps across the drop and pushes the air out ahead of the glass.&quot;;
+  var byId = {};
+  ITEMS.forEach(function (it) { byId[it.id] = it; });
+
+  var tray = document.getElementById(&quot;tray&quot;), msg = document.getElementById(&quot;msg&quot;);
+  var why = document.getElementById(&quot;why&quot;), rig = document.getElementById(&quot;rig&quot;);
+  var elCheck = document.getElementById(&quot;check&quot;), elReset = document.getElementById(&quot;reset&quot;);
+  var tiles = Array.prototype.slice.call(tray.querySelectorAll(&quot;.tile&quot;));
+  var locked = false;
+
+  function shuffleTray() {
+    var kids = Array.prototype.slice.call(tray.children);
+    for (var i = kids.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = kids[i]; kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k) { tray.appendChild(k); });
+  }
+  shuffleTray();
+
+  function say(text, kind) {
+    msg.textContent = text;
+    msg.className = kind ? &quot;msg &quot; + kind : &quot;msg&quot;;
+  }
+
+  function chosen() {
+    return tiles.filter(function (t) { return t.getAttribute(&quot;aria-pressed&quot;) === &quot;true&quot;; })
+                .map(function (t) { return t.dataset.id; });
+  }
+
+  tiles.forEach(function (t) {
+    t.addEventListener(&quot;click&quot;, function () {
+      if (locked) return;
+      var on = t.getAttribute(&quot;aria-pressed&quot;) === &quot;true&quot;;
+      t.setAttribute(&quot;aria-pressed&quot;, on ? &quot;false&quot; : &quot;true&quot;);
+      var n = chosen().length;
+      say(n === 0 ? &quot;Nothing chosen yet.&quot;
+                  : n + (n === 1 ? &quot; piece chosen.&quot; : &quot; pieces chosen.&quot;));
+    });
+  });
+
+  function check() {
+    if (locked) return;
+    var picked = chosen();
+    if (!picked.length) { say(&quot;Choose the equipment first, then check your set-up.&quot;); return; }
+    locked = true;
+    var hits = [], missed = [], over = [];
+    tiles.forEach(function (t) {
+      var it = byId[t.dataset.id], on = picked.indexOf(it.id) !== -1;
+      t.disabled = true;
+      var mk = t.querySelector(&quot;.mk&quot;);
+      if (it.needed &amp;&amp; on) { t.classList.add(&quot;hit&quot;); mk.textContent = &quot;needed&quot;; hits.push(it); }
+      else if (it.needed) { t.classList.add(&quot;miss&quot;); mk.textContent = &quot;missed&quot;; missed.push(it); }
+      else if (on) { t.classList.add(&quot;over&quot;); mk.textContent = &quot;not needed&quot;; over.push(it); }
+      else { mk.textContent = &quot;&quot;; }
+    });
+
+    var need = ITEMS.filter(function (i) { return i.needed; }).length;
+    var parts = [&quot;You chose &quot; + hits.length + &quot; of the &quot; + need + &quot; pieces this method needs&quot;];
+    if (over.length) parts.push(&quot;and &quot; + over.length + &quot; it does not&quot;);
+    say(parts.join(&quot;, &quot;) + &quot;.&quot;, (hits.length === need &amp;&amp; !over.length) ? &quot;good&quot; : null);
+
+    var out = &quot;&quot;;
+    if (missed.length) {
+      out += &quot;&lt;h2&gt;Missed&lt;/h2&gt;&lt;ul&gt;&quot; + missed.map(function (i) {
+        return &quot;&lt;li&gt;&lt;b&gt;&quot; + i.name + &quot;&lt;/b&gt; &amp;mdash; &quot; + i.why + &quot;&lt;/li&gt;&quot;; }).join(&quot;&quot;) + &quot;&lt;/ul&gt;&quot;;
+    }
+    if (over.length) {
+      out += &quot;&lt;h2&gt;Chosen, but not needed&lt;/h2&gt;&lt;ul&gt;&quot; + over.map(function (i) {
+        return &quot;&lt;li&gt;&lt;b&gt;&quot; + i.name + &quot;&lt;/b&gt; &amp;mdash; &quot; + i.why + &quot;&lt;/li&gt;&quot;; }).join(&quot;&quot;) + &quot;&lt;/ul&gt;&quot;;
+    }
+    out += &quot;&lt;h2&gt;What each piece is for&lt;/h2&gt;&lt;ul&gt;&quot;
+      + ITEMS.filter(function (i) { return i.needed; }).map(function (i) {
+          return &quot;&lt;li&gt;&lt;b&gt;&quot; + i.name + &quot;&lt;/b&gt; &amp;mdash; &quot; + i.why + &quot;&lt;/li&gt;&quot;; }).join(&quot;&quot;)
+      + &quot;&lt;/ul&gt;&quot;;
+    why.innerHTML = out;
+
+    rig.hidden = false;
+    rig.innerHTML = RIG + &#x27;&lt;div class=&quot;cap&quot;&gt;&#x27; + CAP + &#x27;&lt;/div&gt;&#x27;;
+    elCheck.disabled = true;
+    reportHeight();
+  }
+
+  elCheck.addEventListener(&quot;click&quot;, check);
+  elReset.addEventListener(&quot;click&quot;, function () {
+    locked = false;
+    tiles.forEach(function (t) {
+      t.disabled = false;
+      t.setAttribute(&quot;aria-pressed&quot;, &quot;false&quot;);
+      t.classList.remove(&quot;hit&quot;, &quot;miss&quot;, &quot;over&quot;);
+      t.querySelector(&quot;.mk&quot;).textContent = &quot;&quot;;
+    });
+    why.innerHTML = &quot;&quot;; rig.hidden = true; rig.innerHTML = &quot;&quot;;
+    elCheck.disabled = false;
+    shuffleTray();
+    say(&quot;Nothing chosen yet.&quot;);
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1260" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="collect"><div class="shead"><span class="num">Stage 3</span><span class="kind">Simulation &middot; Count the cells, measure the row</span></div><h2>Collect the results</h2><p class="blurb">Count the cells across the field of view, then measure the row you drew against a ruler.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Onion cells under the microscope&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,340px);gap:12px;
+  align-items:stretch;margin-bottom:2px}
+@media (max-width:700px){.bench{grid-template-columns:1fr}}
+.results{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;display:flex;flex-direction:column;justify-content:center}
+.stage{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stage svg{flex:0 0 auto;max-width:100%;height:auto}
+.readouts{flex:1 1 140px;min-width:138px;display:grid;gap:6px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+    border-bottom:1px dotted var(--line);padding-bottom:4px}
+.ro&gt;span{color:var(--muted);font-size:12px}
+.ro b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:650}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:12px 0 0;padding:10px 12px 12px}
+legend{font-size:12px;font-weight:650;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em;padding:0 5px}
+.hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+.picks{display:flex;gap:6px;flex-wrap:wrap}
+.picks button{flex:1 1 56px;padding:9px 4px;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg);border-radius:8px;font:inherit;font-variant-numeric:tabular-nums;
+  cursor:pointer}
+.picks button[aria-pressed=&quot;true&quot;]{background:var(--accent);color:var(--accent-fg);
+  border-color:var(--accent);font-weight:650}
+.picks button:disabled{opacity:.5;cursor:not-allowed}
+.picks button .done{display:block;font-size:10px;color:var(--muted);line-height:1.2}
+.picks button[aria-pressed=&quot;true&quot;] .done{color:var(--accent-fg);opacity:.85}
+.fixedgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.fixed{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed b{font-size:15px;font-weight:650;color:var(--fg);padding:5px 0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:8px}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+th[scope=&quot;row&quot;]{text-align:left}
+td.empty{color:var(--muted)}
+.entry{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.entry input{width:92px;padding:8px 10px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted)}
+.entry button{padding:8px 13px;border:1px solid var(--accent);border-radius:8px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+tr.active th[scope=&quot;row&quot;]{color:var(--accent);font-weight:700}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+  &lt;h1&gt;Onion cells under the microscope&lt;/h1&gt;
+  &lt;p class=&quot;sub&quot;&gt;Count the cells across the field of view, then measure the row you drew. Those
+    two numbers are what the magnification is worked out from.&lt;/p&gt;
+
+  &lt;div class=&quot;bench&quot;&gt;
+    &lt;div class=&quot;stage&quot;&gt;
+&lt;svg viewBox=&quot;0 0 310 240&quot; width=&quot;300&quot; role=&quot;img&quot; aria-label=&quot;The view down the microscope: rows
+     of onion epidermis cells lying end to end and sharing their walls, each with one stained
+     nucleus. The middle row runs clear across the field of view.&quot;&gt;
+  &lt;defs&gt;&lt;clipPath id=&quot;fov&quot;&gt;&lt;circle cx=&quot;120&quot; cy=&quot;120&quot; r=&quot;104&quot;/&gt;&lt;/clipPath&gt;&lt;/defs&gt;
+  &lt;circle cx=&quot;120&quot; cy=&quot;120&quot; r=&quot;104&quot; fill=&quot;var(--lens)&quot;/&gt;
+  &lt;g clip-path=&quot;url(#fov)&quot;&gt;
+    &lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;240&quot; height=&quot;240&quot; fill=&quot;var(--lens)&quot;/&gt;
+    &lt;rect x=&quot;-16&quot; y=&quot;44&quot; width=&quot;29&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;-2&quot; cy=&quot;70&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;13&quot; y=&quot;44&quot; width=&quot;35&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;30&quot; cy=&quot;70&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;48&quot; y=&quot;44&quot; width=&quot;34&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;65&quot; cy=&quot;70&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;82&quot; y=&quot;44&quot; width=&quot;28&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;96&quot; cy=&quot;70&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;110&quot; y=&quot;44&quot; width=&quot;31&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;126&quot; cy=&quot;70&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;141&quot; y=&quot;44&quot; width=&quot;35&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;158&quot; cy=&quot;70&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;176&quot; y=&quot;44&quot; width=&quot;33&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;192&quot; cy=&quot;70&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;209&quot; y=&quot;44&quot; width=&quot;36&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;227&quot; cy=&quot;70&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;245&quot; y=&quot;44&quot; width=&quot;35&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;262&quot; cy=&quot;70&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;-2&quot; y=&quot;86&quot; width=&quot;27&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;12&quot; cy=&quot;102&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.75&quot;/&gt;&lt;rect x=&quot;25&quot; y=&quot;86&quot; width=&quot;35&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;42&quot; cy=&quot;102&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.75&quot;/&gt;&lt;rect x=&quot;60&quot; y=&quot;86&quot; width=&quot;26&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;73&quot; cy=&quot;102&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.75&quot;/&gt;&lt;rect x=&quot;86&quot; y=&quot;86&quot; width=&quot;33&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;102&quot; cy=&quot;102&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.75&quot;/&gt;&lt;rect x=&quot;119&quot; y=&quot;86&quot; width=&quot;30&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;134&quot; cy=&quot;102&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.75&quot;/&gt;&lt;rect x=&quot;149&quot; y=&quot;86&quot; width=&quot;34&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;166&quot; cy=&quot;102&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.75&quot;/&gt;&lt;rect x=&quot;183&quot; y=&quot;86&quot; width=&quot;29&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;198&quot; cy=&quot;102&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.75&quot;/&gt;&lt;rect x=&quot;212&quot; y=&quot;86&quot; width=&quot;29&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;226&quot; cy=&quot;102&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.75&quot;/&gt;&lt;rect x=&quot;241&quot; y=&quot;86&quot; width=&quot;37&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;260&quot; cy=&quot;102&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.75&quot;/&gt;&lt;rect x=&quot;-16&quot; y=&quot;128&quot; width=&quot;33&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;0&quot; cy=&quot;154&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;17&quot; y=&quot;128&quot; width=&quot;34&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;34&quot; cy=&quot;154&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;51&quot; y=&quot;128&quot; width=&quot;34&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;68&quot; cy=&quot;154&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;85&quot; y=&quot;128&quot; width=&quot;33&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;102&quot; cy=&quot;154&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;118&quot; y=&quot;128&quot; width=&quot;32&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;134&quot; cy=&quot;154&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;150&quot; y=&quot;128&quot; width=&quot;36&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;168&quot; cy=&quot;154&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;186&quot; y=&quot;128&quot; width=&quot;28&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;200&quot; cy=&quot;154&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;214&quot; y=&quot;128&quot; width=&quot;29&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;228&quot; cy=&quot;154&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;243&quot; y=&quot;128&quot; width=&quot;36&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;261&quot; cy=&quot;154&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;-2&quot; y=&quot;170&quot; width=&quot;28&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;12&quot; cy=&quot;186&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;26&quot; y=&quot;170&quot; width=&quot;34&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;43&quot; cy=&quot;186&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;60&quot; y=&quot;170&quot; width=&quot;32&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;76&quot; cy=&quot;186&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;92&quot; y=&quot;170&quot; width=&quot;37&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;110&quot; cy=&quot;186&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;129&quot; y=&quot;170&quot; width=&quot;26&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;142&quot; cy=&quot;186&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;155&quot; y=&quot;170&quot; width=&quot;36&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;173&quot; cy=&quot;186&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;191&quot; y=&quot;170&quot; width=&quot;27&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;204&quot; cy=&quot;186&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;218&quot; y=&quot;170&quot; width=&quot;28&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;232&quot; cy=&quot;186&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;rect x=&quot;246&quot; y=&quot;170&quot; width=&quot;35&quot; height=&quot;42&quot; rx=&quot;3&quot; fill=&quot;var(--agar)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;ellipse cx=&quot;264&quot; cy=&quot;186&quot; rx=&quot;5.2&quot; ry=&quot;4.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;
+  &lt;/g&gt;
+  &lt;circle cx=&quot;120&quot; cy=&quot;120&quot; r=&quot;104&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+  &lt;circle cx=&quot;120&quot; cy=&quot;120&quot; r=&quot;107&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+  &lt;g data-ann=&quot;1&quot;&gt;&lt;circle cx=&quot;150&quot; cy=&quot;86&quot; r=&quot;1.9&quot; fill=&quot;var(--muted)&quot;/&gt;&lt;path d=&quot;M150,86 L250,44&quot; fill=&quot;none&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;/&gt;&lt;text x=&quot;254&quot; y=&quot;47.4&quot; text-anchor=&quot;start&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;cell wall&lt;/text&gt;&lt;/g&gt;
+  &lt;g data-ann=&quot;1&quot;&gt;&lt;circle cx=&quot;133&quot; cy=&quot;102&quot; r=&quot;1.9&quot; fill=&quot;var(--muted)&quot;/&gt;&lt;path d=&quot;M133,102 L250,76&quot; fill=&quot;none&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;/&gt;&lt;text x=&quot;254&quot; y=&quot;79.4&quot; text-anchor=&quot;start&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;nucleus&lt;/text&gt;&lt;/g&gt;
+  &lt;g data-ann=&quot;1&quot;&gt;&lt;circle cx=&quot;108&quot; cy=&quot;112&quot; r=&quot;1.9&quot; fill=&quot;var(--muted)&quot;/&gt;&lt;path d=&quot;M108,112 L250,108&quot; fill=&quot;none&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;/&gt;&lt;text x=&quot;254&quot; y=&quot;111.4&quot; text-anchor=&quot;start&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;cytoplasm&lt;/text&gt;&lt;/g&gt;
+  &lt;g data-ann=&quot;1&quot;&gt;&lt;path d=&quot;M188,214 L236,214&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;butt&quot; fill=&quot;none&quot;/&gt;&lt;path d=&quot;M188,210 L188,218 M236,210 L236,218&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;text x=&quot;212.0&quot; y=&quot;230&quot; text-anchor=&quot;middle&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;0.3 mm&lt;/text&gt;&lt;/g&gt;
+  &lt;g data-ann=&quot;1&quot;&gt;&lt;text x=&quot;300&quot; y=&quot;30&quot; text-anchor=&quot;end&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;&amp;times;100&lt;/text&gt;&lt;/g&gt;
+&lt;/svg&gt;
+      &lt;div class=&quot;readouts&quot;&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Objective lens&lt;/span&gt;&lt;b&gt;&amp;times;10&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Cells counted&lt;/span&gt;&lt;b id=&quot;roN&quot;&gt;0&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Row as drawn&lt;/span&gt;&lt;b&gt;&lt;span id=&quot;roL&quot;&gt;&amp;mdash;&lt;/span&gt; mm&lt;/b&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;results&quot;&gt;
+      &lt;table&gt;
+        &lt;caption&gt;What the drawing and the ruler give you.&lt;/caption&gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Cells in the row&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;tN&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Row as drawn&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;tL&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;One cell as drawn&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;tC&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;A real cell&lt;/th&gt;&lt;td&gt;0.3 mm&lt;/td&gt;&lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;Step 1 &amp;mdash; count the cells in the row&lt;/legend&gt;
+    &lt;p class=&quot;hint&quot;&gt;Count along the middle row, from the wall at one end to the wall at the
+      other. Cells cut off by the edge of the field of view are not counted.&lt;/p&gt;
+    &lt;div class=&quot;entry&quot; id=&quot;counter&quot;&gt;
+      &lt;input type=&quot;text&quot; inputmode=&quot;numeric&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot;
+             id=&quot;val&quot; aria-label=&quot;Number of cells in the row&quot;&gt;
+      &lt;span class=&quot;unit&quot;&gt;cells&lt;/span&gt;
+      &lt;button type=&quot;button&quot; class=&quot;primary&quot; id=&quot;lockN&quot;&gt;Record the count&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/fieldset&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;Step 2 &amp;mdash; measure the row you drew&lt;/legend&gt;
+    &lt;p class=&quot;hint&quot;&gt;The row is drawn on the page below with a ruler under it. Click the mark on
+      the ruler that the end of the row reaches.&lt;/p&gt;
+    
+&lt;svg viewBox=&quot;0 0 380 186&quot; width=&quot;360&quot; id=&quot;page&quot; role=&quot;img&quot; aria-label=&quot;The row of 8 cells
+     drawn on the page, with a ruler beneath it marked in millimeters.&quot;&gt;
+  &lt;rect x=&quot;8&quot; y=&quot;8&quot; width=&quot;364&quot; height=&quot;170&quot; rx=&quot;8&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+        stroke-width=&quot;1.6&quot;/&gt;
+  &lt;g&gt;&lt;rect x=&quot;30.0&quot; y=&quot;44&quot; width=&quot;30.0&quot; height=&quot;46&quot; rx=&quot;3&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect x=&quot;60.0&quot; y=&quot;44&quot; width=&quot;30.0&quot; height=&quot;46&quot; rx=&quot;3&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect x=&quot;90.0&quot; y=&quot;44&quot; width=&quot;30.0&quot; height=&quot;46&quot; rx=&quot;3&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect x=&quot;120.0&quot; y=&quot;44&quot; width=&quot;30.0&quot; height=&quot;46&quot; rx=&quot;3&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect x=&quot;150.0&quot; y=&quot;44&quot; width=&quot;30.0&quot; height=&quot;46&quot; rx=&quot;3&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect x=&quot;180.0&quot; y=&quot;44&quot; width=&quot;30.0&quot; height=&quot;46&quot; rx=&quot;3&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect x=&quot;210.0&quot; y=&quot;44&quot; width=&quot;30.0&quot; height=&quot;46&quot; rx=&quot;3&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect x=&quot;240.0&quot; y=&quot;44&quot; width=&quot;30.0&quot; height=&quot;46&quot; rx=&quot;3&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;/g&gt;
+  &lt;line x1=&quot;30&quot; y1=&quot;34&quot; x2=&quot;30&quot; y2=&quot;150&quot; stroke=&quot;var(--accent)&quot; stroke-width=&quot;1.6&quot;
+        stroke-dasharray=&quot;3 3&quot; opacity=&quot;0.65&quot;/&gt;
+  &lt;line x1=&quot;270&quot; y1=&quot;34&quot; x2=&quot;270&quot; y2=&quot;150&quot;
+        stroke=&quot;var(--accent)&quot; stroke-width=&quot;1.6&quot; stroke-dasharray=&quot;3 3&quot; opacity=&quot;0.65&quot;/&gt;
+  &lt;line x1=&quot;30&quot; y1=&quot;104&quot; x2=&quot;270&quot; y2=&quot;104&quot; stroke=&quot;var(--accent)&quot;
+        stroke-width=&quot;3&quot; stroke-dasharray=&quot;4 3&quot; id=&quot;span&quot; opacity=&quot;0&quot;/&gt;
+  &lt;line x1=&quot;30&quot; y1=&quot;150&quot; x2=&quot;356&quot; y2=&quot;150&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+  &lt;text x=&quot;30.0&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;0&lt;/text&gt;&lt;text x=&quot;70.0&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;10&lt;/text&gt;&lt;text x=&quot;110.0&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;20&lt;/text&gt;&lt;text x=&quot;150.0&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;30&lt;/text&gt;&lt;text x=&quot;190.0&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;40&lt;/text&gt;&lt;text x=&quot;230.0&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;50&lt;/text&gt;&lt;text x=&quot;270.0&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;60&lt;/text&gt;&lt;text x=&quot;310.0&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;70&lt;/text&gt;&lt;text x=&quot;350.0&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;80&lt;/text&gt;&lt;line x1=&quot;30.0&quot; y1=&quot;150&quot; x2=&quot;30.0&quot; y2=&quot;136&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;0&quot; x=&quot;22.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;0 millimeters&quot;/&gt;&lt;line x1=&quot;50.0&quot; y1=&quot;150&quot; x2=&quot;50.0&quot; y2=&quot;142&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;5&quot; x=&quot;42.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;5 millimeters&quot;/&gt;&lt;line x1=&quot;70.0&quot; y1=&quot;150&quot; x2=&quot;70.0&quot; y2=&quot;136&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;10&quot; x=&quot;62.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;10 millimeters&quot;/&gt;&lt;line x1=&quot;90.0&quot; y1=&quot;150&quot; x2=&quot;90.0&quot; y2=&quot;142&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;15&quot; x=&quot;82.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;15 millimeters&quot;/&gt;&lt;line x1=&quot;110.0&quot; y1=&quot;150&quot; x2=&quot;110.0&quot; y2=&quot;136&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;20&quot; x=&quot;102.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;20 millimeters&quot;/&gt;&lt;line x1=&quot;130.0&quot; y1=&quot;150&quot; x2=&quot;130.0&quot; y2=&quot;142&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;25&quot; x=&quot;122.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;25 millimeters&quot;/&gt;&lt;line x1=&quot;150.0&quot; y1=&quot;150&quot; x2=&quot;150.0&quot; y2=&quot;136&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;30&quot; x=&quot;142.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;30 millimeters&quot;/&gt;&lt;line x1=&quot;170.0&quot; y1=&quot;150&quot; x2=&quot;170.0&quot; y2=&quot;142&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;35&quot; x=&quot;162.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;35 millimeters&quot;/&gt;&lt;line x1=&quot;190.0&quot; y1=&quot;150&quot; x2=&quot;190.0&quot; y2=&quot;136&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;40&quot; x=&quot;182.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;40 millimeters&quot;/&gt;&lt;line x1=&quot;210.0&quot; y1=&quot;150&quot; x2=&quot;210.0&quot; y2=&quot;142&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;45&quot; x=&quot;202.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;45 millimeters&quot;/&gt;&lt;line x1=&quot;230.0&quot; y1=&quot;150&quot; x2=&quot;230.0&quot; y2=&quot;136&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;50&quot; x=&quot;222.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;50 millimeters&quot;/&gt;&lt;line x1=&quot;250.0&quot; y1=&quot;150&quot; x2=&quot;250.0&quot; y2=&quot;142&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;55&quot; x=&quot;242.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;55 millimeters&quot;/&gt;&lt;line x1=&quot;270.0&quot; y1=&quot;150&quot; x2=&quot;270.0&quot; y2=&quot;136&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;60&quot; x=&quot;262.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;60 millimeters&quot;/&gt;&lt;line x1=&quot;290.0&quot; y1=&quot;150&quot; x2=&quot;290.0&quot; y2=&quot;142&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;65&quot; x=&quot;282.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;65 millimeters&quot;/&gt;&lt;line x1=&quot;310.0&quot; y1=&quot;150&quot; x2=&quot;310.0&quot; y2=&quot;136&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;70&quot; x=&quot;302.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;70 millimeters&quot;/&gt;&lt;line x1=&quot;330.0&quot; y1=&quot;150&quot; x2=&quot;330.0&quot; y2=&quot;142&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;75&quot; x=&quot;322.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;75 millimeters&quot;/&gt;&lt;line x1=&quot;350.0&quot; y1=&quot;150&quot; x2=&quot;350.0&quot; y2=&quot;136&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;rect class=&quot;tick&quot; data-mm=&quot;80&quot; x=&quot;342.0&quot; y=&quot;128&quot; width=&quot;16&quot; height=&quot;34&quot; fill=&quot;transparent&quot; tabindex=&quot;0&quot; role=&quot;button&quot; aria-label=&quot;80 millimeters&quot;/&gt;
+  &lt;line id=&quot;pin&quot; x1=&quot;30&quot; y1=&quot;128&quot; x2=&quot;30&quot; y2=&quot;162&quot; stroke=&quot;var(--accent)&quot; stroke-width=&quot;3&quot;
+        opacity=&quot;0&quot;/&gt;
+  &lt;g data-ann=&quot;1&quot;&gt;&lt;circle cx=&quot;90&quot; cy=&quot;67&quot; r=&quot;1.9&quot; fill=&quot;var(--muted)&quot;/&gt;&lt;path d=&quot;M90,67 L212,26&quot; fill=&quot;none&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;/&gt;&lt;text x=&quot;216&quot; y=&quot;29.4&quot; text-anchor=&quot;start&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;the row you drew&lt;/text&gt;&lt;/g&gt;
+  &lt;text x=&quot;30&quot; y=&quot;170&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot;
+        font-family=&quot;system-ui, sans-serif&quot; data-ann=&quot;1&quot;&gt;millimeters&lt;/text&gt;
+&lt;/svg&gt;
+  &lt;/fieldset&gt;
+
+  &lt;div class=&quot;actions&quot;&gt;
+    &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Count the cells first.&lt;/p&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_microscope-collect&quot;;
+  var N = 8, ROW = 60, REAL = 0.3;
+  var lockedN = false, lockedL = false, tries = 0;
+  var msg = document.getElementById(&quot;msg&quot;), val = document.getElementById(&quot;val&quot;);
+  var lockBtn = document.getElementById(&quot;lockN&quot;);
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? &quot;msg &quot; + kind : &quot;msg&quot;; }
+
+  // The count is typed, not stepped. Stepping to it means nudging a number until it looks
+  // right, which is not counting.
+  function record() {
+    if (lockedN) return;
+    var raw = val.value.trim();
+    val.classList.remove(&quot;miss&quot;);
+    if (!raw) { say(&quot;Type how many cells you counted, then record it.&quot;, &quot;warn&quot;); return; }
+    if (!/^\d+$/.test(raw)) {
+      say(/\d/.test(raw) ? &quot;Just the number of cells, with nothing after it.&quot;
+                        : &quot;That is not a number. Type the digits you counted.&quot;, &quot;warn&quot;);
+      val.classList.add(&quot;miss&quot;);
+      return;
+    }
+    var n = parseInt(raw, 10);
+    document.getElementById(&quot;roN&quot;).textContent = n;
+    if (n !== N) {
+      tries++;
+      val.classList.add(&quot;miss&quot;); val.select();
+      say(tries &lt; 2
+        ? n + &quot; is not what is there. Count again along the middle row.&quot;
+        : &quot;Start at the wall on the left of the middle row and work across to the wall at the &quot;
+          + &quot;other end. Leave out any cell the edge of the circle cuts through.&quot;, &quot;warn&quot;);
+      return;
+    }
+    lockedN = true;
+    val.disabled = true; lockBtn.disabled = true;
+    var t = document.getElementById(&quot;tN&quot;);
+    t.textContent = N; t.classList.remove(&quot;empty&quot;);
+    say(&quot;Recorded. Now measure the row on the page below.&quot;, &quot;good&quot;);
+    reportHeight();
+  }
+  lockBtn.addEventListener(&quot;click&quot;, record);
+  val.addEventListener(&quot;keydown&quot;, function (e) {
+    if (e.key === &quot;Enter&quot;) { e.preventDefault(); record(); }
+  });
+  val.addEventListener(&quot;input&quot;, function () { val.classList.remove(&quot;miss&quot;); });
+
+  function readRuler(mm) {
+    if (!lockedN) { say(&quot;Count the cells first.&quot;, &quot;warn&quot;); return; }
+    if (lockedL) return;
+    var x = 30 + mm * 4.0;
+    var pin = document.getElementById(&quot;pin&quot;);
+    pin.setAttribute(&quot;x1&quot;, x); pin.setAttribute(&quot;x2&quot;, x); pin.setAttribute(&quot;opacity&quot;, 1);
+    document.getElementById(&quot;roL&quot;).textContent = mm;
+    if (mm !== ROW) {
+      say(&quot;That is where &quot; + mm + &quot; mm falls. Read the mark the far wall of the last cell &quot;
+          + &quot;reaches, not the one nearest it.&quot;, &quot;warn&quot;);
+      return;
+    }
+    lockedL = true;
+    document.getElementById(&quot;span&quot;).setAttribute(&quot;opacity&quot;, 1);
+    var tl = document.getElementById(&quot;tL&quot;), tc = document.getElementById(&quot;tC&quot;);
+    tl.textContent = ROW + &quot; mm&quot;; tl.classList.remove(&quot;empty&quot;);
+    tc.textContent = (ROW / N) + &quot; mm&quot;; tc.classList.remove(&quot;empty&quot;);
+    say(&quot;Both readings are in the table. A real cell is &quot; + REAL + &quot; mm long, so the drawing &quot;
+        + &quot;is bigger than the cell by some number of times \\u2014 that number is the next &quot;
+        + &quot;stage&#x27;s work.&quot;, &quot;good&quot;);
+    reportHeight();
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;.tick&quot;), function (t) {
+    t.addEventListener(&quot;click&quot;, function () { readRuler(+t.dataset.mm); });
+    t.addEventListener(&quot;keydown&quot;, function (e) {
+      if (e.key === &quot;Enter&quot; || e.key === &quot; &quot;) { e.preventDefault(); readRuler(+t.dataset.mm); }
+    });
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    lockedN = false; lockedL = false; tries = 0;
+    val.value = &quot;&quot;; val.disabled = false; val.classList.remove(&quot;miss&quot;);
+    lockBtn.disabled = false;
+    document.getElementById(&quot;roN&quot;).textContent = &quot;0&quot;;
+    [&quot;tN&quot;, &quot;tL&quot;, &quot;tC&quot;].forEach(function (id) {
+      var e = document.getElementById(id);
+      e.textContent = &quot;\\u2014&quot;; e.classList.add(&quot;empty&quot;);
+    });
+    document.getElementById(&quot;roL&quot;).textContent = &quot;\\u2014&quot;;
+    document.getElementById(&quot;pin&quot;).setAttribute(&quot;opacity&quot;, 0);
+    document.getElementById(&quot;span&quot;).setAttribute(&quot;opacity&quot;, 0);
+    say(&quot;Count the cells first.&quot;);
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1060" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="skillvideo"><div class="shead"><span class="num">Stage 4</span><span class="kind">Video &middot; 86 seconds</span></div><h2>Watch how to calculate magnification</h2><p class="blurb">Image size over actual size, the same units on both, and why the answer comes out with no units at all.</p><div class="media"><video controls preload="metadata" playsinline src="videos/microscope-skill.mp4"></video></div></section>
+<section class="stage" id="skill"><div class="shead"><span class="num">Stage 5</span><span class="kind">Simulation &middot; Three steps, units checked</span></div><h2>Work out the magnification</h2><p class="blurb">Divide the row down to one cell, divide by the real cell, and say what units the answer carries.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Working out magnification&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step h2{font-size:12.5px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--card);font-weight:650}
+th[scope=row]{text-align:left}
+td.cell{cursor:pointer}
+td.cell:hover{background:var(--accent-soft)}
+td.cell:focus{outline:2px solid var(--accent);outline-offset:-2px}
+td.flagged{background:var(--warn-bg);color:var(--warn);font-weight:700;
+  box-shadow:inset 0 0 0 2px var(--warn-line)}
+td.mean{font-weight:650}
+td.dim{color:var(--muted)}
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 200px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;
+  color:var(--muted)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:88px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:22px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.final{margin-top:12px;font-size:15px;background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:9px;padding:11px 13px}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Working out magnification&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;A row of 8 onion cells has been drawn
+60 mm long in a notebook. One real cell is 0.3 mm long.&lt;/p&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s1&quot;&gt;
+&lt;h2&gt;Step 1 &amp;mdash; how long is one cell as drawn?&lt;/h2&gt;
+&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-one&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Drawn length of one cell&lt;/span&gt;&lt;span class=&quot;work&quot; id=&quot;work-one&quot;&gt;60 mm &amp;divide; 8 cells&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-one&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Drawn length of one cell&quot;&gt;&lt;span class=&quot;unit&quot;&gt;mm&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s2&quot; hidden&gt;
+&lt;h2&gt;Step 2 &amp;mdash; are the two lengths in the same units?&lt;/h2&gt;
+&lt;div class=&quot;choices&quot; id=&quot;c2&quot;&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot;&gt;Yes &amp;mdash; both are in millimeters, so they
+can be divided as they stand.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;No &amp;mdash; the drawn length must be changed to
+micrometres first.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;No &amp;mdash; the real length must be changed to
+centimetres first.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;It makes no difference, because magnification
+has no units anyway.&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s3&quot; hidden&gt;
+&lt;h2&gt;Step 3 &amp;mdash; the magnification&lt;/h2&gt;
+&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-mag&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Magnification&lt;/span&gt;&lt;span class=&quot;work&quot; id=&quot;work-mag&quot;&gt;7.5 mm &amp;divide; 0.3 mm&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-mag&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Magnification&quot;&gt;&lt;span class=&quot;unit&quot;&gt;times&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s4&quot; hidden&gt;
+&lt;h2&gt;Step 4 &amp;mdash; how it is written&lt;/h2&gt;
+&lt;div class=&quot;choices&quot; id=&quot;c4&quot;&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot;&gt;&amp;times;25, with no units.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;25 mm.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;25 times per millimetre.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;&amp;times;25 mm.&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Start with one cell.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;skill-microscope-magnification&quot;;
+  var ONE = 7.5, MAG = 25, ROW = 60, N = 8, REAL = 0.3;
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+  // DAN&#x27;S RULING, 1 OCTOBER: the student types the answer. This replaces a stepper, whose
+  // trouble was that it could be walked to the right number without ever working it out --
+  // nudge, look, nudge again. A box has to be filled in before anything happens.
+  //
+  // The cost of a box is that it can be given nonsense, so this one says what it wants rather
+  // than silently refusing, and the misses are graded: the first says only that it is wrong,
+  // the second names the operation, the third names the operation with the numbers in it. It
+  // never gives the answer, and there is no limit on tries.
+  function entry(host, opts) {
+    var input = host.querySelector(&quot;input&quot;), btn = host.querySelector(&quot;button&quot;);
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, &quot;&quot;).replace(/^[x\u00d7]/i, &quot;&quot;);
+      input.classList.remove(&quot;miss&quot;);
+      if (!raw) { opts.onbad(&quot;Type your answer in the box, then press Check.&quot;); return; }
+      // &quot;6 plants&quot; is a different mistake from &quot;abc&quot;, and saying so is the whole point of
+      // letting them type: a stepper could not tell you what you had got wrong.
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? &quot;Just the number, without the units \u2014 they are already printed beside the box.&quot;
+          : &quot;That is not a number. Type digits, and a decimal point if you need one.&quot;);
+        input.classList.add(&quot;miss&quot;);
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) &lt; 1e-9) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.fmt ? opts.fmt(v) : v;
+        opts.onright(v);
+      } else {
+        input.classList.add(&quot;miss&quot;);
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener(&quot;click&quot;, submit);
+    input.addEventListener(&quot;keydown&quot;, function (e) {
+      if (e.key === &quot;Enter&quot;) { e.preventDefault(); submit(); }
+    });
+    input.addEventListener(&quot;input&quot;, function () { input.classList.remove(&quot;miss&quot;); });
+    return { focus: function () { input.focus(); } };
+  }
+
+  function step(id, want, nextId, text, hints, fmt) {
+    var row = document.getElementById(&quot;row-&quot; + id);
+    entry(document.getElementById(&quot;spin-&quot; + id), {
+      want: want, fmt: fmt,
+      onbad: function (m) { say(m, &quot;warn&quot;); reportHeight(); },
+      onright: function () {
+        row.classList.add(&quot;done&quot;);
+        if (nextId) document.getElementById(nextId).hidden = false;
+        say(text, &quot;good&quot;); reportHeight();
+      },
+      onwrong: function (v, n) {
+        say(n === 1 ? v + &quot; is not it. Work it out and try again.&quot;
+                    : hints[Math.min(n - 2, hints.length - 1)], &quot;warn&quot;);
+        reportHeight();
+      } });
+  }
+  step(&quot;one&quot;, ONE, &quot;s2&quot;, &quot;Right: &quot; + ONE + &quot; mm for one cell as drawn.&quot;,
+       [&quot;The row is &quot; + ROW + &quot; mm long and holds &quot; + N + &quot; cells. Divide.&quot;,
+        ROW + &quot; ÷ &quot; + N + &quot; gives the length of one cell as drawn.&quot;]);
+  step(&quot;mag&quot;, MAG, &quot;s4&quot;, &quot;Right: a magnification of &quot; + MAG + &quot; times.&quot;,
+       [&quot;Divide the drawn length of one cell by the real length of one cell.&quot;,
+        ONE + &quot; mm ÷ &quot; + REAL + &quot; mm. Both are in millimeters, so divide as they stand.&quot;],
+       function (v) { return &quot;×&quot; + v; });
+
+  function choose(id, good, bad, nextId) {
+    Array.prototype.forEach.call(document.querySelectorAll(&quot;#&quot; + id + &quot; .choice&quot;), function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        Array.prototype.forEach.call(document.querySelectorAll(&quot;#&quot; + id + &quot; .choice&quot;),
+          function (o) { o.disabled = true; if (o.dataset.ok === &quot;1&quot;) o.classList.add(&quot;right&quot;); });
+        var ok = b.dataset.ok === &quot;1&quot;;
+        if (!ok) b.classList.add(&quot;wrong&quot;);
+        say(ok ? good : bad, ok ? &quot;good&quot; : &quot;warn&quot;);
+        if (ok &amp;&amp; nextId) document.getElementById(nextId).hidden = false;
+        reportHeight();
+      });
+    });
+  }
+  choose(&quot;c2&quot;,
+    &quot;Right. Both lengths are already in millimeters, so they divide straight away. If one had &quot;
+    + &quot;been in micrometres, it would have had to be converted first.&quot;,
+    &quot;Not this one. Look at the units on each length before you divide.&quot;, &quot;s3&quot;);
+  choose(&quot;c4&quot;,
+    &quot;Right. Magnification is one length divided by another, so the units cancel and none is &quot;
+    + &quot;written. It is given with a multiplication sign in front of the number.&quot;,
+    &quot;Not this one. Dividing a length by a length leaves no units behind.&quot;);
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function(){ location.reload(); });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1050" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="conclusion"><div class="shead"><span class="num">Stage 6</span><span class="kind">Question &middot; A worked example, then one choice</span></div><h2>Choose the conclusion</h2><p class="blurb">What do your figures show? A conclusion from another investigation, with what makes it good, and then three for your own.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Choose the conclusion&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+  margin-top:12px}
+.panel[hidden]{display:none}
+.panel h2{font-size:12px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.setup{font-size:13.5px;color:var(--muted);margin:0 0 9px}
+.model{font-size:15px;line-height:1.62;margin:0;padding:11px 13px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:9px;counter-reset:st}
+.steps li{counter-increment:st;position:relative;font-size:14px;line-height:1.55;
+  background:var(--bg);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px 10px 44px}
+.steps li::before{content:counter(st);position:absolute;left:11px;top:10px;width:22px;
+  height:22px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
+  font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.steps b{display:block;color:var(--fg);font-weight:650;font-size:14.5px;margin-bottom:2px}
+.steps span{color:var(--muted)}
+.shape{font-size:13.5px;margin:11px 0 0;padding:9px 11px;border:1px solid var(--warn-line);
+  background:var(--warn-bg);color:var(--warn);border-radius:8px}
+.recap{font-size:14px;line-height:1.55;margin:0 0 11px;padding:10px 12px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.q{font-size:15px;font-weight:600;margin:0 0 10px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:11px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:14.5px;line-height:1.55;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.picked{border-color:var(--accent)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw{font-size:13.5px;line-height:1.5;margin:6px 0 0;padding:8px 11px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line)}
+.rw.good{border-color:var(--good-line);background:var(--good-bg)}
+.rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw b{font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Choose the conclusion&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;A conclusion says what the results show. It is not a summary of what you did.&lt;/p&gt;
+
+&lt;div class=&quot;panel&quot;&gt;
+&lt;h2&gt;How to write a conclusion&lt;/h2&gt;
+&lt;p class=&quot;setup&quot;&gt;Three steps, in this order. They are the same three whatever you
+  investigated.&lt;/p&gt;
+&lt;ol class=&quot;steps&quot;&gt;&lt;li&gt;&lt;b&gt;State the answer the question asked for.&lt;/b&gt;&lt;span&gt;Give the number, and its units if it has any. With a calculation the working usually comes first and the number follows it, but the number has to be there and has to be plainly the answer.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the data that evidences it.&lt;/b&gt;&lt;span&gt;Show the figures it came from and the steps between them, so a reader can check the arithmetic instead of trusting it.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Point out any exceptions.&lt;/b&gt;&lt;span&gt;Name any reading that does not fit the others and say what you did about it. An answer that is an estimate rather than a count, or that carries no units where a reader would expect some, belongs here too.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;p class=&quot;shape&quot;&gt;Now do those three things for your own figures. Only one of the three below does all of them, and it has to end in the number the question asked for.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;panel&quot;&gt;
+&lt;h2&gt;Now your own results&lt;/h2&gt;
+&lt;p class=&quot;recap&quot;&gt;You were asked how many times larger than the real cell your drawing is. You drew a row of 8 cells, and the row you drew measures 60 mm long. A real cell of this kind is 0.3 mm long.&lt;/p&gt;
+&lt;p class=&quot;q&quot;&gt;Which of these is a conclusion, and one your own figures support?&lt;/p&gt;
+&lt;div class=&quot;opts&quot; id=&quot;opts&quot;&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Pick one. You get one go at it, and
+then all three are explained.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;panel&quot; id=&quot;after&quot; hidden&gt;
+&lt;h2&gt;The three steps again&lt;/h2&gt;
+&lt;ol class=&quot;steps&quot; id=&quot;afterlist&quot;&gt;&lt;li&gt;&lt;b&gt;State the answer the question asked for.&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the data that evidences it.&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Point out any exceptions.&lt;/b&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;conclusion-microscope&quot;;
+  var OPTS = [{&quot;text&quot;: &quot;The row of 8 cells was drawn 60 mm long, so one cell was drawn 7.5 mm long. A real cell is 0.3 mm long, and 7.5 divided by 0.3 is 25, so the drawing is &amp;times;25. The answer carries no units, and it does not tell you how much detail the drawing shows.&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;A conclusion, it answers what was asked, and both steps are there: the row divided down to one cell, then one cell divided by the real one. A magnification carries no units, and this says so.&quot;}, {&quot;text&quot;: &quot;The row was drawn 60 mm long and a real cell is 0.3 mm long, and 60 divided by 0.3 is 200, so the drawing is &amp;times;200. The answer carries no units, because it is one length divided by another. It does not tell you how much detail the drawing shows.&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;The 60 mm is 8 cells, not one. Dividing a row of 8 by a single cell makes the drawing look 8 times bigger than it is, so divide the 60 mm by 8 before you go anywhere near the real cell.&quot;}, {&quot;text&quot;: &quot;One cell was drawn 7.5 mm long and a real cell is 0.3 mm long, and 7.5 minus 0.3 is 7.2. So the drawing is 7.2 mm larger than the real cell, and the magnification is 7.2 mm. It does not tell you how much detail the drawing shows, which is a different thing.&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Magnification is how many times bigger, not how much bigger, so the two lengths are divided and not subtracted. That is also why a magnification carries no units &amp;mdash; 7.2 mm could not be one.&quot;}];
+  var LETTERS = &quot;ABC&quot;;
+  var box = document.getElementById(&quot;opts&quot;), msg = document.getElementById(&quot;msg&quot;);
+  var done = false;
+
+  // Fisher-Yates, so the accurate conclusion is in no fixed position.
+  var order = OPTS.map(function (o, i) { return i; });
+  for (var i = order.length - 1; i &gt; 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1)), t = order[i];
+    order[i] = order[j]; order[j] = t;
+  }
+
+  order.forEach(function (idx, pos) {
+    var o = OPTS[idx];
+    var b = document.createElement(&quot;button&quot;);
+    b.type = &quot;button&quot;;
+    b.className = &quot;opt&quot;;
+    b.dataset.i = idx;
+    b.innerHTML = &#x27;&lt;span class=&quot;ltr&quot;&gt;&#x27; + LETTERS[pos] + &#x27;&lt;/span&gt;&lt;span&gt;&#x27; + o.text + &#x27;&lt;/span&gt;&#x27;;
+    box.appendChild(b);
+    var r = document.createElement(&quot;p&quot;);
+    r.className = &quot;rw&quot;;
+    r.id = &quot;rw&quot; + idx;
+    r.hidden = true;
+    box.appendChild(r);
+  });
+
+  box.addEventListener(&quot;click&quot;, function (e) {
+    var b = e.target.closest(&quot;.opt&quot;);
+    if (!b || done) return;
+    done = true;
+    var chosen = +b.dataset.i;
+
+    OPTS.forEach(function (o, idx) {
+      var btn = box.querySelector(&#x27;.opt[data-i=&quot;&#x27; + idx + &#x27;&quot;]&#x27;);
+      btn.disabled = true;
+      btn.classList.add(o.ok ? &quot;right&quot; : &quot;wrong&quot;);
+      var r = document.getElementById(&quot;rw&quot; + idx);
+      r.hidden = false;
+      r.className = &quot;rw &quot; + (o.ok ? &quot;good&quot; : &quot;bad&quot;);
+      var head = o.ok ? &quot;The accurate one.&quot; : &quot;Not this one.&quot;;
+      if (idx === chosen) head = o.ok ? &quot;You picked this one, and it is the accurate one.&quot;
+                                      : &quot;You picked this one.&quot;;
+      r.innerHTML = &quot;&lt;b&gt;&quot; + head + &quot;&lt;/b&gt; &quot; + o.why;
+    });
+
+    var right = OPTS[chosen].ok;
+    msg.textContent = right
+      ? &quot;That is the one. Read the other two as well \u2014 each is wrong in a way that is &quot;
+        + &quot;easy to fall into.&quot;
+      : &quot;Not that one. The accurate conclusion is marked in green, and every option now says &quot;
+        + &quot;what is right or wrong with it.&quot;;
+    msg.className = &quot;msg &quot; + (right ? &quot;good&quot; : &quot;warn&quot;);
+    document.getElementById(&quot;after&quot;).hidden = false;
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1090" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="questions"><div class="shead"><span class="num">Stage 7</span><span class="kind">Questions &middot; Eight items</span></div><h2>Answer eight questions</h2><p class="blurb">On making the slide, and on reading what it shows.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Onion cells under the microscope — questions&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.q h2{font-size:12px;margin:0 0 6px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.q .stem{margin:0 0 10px;font-weight:500}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;text-align:left;padding:9px 11px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.fb{margin-top:8px;font-size:13.5px;padding:8px 10px;border-radius:8px;display:none}
+.fb.on{display:block;background:var(--bg);border:1px solid var(--line)}
+.score{margin-top:14px;font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;&lt;h1&gt;Onion cells under the microscope&lt;/h1&gt;&lt;p class=&quot;sub&quot;&gt;Eight questions on making the slide and on reading what it shows.&lt;/p&gt;&lt;div class=&quot;q&quot; data-qn=&quot;1&quot;&gt;&lt;h2&gt;Question 1 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;To make a slide of onion cells, a student peels the skin from the inner curve of an onion scale. Why is that piece of skin used rather than a slice of the onion?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;It is one cell thick, so light passes through and single cells show.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;It is the only part of an onion that is made of cells.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;It comes away in one piece, which a slice would not.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb1&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;2&quot;&gt;&lt;h2&gt;Question 2 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;One drop of iodine is added to the onion peel before the coverslip goes on. What does the iodine do?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;It gives the structures inside the cells some color, so they can be told apart.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;It kills the cells, so they hold still while they are being looked at.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;It makes the peel thinner, so more light can pass through it.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb2&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;3&quot;&gt;&lt;h2&gt;Question 3 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;When mounting a slide, the coverslip is stood on one edge and lowered slowly rather than dropped flat. What does lowering it that way avoid?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Air trapped under the glass, which shows as dark-edged circles.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Stain squeezing out from under the glass and onto the stage.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;The coverslip cracking as it lands flat on the slide.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb3&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;4&quot;&gt;&lt;h2&gt;Question 4 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A student is focusing a slide with the lowest-power objective. Why is the lens moved away from the slide while focusing, and not toward it?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Moving away can never drive the lens into the slide, and moving toward it can.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;The image only comes into focus as the lens moves away, whichever way you start.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Moving toward the slide lets less light through and darkens the view.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb4&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;5&quot;&gt;&lt;h2&gt;Question 5 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A drawing of a cell measures 7.5 mm across, and the real cell is 0.3 mm across. What is the magnification of the drawing?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;&amp;times;25, from 7.5 divided by 0.3.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;&amp;times;2.25, from 7.5 multiplied by 0.3.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;&amp;times;0.04, from 0.3 divided by 7.5.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb5&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;6&quot;&gt;&lt;h2&gt;Question 6 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A student draws a row of 8 cells and the row measures 60 mm. A real cell is 0.3 mm long. Why is 60 divided by 8 before anything else is done?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Because 60 mm is the length of 8 cells, and it has to be compared with one real cell.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Because the drawing has to be reduced to the same scale as the microscope&#x27;s lens.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Because 8 cells is too many to draw accurately and the mean is safer.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb6&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;7&quot;&gt;&lt;h2&gt;Question 7 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A student works out that a drawing is 25 times the size of the real cell and writes the answer as &amp;times;25 mm. What is wrong with writing it that way?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;A magnification has no units, because it is one length divided by another of the same kind.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;The units should be written as &amp;times;25 mm&amp;sup2;, because two lengths were used.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;The units are right but the symbol is wrong, and it should be written 25&amp;times; mm.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb7&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;8&quot;&gt;&lt;h2&gt;Question 8 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;Two microscopes both magnify &amp;times;400, but one shows two structures as separate where the other shows a single blur. What does that difference show?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;The two microscopes differ in resolution, which is a different thing from magnification.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;One of the two is not really magnifying &amp;times;400, whatever its lenses say.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;The blurred one needs focusing, and at the right focus the two would match.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb8&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;p class=&quot;score&quot; id=&quot;score&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_microscope-questions&quot;;
+  var EXPL = {&quot;1&quot;: &quot;A thicker piece has cells lying over cells, and the view is a muddle whatever the focus is doing. One layer means every cell in the view is seen on its own.&quot;, &quot;2&quot;: &quot;Onion epidermis is almost colorless, so the walls and nuclei are nearly invisible against the background. A stain gives them contrast, and contrast is what lets you see a boundary at all.&quot;, &quot;3&quot;: &quot;A coverslip dropped flat seals air in as it lands. Lowered from one edge, the glass pushes the air ahead of itself and out the far side, and the specimen is left under liquid.&quot;, &quot;4&quot;: &quot;Starting with the lens close and racking it away means the gap only ever grows. Racking toward the slide while looking down the eyepiece is how coverslips get broken and lenses get scratched.&quot;, &quot;5&quot;: &quot;Magnification is the size of the image divided by the size of the real thing. 7.5 divided by 0.3 is 25, so the drawing is 25 times the size of the cell.&quot;, &quot;6&quot;: &quot;The two lengths in the sum must be the same thing measured twice: one drawn cell against one real cell. 60 divided by 8 gives 7.5 mm for one drawn cell, and that is what 0.3 mm is compared with.&quot;, &quot;7&quot;: &quot;Millimeters divided by millimeters cancel, and what is left is a plain number. It says how many times bigger, and that is a ratio rather than a length.&quot;, &quot;8&quot;: &quot;Magnification is how much larger the image is. Resolution is how far apart two things have to be before they can be seen as two. Making a blur bigger gives a bigger blur.&quot;}, ERR = {&quot;1&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;every part of the onion is made of cells&quot;, &quot;c&quot;: &quot;a slice can be cut in one piece easily enough&quot;}, &quot;2&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;onion peel does not swim away, and iodine is not used for that here&quot;, &quot;c&quot;: &quot;the peel is already one cell thick and the stain does not thin it&quot;}, &quot;3&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;some stain squeezes out whichever way the glass goes down&quot;, &quot;c&quot;: &quot;a coverslip dropped flat onto liquid does not usually break&quot;}, &quot;4&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;focus can be found traveling in either direction&quot;, &quot;c&quot;: &quot;the light reaching the specimen does not depend on the lens height&quot;}, &quot;5&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;multiplies where the two sizes should be divided&quot;, &quot;c&quot;: &quot;divides the real size by the image size, which is upside down&quot;}, &quot;6&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;the lens does not come into the arithmetic at all&quot;, &quot;c&quot;: &quot;dividing by 8 is not a way of handling error here&quot;}, &quot;7&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;gives an area, and neither length was squared&quot;, &quot;c&quot;: &quot;the order of the symbol is not the fault here&quot;}, &quot;8&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;both can magnify the same amount and still differ&quot;, &quot;c&quot;: &quot;focus is a setting; resolution is a limit of the instrument&quot;}}, TOTAL = 8;
+  var done = {}, right = 0;
+  var score = document.getElementById(&quot;score&quot;);
+
+  // The JSON keeps every key at option a, because TimeBack randomises. This page does not, so
+  // without a shuffle here the key sits at A in all eight and is spotted by question three.
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;.opts&quot;), function (box) {
+    var kids = Array.prototype.slice.call(box.children);
+    for (var i = kids.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = kids[i];
+      kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k, n) {
+      box.appendChild(k);
+      k.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCD&quot;[n];
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;.opt&quot;), function (b) {
+    b.addEventListener(&quot;click&quot;, function () {
+      var qn = b.dataset.q;
+      if (done[qn]) return;
+      done[qn] = true;
+      var ok = b.dataset.ok === &quot;1&quot;;
+      if (ok) right++;
+      var q = document.querySelector(&#x27;.q[data-qn=&quot;&#x27; + qn + &#x27;&quot;]&#x27;);
+      Array.prototype.forEach.call(q.querySelectorAll(&quot;.opt&quot;), function (o) {
+        o.disabled = true;
+        if (o.dataset.ok === &quot;1&quot;) o.classList.add(&quot;right&quot;);
+      });
+      if (!ok) b.classList.add(&quot;wrong&quot;);
+      var fb = document.getElementById(&quot;fb&quot; + qn);
+      fb.className = &quot;fb on&quot;;
+      // the error paths are whole clauses, not verb phrases, so they lead the feedback
+      var why = ERR[qn][b.dataset.o];
+      fb.innerHTML = (ok ? &quot;&quot; : &quot;&lt;b&gt;&quot; + why.charAt(0).toUpperCase() + why.slice(1)
+                                + &quot;.&lt;/b&gt; &quot;) + EXPL[qn];
+      var n = Object.keys(done).length;
+      score.textContent = n + &quot; of &quot; + TOTAL + &quot; answered, &quot; + right + &quot; right.&quot;;
+      reportHeight();
+    });
+  });
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="3400" loading="lazy" title="Simulation"></iframe></div></section>
+<footer><p><strong>Nothing here is marked behind the scenes.</strong> TimeBack cannot see inside a simulation, so the simulations are the practical and what a student is assessed on is the eight questions at the end, together with the checkpoints in the lessons this practical belongs to.</p><p>The readings are the same for every student, because a marked question needs one right answer. The analysis skill this practical teaches is <strong>calculating magnification</strong>, and no two of the six practicals teach the same one.</p></footer></div>

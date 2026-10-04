@@ -1,0 +1,1640 @@
+<title>HS Biology: Photosynthesis and light</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#fbfaf8; --surface:#ffffff; --ink:#1b1e22; --muted:#6f6a63;
+  --line:#e7e2da; --rule:#d8d2c8; --accent:#0e6f66; --accent-soft:#e2efec;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+    --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+  --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1020px;margin:0 auto;padding-inline:20px;padding-block:44px 64px}
+
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6.4vw,44px);line-height:1.12;
+  letter-spacing:-.015em;margin:0 0 14px;text-wrap:balance}
+.lead{font-family:var(--serif);font-size:clamp(17px,2.4vw,20px);line-height:1.5;color:var(--ink);
+  margin:0 0 28px;max-width:56ch}
+.lead em{font-style:italic;color:var(--accent);font-weight:600}
+
+.design{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 40px}
+.design div{flex:1 1 205px;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:14px 16px}
+.design dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 5px}
+.design dd{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
+
+nav.jump{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin:0 0 44px;
+  scrollbar-width:thin}
+nav.jump a{flex:0 0 auto;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;background:var(--surface);white-space:nowrap}
+nav.jump a:hover,nav.jump a:focus-visible{color:var(--accent);border-color:var(--accent)}
+
+section.stage{border-top:1px solid var(--rule);padding-top:26px;margin-top:44px;
+  scroll-margin-top:24px}
+section.stage:first-of-type{margin-top:0}
+.shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+  letter-spacing:.08em}
+.kind{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(21px,3.6vw,27px);line-height:1.2;
+  margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.blurb{color:var(--muted);font-size:15.5px;margin:0 0 20px}
+
+.media{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+video{width:100%;display:block;background:#0b0d10}
+iframe{width:100%;border:0;display:block;background:var(--surface)}
+
+footer{border-top:1px solid var(--rule);margin-top:52px;padding-top:22px;color:var(--muted);
+  font-size:14.5px}
+footer p{margin:0 0 10px;max-width:62ch}
+footer strong{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<style>.waiting{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--muted);font-size:14px}.waiting code{font-size:12.5px}</style>
+
+<script>
+// Registered before the frames are parsed: a srcdoc frame runs its script during parsing and
+// would otherwise post its height into a page that is not listening yet.
+(function () {
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "sim-height") return;
+    var frames = document.querySelectorAll("iframe");
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].contentWindow === e.source) {
+        frames[i].style.height = e.data.height + "px";
+        return;
+      }
+    }
+  });
+}());
+</script>
+<div class="wrap">
+<p class="eyebrow">Required practical &middot; High School Biology</p>
+<h1>Photosynthesis and light</h1>
+<p class="lead">Does brighter light make a plant photosynthesize faster? Seven stages, in the order a student works through them &mdash; <em>watch, set up, measure, spot, conclude, answer</em>.</p>
+<dl class="design"><div><dt>What we change</dt><dd>The brightness of the lamp: six settings, 1 to 6</dd></div><div><dt>What we measure</dt><dd>Bubbles of oxygen counted in one minute</dd></div><div><dt>What we keep the same</dt><dd>The piece of pondweed, the distance from the lamp, the volume of water, and the minute</dd></div></dl>
+<nav class="jump" aria-label="The seven stages"><a href="#method">1. Watch the method</a><a href="#equipment">2. Set out the equipment</a><a href="#collect">3. Collect the results</a><a href="#skillvideo">4. Watch how to handle an odd reading</a><a href="#skill">5. Spot the anomalous result</a><a href="#conclusion">6. Choose the conclusion</a><a href="#questions">7. Answer eight questions</a></nav>
+<section class="stage" id="method"><div class="shead"><span class="num">Stage 1</span><span class="kind">Video &middot; 79 seconds</span></div><h2>Watch the method</h2><p class="blurb">The apparatus, the one thing that changes, the four held the same, and why a beaker of water stands between the lamp and the tube.</p><div class="media"><video controls preload="metadata" playsinline src="videos/photosynthesis-method.mp4"></video></div></section>
+<section class="stage" id="equipment"><div class="shead"><span class="num">Stage 2</span><span class="kind">Simulation &middot; Twelve pieces on the bench</span></div><h2>Set out the equipment</h2><p class="blurb">Choose every piece the method needs. One submission, then every piece is marked and explained.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Set out the equipment&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.tray{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.tile{background:var(--card);border:2px solid var(--line);border-radius:10px;
+  padding:6px 4px 4px;cursor:pointer;font:inherit;color:var(--fg);display:flex;
+  flex-direction:column;gap:2px;align-items:center;text-align:center}
+.tile svg{width:100%;height:auto;max-width:86px;display:block}
+.tile .nm{font-size:12px;line-height:1.25;font-weight:600}
+.tile[aria-pressed=&quot;true&quot;]{border-color:var(--accent);background:var(--bg);
+  box-shadow:inset 0 0 0 2px var(--accent)}
+.tile .mk{font-size:11px;font-weight:700;min-height:14px}
+.tile.hit{border-color:var(--good-line);background:var(--good-bg)}
+.tile.hit .mk{color:var(--good)}
+.tile.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.tile.miss .mk{color:var(--bad)}
+.tile.over{border-color:var(--warn-line);background:var(--warn-bg)}
+.tile.over .mk{color:var(--warn)}
+.tile:disabled{cursor:default}
+.why{margin-top:14px;display:grid;gap:8px}
+.why h2{font-size:13px;margin:0;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.why ul{margin:0;padding-left:18px} .why li{font-size:13.5px;margin-bottom:5px}
+.why li b{font-weight:650}
+.rig{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px}
+.rig svg{width:100%;height:auto;display:block;border-radius:6px}
+.rig .cap{font-size:12.5px;color:var(--muted);padding-top:6px}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+  &lt;h1&gt;Set out the equipment&lt;/h1&gt;
+  &lt;p class=&quot;sub&quot;&gt;Choose every piece of equipment this method needs, then check your set-up.&lt;/p&gt;
+  &lt;div class=&quot;brief&quot;&gt;&lt;p&gt;&lt;b&gt;The method.&lt;/b&gt; Pondweed in a test tube of water gives off oxygen when it photosynthesizes, and the oxygen comes off the cut end of the stem as bubbles. The rate is the number of bubbles counted in one minute.&lt;/p&gt;&lt;p&gt;The lamp has six brightness settings, and the brightness is the one thing that changes. The tube stays the same distance from the lamp every time.&lt;/p&gt;&lt;p&gt;A bright lamp gives off heat as well as light, and warming the water would change the rate on its own. So a beaker of water stands between the lamp and the tube: it takes the heat out and lets the light through.&lt;/p&gt;&lt;/div&gt;
+  &lt;div class=&quot;tray&quot; id=&quot;tray&quot; role=&quot;group&quot; aria-label=&quot;Equipment on the bench&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;lamp&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;ellipse cx=&quot;30&quot; cy=&quot;132&quot; rx=&quot;24&quot; ry=&quot;3.37&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+         stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M6,132 A24,3.37 0 0 0 54,132 L54,126 A24,3.37 0 0 1 6,126 Z&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;ellipse cx=&quot;30&quot; cy=&quot;126&quot; rx=&quot;24&quot; ry=&quot;3.37&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+         stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M22,134 C14,140 10,142 4,142&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;rect x=&quot;1&quot; y=&quot;138&quot; width=&quot;7&quot; height=&quot;8&quot; rx=&quot;1.6&quot; fill=&quot;var(--dark)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M30,126 L30,96&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M30,96 L56,62&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M58.7,55.5 L107.6,61.5 L92.4,98.5 L53.4,68.5 Z&quot; fill=&quot;var(--screen)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M61,62 L94,80&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;94&quot; cy=&quot;80&quot; r=&quot;7.6&quot; fill=&quot;var(--warn-bg)&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;ellipse cx=&quot;100&quot; cy=&quot;80&quot; rx=&quot;9&quot; ry=&quot;21&quot; transform=&quot;rotate(22 100 80)&quot; fill=&quot;none&quot;
+         stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M100,59 A9,21 0 0 0 100,101&quot; transform=&quot;rotate(22 100 80)&quot; fill=&quot;none&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.4&quot;/&gt;
+&lt;g stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.6&quot; stroke-linecap=&quot;round&quot; opacity=&quot;0.85&quot;&gt;
+  &lt;path d=&quot;M105.6,64.4 L116,60&quot;/&gt;&lt;path d=&quot;M108.9,80 L120,80&quot;/&gt;&lt;path d=&quot;M105.6,95.6 L116,100&quot;/&gt;
+&lt;/g&gt;
+&lt;circle cx=&quot;30&quot; cy=&quot;96&quot; r=&quot;4.6&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;circle cx=&quot;56&quot; cy=&quot;62&quot; r=&quot;4.6&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Lamp&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;beaker&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M29,52 L29,124 Q29,130 35,130 L85,130 Q91,130 91,124 L91,52&quot;
+      fill=&quot;var(--glass-fill)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M35,125 A25,4.12 0 0 0 85,125&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      opacity=&quot;0.85&quot;/&gt;
+&lt;path d=&quot;M35,62 L35,118&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot;
+      opacity=&quot;0.8&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.85&quot;&gt;
+&lt;path d=&quot;M29,72 L45,72 M29,86 L38,86 M29,100 L45,100 M29,114 L38,114&quot;/&gt;
+&lt;/g&gt;
+&lt;text x=&quot;48&quot; y=&quot;75&quot; font-size=&quot;8&quot; fill=&quot;var(--glass)&quot;&gt;200&lt;/text&gt;
+&lt;text x=&quot;48&quot; y=&quot;103&quot; font-size=&quot;8&quot; fill=&quot;var(--glass)&quot;&gt;100&lt;/text&gt;
+&lt;text x=&quot;48&quot; y=&quot;122&quot; font-size=&quot;7.5&quot; fill=&quot;var(--glass)&quot;&gt;cm&amp;#179;&lt;/text&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;52&quot; rx=&quot;31&quot; ry=&quot;4.70&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+         stroke-width=&quot;3&quot;/&gt;
+&lt;!-- The spout is pulled out of the rim band, not pasted onto it. It used to be a flat wedge
+     laid over the rim: the inner rim line stopped dead and restarted, leaving a square notch,
+     and the left wall did not meet the rim at all. Now the lip&#x27;s two edges leave the rim at
+     tangent points, the rim&#x27;s own arc runs behind the throat, and the wall thickness carries
+     through. --&gt;
+&lt;path d=&quot;M34,49.44 C27,49 20,50 13,52 C20,54 27,55 34,54.56 Z&quot; fill=&quot;var(--bg)&quot;
+      stroke=&quot;none&quot;/&gt;
+&lt;path d=&quot;M34,49.44 C27,49 20,50 13,52&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M34,54.56 C27,55 20,54 13,52&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Beaker of water&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;test-tube&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M53,30 L53,116 A7,7 0 0 0 67,116 L67,30&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M53,116 A7,1.34 0 0 0 67,116&quot; fill=&quot;var(--body)&quot; stroke=&quot;none&quot;
+      opacity=&quot;0.85&quot;/&gt;
+&lt;path d=&quot;M56.5,42 L56.5,104&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot;
+      opacity=&quot;0.8&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;29&quot; rx=&quot;8.4&quot; ry=&quot;1.16&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.1&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Test tube&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;pondweed&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M60,40 C59.6,64 60.2,98 61,126&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;butt&quot;/&gt;
+&lt;path d=&quot;M60,40 C59.6,64 60.2,98 61,126&quot; fill=&quot;none&quot; stroke=&quot;var(--good)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;butt&quot;/&gt;
+&lt;path d=&quot;M61,126 C61.4,130 62,133 62.8,136&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M61,126 C61.4,130 62,133 62.8,136&quot; fill=&quot;none&quot; stroke=&quot;var(--good)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;g fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;&gt;
+  &lt;path d=&quot;M58.6,42 C50,37 42,35 34,36 C42,41 50,44 58.6,45 Z&quot;/&gt;
+  &lt;path d=&quot;M62.4,42 C71,37 79,35 86,36 C79,41 71,44 62.4,45 Z&quot;/&gt;
+  &lt;path d=&quot;M58.8,60 C50,55 42,53 34,54 C42,59 50,62 58.8,63 Z&quot;/&gt;
+  &lt;path d=&quot;M62.2,60 C71,55 79,53 86,54 C79,59 71,62 62.2,63 Z&quot;/&gt;
+  &lt;path d=&quot;M59,78 C50,73 42,71 34,72 C42,77 50,80 59,81 Z&quot;/&gt;
+  &lt;path d=&quot;M62,78 C71,73 79,71 86,72 C79,77 71,80 62,81 Z&quot;/&gt;
+  &lt;path d=&quot;M59.2,96 C50,91 42,89 34,90 C42,95 50,98 59.2,99 Z&quot;/&gt;
+  &lt;path d=&quot;M61.8,96 C71,91 79,89 86,90 C79,95 71,98 61.8,99 Z&quot;/&gt;
+&lt;/g&gt;
+&lt;path d=&quot;M57.9,38.4 L62.2,41.6&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;butt&quot;/&gt;
+&lt;path d=&quot;M57.9,38.4 L62.2,41.6&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;butt&quot;/&gt;
+&lt;g fill=&quot;var(--bubble)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;&gt;
+  &lt;circle cx=&quot;63&quot; cy=&quot;30&quot; r=&quot;3.4&quot;/&gt;&lt;circle cx=&quot;58&quot; cy=&quot;21&quot; r=&quot;2.6&quot;/&gt;
+  &lt;circle cx=&quot;64&quot; cy=&quot;13&quot; r=&quot;2&quot;/&gt;
+&lt;/g&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Pondweed&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;test-tube-rack&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M10,54 L22,46 L110,46 L98,54 Z&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;10&quot; y=&quot;54&quot; width=&quot;88&quot; height=&quot;11&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;g fill=&quot;var(--dark)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;&gt;
+&lt;ellipse cx=&quot;31&quot; cy=&quot;50&quot; rx=&quot;6.5&quot; ry=&quot;1.24&quot;/&gt;&lt;ellipse cx=&quot;51&quot; cy=&quot;50&quot; rx=&quot;6.5&quot; ry=&quot;1.24&quot;/&gt;
+&lt;ellipse cx=&quot;71&quot; cy=&quot;50&quot; rx=&quot;6.5&quot; ry=&quot;1.24&quot;/&gt;&lt;ellipse cx=&quot;91&quot; cy=&quot;50&quot; rx=&quot;6.5&quot; ry=&quot;1.24&quot;/&gt;
+&lt;/g&gt;
+&lt;rect x=&quot;14&quot; y=&quot;65&quot; width=&quot;9&quot; height=&quot;38&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;85&quot; y=&quot;65&quot; width=&quot;9&quot; height=&quot;38&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M10,103 L22,95 L110,95 L98,103 Z&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;10&quot; y=&quot;103&quot; width=&quot;88&quot; height=&quot;11&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.7&quot;&gt;
+&lt;path d=&quot;M31,99 L31,103 M51,99 L51,103 M71,99 L71,103 M91,99 L91,103&quot;/&gt;
+&lt;/g&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Test tube rack&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;stopwatch&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;6&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;55&quot; y=&quot;46&quot; width=&quot;10&quot; height=&quot;11&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;rect x=&quot;82&quot; y=&quot;58&quot; width=&quot;9&quot; height=&quot;7&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; transform=&quot;rotate(38 86 61)&quot;/&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;36&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;33&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.75&quot;&gt;&lt;path d=&quot;M63.0,63.7 L63.2,61.2 M65.9,64.1 L66.4,61.7 M68.8,64.9 L69.6,62.5 M71.6,66.0 L72.6,63.7 M76.8,68.9 L78.2,66.9 M79.1,70.8 L80.7,69.0 M81.2,72.9 L83.0,71.3 M83.1,75.2 L85.1,73.8 M86.0,80.4 L88.3,79.4 M87.1,83.2 L89.5,82.4 M87.9,86.1 L90.3,85.6 M88.3,89.0 L90.8,88.8 M88.3,95.0 L90.8,95.2 M87.9,97.9 L90.3,98.4 M87.1,100.8 L89.5,101.6 M86.0,103.6 L88.3,104.6 M83.1,108.8 L85.1,110.2 M81.2,111.1 L83.0,112.7 M79.1,113.2 L80.7,115.0 M76.8,115.1 L78.2,117.1 M71.6,118.0 L72.6,120.3 M68.8,119.1 L69.6,121.5 M65.9,119.9 L66.4,122.3 M63.0,120.3 L63.2,122.8 M57.0,120.3 L56.8,122.8 M54.1,119.9 L53.6,122.3 M51.2,119.1 L50.4,121.5 M48.4,118.0 L47.4,120.3 M43.2,115.1 L41.8,117.1 M40.9,113.2 L39.3,115.0 M38.8,111.1 L37.0,112.7 M36.9,108.8 L34.9,110.2 M34.0,103.6 L31.7,104.6 M32.9,100.8 L30.5,101.6 M32.1,97.9 L29.7,98.4 M31.7,95.0 L29.2,95.2 M31.7,89.0 L29.2,88.8 M32.1,86.1 L29.7,85.6 M32.9,83.2 L30.5,82.4 M34.0,80.4 L31.7,79.4 M36.9,75.2 L34.9,73.8 M38.8,72.9 L37.0,71.3 M40.9,70.8 L39.3,69.0 M43.2,68.9 L41.8,66.9 M48.4,66.0 L47.4,63.7 M51.2,64.9 L50.4,62.5 M54.1,64.1 L53.6,61.7 M57.0,63.7 L56.8,61.2&quot;/&gt;&lt;/g&gt;&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; stroke-linecap=&quot;round&quot;&gt;&lt;path d=&quot;M60.0,66.0 L60.0,61.0 M73.0,69.5 L75.5,65.2 M82.5,79.0 L86.8,76.5 M86.0,92.0 L91.0,92.0 M82.5,105.0 L86.8,107.5 M73.0,114.5 L75.5,118.8 M60.0,118.0 L60.0,123.0 M47.0,114.5 L44.5,118.8 M37.5,105.0 L33.2,107.5 M34.0,92.0 L29.0,92.0 M37.5,79.0 L33.2,76.5 M47.0,69.5 L44.5,65.2&quot;/&gt;&lt;/g&gt;&lt;text x=&quot;70.8&quot; y=&quot;75.2&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;5&lt;/text&gt;&lt;text x=&quot;78.6&quot; y=&quot;83.0&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;10&lt;/text&gt;&lt;text x=&quot;81.5&quot; y=&quot;93.8&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;15&lt;/text&gt;&lt;text x=&quot;78.6&quot; y=&quot;104.5&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;&lt;text x=&quot;70.8&quot; y=&quot;112.4&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;25&lt;/text&gt;&lt;text x=&quot;60.0&quot; y=&quot;115.3&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;30&lt;/text&gt;&lt;text x=&quot;49.2&quot; y=&quot;112.4&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;35&lt;/text&gt;&lt;text x=&quot;41.4&quot; y=&quot;104.5&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;40&lt;/text&gt;&lt;text x=&quot;38.5&quot; y=&quot;93.8&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;45&lt;/text&gt;&lt;text x=&quot;41.4&quot; y=&quot;83.0&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;50&lt;/text&gt;&lt;text x=&quot;49.2&quot; y=&quot;75.2&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;55&lt;/text&gt;&lt;text x=&quot;60.0&quot; y=&quot;72.3&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;60&lt;/text&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;104&quot; r=&quot;6&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;&gt;
+&lt;path d=&quot;M60,99 L60,100.6 M65,104 L63.4,104 M60,109 L60,107.4 M55,104 L56.6,104&quot;/&gt;
+&lt;/g&gt;
+&lt;path d=&quot;M60,104 L62.6,101.4&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M53.2,93.8 L88.0,84.5&quot; stroke=&quot;var(--warm)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;2.6&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Stopwatch&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;microscope&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M16,136 L104,136 L98,123 L42,123 Q28,123 22,130 Z&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M96,129 C111,113 109,72 84,55 L76,65 C95,76 97,111 84,123 Z&quot;
+      fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;24&quot; y=&quot;92&quot; width=&quot;76&quot; height=&quot;7&quot; rx=&quot;1.5&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;ellipse cx=&quot;59&quot; cy=&quot;95.5&quot; rx=&quot;7&quot; ry=&quot;1.34&quot; fill=&quot;var(--body)&quot; stroke=&quot;none&quot;/&gt;
+&lt;path d=&quot;M42,96 L42,88 Q42,86 45,86 L51,86&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M76,96 L76,88 Q76,86 73,86 L67,86&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;97&quot; cy=&quot;106&quot; r=&quot;9&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;circle cx=&quot;97&quot; cy=&quot;106&quot; r=&quot;4.5&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;rect x=&quot;66&quot; y=&quot;54&quot; width=&quot;20&quot; height=&quot;11&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;48&quot; y=&quot;28&quot; width=&quot;22&quot; height=&quot;30&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;52&quot; y=&quot;14&quot; width=&quot;14&quot; height=&quot;16&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M53,70 L65,70 L62,82 L56,82 Z&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M68,70 L78,70 L76,80 L70,80 Z&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M47,58 L71,58 L79,70 L39,70 Z&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M51,100 L67,100 L63,111 L55,111 Z&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M62,104 L72,102&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;73.5&quot; cy=&quot;101.6&quot; r=&quot;2.4&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;path d=&quot;M54,124 L54,99 L64,99 L64,124 Z&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M52,99 L66,99&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M56,92 L56,99 M62,92 L62,99&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.6&quot;
+      opacity=&quot;0.75&quot;/&gt;
+&lt;path d=&quot;M56,86 L56,92 M62,86 L62,92&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.6&quot;
+      opacity=&quot;0.55&quot;/&gt;
+&lt;path d=&quot;M59,124 L59,130 L76,130&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;ellipse cx=&quot;76&quot; cy=&quot;119&quot; rx=&quot;7.5&quot; ry=&quot;7.5&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+         stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M76,126.5 L76,130&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;circle cx=&quot;76&quot; cy=&quot;130&quot; r=&quot;2.2&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;path d=&quot;M71.5,116 L80.5,113&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.8&quot;/&gt;
+&lt;path d=&quot;M69,116 L60,124&quot; stroke=&quot;var(--warn)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.65&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Microscope&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;funnel&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M27,44 L93,44 L65,101 L55,101 Z&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M55,101 L55,130 M65,101 L65,130&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M55,101 L65,101&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;130&quot; rx=&quot;5&quot; ry=&quot;0.95&quot; fill=&quot;var(--body)&quot; stroke=&quot;none&quot;/&gt;
+&lt;path d=&quot;M55.4,129 A5,0.95 0 0 1 64.6,129&quot; fill=&quot;var(--body)&quot; stroke=&quot;none&quot;
+      opacity=&quot;0.5&quot;/&gt;
+&lt;path d=&quot;M45,54 L58,80&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot;
+      opacity=&quot;0.8&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;44&quot; rx=&quot;33&quot; ry=&quot;5.08&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Funnel&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;petri-dish&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M23,95 L23,106 A37,5.85 0 0 0 97,106 L97,95&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M26,101 L26,105 A34,5.27 0 0 0 94,105 L94,101&quot; fill=&quot;var(--agar)&quot;/&gt;
+&lt;path d=&quot;M26,101 A34,5.27 0 0 0 94,101&quot; fill=&quot;var(--agar)&quot; opacity=&quot;0.9&quot;/&gt;
+&lt;path d=&quot;M20,88 L20,93 A40,6.42 0 0 0 100,93 L100,88&quot; fill=&quot;var(--glass-fill)&quot; fill-opacity=&quot;0.45&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;88&quot; rx=&quot;40&quot; ry=&quot;6.42&quot; fill=&quot;var(--glass-fill)&quot; fill-opacity=&quot;0.45&quot;
+         stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M32,84 A40,6.42 0 0 0 46,91&quot; fill=&quot;none&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot;
+      stroke-linecap=&quot;round&quot; opacity=&quot;0.85&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Petri dish&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;ph-meter&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M10,84 L62,84 Q66,84 66,88 L66,124 Q66,128 62,128 L10,128
+         Q6,128 6,124 L6,88 Q6,84 10,84 Z&quot;
+      fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;11&quot; y=&quot;88&quot; width=&quot;46&quot; height=&quot;17&quot; rx=&quot;2&quot; fill=&quot;var(--dark)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;text x=&quot;34&quot; y=&quot;101&quot; font-size=&quot;11.5&quot; fill=&quot;var(--screen)&quot; text-anchor=&quot;middle&quot;
+      font-family=&quot;ui-monospace,Menlo,Consolas,monospace&quot;&gt;7.00&lt;/text&gt;
+&lt;text x=&quot;14&quot; y=&quot;120&quot; font-size=&quot;8.5&quot; fill=&quot;var(--ink)&quot;&gt;pH&lt;/text&gt;
+&lt;rect x=&quot;30&quot; y=&quot;111&quot; width=&quot;12&quot; height=&quot;8&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;rect x=&quot;46&quot; y=&quot;111&quot; width=&quot;12&quot; height=&quot;8&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;circle cx=&quot;66&quot; cy=&quot;92&quot; r=&quot;3.2&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M69,92 C82,80 86,58 90,44&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;84&quot; y=&quot;42&quot; width=&quot;13&quot; height=&quot;22&quot; rx=&quot;3&quot; fill=&quot;var(--bg)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M86,64 L95,64 L95,104 L86,104 Z&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;90.5&quot; cy=&quot;110&quot; r=&quot;6&quot; fill=&quot;var(--glass-fill)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;path d=&quot;M88,107 A3,3 0 0 1 90.5,106&quot; fill=&quot;none&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M86,96 L95,96&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;/&gt;
+&lt;path d=&quot;M88,72 L88,92&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; opacity=&quot;0.8&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;pH meter&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;mass-balance&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M33,79 L87,79 L84,83 L36,83 Z&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;79&quot; rx=&quot;27&quot; ry=&quot;3.94&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;55&quot; y=&quot;83&quot; width=&quot;10&quot; height=&quot;7&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M16,89 L104,89 Q108,89 108,93 L108,120 Q108,124 104,124 L16,124
+         Q12,124 12,120 L12,93 Q12,89 16,89 Z&quot;
+      fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;60&quot; y=&quot;94&quot; width=&quot;42&quot; height=&quot;17&quot; rx=&quot;2&quot; fill=&quot;var(--dark)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;text x=&quot;81&quot; y=&quot;107&quot; font-size=&quot;11&quot; fill=&quot;var(--screen)&quot; text-anchor=&quot;middle&quot;
+      font-family=&quot;ui-monospace,Menlo,Consolas,monospace&quot;&gt;0.00 g&lt;/text&gt;
+&lt;rect x=&quot;19&quot; y=&quot;96&quot; width=&quot;17&quot; height=&quot;9&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;rect x=&quot;40&quot; y=&quot;96&quot; width=&quot;17&quot; height=&quot;9&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;text x=&quot;27.5&quot; y=&quot;102.8&quot; font-size=&quot;5.5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;ON&lt;/text&gt;
+&lt;text x=&quot;48.5&quot; y=&quot;102.8&quot; font-size=&quot;5.5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;TARE&lt;/text&gt;
+&lt;circle cx=&quot;30&quot; cy=&quot;115&quot; r=&quot;5&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;circle cx=&quot;30&quot; cy=&quot;115&quot; r=&quot;1.8&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;rect x=&quot;20&quot; y=&quot;124&quot; width=&quot;9&quot; height=&quot;6&quot; rx=&quot;1.5&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;rect x=&quot;91&quot; y=&quot;124&quot; width=&quot;9&quot; height=&quot;6&quot; rx=&quot;1.5&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Mass balance&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;conical-flask&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M25,132 L46,74 Q50,64 51,56 L51,34 L69,34 L69,56 Q70,64 74,74 L95,132 Z&quot;
+      fill=&quot;var(--glass-fill)&quot; stroke=&quot;none&quot;/&gt;
+&lt;path d=&quot;M51,34 L51,56 Q50,64 46,74 L25,132 L95,132 L74,74 Q70,64 69,56 L69,34&quot;
+      fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M29,128 A31,5.27 0 0 0 91,128&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      opacity=&quot;0.85&quot;/&gt;
+&lt;path d=&quot;M45,86 L36,122&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot;
+      opacity=&quot;0.8&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;&gt;
+&lt;path d=&quot;M34,109 L48,109 M31,118 L45,118&quot;/&gt;
+&lt;/g&gt;
+&lt;text x=&quot;51&quot; y=&quot;111.5&quot; font-size=&quot;7.5&quot; fill=&quot;var(--glass)&quot;&gt;150&lt;/text&gt;
+&lt;text x=&quot;48&quot; y=&quot;121&quot; font-size=&quot;7.5&quot; fill=&quot;var(--glass)&quot;&gt;100 cm&amp;#179;&lt;/text&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;34&quot; rx=&quot;9.5&quot; ry=&quot;1.29&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+         stroke-width=&quot;1.3&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Conical flask&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;
+  &lt;div class=&quot;actions&quot;&gt;
+    &lt;button id=&quot;check&quot; class=&quot;primary&quot; type=&quot;button&quot;&gt;Check my set-up&lt;/button&gt;
+    &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Nothing chosen yet.&lt;/p&gt;
+  &lt;div class=&quot;why&quot; id=&quot;why&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;rig&quot; id=&quot;rig&quot; hidden&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_photosynthesis-equipment&quot;;
+  var ITEMS = [{&quot;id&quot;: &quot;lamp&quot;, &quot;name&quot;: &quot;Lamp&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Gives the light. Its six settings are the one thing this experiment changes.&quot;}, {&quot;id&quot;: &quot;beaker&quot;, &quot;name&quot;: &quot;Beaker of water&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Stands between the lamp and the tube and takes the heat out of the light, so the water around the pondweed stays at the same temperature at every setting.&quot;}, {&quot;id&quot;: &quot;test-tube&quot;, &quot;name&quot;: &quot;Test tube&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Holds the water and the pondweed while the bubbles are counted.&quot;}, {&quot;id&quot;: &quot;pondweed&quot;, &quot;name&quot;: &quot;Pondweed&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;The plant that photosynthesizes. The bubbles come off its cut end, so the cut end faces up the tube where they can be seen.&quot;}, {&quot;id&quot;: &quot;test-tube-rack&quot;, &quot;name&quot;: &quot;Test tube rack&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Holds the tube upright and still, so the distance from the lamp does not change between one count and the next.&quot;}, {&quot;id&quot;: &quot;stopwatch&quot;, &quot;name&quot;: &quot;Stopwatch&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Times the one minute over which the bubbles are counted.&quot;}, {&quot;id&quot;: &quot;microscope&quot;, &quot;name&quot;: &quot;Microscope&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is viewed under magnification. The bubbles are large enough to count by eye.&quot;}, {&quot;id&quot;: &quot;funnel&quot;, &quot;name&quot;: &quot;Funnel&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is filtered, and nothing is poured into a narrow neck.&quot;}, {&quot;id&quot;: &quot;petri-dish&quot;, &quot;name&quot;: &quot;Petri dish&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is grown. A Petri dish holds a culture, and there is no culture here.&quot;}, {&quot;id&quot;: &quot;ph-meter&quot;, &quot;name&quot;: &quot;pH meter&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;pH is not what this experiment changes. Light intensity is.&quot;}, {&quot;id&quot;: &quot;mass-balance&quot;, &quot;name&quot;: &quot;Mass balance&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is weighed. The measurement is a count of bubbles.&quot;}, {&quot;id&quot;: &quot;conical-flask&quot;, &quot;name&quot;: &quot;Conical flask&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;The pondweed goes in a test tube, which is narrow enough for the bubbles to rise in one stream where they can be counted.&quot;}];
+  var RIG = &quot;\n&lt;svg viewBox=\&quot;0 0 620 240\&quot; role=\&quot;img\&quot; aria-label=\&quot;A lamp shining through a beaker of water onto\n     a test tube of pondweed standing in a rack. Bubbles rise from the cut end of the stem, and\n     a stopwatch lies on the bench beside the rack.\&quot;&gt;\n  &lt;g transform=\&quot;translate(130,6)\&quot;&gt;\n  &lt;line x1=\&quot;6\&quot; y1=\&quot;200\&quot; x2=\&quot;294\&quot; y2=\&quot;200\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot;/&gt;\n  &lt;ellipse cx=\&quot;38\&quot; cy=\&quot;192\&quot; rx=\&quot;28\&quot; ry=\&quot;4.13\&quot; fill=\&quot;var(--metal)\&quot; stroke=\&quot;var(--ink)\&quot;\n           stroke-width=\&quot;3\&quot;/&gt;\n  &lt;path d=\&quot;M10,192 A28,4.13 0 0 0 66,192 L66,186 A28,4.13 0 0 1 10,186 Z\&quot; fill=\&quot;var(--metal)\&quot;\n        stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;\n  &lt;ellipse cx=\&quot;38\&quot; cy=\&quot;186\&quot; rx=\&quot;28\&quot; ry=\&quot;4.13\&quot; fill=\&quot;var(--metal)\&quot; stroke=\&quot;var(--ink)\&quot;\n           stroke-width=\&quot;3\&quot;/&gt;\n  &lt;path d=\&quot;M38,186 L38,142 L64,104\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot; fill=\&quot;none\&quot;\n        stroke-linecap=\&quot;round\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;\n  &lt;circle cx=\&quot;38\&quot; cy=\&quot;142\&quot; r=\&quot;4.4\&quot; fill=\&quot;var(--bg)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot;/&gt;\n  &lt;path d=\&quot;M66.7,97.5 L115.6,103.5 L100.4,140.5 L61.4,110.5 Z\&quot; fill=\&quot;var(--dark)\&quot;\n        stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;\n  &lt;ellipse cx=\&quot;108\&quot; cy=\&quot;122\&quot; rx=\&quot;9\&quot; ry=\&quot;21\&quot; transform=\&quot;rotate(22 108 122)\&quot; fill=\&quot;var(--bg)\&quot;\n           stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot;/&gt;\n  &lt;circle cx=\&quot;105\&quot; cy=\&quot;122\&quot; r=\&quot;6.6\&quot; fill=\&quot;var(--warn-bg)\&quot; stroke=\&quot;var(--warn)\&quot;\n          stroke-width=\&quot;1.6\&quot;/&gt;\n  &lt;path d=\&quot;M116,104 L150,110 L150,150 L116,142 Z\&quot; fill=\&quot;var(--warn)\&quot; opacity=\&quot;0.18\&quot;/&gt;\n  &lt;path d=\&quot;M150,110 L206,104 L206,152 L150,150 Z\&quot; fill=\&quot;var(--warn)\&quot; opacity=\&quot;0.13\&quot;/&gt;\n  &lt;path d=\&quot;M141,92 L141,172 A30,4.51 0 0 0 201,172 L201,92\&quot; fill=\&quot;var(--glass-fill)\&quot;\n        stroke=\&quot;none\&quot;/&gt;\n  &lt;path d=\&quot;M141,106 L141,172 A30,4.51 0 0 0 201,172 L201,106 Z\&quot; fill=\&quot;var(--water)\&quot;\n        opacity=\&quot;0.6\&quot;/&gt;\n  &lt;ellipse cx=\&quot;171\&quot; cy=\&quot;106\&quot; rx=\&quot;30\&quot; ry=\&quot;4.51\&quot; fill=\&quot;var(--water)\&quot; opacity=\&quot;0.75\&quot;/&gt;\n  &lt;path d=\&quot;M141,92 L141,172 A30,4.51 0 0 0 201,172 L201,92\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--ink)\&quot;\n        stroke-width=\&quot;3\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;\n  &lt;g stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;&gt;\n    &lt;path d=\&quot;M141,124 L153,124 M141,138 L149,138 M141,152 L153,152\&quot;/&gt;\n  &lt;/g&gt;\n  &lt;ellipse cx=\&quot;171\&quot; cy=\&quot;92\&quot; rx=\&quot;30\&quot; ry=\&quot;4.51\&quot; fill=\&quot;var(--bg)\&quot; stroke=\&quot;var(--ink)\&quot;\n           stroke-width=\&quot;3\&quot;/&gt;\n  &lt;path d=\&quot;M195,89.15 C201,88.7 207,90.3 213,92 C207,93.7 201,95.3 195,94.85 Z\&quot; fill=\&quot;var(--bg)\&quot;\n        stroke=\&quot;none\&quot;/&gt;\n  &lt;path d=\&quot;M195,89.15 C201,88.7 207,90.3 213,92\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--ink)\&quot;\n        stroke-width=\&quot;3\&quot; stroke-linecap=\&quot;round\&quot;/&gt;\n  &lt;path d=\&quot;M195,94.85 C201,95.3 207,93.7 213,92\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--ink)\&quot;\n        stroke-width=\&quot;3\&quot; stroke-linecap=\&quot;round\&quot;/&gt;\n  &lt;path d=\&quot;M147,116 L147,164\&quot; stroke=\&quot;var(--bg)\&quot; stroke-width=\&quot;2.2\&quot; opacity=\&quot;0.7\&quot;/&gt;\n  &lt;rect x=\&quot;216\&quot; y=\&quot;166\&quot; width=\&quot;72\&quot; height=\&quot;7\&quot; rx=\&quot;2\&quot; fill=\&quot;var(--metal)\&quot; stroke=\&quot;var(--ink)\&quot;\n        stroke-width=\&quot;1.6\&quot;/&gt;\n  &lt;rect x=\&quot;216\&quot; y=\&quot;192\&quot; width=\&quot;72\&quot; height=\&quot;7\&quot; rx=\&quot;2\&quot; fill=\&quot;var(--metal)\&quot; stroke=\&quot;var(--ink)\&quot;\n        stroke-width=\&quot;1.6\&quot;/&gt;\n  &lt;rect x=\&quot;220\&quot; y=\&quot;173\&quot; width=\&quot;6\&quot; height=\&quot;19\&quot; fill=\&quot;var(--metal)\&quot; stroke=\&quot;var(--ink)\&quot;\n        stroke-width=\&quot;1.6\&quot;/&gt;\n  &lt;rect x=\&quot;278\&quot; y=\&quot;173\&quot; width=\&quot;6\&quot; height=\&quot;19\&quot; fill=\&quot;var(--metal)\&quot; stroke=\&quot;var(--ink)\&quot;\n        stroke-width=\&quot;1.6\&quot;/&gt;\n  &lt;path d=\&quot;M237,32 L237,176 A15,15 0 0 0 267,176 L267,32\&quot; fill=\&quot;var(--glass-fill)\&quot;\n        stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;\n  &lt;path d=\&quot;M237,54 L237,176 A15,15 0 0 0 267,176 L267,54 Z\&quot; fill=\&quot;var(--water)\&quot;\n        opacity=\&quot;0.7\&quot;/&gt;\n  &lt;ellipse cx=\&quot;252\&quot; cy=\&quot;54\&quot; rx=\&quot;15\&quot; ry=\&quot;1.85\&quot; fill=\&quot;var(--water)\&quot;/&gt;\n  &lt;path d=\&quot;M252,168 C251.6,140 252.4,100 253,70\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--good)\&quot;\n        stroke-width=\&quot;3\&quot; stroke-linecap=\&quot;round\&quot;/&gt;\n  &lt;g fill=\&quot;var(--good)\&quot; opacity=\&quot;0.92\&quot;&gt;\n    &lt;path d=\&quot;M252,84 C246,80 242,78 240,79 C244,83 248,86 252,86 Z\&quot;/&gt;\n    &lt;path d=\&quot;M253,84 C259,80 263,78 265,79 C261,83 257,86 253,86 Z\&quot;/&gt;\n    &lt;path d=\&quot;M252,104 C246,100 242,98 240,99 C244,103 248,106 252,106 Z\&quot;/&gt;\n    &lt;path d=\&quot;M253,104 C259,100 263,98 265,99 C261,103 257,106 253,106 Z\&quot;/&gt;\n    &lt;path d=\&quot;M252,124 C246,120 242,118 240,119 C244,123 248,126 252,126 Z\&quot;/&gt;\n    &lt;path d=\&quot;M253,124 C259,120 263,118 265,119 C261,123 257,126 253,126 Z\&quot;/&gt;\n    &lt;path d=\&quot;M252,144 C246,140 242,138 240,139 C244,143 248,146 252,146 Z\&quot;/&gt;\n    &lt;path d=\&quot;M253,144 C259,140 263,138 265,139 C261,143 257,146 253,146 Z\&quot;/&gt;\n  &lt;/g&gt;  &lt;path d=\&quot;M247,166.5 L258,171\&quot; stroke=\&quot;var(--bg)\&quot; stroke-width=\&quot;2.2\&quot;/&gt;\n  &lt;path d=\&quot;M247,166.5 L258,171\&quot; stroke=\&quot;var(--good)\&quot; stroke-width=\&quot;3\&quot;\n        stroke-linecap=\&quot;round\&quot;/&gt;\n  &lt;g fill=\&quot;var(--bubble)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.6\&quot;&gt;\n    &lt;circle cx=\&quot;255\&quot; cy=\&quot;152\&quot; r=\&quot;3\&quot;/&gt;&lt;circle cx=\&quot;249\&quot; cy=\&quot;134\&quot; r=\&quot;2.6\&quot;/&gt;\n    &lt;circle cx=\&quot;254\&quot; cy=\&quot;116\&quot; r=\&quot;2.8\&quot;/&gt;&lt;circle cx=\&quot;250\&quot; cy=\&quot;96\&quot; r=\&quot;2.4\&quot;/&gt;\n    &lt;circle cx=\&quot;254\&quot; cy=\&quot;76\&quot; r=\&quot;2.6\&quot;/&gt;\n  &lt;/g&gt;\n  &lt;ellipse cx=\&quot;252\&quot; cy=\&quot;32\&quot; rx=\&quot;15\&quot; ry=\&quot;1.85\&quot; fill=\&quot;var(--bg)\&quot; stroke=\&quot;var(--ink)\&quot;\n           stroke-width=\&quot;2.5\&quot;/&gt;\n  &lt;circle cx=\&quot;104\&quot; cy=\&quot;182\&quot; r=\&quot;15\&quot; fill=\&quot;var(--bg)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;3\&quot;/&gt;\n  &lt;circle cx=\&quot;104\&quot; cy=\&quot;182\&quot; r=\&quot;11\&quot; fill=\&quot;var(--card)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.6\&quot;/&gt;\n  &lt;path d=\&quot;M104,182 L104,174\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.6\&quot; stroke-linecap=\&quot;round\&quot;/&gt;\n  &lt;path d=\&quot;M104,182 L110,185\&quot; stroke=\&quot;var(--warm)\&quot; stroke-width=\&quot;1.6\&quot;\n        stroke-linecap=\&quot;round\&quot;/&gt;\n  &lt;rect x=\&quot;100\&quot; y=\&quot;163\&quot; width=\&quot;8\&quot; height=\&quot;5\&quot; rx=\&quot;1.5\&quot; fill=\&quot;var(--ink)\&quot;/&gt;\n  &lt;/g&gt;\n&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;215\&quot; cy=\&quot;110\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M215,110 L150,40\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;146\&quot; y=\&quot;43.4\&quot; text-anchor=\&quot;end\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;lamp, six settings&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;301\&quot; cy=\&quot;106\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M301,106 L301,37\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;301\&quot; y=\&quot;31.4\&quot; text-anchor=\&quot;middle\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;beaker of water&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;384\&quot; cy=\&quot;82\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M384,82 L470,76\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;474\&quot; y=\&quot;79.4\&quot; text-anchor=\&quot;start\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;oxygen bubbles&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;383\&quot; cy=\&quot;110\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M383,110 L470,116\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;474\&quot; y=\&quot;119.4\&quot; text-anchor=\&quot;start\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;pondweed&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;397\&quot; cy=\&quot;60\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M397,60 L470,40\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;474\&quot; y=\&quot;43.4\&quot; text-anchor=\&quot;start\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;test tube&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;418\&quot; cy=\&quot;184\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M418,184 L470,186\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;474\&quot; y=\&quot;189.4\&quot; text-anchor=\&quot;start\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;test tube rack&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=\&quot;1\&quot;&gt;&lt;circle cx=\&quot;234\&quot; cy=\&quot;196\&quot; r=\&quot;1.9\&quot; fill=\&quot;var(--muted)\&quot;/&gt;&lt;path d=\&quot;M234,196 L150,224\&quot; fill=\&quot;none\&quot; stroke=\&quot;var(--muted)\&quot; stroke-width=\&quot;1.6\&quot; opacity=\&quot;0.8\&quot;/&gt;&lt;text x=\&quot;146\&quot; y=\&quot;227.4\&quot; text-anchor=\&quot;end\&quot; font-size=\&quot;10.5\&quot; fill=\&quot;var(--muted)\&quot; font-family=\&quot;system-ui, sans-serif\&quot;&gt;stopwatch&lt;/text&gt;&lt;/g&gt;\n&lt;/svg&gt;\n&quot;, CAP = &quot;The apparatus set up. From the left: the lamp, the beaker of water that takes the heat out of the light, the test tube of pondweed standing in its rack, and the stopwatch. A brighter setting therefore gives more light without also giving more heat.&quot;;
+  var byId = {};
+  ITEMS.forEach(function (it) { byId[it.id] = it; });
+
+  var tray = document.getElementById(&quot;tray&quot;), msg = document.getElementById(&quot;msg&quot;);
+  var why = document.getElementById(&quot;why&quot;), rig = document.getElementById(&quot;rig&quot;);
+  var elCheck = document.getElementById(&quot;check&quot;), elReset = document.getElementById(&quot;reset&quot;);
+  var tiles = Array.prototype.slice.call(tray.querySelectorAll(&quot;.tile&quot;));
+  var locked = false;
+
+  function shuffleTray() {
+    var kids = Array.prototype.slice.call(tray.children);
+    for (var i = kids.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = kids[i]; kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k) { tray.appendChild(k); });
+  }
+  shuffleTray();
+
+  function say(text, kind) {
+    msg.textContent = text;
+    msg.className = kind ? &quot;msg &quot; + kind : &quot;msg&quot;;
+  }
+
+  function chosen() {
+    return tiles.filter(function (t) { return t.getAttribute(&quot;aria-pressed&quot;) === &quot;true&quot;; })
+                .map(function (t) { return t.dataset.id; });
+  }
+
+  tiles.forEach(function (t) {
+    t.addEventListener(&quot;click&quot;, function () {
+      if (locked) return;
+      var on = t.getAttribute(&quot;aria-pressed&quot;) === &quot;true&quot;;
+      t.setAttribute(&quot;aria-pressed&quot;, on ? &quot;false&quot; : &quot;true&quot;);
+      var n = chosen().length;
+      say(n === 0 ? &quot;Nothing chosen yet.&quot;
+                  : n + (n === 1 ? &quot; piece chosen.&quot; : &quot; pieces chosen.&quot;));
+    });
+  });
+
+  function check() {
+    if (locked) return;
+    var picked = chosen();
+    if (!picked.length) { say(&quot;Choose the equipment first, then check your set-up.&quot;); return; }
+    locked = true;
+    var hits = [], missed = [], over = [];
+    tiles.forEach(function (t) {
+      var it = byId[t.dataset.id], on = picked.indexOf(it.id) !== -1;
+      t.disabled = true;
+      var mk = t.querySelector(&quot;.mk&quot;);
+      if (it.needed &amp;&amp; on) { t.classList.add(&quot;hit&quot;); mk.textContent = &quot;needed&quot;; hits.push(it); }
+      else if (it.needed) { t.classList.add(&quot;miss&quot;); mk.textContent = &quot;missed&quot;; missed.push(it); }
+      else if (on) { t.classList.add(&quot;over&quot;); mk.textContent = &quot;not needed&quot;; over.push(it); }
+      else { mk.textContent = &quot;&quot;; }
+    });
+
+    var need = ITEMS.filter(function (i) { return i.needed; }).length;
+    var parts = [&quot;You chose &quot; + hits.length + &quot; of the &quot; + need + &quot; pieces this method needs&quot;];
+    if (over.length) parts.push(&quot;and &quot; + over.length + &quot; it does not&quot;);
+    say(parts.join(&quot;, &quot;) + &quot;.&quot;, (hits.length === need &amp;&amp; !over.length) ? &quot;good&quot; : null);
+
+    var out = &quot;&quot;;
+    if (missed.length) {
+      out += &quot;&lt;h2&gt;Missed&lt;/h2&gt;&lt;ul&gt;&quot; + missed.map(function (i) {
+        return &quot;&lt;li&gt;&lt;b&gt;&quot; + i.name + &quot;&lt;/b&gt; &amp;mdash; &quot; + i.why + &quot;&lt;/li&gt;&quot;; }).join(&quot;&quot;) + &quot;&lt;/ul&gt;&quot;;
+    }
+    if (over.length) {
+      out += &quot;&lt;h2&gt;Chosen, but not needed&lt;/h2&gt;&lt;ul&gt;&quot; + over.map(function (i) {
+        return &quot;&lt;li&gt;&lt;b&gt;&quot; + i.name + &quot;&lt;/b&gt; &amp;mdash; &quot; + i.why + &quot;&lt;/li&gt;&quot;; }).join(&quot;&quot;) + &quot;&lt;/ul&gt;&quot;;
+    }
+    out += &quot;&lt;h2&gt;What each piece is for&lt;/h2&gt;&lt;ul&gt;&quot;
+      + ITEMS.filter(function (i) { return i.needed; }).map(function (i) {
+          return &quot;&lt;li&gt;&lt;b&gt;&quot; + i.name + &quot;&lt;/b&gt; &amp;mdash; &quot; + i.why + &quot;&lt;/li&gt;&quot;; }).join(&quot;&quot;)
+      + &quot;&lt;/ul&gt;&quot;;
+    why.innerHTML = out;
+
+    rig.hidden = false;
+    rig.innerHTML = RIG + &#x27;&lt;div class=&quot;cap&quot;&gt;&#x27; + CAP + &#x27;&lt;/div&gt;&#x27;;
+    elCheck.disabled = true;
+    reportHeight();
+  }
+
+  elCheck.addEventListener(&quot;click&quot;, check);
+  elReset.addEventListener(&quot;click&quot;, function () {
+    locked = false;
+    tiles.forEach(function (t) {
+      t.disabled = false;
+      t.setAttribute(&quot;aria-pressed&quot;, &quot;false&quot;);
+      t.classList.remove(&quot;hit&quot;, &quot;miss&quot;, &quot;over&quot;);
+      t.querySelector(&quot;.mk&quot;).textContent = &quot;&quot;;
+    });
+    why.innerHTML = &quot;&quot;; rig.hidden = true; rig.innerHTML = &quot;&quot;;
+    elCheck.disabled = false;
+    shuffleTray();
+    say(&quot;Nothing chosen yet.&quot;);
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1180" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="collect"><div class="shead"><span class="num">Stage 3</span><span class="kind">Simulation &middot; Six settings, three runs each</span></div><h2>Collect the results</h2><p class="blurb">Count the bubbles at each lamp setting, three times over. Each setting can be collected once.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Pondweed and light intensity&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,340px);gap:12px;
+  align-items:stretch;margin-bottom:2px}
+@media (max-width:700px){.bench{grid-template-columns:1fr}}
+.results{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;display:flex;flex-direction:column;justify-content:center}
+.stage{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stage svg{flex:0 0 auto;max-width:100%;height:auto}
+.readouts{flex:1 1 140px;min-width:138px;display:grid;gap:6px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+    border-bottom:1px dotted var(--line);padding-bottom:4px}
+.ro&gt;span{color:var(--muted);font-size:12px}
+.ro b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:650}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:12px 0 0;padding:10px 12px 12px}
+legend{font-size:12px;font-weight:650;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em;padding:0 5px}
+.hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+.picks{display:flex;gap:6px;flex-wrap:wrap}
+.picks button{flex:1 1 56px;padding:9px 4px;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg);border-radius:8px;font:inherit;font-variant-numeric:tabular-nums;
+  cursor:pointer}
+.picks button[aria-pressed=&quot;true&quot;]{background:var(--accent);color:var(--accent-fg);
+  border-color:var(--accent);font-weight:650}
+.picks button:disabled{opacity:.5;cursor:not-allowed}
+.picks button .done{display:block;font-size:10px;color:var(--muted);line-height:1.2}
+.picks button[aria-pressed=&quot;true&quot;] .done{color:var(--accent-fg);opacity:.85}
+.fixedgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.fixed{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed b{font-size:15px;font-weight:650;color:var(--fg);padding:5px 0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:8px}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+th[scope=&quot;row&quot;]{text-align:left}
+td.empty{color:var(--muted)}
+.entry{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.entry input{width:92px;padding:8px 10px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted)}
+.entry button{padding:8px 13px;border:1px solid var(--accent);border-radius:8px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+tr.active th[scope=&quot;row&quot;]{color:var(--accent);font-weight:700}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+  &lt;h1&gt;Pondweed and light intensity&lt;/h1&gt;
+  &lt;p class=&quot;sub&quot;&gt;Count the bubbles given off in one minute, three times at each lamp setting.
+    Each setting can be collected once.&lt;/p&gt;
+
+  &lt;div class=&quot;bench&quot;&gt;
+    &lt;div class=&quot;stage&quot;&gt;
+&lt;svg viewBox=&quot;0 0 320 236&quot; width=&quot;310&quot; role=&quot;img&quot; aria-label=&quot;A lamp shining through a beaker
+     of water onto a test tube of pondweed standing in a rack. Bubbles rise from the cut end of
+     the stem.&quot;&gt;
+  &lt;!-- The beaker is back, and drawn as a beaker. It was a flat-bottomed box with a cylinder
+       top, no spout, no graduations, and nearly as wide as the test tube. A 250 cm3 beaker is
+       about 7 cm across and a boiling tube about 2.5, so it is now 2.5 times the tube&#x27;s width;
+       the lip is pulled from the rim at its true tangent points; the water surface is an
+       ellipse, because you cannot see down into a cylinder at the rim and edge-on at the
+       surface; and the glass carries one weight from rim to base. --&gt;
+  &lt;line x1=&quot;6&quot; y1=&quot;211&quot; x2=&quot;314&quot; y2=&quot;211&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+  &lt;g id=&quot;beam&quot; opacity=&quot;0.28&quot;&gt;
+    &lt;path d=&quot;M134,112 L250,104 L250,176 L132,152 Z&quot; fill=&quot;var(--warn)&quot;/&gt;
+  &lt;/g&gt;
+  &lt;ellipse cx=&quot;44&quot; cy=&quot;203&quot; rx=&quot;30&quot; ry=&quot;4.51&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+           stroke-width=&quot;3&quot;/&gt;
+  &lt;path d=&quot;M14,203 A30,4.51 0 0 0 74,203 L74,196 A30,4.51 0 0 1 14,196 Z&quot; fill=&quot;var(--metal)&quot;
+        stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+  &lt;ellipse cx=&quot;44&quot; cy=&quot;196&quot; rx=&quot;30&quot; ry=&quot;4.51&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+           stroke-width=&quot;3&quot;/&gt;
+  &lt;path d=&quot;M34,207 C24,213 18,215 10,215&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;
+        stroke-linecap=&quot;round&quot;/&gt;
+  &lt;rect x=&quot;4&quot; y=&quot;211&quot; width=&quot;8&quot; height=&quot;9&quot; rx=&quot;2&quot; fill=&quot;var(--dark)&quot; stroke=&quot;var(--ink)&quot;
+        stroke-width=&quot;1.6&quot;/&gt;
+  &lt;path d=&quot;M44,196 L44,150&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M44,150 L78,112&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M81.5,104.5 L135,111 L118,152 L75,119 Z&quot; fill=&quot;var(--screen)&quot;
+        stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M84,112 L117,130&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;circle cx=&quot;117&quot; cy=&quot;130&quot; r=&quot;8.4&quot; fill=&quot;var(--warn-bg)&quot; stroke=&quot;var(--warn)&quot;
+          stroke-width=&quot;3&quot;/&gt;
+  &lt;ellipse cx=&quot;127&quot; cy=&quot;131.5&quot; rx=&quot;10&quot; ry=&quot;23&quot; transform=&quot;rotate(22 127 131.5)&quot; fill=&quot;none&quot;
+           stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+  &lt;circle cx=&quot;44&quot; cy=&quot;150&quot; r=&quot;5&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+  &lt;circle cx=&quot;78&quot; cy=&quot;112&quot; r=&quot;5&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+
+  &lt;path d=&quot;M130,132 L130,205 A37.5,5.94 0 0 0 205,205 L205,132&quot; fill=&quot;var(--glass-fill)&quot;
+        stroke=&quot;none&quot;/&gt;
+  &lt;path d=&quot;M130,150 L130,205 A37.5,5.94 0 0 0 205,205 L205,150 Z&quot; fill=&quot;var(--water)&quot;
+        opacity=&quot;0.6&quot;/&gt;
+  &lt;ellipse cx=&quot;167.5&quot; cy=&quot;150&quot; rx=&quot;37.5&quot; ry=&quot;5.94&quot; fill=&quot;var(--water)&quot; opacity=&quot;0.75&quot;/&gt;
+  &lt;path d=&quot;M130,132 L130,205 A37.5,5.94 0 0 0 205,205 L205,132&quot; fill=&quot;none&quot;
+        stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+  &lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.8&quot;&gt;
+    &lt;path d=&quot;M130,164 L146,164 M130,178 L140,178 M130,192 L146,192&quot;/&gt;
+  &lt;/g&gt;
+  &lt;text x=&quot;150&quot; y=&quot;167&quot; font-size=&quot;8&quot; fill=&quot;var(--glass)&quot;&gt;200&lt;/text&gt;
+  &lt;text x=&quot;150&quot; y=&quot;195&quot; font-size=&quot;8&quot; fill=&quot;var(--glass)&quot;&gt;100&lt;/text&gt;
+  &lt;ellipse cx=&quot;167.5&quot; cy=&quot;132&quot; rx=&quot;37.5&quot; ry=&quot;5.94&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+           stroke-width=&quot;3&quot;/&gt;
+  &lt;path d=&quot;M195,127.96 C202,127.4 209,129 217,132 C209,135 202,136.6 195,136.04 Z&quot;
+        fill=&quot;var(--bg)&quot; stroke=&quot;none&quot;/&gt;
+  &lt;path d=&quot;M195,127.96 C202,127.4 209,129 217,132&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot;
+        stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M195,136.04 C202,136.6 209,135 217,132&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot;
+        stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M136,146 L136,198&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.75&quot;/&gt;
+
+  &lt;rect x=&quot;226&quot; y=&quot;174&quot; width=&quot;74&quot; height=&quot;7&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+        stroke-width=&quot;1.6&quot;/&gt;
+  &lt;rect x=&quot;226&quot; y=&quot;204&quot; width=&quot;74&quot; height=&quot;7&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+        stroke-width=&quot;1.6&quot;/&gt;
+  &lt;rect x=&quot;230&quot; y=&quot;181&quot; width=&quot;6&quot; height=&quot;23&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+        stroke-width=&quot;1.6&quot;/&gt;
+  &lt;rect x=&quot;290&quot; y=&quot;181&quot; width=&quot;6&quot; height=&quot;23&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+        stroke-width=&quot;1.6&quot;/&gt;
+  &lt;path d=&quot;M248,36 L248,189 A15,15 0 0 0 278,189 L278,36&quot; fill=&quot;var(--glass-fill)&quot;
+        stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M248,58 L248,189 A15,15 0 0 0 278,189 L278,58 Z&quot; fill=&quot;var(--water)&quot;
+        opacity=&quot;0.75&quot;/&gt;
+  &lt;ellipse cx=&quot;263&quot; cy=&quot;58&quot; rx=&quot;15&quot; ry=&quot;1.85&quot; fill=&quot;var(--water)&quot;/&gt;
+  &lt;path d=&quot;M263,181 L263,72&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;butt&quot;/&gt;
+  &lt;path d=&quot;M263,181 L263,72&quot; stroke=&quot;var(--good)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;butt&quot;/&gt;
+  &lt;g fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;&gt;
+    &lt;path d=&quot;M261.8,84 C257,80 254,79 251,80 C255,83 258,85 261.8,86 Z&quot;/&gt;
+    &lt;path d=&quot;M264.2,84 C269,80 272,79 275,80 C271,83 268,85 264.2,86 Z&quot;/&gt;
+    &lt;path d=&quot;M261.8,104 C257,100 254,99 251,100 C255,103 258,105 261.8,106 Z&quot;/&gt;
+    &lt;path d=&quot;M264.2,104 C269,100 272,99 275,100 C271,103 268,105 264.2,106 Z&quot;/&gt;
+    &lt;path d=&quot;M261.8,124 C257,120 254,119 251,120 C255,123 258,125 261.8,126 Z&quot;/&gt;
+    &lt;path d=&quot;M264.2,124 C269,120 272,119 275,120 C271,123 268,125 264.2,126 Z&quot;/&gt;
+    &lt;path d=&quot;M261.8,144 C257,140 254,139 251,140 C255,143 258,145 261.8,146 Z&quot;/&gt;
+    &lt;path d=&quot;M264.2,144 C269,140 272,139 275,140 C271,143 268,145 264.2,146 Z&quot;/&gt;
+  &lt;/g&gt;
+  &lt;path d=&quot;M258,179 L268,183&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;butt&quot;/&gt;
+  &lt;path d=&quot;M258,179 L268,183&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;butt&quot;/&gt;
+  &lt;g id=&quot;bubbles&quot;&gt;&lt;/g&gt;
+  &lt;ellipse cx=&quot;263&quot; cy=&quot;36&quot; rx=&quot;15&quot; ry=&quot;1.85&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+           stroke-width=&quot;2.5&quot;/&gt;
+&lt;/svg&gt;
+
+      &lt;div class=&quot;readouts&quot;&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Lamp setting&lt;/span&gt;&lt;b id=&quot;roS&quot;&gt;1&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Run&lt;/span&gt;&lt;b&gt;&lt;span id=&quot;roR&quot;&gt;0&lt;/span&gt; of 3&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Bubbles&lt;/span&gt;&lt;b id=&quot;roB&quot;&gt;0&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Time&lt;/span&gt;&lt;b&gt;&lt;span id=&quot;roT&quot;&gt;0&lt;/span&gt; s&lt;/b&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;results&quot;&gt;
+      &lt;table&gt;
+        &lt;caption&gt;Bubbles counted in one minute, at each lamp setting.&lt;/caption&gt;
+        &lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Setting&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Run 1&lt;/th&gt;
+          &lt;th scope=&quot;col&quot;&gt;Run 2&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Run 3&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+        &lt;tbody id=&quot;tbody&quot;&gt;&lt;tr id=&quot;row1&quot;&gt;&lt;th scope=&quot;row&quot;&gt;1&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;c1_0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c1_1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c1_2&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;row2&quot;&gt;&lt;th scope=&quot;row&quot;&gt;2&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;c2_0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c2_1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c2_2&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;row3&quot;&gt;&lt;th scope=&quot;row&quot;&gt;3&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;c3_0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c3_1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c3_2&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;row4&quot;&gt;&lt;th scope=&quot;row&quot;&gt;4&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;c4_0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c4_1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c4_2&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;row5&quot;&gt;&lt;th scope=&quot;row&quot;&gt;5&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;c5_0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c5_1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c5_2&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;row6&quot;&gt;&lt;th scope=&quot;row&quot;&gt;6&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;c6_0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c6_1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;c6_2&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;Independent variable &amp;mdash; what we change&lt;/legend&gt;
+    &lt;p class=&quot;hint&quot;&gt;The brightness of the lamp, set on its own dial from 1 to 6.&lt;/p&gt;
+    &lt;div class=&quot;picks&quot; id=&quot;picks&quot; role=&quot;group&quot; aria-label=&quot;Lamp setting&quot;&gt;&lt;button type=&quot;button&quot; data-s=&quot;1&quot; aria-pressed=&quot;true&quot;&gt;1&lt;span class=&quot;done&quot; data-done=&quot;1&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; data-s=&quot;2&quot; aria-pressed=&quot;false&quot;&gt;2&lt;span class=&quot;done&quot; data-done=&quot;2&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; data-s=&quot;3&quot; aria-pressed=&quot;false&quot;&gt;3&lt;span class=&quot;done&quot; data-done=&quot;3&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; data-s=&quot;4&quot; aria-pressed=&quot;false&quot;&gt;4&lt;span class=&quot;done&quot; data-done=&quot;4&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; data-s=&quot;5&quot; aria-pressed=&quot;false&quot;&gt;5&lt;span class=&quot;done&quot; data-done=&quot;5&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; data-s=&quot;6&quot; aria-pressed=&quot;false&quot;&gt;6&lt;span class=&quot;done&quot; data-done=&quot;6&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;
+  &lt;/fieldset&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;Control variables &amp;mdash; what we keep the same&lt;/legend&gt;
+    &lt;p class=&quot;hint&quot;&gt;The design sets these once and holds them there. The beaker of water between
+      the lamp and the tube takes the heat out of the light, so a brighter setting does not also
+      warm the water.&lt;/p&gt;
+    &lt;div class=&quot;fixedgrid&quot;&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Piece of pondweed&lt;/span&gt;&lt;b&gt;the same one throughout&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Distance from lamp to tube&lt;/span&gt;&lt;b&gt;20 cm&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Water in the tube&lt;/span&gt;&lt;b&gt;15 cm&amp;sup3;&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Counting time&lt;/span&gt;&lt;b&gt;60 s&lt;/b&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/fieldset&gt;
+
+  &lt;div class=&quot;actions&quot;&gt;
+    &lt;button id=&quot;run&quot; class=&quot;primary&quot; type=&quot;button&quot;&gt;Collect the three runs at setting 1&lt;/button&gt;
+    &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start the whole experiment again&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Pick a setting, then collect.&lt;/p&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_photosynthesis-collect&quot;;
+  var DATA = {&quot;1&quot;: [5, 7, 6], &quot;2&quot;: [12, 11, 13], &quot;3&quot;: [17, 19, 34], &quot;4&quot;: [23, 25, 24], &quot;5&quot;: [30, 29, 31], &quot;6&quot;: [31, 29, 30]};
+  var setting = 1, running = false;
+  var done = {};
+
+  var picks = document.getElementById(&quot;picks&quot;), msg = document.getElementById(&quot;msg&quot;);
+  var run = document.getElementById(&quot;run&quot;), bubbles = document.getElementById(&quot;bubbles&quot;);
+  var beam = document.getElementById(&quot;beam&quot;);
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? &quot;msg &quot; + kind : &quot;msg&quot;; }
+
+  function paintPicks() {
+    Array.prototype.forEach.call(picks.children, function (b) {
+      var s = +b.dataset.s;
+      b.setAttribute(&quot;aria-pressed&quot;, s === setting ? &quot;true&quot; : &quot;false&quot;);
+      b.disabled = running || !!done[s];
+      b.querySelector(&quot;.done&quot;).textContent = done[s] ? &quot;done&quot; : &quot;&quot;;
+    });
+    document.getElementById(&quot;roS&quot;).textContent = setting;
+    // A brighter setting is a brighter beam, so the apparatus shows what the dial says.
+    beam.setAttribute(&quot;opacity&quot;, (0.12 + 0.06 * setting).toFixed(2));
+    run.textContent = done[setting]
+      ? &quot;Setting &quot; + setting + &quot; is already collected&quot;
+      : &quot;Collect the three runs at setting &quot; + setting;
+    run.disabled = running || !!done[setting];
+    Array.prototype.forEach.call(document.querySelectorAll(&quot;#tbody tr&quot;), function (tr) {
+      tr.classList.toggle(&quot;active&quot;, tr.id === &quot;row&quot; + setting);
+    });
+  }
+
+  picks.addEventListener(&quot;click&quot;, function (e) {
+    var b = e.target.closest(&quot;button[data-s]&quot;);
+    if (!b || running || b.disabled) return;
+    setting = +b.dataset.s;
+    paintPicks();
+    reportHeight();
+  });
+
+  // setInterval on the wall clock, never requestAnimationFrame: a frame callback is throttled
+  // to a stop in a background tab, and the run would never finish.
+  function oneRun(n, counts, idx, after) {
+    running = true; paintPicks();
+    var target = counts[idx], t0 = Date.now(), shown = 0;
+    document.getElementById(&quot;roR&quot;).textContent = idx + 1;
+    var timer = setInterval(function () {
+      var p = Math.min(1, (Date.now() - t0) / 2600);
+      document.getElementById(&quot;roT&quot;).textContent = Math.round(p * 60);
+      var want = Math.round(p * target);
+      while (shown &lt; want) { shown++; blow(); }
+      document.getElementById(&quot;roB&quot;).textContent = shown;
+      if (p &gt;= 1) {
+        clearInterval(timer);
+        var cell = document.getElementById(&quot;c&quot; + n + &quot;_&quot; + idx);
+        cell.textContent = target; cell.classList.remove(&quot;empty&quot;);
+        after();
+      }
+    }, 40);
+  }
+
+  function blow() {
+    var c = document.createElementNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;circle&quot;);
+    c.setAttribute(&quot;cx&quot;, 263 + (Math.random() * 10 - 5));
+    c.setAttribute(&quot;cy&quot;, 177);
+    c.setAttribute(&quot;r&quot;, 2 + Math.random() * 1.6);
+    c.setAttribute(&quot;fill&quot;, &quot;var(--bubble)&quot;);
+    c.setAttribute(&quot;stroke&quot;, &quot;var(--glass)&quot;);
+    c.setAttribute(&quot;stroke-width&quot;, &quot;0.7&quot;);
+    bubbles.appendChild(c);
+    var y = 172, t = setInterval(function () {
+      y -= 3.2;
+      c.setAttribute(&quot;cy&quot;, y);
+      if (y &lt; 62) { clearInterval(t); if (c.parentNode) c.parentNode.removeChild(c); }
+    }, 30);
+  }
+
+  run.addEventListener(&quot;click&quot;, function () {
+    if (running || done[setting]) return;
+    var counts = DATA[setting];
+    say(&quot;Counting. Three runs at setting &quot; + setting + &quot;.&quot;);
+    oneRun(setting, counts, 0, function () {
+      oneRun(setting, counts, 1, function () {
+        oneRun(setting, counts, 2, function () {
+          done[setting] = true; running = false;
+          var left = 6 - Object.keys(done).length;
+          say(left ? &quot;Setting &quot; + setting + &quot; done. &quot; + left +
+                     (left === 1 ? &quot; setting left.&quot; : &quot; settings left.&quot;)
+                   : &quot;All six settings collected. The means are the next stage&#x27;s work.&quot;,
+              left ? null : &quot;good&quot;);
+          var next = [1,2,3,4,5,6].filter(function (s) { return !done[s]; })[0];
+          if (next) setting = next;
+          paintPicks(); reportHeight();
+        });
+      });
+    });
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    if (running) return;
+    done = {}; setting = 1;
+    Array.prototype.forEach.call(document.querySelectorAll(&quot;#tbody td&quot;), function (td) {
+      td.textContent = &quot;\u2014&quot;; td.classList.add(&quot;empty&quot;);
+    });
+    document.getElementById(&quot;roR&quot;).textContent = &quot;0&quot;;
+    document.getElementById(&quot;roB&quot;).textContent = &quot;0&quot;;
+    document.getElementById(&quot;roT&quot;).textContent = &quot;0&quot;;
+    say(&quot;Pick a setting, then collect.&quot;);
+    paintPicks(); reportHeight();
+  });
+
+  paintPicks();
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1000" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="skillvideo"><div class="shead"><span class="num">Stage 4</span><span class="kind">Video &middot; 76 seconds</span></div><h2>Watch how to handle an odd reading</h2><p class="blurb">What makes a reading anomalous, why it is left out of the mean, and why it stays in the table.</p><div class="media"><video controls preload="metadata" playsinline src="videos/photosynthesis-skill.mp4"></video></div></section>
+<section class="stage" id="skill"><div class="shead"><span class="num">Stage 5</span><span class="kind">Simulation &middot; Find it, drop it, take the mean</span></div><h2>Spot the anomalous result</h2><p class="blurb">One of your eighteen counts does not fit its own repeats. Find it, and work out the means without it.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Anomalous results and the mean&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step h2{font-size:12.5px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--card);font-weight:650}
+th[scope=row]{text-align:left}
+td.cell{cursor:pointer}
+td.cell:hover{background:var(--accent-soft)}
+td.cell:focus{outline:2px solid var(--accent);outline-offset:-2px}
+td.flagged{background:var(--warn-bg);color:var(--warn);font-weight:700;
+  box-shadow:inset 0 0 0 2px var(--warn-line)}
+td.mean{font-weight:650}
+td.dim{color:var(--muted)}
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 200px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;
+  color:var(--muted)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:88px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:22px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.final{margin-top:12px;font-size:15px;background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:9px;padding:11px 13px}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Anomalous results and the mean&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Every light intensity was counted three times. One of those counts does not
+belong with its own repeats.&lt;/p&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s1&quot;&gt;
+&lt;h2&gt;Step 1 &amp;mdash; find the result that does not fit&lt;/h2&gt;
+&lt;p class=&quot;ask&quot;&gt;Look along each row. Click the one count that does not sit with the other two in
+its row.&lt;/p&gt;
+&lt;table&gt;&lt;caption&gt;Bubbles counted in one minute, three counts at each light intensity.&lt;/caption&gt;
+&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Light intensity&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Count 1&lt;/th&gt;
+&lt;th scope=&quot;col&quot;&gt;Count 2&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Count 3&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Mean&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+&lt;tbody id=&quot;tb&quot;&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;1&lt;/th&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;1&quot; data-v=&quot;5&quot; data-k=&quot;0&quot;&gt;5&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;1&quot; data-v=&quot;7&quot; data-k=&quot;1&quot;&gt;7&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;1&quot; data-v=&quot;6&quot; data-k=&quot;2&quot;&gt;6&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;2&lt;/th&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;2&quot; data-v=&quot;12&quot; data-k=&quot;0&quot;&gt;12&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;2&quot; data-v=&quot;11&quot; data-k=&quot;1&quot;&gt;11&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;2&quot; data-v=&quot;13&quot; data-k=&quot;2&quot;&gt;13&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m2&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;3&lt;/th&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;3&quot; data-v=&quot;17&quot; data-k=&quot;0&quot;&gt;17&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;3&quot; data-v=&quot;19&quot; data-k=&quot;1&quot;&gt;19&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;3&quot; data-v=&quot;34&quot; data-k=&quot;2&quot;&gt;34&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m3&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;4&lt;/th&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;4&quot; data-v=&quot;23&quot; data-k=&quot;0&quot;&gt;23&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;4&quot; data-v=&quot;25&quot; data-k=&quot;1&quot;&gt;25&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;4&quot; data-v=&quot;24&quot; data-k=&quot;2&quot;&gt;24&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m4&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;5&lt;/th&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;5&quot; data-v=&quot;30&quot; data-k=&quot;0&quot;&gt;30&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;5&quot; data-v=&quot;29&quot; data-k=&quot;1&quot;&gt;29&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;5&quot; data-v=&quot;31&quot; data-k=&quot;2&quot;&gt;31&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m5&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;6&lt;/th&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;6&quot; data-v=&quot;31&quot; data-k=&quot;0&quot;&gt;31&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;6&quot; data-v=&quot;29&quot; data-k=&quot;1&quot;&gt;29&lt;/td&gt;&lt;td class=&quot;cell&quot; tabindex=&quot;0&quot; data-i=&quot;6&quot; data-v=&quot;30&quot; data-k=&quot;2&quot;&gt;30&lt;/td&gt;&lt;td class=&quot;dim&quot; id=&quot;m6&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s2&quot; hidden&gt;
+&lt;h2&gt;Step 2 &amp;mdash; take the mean without it&lt;/h2&gt;
+&lt;p class=&quot;ask&quot;&gt;At intensity 3 the two counts that agree are 17 and
+19. What is their mean?&lt;/p&gt;
+&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-mean&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Mean at intensity 3&lt;/span&gt;&lt;span class=&quot;work&quot; id=&quot;work-mean&quot;&gt;(17 + 19) &amp;divide; 2&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-mean&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Mean at intensity 3&quot;&gt;&lt;span class=&quot;unit&quot;&gt;bubbles&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s3&quot; hidden&gt;
+&lt;h2&gt;Step 3 &amp;mdash; what you write down&lt;/h2&gt;
+&lt;div class=&quot;choices&quot; id=&quot;c3&quot;&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot;&gt;Keep 34 in the table, mark it as anomalous,
+and say why it was left out of the mean.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Erase 34 from the table, because a wrong
+reading should not be in the record.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Change 34 to a number that fits the row, so
+the results look consistent.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Keep 34 and include it in the mean, because
+every reading counts equally.&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Start by finding the odd count.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;skill-photosynthesis-anomaly&quot;;
+  var ROWS = [[1, [5, 7, 6]], [2, [12, 11, 13]], [3, [17, 19, 34]], [4, [23, 25, 24]], [5, [30, 29, 31]], [6, [31, 29, 30]]], AI = 3, AV = 34, WANT = 18.0, KEEP = [17, 19];
+  var msg = document.getElementById(&quot;msg&quot;), stage = 1;
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+  function meanOf(cs) { var s = 0; cs.forEach(function (c) { s += c; }); return s / cs.length; }
+
+  function fillMeans() {
+    ROWS.forEach(function (r) {
+      var i = r[0], cs = r[1];
+      var keep = (i === AI) ? cs.filter(function (c) { return c !== AV; }) : cs;
+      var cell = document.getElementById(&quot;m&quot; + i);
+      cell.textContent = String(Math.round(meanOf(keep) * 10) / 10);
+      cell.className = &quot;mean&quot;;
+    });
+  }
+
+  function pick(td) {
+    if (stage !== 1) return;
+    var i = +td.dataset.i, v = +td.dataset.v;
+    if (i === AI &amp;&amp; v === AV) {
+      td.classList.add(&quot;flagged&quot;);
+      stage = 2;
+      document.getElementById(&quot;s2&quot;).hidden = false;
+      say(&quot;That is the one. &quot; + AV + &quot; at intensity &quot; + AI + &quot; sits far outside its own repeats, &quot;
+          + &quot;so it is an anomalous result.&quot;, &quot;good&quot;);
+    } else {
+      say(v + &quot; fits the other two counts in its row closely enough. Look for a row where one &quot;
+          + &quot;count stands well clear of the other two.&quot;, &quot;warn&quot;);
+    }
+    reportHeight();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;#tb .cell&quot;), function (td) {
+    td.addEventListener(&quot;click&quot;, function () { pick(td); });
+    td.addEventListener(&quot;keydown&quot;, function (e) {
+      if (e.key === &quot;Enter&quot; || e.key === &quot; &quot;) { e.preventDefault(); pick(td); }
+    });
+  });
+
+  // DAN&#x27;S RULING, 1 OCTOBER: the student types the answer. This replaces a stepper, whose
+  // trouble was that it could be walked to the right number without ever working it out --
+  // nudge, look, nudge again. A box has to be filled in before anything happens.
+  //
+  // The cost of a box is that it can be given nonsense, so this one says what it wants rather
+  // than silently refusing, and the misses are graded: the first says only that it is wrong,
+  // the second names the operation, the third names the operation with the numbers in it. It
+  // never gives the answer, and there is no limit on tries.
+  function entry(host, opts) {
+    var input = host.querySelector(&quot;input&quot;), btn = host.querySelector(&quot;button&quot;);
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, &quot;&quot;).replace(/^[x\u00d7]/i, &quot;&quot;);
+      input.classList.remove(&quot;miss&quot;);
+      if (!raw) { opts.onbad(&quot;Type your answer in the box, then press Check.&quot;); return; }
+      // &quot;6 plants&quot; is a different mistake from &quot;abc&quot;, and saying so is the whole point of
+      // letting them type: a stepper could not tell you what you had got wrong.
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? &quot;Just the number, without the units \u2014 they are already printed beside the box.&quot;
+          : &quot;That is not a number. Type digits, and a decimal point if you need one.&quot;);
+        input.classList.add(&quot;miss&quot;);
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) &lt; 1e-9) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.fmt ? opts.fmt(v) : v;
+        opts.onright(v);
+      } else {
+        input.classList.add(&quot;miss&quot;);
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener(&quot;click&quot;, submit);
+    input.addEventListener(&quot;keydown&quot;, function (e) {
+      if (e.key === &quot;Enter&quot;) { e.preventDefault(); submit(); }
+    });
+    input.addEventListener(&quot;input&quot;, function () { input.classList.remove(&quot;miss&quot;); });
+    return { focus: function () { input.focus(); } };
+  }
+
+  entry(document.getElementById(&quot;spin-mean&quot;), {
+    want: WANT,
+    onbad: function (m) { say(m, &quot;warn&quot;); },
+    onright: function () {
+      document.getElementById(&quot;row-mean&quot;).classList.add(&quot;done&quot;);
+      fillMeans();
+      stage = 3;
+      document.getElementById(&quot;s3&quot;).hidden = false;
+      say(&quot;Right: &quot; + WANT + &quot; bubbles in one minute. Every other row keeps all three counts, &quot;
+          + &quot;because nothing in them stands out.&quot;, &quot;good&quot;);
+      reportHeight();
+    },
+    onwrong: function (v, n) {
+      say(n === 1 ? v + &quot; is not the mean of the two counts that agree.&quot;
+        : n === 2 ? &quot;Add the two counts that agree with each other, and divide by 2 — not &quot;
+                    + &quot;by 3, because the anomalous one takes no part in it.&quot;
+        : &quot;The two counts that agree are &quot; + KEEP[0] + &quot; and &quot; + KEEP[1] + &quot;. Add them and &quot;
+          + &quot;divide by 2.&quot;, &quot;warn&quot;);
+      reportHeight();
+    } });
+
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;#c3 .choice&quot;), function (b) {
+    b.addEventListener(&quot;click&quot;, function () {
+      if (stage !== 3) return;
+      stage = 4;
+      Array.prototype.forEach.call(document.querySelectorAll(&quot;#c3 .choice&quot;), function (o) {
+        o.disabled = true;
+        if (o.dataset.ok === &quot;1&quot;) o.classList.add(&quot;right&quot;);
+      });
+      var ok = b.dataset.ok === &quot;1&quot;;
+      if (!ok) b.classList.add(&quot;wrong&quot;);
+      say(ok ? &quot;Right. An anomalous result is reported, not hidden. You keep it, mark it, and &quot;
+             + &quot;say why it was left out, so anyone reading your work can check the judgement.&quot;
+             : &quot;Not this one. Changing or erasing a reading hides what happened. You keep it, &quot;
+             + &quot;mark it, and say why it was left out of the mean.&quot;, ok ? &quot;good&quot; : &quot;warn&quot;);
+      reportHeight();
+    });
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function(){ location.reload(); });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1100" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="conclusion"><div class="shead"><span class="num">Stage 6</span><span class="kind">Question &middot; A worked example, then one choice</span></div><h2>Choose the conclusion</h2><p class="blurb">What do the results show? A conclusion from another investigation, with what makes it good, and then three conclusions for your own results.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Choose the conclusion&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+  margin-top:12px}
+.panel[hidden]{display:none}
+.panel h2{font-size:12px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.setup{font-size:13.5px;color:var(--muted);margin:0 0 9px}
+.model{font-size:15px;line-height:1.62;margin:0;padding:11px 13px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:9px;counter-reset:st}
+.steps li{counter-increment:st;position:relative;font-size:14px;line-height:1.55;
+  background:var(--bg);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px 10px 44px}
+.steps li::before{content:counter(st);position:absolute;left:11px;top:10px;width:22px;
+  height:22px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
+  font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.steps b{display:block;color:var(--fg);font-weight:650;font-size:14.5px;margin-bottom:2px}
+.steps span{color:var(--muted)}
+.shape{font-size:13.5px;margin:11px 0 0;padding:9px 11px;border:1px solid var(--warn-line);
+  background:var(--warn-bg);color:var(--warn);border-radius:8px}
+.recap{font-size:14px;line-height:1.55;margin:0 0 11px;padding:10px 12px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.q{font-size:15px;font-weight:600;margin:0 0 10px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:11px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:14.5px;line-height:1.55;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.picked{border-color:var(--accent)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw{font-size:13.5px;line-height:1.5;margin:6px 0 0;padding:8px 11px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line)}
+.rw.good{border-color:var(--good-line);background:var(--good-bg)}
+.rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw b{font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Choose the conclusion&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;A conclusion says what the results show. It is not a summary of what you did.&lt;/p&gt;
+
+&lt;div class=&quot;panel&quot;&gt;
+&lt;h2&gt;How to write a conclusion&lt;/h2&gt;
+&lt;p class=&quot;setup&quot;&gt;Three steps, in this order. They are the same three whatever you
+  investigated.&lt;/p&gt;
+&lt;ol class=&quot;steps&quot;&gt;&lt;li&gt;&lt;b&gt;State the overall trend.&lt;/b&gt;&lt;span&gt;Say what happened to the thing you measured as the thing you changed went up. One sentence, in plain words, and covering the whole range rather than the start of it.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the data that evidences it.&lt;/b&gt;&lt;span&gt;Quote figures from your own results, usually one from each end of the range. A direction with no numbers behind it is an opinion, and a reader cannot check it.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Point out any exceptions.&lt;/b&gt;&lt;span&gt;Name any reading that does not follow the trend, say where it is, and say what it does instead. An exception left out quietly is the one thing a reader cannot forgive.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;p class=&quot;shape&quot;&gt;Now do those three things for your own results. Only one of the three below does all of them, and it has to fit every reading you took.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;panel&quot;&gt;
+&lt;h2&gt;Now your own results&lt;/h2&gt;
+&lt;p class=&quot;recap&quot;&gt;The lamp had six settings, numbered 1 to 6, each brighter than the one before. Your means were 6 bubbles in one minute at setting 1, then 12, 18, 24, 30 at setting 5, and 30 again at setting 6. One run at setting 3 gave 34 bubbles against 17 and 19 for the other two, and you left it out of the mean.&lt;/p&gt;
+&lt;p class=&quot;q&quot;&gt;Which of these is a conclusion, and one your own results support?&lt;/p&gt;
+&lt;div class=&quot;opts&quot; id=&quot;opts&quot;&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Pick one. You get one go at it, and
+then all three are explained.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;panel&quot; id=&quot;after&quot; hidden&gt;
+&lt;h2&gt;The three steps again&lt;/h2&gt;
+&lt;ol class=&quot;steps&quot; id=&quot;afterlist&quot;&gt;&lt;li&gt;&lt;b&gt;State the overall trend.&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the data that evidences it.&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Point out any exceptions.&lt;/b&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;conclusion-photosynthesis&quot;;
+  var OPTS = [{&quot;text&quot;: &quot;The rate rose steadily as the light went from setting 1 to setting 5, from a mean of 6 bubbles in one minute to 30. From setting 5 to setting 6 it stayed at 30, so light was holding the rate back up to setting 5 and above that something else was. The results do not show what that other thing is.&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;A conclusion, and your own means carry it. It says where the line levels off, which is what the graph was drawn to find, and stops where the evidence stops.&quot;}, {&quot;text&quot;: &quot;The rate rose steadily as the light went from setting 1 to setting 6, from a mean of 6 bubbles in one minute to 30. So light was holding the rate back the whole way, and turning the lamp up past setting 6 would push it above 30. The results do not show how far above 30 it would go.&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Your last two means are both 30, so the rate stopped rising between setting 5 and setting 6. Once the line has leveled off, light is no longer what holds the rate back, and more of it does not make the plant go any faster.&quot;}, {&quot;text&quot;: &quot;The highest reading in the whole investigation was the 34 bubbles in one minute at setting 3, so the rate was at its fastest at setting 3. Every other setting gave a lower mean than that, the lowest being the 6 bubbles at setting 1. The results do not show why setting 3 came out fastest.&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;That 34 is the anomalous reading you spotted and left out. The other two runs at setting 3 gave 17 and 19, which is why the mean there is 18. A conclusion cannot rest on the one reading its own repeats disagree with.&quot;}];
+  var LETTERS = &quot;ABC&quot;;
+  var box = document.getElementById(&quot;opts&quot;), msg = document.getElementById(&quot;msg&quot;);
+  var done = false;
+
+  // Fisher-Yates, so the accurate conclusion is in no fixed position.
+  var order = OPTS.map(function (o, i) { return i; });
+  for (var i = order.length - 1; i &gt; 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1)), t = order[i];
+    order[i] = order[j]; order[j] = t;
+  }
+
+  order.forEach(function (idx, pos) {
+    var o = OPTS[idx];
+    var b = document.createElement(&quot;button&quot;);
+    b.type = &quot;button&quot;;
+    b.className = &quot;opt&quot;;
+    b.dataset.i = idx;
+    b.innerHTML = &#x27;&lt;span class=&quot;ltr&quot;&gt;&#x27; + LETTERS[pos] + &#x27;&lt;/span&gt;&lt;span&gt;&#x27; + o.text + &#x27;&lt;/span&gt;&#x27;;
+    box.appendChild(b);
+    var r = document.createElement(&quot;p&quot;);
+    r.className = &quot;rw&quot;;
+    r.id = &quot;rw&quot; + idx;
+    r.hidden = true;
+    box.appendChild(r);
+  });
+
+  box.addEventListener(&quot;click&quot;, function (e) {
+    var b = e.target.closest(&quot;.opt&quot;);
+    if (!b || done) return;
+    done = true;
+    var chosen = +b.dataset.i;
+
+    OPTS.forEach(function (o, idx) {
+      var btn = box.querySelector(&#x27;.opt[data-i=&quot;&#x27; + idx + &#x27;&quot;]&#x27;);
+      btn.disabled = true;
+      btn.classList.add(o.ok ? &quot;right&quot; : &quot;wrong&quot;);
+      var r = document.getElementById(&quot;rw&quot; + idx);
+      r.hidden = false;
+      r.className = &quot;rw &quot; + (o.ok ? &quot;good&quot; : &quot;bad&quot;);
+      var head = o.ok ? &quot;The accurate one.&quot; : &quot;Not this one.&quot;;
+      if (idx === chosen) head = o.ok ? &quot;You picked this one, and it is the accurate one.&quot;
+                                      : &quot;You picked this one.&quot;;
+      r.innerHTML = &quot;&lt;b&gt;&quot; + head + &quot;&lt;/b&gt; &quot; + o.why;
+    });
+
+    var right = OPTS[chosen].ok;
+    msg.textContent = right
+      ? &quot;That is the one. Read the other two as well \u2014 each is wrong in a way that is &quot;
+        + &quot;easy to fall into.&quot;
+      : &quot;Not that one. The accurate conclusion is marked in green, and every option now says &quot;
+        + &quot;what is right or wrong with it.&quot;;
+    msg.className = &quot;msg &quot; + (right ? &quot;good&quot; : &quot;warn&quot;);
+    document.getElementById(&quot;after&quot;).hidden = false;
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1150" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="questions"><div class="shead"><span class="num">Stage 7</span><span class="kind">Questions &middot; Eight items</span></div><h2>Answer eight questions</h2><p class="blurb">On carrying the practical out, and on what its results show.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Pondweed and light intensity — questions&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.q h2{font-size:12px;margin:0 0 6px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.q .stem{margin:0 0 10px;font-weight:500}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;text-align:left;padding:9px 11px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.fb{margin-top:8px;font-size:13.5px;padding:8px 10px;border-radius:8px;display:none}
+.fb.on{display:block;background:var(--bg);border:1px solid var(--line)}
+.score{margin-top:14px;font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;&lt;h1&gt;Pondweed and light intensity&lt;/h1&gt;&lt;p class=&quot;sub&quot;&gt;Eight questions on the practical and on what its results show.&lt;/p&gt;&lt;div class=&quot;q&quot; data-qn=&quot;1&quot;&gt;&lt;h2&gt;Question 1 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;In the pondweed practical a lamp shines on a test tube holding pondweed, and a beaker of water stands between the lamp and the tube. What is the beaker of water there for?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;It takes the heat out of the light, so a brighter setting does not also warm the water around the pondweed.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;It spreads the light out evenly, so the whole piece of pondweed is lit rather than one end of it.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;It gives the pondweed a supply of water, which it needs in order to photosynthesize.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb1&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;2&quot;&gt;&lt;h2&gt;Question 2 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A student counts the bubbles from a piece of pondweed for one minute at each of six lamp settings. Why is the counting time the same every time?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Because a count over a longer time would be larger for that reason alone, and the six settings could not be compared.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Because one minute is long enough for the pondweed to settle down after the lamp has been moved to its new setting.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Because a minute is the shortest stretch of time over which a rate of reaction can be measured at all.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb2&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;3&quot;&gt;&lt;h2&gt;Question 3 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;At one lamp setting a student&#x27;s three counts are 17, 19 and 34 bubbles. What should be done with the 34?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Write it down and circle it, leave it out of the mean, and say why it was left out.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Leave it out of the mean and cross it off the table, since it is not being used.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Keep all three in the mean, because throwing a reading away would bias the result.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb3&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;4&quot;&gt;&lt;h2&gt;Question 4 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;In the pondweed practical the bubbles are counted three times at every lamp setting rather than once. What does running three counts give you?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;A reading that does not fit the other two can be spotted, and the mean of the ones that agree is closer to the true value.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Three counts take three times as long, which gives the pondweed the time it needs to settle to a steady rate at that setting.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Three counts make the result hold for pondweed in general rather than for this one piece of it on this one afternoon.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb4&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;5&quot;&gt;&lt;h2&gt;Question 5 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A student&#x27;s means rise steadily from setting 1 to setting 5 and then stay the same from setting 5 to setting 6. What does the flat part show?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Above setting 5 something other than the light is holding the rate back.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Above setting 5 the pondweed has taken in as much light as it can hold.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Above setting 5 the lamp is no longer getting brighter, whatever the dial says.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb5&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;6&quot;&gt;&lt;h2&gt;Question 6 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;The pondweed in this practical is put in the tube with its cut end upward. Why does the cut end go at the top?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;The oxygen comes out of the cut end, so it has to be where the bubbles can be seen and counted.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;The cut end is where the pondweed takes in water, so it has to be under the surface.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;The leaves work better when they are the right way up, and that puts the cut end at the top.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb6&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;7&quot;&gt;&lt;h2&gt;Question 7 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;In the pondweed practical the bubbles that are counted come off the cut end of the stem. What gas are they mostly?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Oxygen, which is made in photosynthesis.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Carbon dioxide, which is used up in photosynthesis.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Water vapor, which is given off through the leaves.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb7&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;8&quot;&gt;&lt;h2&gt;Question 8 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A student runs the pondweed practical but moves the lamp closer for the brighter settings, to get more light on the tube. What is wrong with doing that?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Two things have changed at once, so a faster rate cannot be put down to the setting on the dial.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;The lamp would be too close for the beaker of water to fit between it and the tube.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Moving the lamp between counts would disturb the pondweed and stop it giving off bubbles.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb8&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;p class=&quot;score&quot; id=&quot;score&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_photosynthesis-questions&quot;;
+  var EXPL = {&quot;1&quot;: &quot;A lamp gives off heat as well as light. Temperature changes the rate on its own, so without the beaker the brighter settings would be warmer settings too, and nobody could say which of the two had changed the rate.&quot;, &quot;2&quot;: &quot;The number being compared is bubbles per minute. If one setting ran for a minute and another for two, the second would give more bubbles whatever the light was doing.&quot;, &quot;3&quot;: &quot;34 does not fit its own repeats, so it is anomalous and takes no part in the mean. It still belongs in the table: a reader can see it was found, see it was left out, and see the reason given.&quot;, &quot;4&quot;: &quot;One count on its own cannot be checked against anything. Three counts show whether the readings agree, and a reading that disagrees with both of the others can then be found and left out.&quot;, &quot;5&quot;: &quot;While the rate climbs with the light, light is what is holding it back. Once the rate stops climbing, more light makes no difference, so something else is now the shortage. This experiment cannot say what, because only the light was changed.&quot;, &quot;6&quot;: &quot;The gas made in the leaves travels up the stem and leaves through the cut. A cut end buried at the bottom of the tube would release the bubbles where they are hardest to count.&quot;, &quot;7&quot;: &quot;Photosynthesis takes in carbon dioxide and water and gives out oxygen. Under water the oxygen cannot escape into the air from the leaf, so it collects and comes out of the cut stem as bubbles.&quot;, &quot;8&quot;: &quot;Distance changes how much light reaches the tube just as the dial does. With both changing together there is no way to say how much of the rise came from which, and the investigation answers nothing.&quot;}, ERR = {&quot;1&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;reads the beaker as a lens rather than as a heat shield&quot;, &quot;c&quot;: &quot;the pondweed is already standing in water inside the tube&quot;}, &quot;2&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;settling time is a different thing from the counting time&quot;, &quot;c&quot;: &quot;a rate can be measured over any length of time&quot;}, &quot;3&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;the record is not the same thing as the mean&quot;, &quot;c&quot;: &quot;a reading its own repeats disagree with is not evidence&quot;}, &quot;4&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;the repeats are about the reading, not about the plant&quot;, &quot;c&quot;: &quot;one piece of pondweed is one piece however often it is counted&quot;}, &quot;5&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;light is used as it arrives, not stored up to a limit&quot;, &quot;c&quot;: &quot;the dial is the one thing known to have changed&quot;}, &quot;6&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;the cut end is an opening, not a root&quot;, &quot;c&quot;: &quot;the leaves photosynthesize whichever way up the sprig sits&quot;}, &quot;7&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;carbon dioxide goes in, so it cannot be the gas coming out&quot;, &quot;c&quot;: &quot;water vapor leaves a land plant&#x27;s leaves in air, not a pond plant&#x27;s stem in water&quot;}, &quot;8&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;the beaker can be moved along with the lamp&quot;, &quot;c&quot;: &quot;the pondweed is in a tube and is not touched&quot;}}, TOTAL = 8;
+  var done = {}, right = 0;
+  var score = document.getElementById(&quot;score&quot;);
+
+  // The JSON keeps every key at option a, because TimeBack randomises. This page does not, so
+  // without a shuffle here the key sits at A in all eight and is spotted by question three.
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;.opts&quot;), function (box) {
+    var kids = Array.prototype.slice.call(box.children);
+    for (var i = kids.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = kids[i];
+      kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k, n) {
+      box.appendChild(k);
+      k.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCD&quot;[n];
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;.opt&quot;), function (b) {
+    b.addEventListener(&quot;click&quot;, function () {
+      var qn = b.dataset.q;
+      if (done[qn]) return;
+      done[qn] = true;
+      var ok = b.dataset.ok === &quot;1&quot;;
+      if (ok) right++;
+      var q = document.querySelector(&#x27;.q[data-qn=&quot;&#x27; + qn + &#x27;&quot;]&#x27;);
+      Array.prototype.forEach.call(q.querySelectorAll(&quot;.opt&quot;), function (o) {
+        o.disabled = true;
+        if (o.dataset.ok === &quot;1&quot;) o.classList.add(&quot;right&quot;);
+      });
+      if (!ok) b.classList.add(&quot;wrong&quot;);
+      var fb = document.getElementById(&quot;fb&quot; + qn);
+      fb.className = &quot;fb on&quot;;
+      // the error paths are whole clauses, not verb phrases, so they lead the feedback
+      var why = ERR[qn][b.dataset.o];
+      fb.innerHTML = (ok ? &quot;&quot; : &quot;&lt;b&gt;&quot; + why.charAt(0).toUpperCase() + why.slice(1)
+                                + &quot;.&lt;/b&gt; &quot;) + EXPL[qn];
+      var n = Object.keys(done).length;
+      score.textContent = n + &quot; of &quot; + TOTAL + &quot; answered, &quot; + right + &quot; right.&quot;;
+      reportHeight();
+    });
+  });
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="3600" loading="lazy" title="Simulation"></iframe></div></section>
+<footer><p><strong>Nothing here is marked behind the scenes.</strong> TimeBack cannot see inside a simulation, so the simulations are the practical and what a student is assessed on is the eight questions at the end, together with the checkpoints in the lessons this practical belongs to.</p><p>The readings are the same for every student, because a marked question needs one right answer. The analysis skill this practical teaches is <strong>spotting an anomalous result</strong>, and no two of the six practicals teach the same one.</p></footer></div>

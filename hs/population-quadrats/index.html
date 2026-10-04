@@ -1,0 +1,1271 @@
+<title>HS Biology: Estimating a population</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#fbfaf8; --surface:#ffffff; --ink:#1b1e22; --muted:#6f6a63;
+  --line:#e7e2da; --rule:#d8d2c8; --accent:#0e6f66; --accent-soft:#e2efec;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+    --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+  --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1020px;margin:0 auto;padding-inline:20px;padding-block:44px 64px}
+
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6.4vw,44px);line-height:1.12;
+  letter-spacing:-.015em;margin:0 0 14px;text-wrap:balance}
+.lead{font-family:var(--serif);font-size:clamp(17px,2.4vw,20px);line-height:1.5;color:var(--ink);
+  margin:0 0 28px;max-width:56ch}
+.lead em{font-style:italic;color:var(--accent);font-weight:600}
+
+.design{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 40px}
+.design div{flex:1 1 205px;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:14px 16px}
+.design dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 5px}
+.design dd{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
+
+nav.jump{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin:0 0 44px;
+  scrollbar-width:thin}
+nav.jump a{flex:0 0 auto;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;background:var(--surface);white-space:nowrap}
+nav.jump a:hover,nav.jump a:focus-visible{color:var(--accent);border-color:var(--accent)}
+
+section.stage{border-top:1px solid var(--rule);padding-top:26px;margin-top:44px;
+  scroll-margin-top:24px}
+section.stage:first-of-type{margin-top:0}
+.shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+  letter-spacing:.08em}
+.kind{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(21px,3.6vw,27px);line-height:1.2;
+  margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.blurb{color:var(--muted);font-size:15.5px;margin:0 0 20px}
+
+.media{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+video{width:100%;display:block;background:#0b0d10}
+iframe{width:100%;border:0;display:block;background:var(--surface)}
+
+footer{border-top:1px solid var(--rule);margin-top:52px;padding-top:22px;color:var(--muted);
+  font-size:14.5px}
+footer p{margin:0 0 10px;max-width:62ch}
+footer strong{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<style>.waiting{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--muted);font-size:14px}.waiting code{font-size:12.5px}</style>
+
+<script>
+// Registered before the frames are parsed: a srcdoc frame runs its script during parsing and
+// would otherwise post its height into a page that is not listening yet.
+(function () {
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "sim-height") return;
+    var frames = document.querySelectorAll("iframe");
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].contentWindow === e.source) {
+        frames[i].style.height = e.data.height + "px";
+        return;
+      }
+    }
+  });
+}());
+</script>
+<div class="wrap">
+<p class="eyebrow">Required practical &middot; High School Biology</p>
+<h1>Estimating a population</h1>
+<p class="lead">How many plants of one species are growing in a field too large to count? Seven stages, in the order a student works through them &mdash; <em>watch, plan, count, scale up, conclude, answer</em>.</p>
+<dl class="design"><div><dt>What we count</dt><dd>Plants of one species inside a quadrat of 0.25 m&sup2;</dd></div><div><dt>How many</dt><dd>Ten quadrats, at ten pairs of random numbers</dd></div><div><dt>What we work out</dt><dd>A mean per quadrat, scaled up to a field of 800 m&sup2;</dd></div></dl>
+<nav class="jump" aria-label="The seven stages"><a href="#method">1. Watch the method</a><a href="#plan">2. Plan the survey</a><a href="#collect">3. Collect the results</a><a href="#skillvideo">4. Watch how to scale a sample up</a><a href="#skill">5. Work out the estimate</a><a href="#conclusion">6. Choose the conclusion</a><a href="#questions">7. Answer eight questions</a></nav>
+<section class="stage" id="method"><div class="shead"><span class="num">Stage 1</span><span class="kind">Video &middot; 85 seconds</span></div><h2>Watch the method</h2><p class="blurb">What a quadrat is, what gets counted inside it, and why a pair of random numbers decides where it goes.</p><div class="media"><video controls preload="metadata" playsinline src="videos/population-method.mp4"></video></div></section>
+<section class="stage" id="plan"><div class="shead"><span class="num">Stage 2</span><span class="kind">Question &middot; Four decisions</span></div><h2>Plan the survey</h2><p class="blurb">Four things to settle before anyone walks into the field. One check, then all four are explained.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Plan the survey&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.dec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;
+  margin-top:12px}
+.dec h2{font-size:12px;margin:0 0 4px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.dec .q{font-size:15.5px;font-weight:600;margin:0 0 10px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:10px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:14.5px;line-height:1.5;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt[aria-pressed=&quot;true&quot;]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw{font-size:13.5px;line-height:1.5;margin:6px 0 0;padding:8px 11px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line)}
+.rw.good{border-color:var(--good-line);background:var(--good-bg)}
+.rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw b{font-weight:650}
+.score{margin-top:14px;font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+  &lt;h1&gt;Plan the survey&lt;/h1&gt;
+  &lt;p class=&quot;sub&quot;&gt;Four decisions to make before anyone walks into the field. One check, then all four are explained.&lt;/p&gt;
+  &lt;div class=&quot;brief&quot;&gt;&lt;p&gt;&lt;b&gt;The problem.&lt;/b&gt; The field holds far more plants of this species than anyone could count one at a time. So a sample is counted instead: a few small squares of known area, scaled up to the whole field.&lt;/p&gt;&lt;p&gt;That only works if the squares stand in fairly for the field. Every decision below is about whether they do.&lt;/p&gt;&lt;/div&gt;
+  &lt;div class=&quot;dec&quot; data-n=&quot;0&quot;&gt;&lt;h2&gt;Decision 1 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;Where does each quadrat go?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts0&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;1&quot;&gt;&lt;h2&gt;Decision 2 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;A pair of numbers lands the quadrat on bare ground. What now?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts1&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;2&quot;&gt;&lt;h2&gt;Decision 3 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;Which plants inside the frame get counted?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts2&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;3&quot;&gt;&lt;h2&gt;Decision 4 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;How many quadrats, and where?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts3&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;actions&quot;&gt;
+    &lt;button id=&quot;check&quot; class=&quot;primary&quot; type=&quot;button&quot;&gt;Check the plan&lt;/button&gt;
+    &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Make all four decisions, then
+    check.&lt;/p&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_population-plan&quot;;
+  var Q = [[{&quot;text&quot;: &quot;At the coordinates a pair of random numbers gives&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;The numbers choose, not the person holding the frame. That is the only way the squares stand in for the whole field rather than for the bits someone liked the look of.&quot;}, {&quot;text&quot;: &quot;Where the plants are growing well, so there is something to count&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Every square would then hold more than its share, and the estimate would come out far above the real number.&quot;}, {&quot;text&quot;: &quot;Spread out evenly along one edge of the field&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;One edge is one strip of ground. If it is damper or shadier than the rest, every square carries that, and nothing in the survey would show it.&quot;}], [{&quot;text&quot;: &quot;Count it, and write down zero&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;Bare ground is part of the field, and leaving it out would quietly raise every figure that follows. A zero is a reading like any other.&quot;}, {&quot;text&quot;: &quot;Move the frame to the nearest patch of plants&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;That is choosing where to count, which is the one thing the random numbers exist to stop.&quot;}, {&quot;text&quot;: &quot;Throw that pair out and draw another&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Discarding the empty squares keeps only the full ones, and the estimate climbs with every pair thrown away.&quot;}], [{&quot;text&quot;: &quot;One species, the same one in every quadrat&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;The question asks how many plants of one species the field holds, so one species is what is counted. Other plants inside the frame are left alone.&quot;}, {&quot;text&quot;: &quot;Every plant inside the frame&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;That gives a figure for all the plants together, which is not the number the investigation set out to find.&quot;}, {&quot;text&quot;: &quot;The plants of that species that are big enough to see easily&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;The small ones are plants too. Leaving them out would lower every count, and by an amount nobody could work out afterwards.&quot;}], [{&quot;text&quot;: &quot;Ten, at ten random pairs across the whole field&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;Ten readings spread over the whole field, so one odd square pulls the mean less and no one part of the field decides the answer.&quot;}, {&quot;text&quot;: &quot;Two, which is quicker and gives the same mean&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Two readings give a mean, but one unusual square moves it by half its own value. Ten readings move far less on one odd square.&quot;}, {&quot;text&quot;: &quot;Ten, all within a few steps of each other&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Ten squares in one corner describe that corner. The rest of the field is not in the sample at all.&quot;}]];
+  var LETTERS = &quot;ABC&quot;;
+  var picked = Q.map(function () { return null; });
+  var locked = false;
+  var msg = document.getElementById(&quot;msg&quot;), check = document.getElementById(&quot;check&quot;);
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? &quot;msg &quot; + kind : &quot;msg&quot;; }
+
+  function lay() {
+    Q.forEach(function (opts, n) {
+      var box = document.getElementById(&quot;opts&quot; + n);
+      box.innerHTML = &quot;&quot;;
+      var order = opts.map(function (_, i) { return i; });
+      for (var i = order.length - 1; i &gt; 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1)), t = order[i];
+        order[i] = order[j]; order[j] = t;
+      }
+      order.forEach(function (idx, pos) {
+        var b = document.createElement(&quot;button&quot;);
+        b.type = &quot;button&quot;; b.className = &quot;opt&quot;; b.dataset.n = n; b.dataset.i = idx;
+        b.setAttribute(&quot;aria-pressed&quot;, &quot;false&quot;);
+        b.innerHTML = &#x27;&lt;span class=&quot;ltr&quot;&gt;&#x27; + LETTERS[pos] + &#x27;&lt;/span&gt;&lt;span&gt;&#x27;
+                    + opts[idx].text + &#x27;&lt;/span&gt;&#x27;;
+        box.appendChild(b);
+        var r = document.createElement(&quot;p&quot;);
+        r.className = &quot;rw&quot;; r.id = &quot;rw&quot; + n + &quot;_&quot; + idx; r.hidden = true;
+        box.appendChild(r);
+      });
+    });
+  }
+  lay();
+
+  document.addEventListener(&quot;click&quot;, function (e) {
+    var b = e.target.closest(&quot;.opt&quot;);
+    if (!b || locked) return;
+    var n = +b.dataset.n;
+    Array.prototype.forEach.call(document.querySelectorAll(&#x27;.opt[data-n=&quot;&#x27; + n + &#x27;&quot;]&#x27;),
+      function (o) { o.setAttribute(&quot;aria-pressed&quot;, &quot;false&quot;); });
+    b.setAttribute(&quot;aria-pressed&quot;, &quot;true&quot;);
+    picked[n] = +b.dataset.i;
+    var done = picked.filter(function (p) { return p !== null; }).length;
+    say(done + &quot; of &quot; + Q.length + &quot; decided.&quot;);
+  });
+
+  check.addEventListener(&quot;click&quot;, function () {
+    if (locked) return;
+    if (picked.indexOf(null) !== -1) {
+      say(&quot;Every decision needs an answer before the plan can be checked.&quot;, &quot;warn&quot;);
+      return;
+    }
+    locked = true;
+    var right = 0;
+    Q.forEach(function (opts, n) {
+      opts.forEach(function (o, idx) {
+        var b = document.querySelector(&#x27;.opt[data-n=&quot;&#x27; + n + &#x27;&quot;][data-i=&quot;&#x27; + idx + &#x27;&quot;]&#x27;);
+        b.disabled = true;
+        b.classList.add(o.ok ? &quot;right&quot; : &quot;wrong&quot;);
+        var r = document.getElementById(&quot;rw&quot; + n + &quot;_&quot; + idx);
+        r.hidden = false;
+        r.className = &quot;rw &quot; + (o.ok ? &quot;good&quot; : &quot;bad&quot;);
+        var head = o.ok ? &quot;This is the one.&quot; : &quot;Not this one.&quot;;
+        if (idx === picked[n]) {
+          head = o.ok ? &quot;You chose this, and it is the one.&quot; : &quot;You chose this.&quot;;
+        }
+        r.innerHTML = &quot;&lt;b&gt;&quot; + head + &quot;&lt;/b&gt; &quot; + o.why;
+      });
+      if (opts[picked[n]].ok) right++;
+    });
+    say(right + &quot; of &quot; + Q.length + &quot; decisions right. Read the others as well \u2014 each &quot;
+        + &quot;wrong one is something people really do, and the reason it costs you is the point.&quot;,
+        right === Q.length ? &quot;good&quot; : null);
+    check.disabled = true;
+    reportHeight();
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    locked = false; picked = Q.map(function () { return null; });
+    check.disabled = false;
+    lay();
+    say(&quot;Make all four decisions, then check.&quot;);
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1500" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="collect"><div class="shead"><span class="num">Stage 3</span><span class="kind">Simulation &middot; Ten quadrats, ten random pairs</span></div><h2>Collect the results</h2><p class="blurb">Draw a pair of numbers, drop the frame where they point, and count what is inside it. Ten times.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Counting plants in quadrats&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,340px);gap:12px;
+  align-items:stretch;margin-bottom:2px}
+@media (max-width:700px){.bench{grid-template-columns:1fr}}
+.results{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;display:flex;flex-direction:column;justify-content:center}
+.stage{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stage svg{flex:0 0 auto;max-width:100%;height:auto}
+.readouts{flex:1 1 140px;min-width:138px;display:grid;gap:6px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+    border-bottom:1px dotted var(--line);padding-bottom:4px}
+.ro&gt;span{color:var(--muted);font-size:12px}
+.ro b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:650}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:12px 0 0;padding:10px 12px 12px}
+legend{font-size:12px;font-weight:650;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em;padding:0 5px}
+.hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+.picks{display:flex;gap:6px;flex-wrap:wrap}
+.picks button{flex:1 1 56px;padding:9px 4px;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg);border-radius:8px;font:inherit;font-variant-numeric:tabular-nums;
+  cursor:pointer}
+.picks button[aria-pressed=&quot;true&quot;]{background:var(--accent);color:var(--accent-fg);
+  border-color:var(--accent);font-weight:650}
+.picks button:disabled{opacity:.5;cursor:not-allowed}
+.picks button .done{display:block;font-size:10px;color:var(--muted);line-height:1.2}
+.picks button[aria-pressed=&quot;true&quot;] .done{color:var(--accent-fg);opacity:.85}
+.fixedgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.fixed{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed b{font-size:15px;font-weight:650;color:var(--fg);padding:5px 0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:8px}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+th[scope=&quot;row&quot;]{text-align:left}
+td.empty{color:var(--muted)}
+.entry{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.entry input{width:92px;padding:8px 10px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted)}
+.entry button{padding:8px 13px;border:1px solid var(--accent);border-radius:8px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+tr.active th[scope=&quot;row&quot;]{color:var(--accent);font-weight:700}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+  &lt;h1&gt;Counting plants in quadrats&lt;/h1&gt;
+  &lt;p class=&quot;sub&quot;&gt;Draw a pair of random numbers, drop the quadrat where they point, and count
+    every plant of the chosen species inside the frame. Ten times.&lt;/p&gt;
+
+  &lt;div class=&quot;bench&quot;&gt;
+    &lt;div class=&quot;stage&quot;&gt;
+&lt;svg viewBox=&quot;0 0 252 262&quot; width=&quot;244&quot; role=&quot;img&quot; aria-label=&quot;A field seen from above, divided
+     into a grid of 10 by 10 squares numbered along both edges. Quadrat frames appear on the
+     squares the random pairs pick out.&quot;&gt;
+  &lt;rect x=&quot;20&quot; y=&quot;24&quot; width=&quot;220&quot; height=&quot;220&quot; fill=&quot;var(--agar)&quot;/&gt;
+  &lt;g&gt;&lt;rect x=&quot;20&quot; y=&quot;24&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.20&quot;/&gt;&lt;rect x=&quot;20&quot; y=&quot;46&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.22&quot;/&gt;&lt;rect x=&quot;20&quot; y=&quot;68&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.30&quot;/&gt;&lt;rect x=&quot;20&quot; y=&quot;90&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.20&quot;/&gt;&lt;rect x=&quot;20&quot; y=&quot;112&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.21&quot;/&gt;&lt;rect x=&quot;20&quot; y=&quot;134&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.23&quot;/&gt;&lt;rect x=&quot;20&quot; y=&quot;156&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.14&quot;/&gt;&lt;rect x=&quot;20&quot; y=&quot;178&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.21&quot;/&gt;&lt;rect x=&quot;20&quot; y=&quot;200&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.24&quot;/&gt;&lt;rect x=&quot;20&quot; y=&quot;222&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.27&quot;/&gt;&lt;rect x=&quot;42&quot; y=&quot;24&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.12&quot;/&gt;&lt;rect x=&quot;42&quot; y=&quot;46&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.17&quot;/&gt;&lt;rect x=&quot;42&quot; y=&quot;68&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.12&quot;/&gt;&lt;rect x=&quot;42&quot; y=&quot;90&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.28&quot;/&gt;&lt;rect x=&quot;42&quot; y=&quot;112&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.25&quot;/&gt;&lt;rect x=&quot;42&quot; y=&quot;134&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.11&quot;/&gt;&lt;rect x=&quot;42&quot; y=&quot;156&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.32&quot;/&gt;&lt;rect x=&quot;42&quot; y=&quot;178&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.31&quot;/&gt;&lt;rect x=&quot;42&quot; y=&quot;200&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.24&quot;/&gt;&lt;rect x=&quot;42&quot; y=&quot;222&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.24&quot;/&gt;&lt;rect x=&quot;64&quot; y=&quot;24&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.13&quot;/&gt;&lt;rect x=&quot;64&quot; y=&quot;46&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.10&quot;/&gt;&lt;rect x=&quot;64&quot; y=&quot;68&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.22&quot;/&gt;&lt;rect x=&quot;64&quot; y=&quot;90&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.11&quot;/&gt;&lt;rect x=&quot;64&quot; y=&quot;112&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.14&quot;/&gt;&lt;rect x=&quot;64&quot; y=&quot;134&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.15&quot;/&gt;&lt;rect x=&quot;64&quot; y=&quot;156&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.11&quot;/&gt;&lt;rect x=&quot;64&quot; y=&quot;178&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.20&quot;/&gt;&lt;rect x=&quot;64&quot; y=&quot;200&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.20&quot;/&gt;&lt;rect x=&quot;64&quot; y=&quot;222&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.29&quot;/&gt;&lt;rect x=&quot;86&quot; y=&quot;24&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.21&quot;/&gt;&lt;rect x=&quot;86&quot; y=&quot;46&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.24&quot;/&gt;&lt;rect x=&quot;86&quot; y=&quot;68&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.21&quot;/&gt;&lt;rect x=&quot;86&quot; y=&quot;90&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.25&quot;/&gt;&lt;rect x=&quot;86&quot; y=&quot;112&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.20&quot;/&gt;&lt;rect x=&quot;86&quot; y=&quot;134&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.16&quot;/&gt;&lt;rect x=&quot;86&quot; y=&quot;156&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.32&quot;/&gt;&lt;rect x=&quot;86&quot; y=&quot;178&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.32&quot;/&gt;&lt;rect x=&quot;86&quot; y=&quot;200&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.28&quot;/&gt;&lt;rect x=&quot;86&quot; y=&quot;222&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.26&quot;/&gt;&lt;rect x=&quot;108&quot; y=&quot;24&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.17&quot;/&gt;&lt;rect x=&quot;108&quot; y=&quot;46&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.15&quot;/&gt;&lt;rect x=&quot;108&quot; y=&quot;68&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.16&quot;/&gt;&lt;rect x=&quot;108&quot; y=&quot;90&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.12&quot;/&gt;&lt;rect x=&quot;108&quot; y=&quot;112&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.27&quot;/&gt;&lt;rect x=&quot;108&quot; y=&quot;134&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.19&quot;/&gt;&lt;rect x=&quot;108&quot; y=&quot;156&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.29&quot;/&gt;&lt;rect x=&quot;108&quot; y=&quot;178&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.19&quot;/&gt;&lt;rect x=&quot;108&quot; y=&quot;200&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.31&quot;/&gt;&lt;rect x=&quot;108&quot; y=&quot;222&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.29&quot;/&gt;&lt;rect x=&quot;130&quot; y=&quot;24&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.10&quot;/&gt;&lt;rect x=&quot;130&quot; y=&quot;46&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.15&quot;/&gt;&lt;rect x=&quot;130&quot; y=&quot;68&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.30&quot;/&gt;&lt;rect x=&quot;130&quot; y=&quot;90&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.20&quot;/&gt;&lt;rect x=&quot;130&quot; y=&quot;112&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.32&quot;/&gt;&lt;rect x=&quot;130&quot; y=&quot;134&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.19&quot;/&gt;&lt;rect x=&quot;130&quot; y=&quot;156&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.12&quot;/&gt;&lt;rect x=&quot;130&quot; y=&quot;178&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.24&quot;/&gt;&lt;rect x=&quot;130&quot; y=&quot;200&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.27&quot;/&gt;&lt;rect x=&quot;130&quot; y=&quot;222&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.16&quot;/&gt;&lt;rect x=&quot;152&quot; y=&quot;24&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.12&quot;/&gt;&lt;rect x=&quot;152&quot; y=&quot;46&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.17&quot;/&gt;&lt;rect x=&quot;152&quot; y=&quot;68&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.31&quot;/&gt;&lt;rect x=&quot;152&quot; y=&quot;90&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.27&quot;/&gt;&lt;rect x=&quot;152&quot; y=&quot;112&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.13&quot;/&gt;&lt;rect x=&quot;152&quot; y=&quot;134&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.15&quot;/&gt;&lt;rect x=&quot;152&quot; y=&quot;156&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.12&quot;/&gt;&lt;rect x=&quot;152&quot; y=&quot;178&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.11&quot;/&gt;&lt;rect x=&quot;152&quot; y=&quot;200&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.28&quot;/&gt;&lt;rect x=&quot;152&quot; y=&quot;222&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.14&quot;/&gt;&lt;rect x=&quot;174&quot; y=&quot;24&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.22&quot;/&gt;&lt;rect x=&quot;174&quot; y=&quot;46&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.20&quot;/&gt;&lt;rect x=&quot;174&quot; y=&quot;68&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.14&quot;/&gt;&lt;rect x=&quot;174&quot; y=&quot;90&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.26&quot;/&gt;&lt;rect x=&quot;174&quot; y=&quot;112&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.13&quot;/&gt;&lt;rect x=&quot;174&quot; y=&quot;134&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.24&quot;/&gt;&lt;rect x=&quot;174&quot; y=&quot;156&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.13&quot;/&gt;&lt;rect x=&quot;174&quot; y=&quot;178&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.19&quot;/&gt;&lt;rect x=&quot;174&quot; y=&quot;200&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.15&quot;/&gt;&lt;rect x=&quot;174&quot; y=&quot;222&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.16&quot;/&gt;&lt;rect x=&quot;196&quot; y=&quot;24&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.31&quot;/&gt;&lt;rect x=&quot;196&quot; y=&quot;46&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.28&quot;/&gt;&lt;rect x=&quot;196&quot; y=&quot;68&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.17&quot;/&gt;&lt;rect x=&quot;196&quot; y=&quot;90&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.29&quot;/&gt;&lt;rect x=&quot;196&quot; y=&quot;112&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.15&quot;/&gt;&lt;rect x=&quot;196&quot; y=&quot;134&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.19&quot;/&gt;&lt;rect x=&quot;196&quot; y=&quot;156&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.29&quot;/&gt;&lt;rect x=&quot;196&quot; y=&quot;178&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.24&quot;/&gt;&lt;rect x=&quot;196&quot; y=&quot;200&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.12&quot;/&gt;&lt;rect x=&quot;196&quot; y=&quot;222&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.32&quot;/&gt;&lt;rect x=&quot;218&quot; y=&quot;24&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.15&quot;/&gt;&lt;rect x=&quot;218&quot; y=&quot;46&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.16&quot;/&gt;&lt;rect x=&quot;218&quot; y=&quot;68&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.27&quot;/&gt;&lt;rect x=&quot;218&quot; y=&quot;90&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.17&quot;/&gt;&lt;rect x=&quot;218&quot; y=&quot;112&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.17&quot;/&gt;&lt;rect x=&quot;218&quot; y=&quot;134&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.12&quot;/&gt;&lt;rect x=&quot;218&quot; y=&quot;156&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.12&quot;/&gt;&lt;rect x=&quot;218&quot; y=&quot;178&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.23&quot;/&gt;&lt;rect x=&quot;218&quot; y=&quot;200&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.15&quot;/&gt;&lt;rect x=&quot;218&quot; y=&quot;222&quot; width=&quot;22&quot; height=&quot;22&quot; fill=&quot;var(--good)&quot; opacity=&quot;0.23&quot;/&gt;&lt;/g&gt;
+  &lt;g&gt;&lt;line x1=&quot;20&quot; y1=&quot;24&quot; x2=&quot;20&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;20&quot; y1=&quot;24&quot; x2=&quot;240&quot; y2=&quot;24&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;42&quot; y1=&quot;24&quot; x2=&quot;42&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;20&quot; y1=&quot;46&quot; x2=&quot;240&quot; y2=&quot;46&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;64&quot; y1=&quot;24&quot; x2=&quot;64&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;20&quot; y1=&quot;68&quot; x2=&quot;240&quot; y2=&quot;68&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;86&quot; y1=&quot;24&quot; x2=&quot;86&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;20&quot; y1=&quot;90&quot; x2=&quot;240&quot; y2=&quot;90&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;108&quot; y1=&quot;24&quot; x2=&quot;108&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;20&quot; y1=&quot;112&quot; x2=&quot;240&quot; y2=&quot;112&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;130&quot; y1=&quot;24&quot; x2=&quot;130&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;20&quot; y1=&quot;134&quot; x2=&quot;240&quot; y2=&quot;134&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;152&quot; y1=&quot;24&quot; x2=&quot;152&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;20&quot; y1=&quot;156&quot; x2=&quot;240&quot; y2=&quot;156&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;174&quot; y1=&quot;24&quot; x2=&quot;174&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;20&quot; y1=&quot;178&quot; x2=&quot;240&quot; y2=&quot;178&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;196&quot; y1=&quot;24&quot; x2=&quot;196&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;20&quot; y1=&quot;200&quot; x2=&quot;240&quot; y2=&quot;200&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;218&quot; y1=&quot;24&quot; x2=&quot;218&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;20&quot; y1=&quot;222&quot; x2=&quot;240&quot; y2=&quot;222&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;240&quot; y1=&quot;24&quot; x2=&quot;240&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;line x1=&quot;20&quot; y1=&quot;244&quot; x2=&quot;240&quot; y2=&quot;244&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot; opacity=&quot;0.45&quot;/&gt;&lt;/g&gt;
+  &lt;rect x=&quot;20&quot; y=&quot;24&quot; width=&quot;220&quot; height=&quot;220&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot;
+        stroke-width=&quot;3&quot;/&gt;
+  &lt;g id=&quot;drops&quot;&gt;&lt;/g&gt;
+  &lt;text x=&quot;31&quot; y=&quot;256&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;1&lt;/text&gt;&lt;text x=&quot;13&quot; y=&quot;38.2&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;1&lt;/text&gt;&lt;text x=&quot;53&quot; y=&quot;256&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;2&lt;/text&gt;&lt;text x=&quot;13&quot; y=&quot;60.2&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;2&lt;/text&gt;&lt;text x=&quot;75&quot; y=&quot;256&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;3&lt;/text&gt;&lt;text x=&quot;13&quot; y=&quot;82.2&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;3&lt;/text&gt;&lt;text x=&quot;97&quot; y=&quot;256&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;4&lt;/text&gt;&lt;text x=&quot;13&quot; y=&quot;104.2&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;4&lt;/text&gt;&lt;text x=&quot;119&quot; y=&quot;256&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;5&lt;/text&gt;&lt;text x=&quot;13&quot; y=&quot;126.2&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;5&lt;/text&gt;&lt;text x=&quot;141&quot; y=&quot;256&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;6&lt;/text&gt;&lt;text x=&quot;13&quot; y=&quot;148.2&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;6&lt;/text&gt;&lt;text x=&quot;163&quot; y=&quot;256&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;7&lt;/text&gt;&lt;text x=&quot;13&quot; y=&quot;170.2&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;7&lt;/text&gt;&lt;text x=&quot;185&quot; y=&quot;256&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;8&lt;/text&gt;&lt;text x=&quot;13&quot; y=&quot;192.2&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;8&lt;/text&gt;&lt;text x=&quot;207&quot; y=&quot;256&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;9&lt;/text&gt;&lt;text x=&quot;13&quot; y=&quot;214.2&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;9&lt;/text&gt;&lt;text x=&quot;229&quot; y=&quot;256&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;10&lt;/text&gt;&lt;text x=&quot;13&quot; y=&quot;236.2&quot; text-anchor=&quot;middle&quot; font-size=&quot;9&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;10&lt;/text&gt;
+  &lt;g data-ann=&quot;1&quot;&gt;
+    &lt;text x=&quot;130&quot; y=&quot;10&quot; text-anchor=&quot;middle&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot;
+          font-family=&quot;system-ui, sans-serif&quot;&gt;each square is one quadrat,
+      0.5 m by 0.5 m&lt;/text&gt;
+  &lt;/g&gt;
+&lt;/svg&gt;
+      &lt;div class=&quot;readouts&quot;&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Quadrat&lt;/span&gt;&lt;b&gt;&lt;span id=&quot;roQ&quot;&gt;0&lt;/span&gt; of 10&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Random pair&lt;/span&gt;&lt;b id=&quot;roP&quot;&gt;&amp;mdash;&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Plants inside&lt;/span&gt;&lt;b id=&quot;roN&quot;&gt;&amp;mdash;&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Running total&lt;/span&gt;&lt;b id=&quot;roT&quot;&gt;0&lt;/b&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;results&quot;&gt;
+      &lt;table&gt;
+        &lt;caption&gt;Plants of the chosen species inside each quadrat.&lt;/caption&gt;
+        &lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Quadrat&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Where&lt;/th&gt;
+          &lt;th scope=&quot;col&quot;&gt;Plants&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+        &lt;tbody id=&quot;tbody&quot;&gt;&lt;tr id=&quot;q1&quot;&gt;&lt;th scope=&quot;row&quot;&gt;1&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;p1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;n1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;q2&quot;&gt;&lt;th scope=&quot;row&quot;&gt;2&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;p2&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;n2&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;q3&quot;&gt;&lt;th scope=&quot;row&quot;&gt;3&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;p3&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;n3&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;q4&quot;&gt;&lt;th scope=&quot;row&quot;&gt;4&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;p4&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;n4&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;q5&quot;&gt;&lt;th scope=&quot;row&quot;&gt;5&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;p5&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;n5&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;q6&quot;&gt;&lt;th scope=&quot;row&quot;&gt;6&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;p6&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;n6&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;q7&quot;&gt;&lt;th scope=&quot;row&quot;&gt;7&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;p7&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;n7&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;q8&quot;&gt;&lt;th scope=&quot;row&quot;&gt;8&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;p8&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;n8&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;q9&quot;&gt;&lt;th scope=&quot;row&quot;&gt;9&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;p9&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;n9&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr id=&quot;q10&quot;&gt;&lt;th scope=&quot;row&quot;&gt;10&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;p10&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;n10&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;What the method fixes&lt;/legend&gt;
+    &lt;p class=&quot;hint&quot;&gt;Nothing here is yours to choose. The pair of numbers decides where the
+      frame goes, and a pair that lands on thin ground is counted like any other &amp;mdash; that
+      is what keeps the sample fair.&lt;/p&gt;
+    &lt;div class=&quot;fixedgrid&quot;&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Quadrat&lt;/span&gt;&lt;b&gt;0.5 m by
+        0.5 m&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Area of one quadrat&lt;/span&gt;&lt;b&gt;0.25
+        m&amp;sup2;&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Area of the field&lt;/span&gt;&lt;b&gt;800
+        m&amp;sup2;&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Species counted&lt;/span&gt;&lt;b&gt;one, the same one each time&lt;/b&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/fieldset&gt;
+
+  &lt;div class=&quot;actions&quot;&gt;
+    &lt;button id=&quot;draw&quot; class=&quot;primary&quot; type=&quot;button&quot;&gt;Draw a random pair&lt;/button&gt;
+    &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Ten quadrats to place.&lt;/p&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_population-collect&quot;;
+  var PAIRS = [[3, 7], [6, 3], [1, 5], [9, 6], [4, 8], [2, 2], [7, 9], [5, 4], [8, 1], [6, 10]], COUNTS = [6, 4, 7, 5, 6, 3, 7, 5, 8, 9];
+  var i = 0, busy = false, total = 0;
+  var msg = document.getElementById(&quot;msg&quot;), drops = document.getElementById(&quot;drops&quot;);
+  var draw = document.getElementById(&quot;draw&quot;);
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? &quot;msg &quot; + kind : &quot;msg&quot;; }
+
+  draw.addEventListener(&quot;click&quot;, function () {
+    if (busy || i &gt;= PAIRS.length) return;
+    busy = true; draw.disabled = true;
+    var p = PAIRS[i], n = COUNTS[i], k = i + 1;
+    document.getElementById(&quot;roQ&quot;).textContent = k;
+    document.getElementById(&quot;roP&quot;).textContent = &quot;(&quot; + p[0] + &quot;, &quot; + p[1] + &quot;)&quot;;
+    document.getElementById(&quot;roN&quot;).textContent = &quot;\u2014&quot;;
+    var tr = document.getElementById(&quot;q&quot; + k);
+    Array.prototype.forEach.call(document.querySelectorAll(&quot;#tbody tr&quot;), function (r) {
+      r.classList.remove(&quot;active&quot;); });
+    tr.classList.add(&quot;active&quot;);
+
+    var f = document.createElementNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;rect&quot;);
+    f.setAttribute(&quot;x&quot;, 20 + (p[0] - 1) * 22);
+    f.setAttribute(&quot;y&quot;, 24 + (p[1] - 1) * 22);
+    f.setAttribute(&quot;width&quot;, 22); f.setAttribute(&quot;height&quot;, 22);
+    f.setAttribute(&quot;fill&quot;, &quot;var(--bg)&quot;); f.setAttribute(&quot;fill-opacity&quot;, &quot;0.25&quot;);
+    f.setAttribute(&quot;stroke&quot;, &quot;var(--accent)&quot;); f.setAttribute(&quot;stroke-width&quot;, &quot;2.4&quot;);
+    drops.appendChild(f);
+
+    var cell = document.getElementById(&quot;p&quot; + k);
+    cell.textContent = &quot;(&quot; + p[0] + &quot;, &quot; + p[1] + &quot;)&quot;; cell.classList.remove(&quot;empty&quot;);
+    say(&quot;Quadrat &quot; + k + &quot; lands on (&quot; + p[0] + &quot;, &quot; + p[1] + &quot;). Counting inside the frame.&quot;);
+
+    // count up to the reading, so the number is watched being taken rather than appearing
+    var shown = 0, t0 = Date.now();
+    var timer = setInterval(function () {
+      var want = Math.min(n, Math.floor((Date.now() - t0) / 90));
+      if (want &gt; shown) { shown = want; document.getElementById(&quot;roN&quot;).textContent = shown; }
+      if (shown &gt;= n) {
+        clearInterval(timer);
+        var c = document.getElementById(&quot;n&quot; + k);
+        c.textContent = n; c.classList.remove(&quot;empty&quot;);
+        total += n;
+        document.getElementById(&quot;roT&quot;).textContent = total;
+        i++; busy = false;
+        if (i &gt;= PAIRS.length) {
+          draw.disabled = true;
+          draw.textContent = &quot;All ten quadrats placed&quot;;
+          say(&quot;Ten quadrats, &quot; + total + &quot; plants between them. Working that up into a figure &quot;
+              + &quot;for the whole field is the next stage.&quot;, &quot;good&quot;);
+        } else {
+          draw.disabled = false;
+          say(&quot;Quadrat &quot; + k + &quot; held &quot; + n + &quot;. &quot; + (PAIRS.length - i) + &quot; to go.&quot;);
+        }
+        reportHeight();
+      }
+    }, 40);
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    if (busy) return;
+    i = 0; total = 0; drops.innerHTML = &quot;&quot;;
+    for (var k = 1; k &lt;= PAIRS.length; k++) {
+      [&quot;p&quot;, &quot;n&quot;].forEach(function (pre) {
+        var e = document.getElementById(pre + k);
+        e.textContent = &quot;\u2014&quot;; e.classList.add(&quot;empty&quot;);
+      });
+      document.getElementById(&quot;q&quot; + k).classList.remove(&quot;active&quot;);
+    }
+    document.getElementById(&quot;roQ&quot;).textContent = &quot;0&quot;;
+    document.getElementById(&quot;roP&quot;).textContent = &quot;\u2014&quot;;
+    document.getElementById(&quot;roN&quot;).textContent = &quot;\u2014&quot;;
+    document.getElementById(&quot;roT&quot;).textContent = &quot;0&quot;;
+    draw.disabled = false; draw.textContent = &quot;Draw a random pair&quot;;
+    say(&quot;Ten quadrats to place.&quot;);
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="980" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="skillvideo"><div class="shead"><span class="num">Stage 4</span><span class="kind">Video &middot; 94 seconds</span></div><h2>Watch how to scale a sample up</h2><p class="blurb">The mean, the number of quadrat areas that fit, the estimate, and which way each source of error shifts it.</p><div class="media"><video controls preload="metadata" playsinline src="videos/population-skill.mp4"></video></div></section>
+<section class="stage" id="skill"><div class="shead"><span class="num">Stage 5</span><span class="kind">Simulation &middot; Mean, scale up, name the error</span></div><h2>Work out the estimate</h2><p class="blurb">Turn ten counts into a figure for the whole field, and say which way it would be wrong if the frames had been placed badly.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;From quadrat counts to an estimate&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step h2{font-size:12.5px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--card);font-weight:650}
+th[scope=row]{text-align:left}
+td.cell{cursor:pointer}
+td.cell:hover{background:var(--accent-soft)}
+td.cell:focus{outline:2px solid var(--accent);outline-offset:-2px}
+td.flagged{background:var(--warn-bg);color:var(--warn);font-weight:700;
+  box-shadow:inset 0 0 0 2px var(--warn-line)}
+td.mean{font-weight:650}
+td.dim{color:var(--muted)}
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 200px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;
+  color:var(--muted)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:88px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:22px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.final{margin-top:12px;font-size:15px;background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:9px;padding:11px 13px}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;From quadrat counts to an estimate&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Ten quadrats were counted in a field of 800 m&amp;sup2;. Nobody counted
+the whole field, so the answer will be an estimate, and it has to be written as one.&lt;/p&gt;
+
+&lt;table&gt;&lt;caption&gt;Plants counted in each quadrat. Each quadrat is
+0.5 m by 0.5 m.&lt;/caption&gt;
+&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Quadrat&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;1&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;2&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;3&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;4&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;5&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;6&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;7&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;8&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;9&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;10&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Plants&lt;/th&gt;&lt;td&gt;6&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;td&gt;7&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;td&gt;6&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;7&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;td&gt;8&lt;/td&gt;&lt;td&gt;9&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s1&quot;&gt;
+&lt;h2&gt;Step 1 &amp;mdash; the mean number in one quadrat&lt;/h2&gt;
+&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-mean&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Mean plants per quadrat&lt;/span&gt;&lt;span class=&quot;work&quot; id=&quot;work-mean&quot;&gt;(6 + 4 + 7 + 5 + 6 + 3 + 7 + 5 + 8 + 9) &amp;divide; 10&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-mean&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Mean plants per quadrat&quot;&gt;&lt;span class=&quot;unit&quot;&gt;plants&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s2&quot; hidden&gt;
+&lt;h2&gt;Step 2 &amp;mdash; how many quadrat areas fit in the field&lt;/h2&gt;
+&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-fit&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Quadrat areas in the field&lt;/span&gt;&lt;span class=&quot;work&quot; id=&quot;work-fit&quot;&gt;800 m&amp;sup2; &amp;divide; 0.25 m&amp;sup2;&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-fit&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Quadrat areas in the field&quot;&gt;&lt;span class=&quot;unit&quot;&gt;quadrats&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s3&quot; hidden&gt;
+&lt;h2&gt;Step 3 &amp;mdash; the estimate&lt;/h2&gt;
+&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-est&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Estimated plants in the field&lt;/span&gt;&lt;span class=&quot;work&quot; id=&quot;work-est&quot;&gt;mean &amp;times; 3,200&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-est&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Estimated plants in the field&quot;&gt;&lt;span class=&quot;unit&quot;&gt;plants&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s4&quot; hidden&gt;
+&lt;h2&gt;Step 4 &amp;mdash; which way would the error run?&lt;/h2&gt;
+&lt;p class=&quot;ask&quot;&gt;Suppose the quadrats had been dropped where the plants looked thickest, rather
+than at random. What would that do to the estimate?&lt;/p&gt;
+&lt;div class=&quot;choices&quot; id=&quot;c4&quot;&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot;&gt;Push it too high, because the sampled patches
+would hold more plants than the field average.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Push it too low, because the thickest patches
+cover only a small part of the field.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Leave it unchanged, because the same number of
+quadrats was counted either way.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Make it more accurate, because the plants are
+easier to see and count where they are thickest.&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s5&quot; hidden&gt;
+&lt;h2&gt;Step 5 &amp;mdash; how to write it down&lt;/h2&gt;
+&lt;div class=&quot;choices&quot; id=&quot;c5&quot;&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot;&gt;About 19,200 plants, from ten
+quadrats placed at random.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Exactly 19,200 plants.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;19,200 plants, give or take one
+or two.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Between 19,150 and
+19,250 plants.&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Start with the mean.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;skill-population-estimate&quot;;
+  var MEAN = 6.0, FIT = 3200, EST = 19200;
+  var TOTAL = 60, QA = 0.25, FA = 800;
+  var msg = document.getElementById(&quot;msg&quot;);
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+  // DAN&#x27;S RULING, 1 OCTOBER: the student types the answer. This replaces a stepper, whose
+  // trouble was that it could be walked to the right number without ever working it out --
+  // nudge, look, nudge again. A box has to be filled in before anything happens.
+  //
+  // The cost of a box is that it can be given nonsense, so this one says what it wants rather
+  // than silently refusing, and the misses are graded: the first says only that it is wrong,
+  // the second names the operation, the third names the operation with the numbers in it. It
+  // never gives the answer, and there is no limit on tries.
+  function entry(host, opts) {
+    var input = host.querySelector(&quot;input&quot;), btn = host.querySelector(&quot;button&quot;);
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, &quot;&quot;).replace(/^[x\u00d7]/i, &quot;&quot;);
+      input.classList.remove(&quot;miss&quot;);
+      if (!raw) { opts.onbad(&quot;Type your answer in the box, then press Check.&quot;); return; }
+      // &quot;6 plants&quot; is a different mistake from &quot;abc&quot;, and saying so is the whole point of
+      // letting them type: a stepper could not tell you what you had got wrong.
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? &quot;Just the number, without the units \u2014 they are already printed beside the box.&quot;
+          : &quot;That is not a number. Type digits, and a decimal point if you need one.&quot;);
+        input.classList.add(&quot;miss&quot;);
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) &lt; 1e-9) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.fmt ? opts.fmt(v) : v;
+        opts.onright(v);
+      } else {
+        input.classList.add(&quot;miss&quot;);
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener(&quot;click&quot;, submit);
+    input.addEventListener(&quot;keydown&quot;, function (e) {
+      if (e.key === &quot;Enter&quot;) { e.preventDefault(); submit(); }
+    });
+    input.addEventListener(&quot;input&quot;, function () { input.classList.remove(&quot;miss&quot;); });
+    return { focus: function () { input.focus(); } };
+  }
+
+  function step(host, want, rowId, nextId, text, hints) {
+    var row = document.getElementById(rowId);
+    return entry(host, {
+      want: want,
+      fmt: function (v) { return v.toLocaleString(); },
+      onbad: function (m) { say(m, &quot;warn&quot;); reportHeight(); },
+      onright: function () {
+        row.classList.add(&quot;done&quot;);
+        if (nextId) document.getElementById(nextId).hidden = false;
+        say(text, &quot;good&quot;);
+        reportHeight();
+      },
+      onwrong: function (v, n) {
+        say(n === 1 ? v.toLocaleString() + &quot; is not it. Work it out and try again.&quot;
+                    : hints[Math.min(n - 2, hints.length - 1)], &quot;warn&quot;);
+        reportHeight();
+      } });
+  }
+  step(document.getElementById(&quot;spin-mean&quot;), MEAN, &quot;row-mean&quot;, &quot;s2&quot;,
+       &quot;Right: a mean of &quot; + MEAN + &quot; plants in one quadrat.&quot;,
+       [&quot;Add the ten counts together, then divide by how many quadrats there were.&quot;,
+        &quot;The ten counts add to &quot; + TOTAL + &quot;. Divide that by 10.&quot;]);
+  step(document.getElementById(&quot;spin-fit&quot;), FIT, &quot;row-fit&quot;, &quot;s3&quot;,
+       FIT.toLocaleString() + &quot; quadrat areas fit in the field.&quot;,
+       [&quot;Work out the area of one quadrat first, then divide the area of the field by it.&quot;,
+        &quot;One quadrat covers &quot; + QA + &quot; m² and the field is &quot; + FA.toLocaleString()
+          + &quot; m². Divide the second by the first.&quot;]);
+  step(document.getElementById(&quot;spin-est&quot;), EST, &quot;row-est&quot;, &quot;s4&quot;,
+       &quot;That gives an estimate of &quot; + EST.toLocaleString() + &quot; plants.&quot;,
+       [&quot;Multiply the mean per quadrat by the number of quadrat areas that fit.&quot;,
+        MEAN + &quot; plants in each of &quot; + FIT.toLocaleString() + &quot; quadrat areas.&quot;]);
+
+  function choose(id, good, bad) {
+    Array.prototype.forEach.call(document.querySelectorAll(&quot;#&quot; + id + &quot; .choice&quot;), function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        var box = document.querySelectorAll(&quot;#&quot; + id + &quot; .choice&quot;);
+        Array.prototype.forEach.call(box, function (o) {
+          o.disabled = true;
+          if (o.dataset.ok === &quot;1&quot;) o.classList.add(&quot;right&quot;);
+        });
+        var ok = b.dataset.ok === &quot;1&quot;;
+        if (!ok) b.classList.add(&quot;wrong&quot;);
+        say(ok ? good : bad, ok ? &quot;good&quot; : &quot;warn&quot;);
+        if (ok &amp;&amp; id === &quot;c4&quot;) document.getElementById(&quot;s5&quot;).hidden = false;
+        reportHeight();
+      });
+    });
+  }
+  choose(&quot;c4&quot;,
+    &quot;Right. Sampling where the plants are thickest is bias, not bad luck: it shifts every &quot;
+    + &quot;quadrat the same way, so taking more of them would not help. Random placement is what &quot;
+    + &quot;fixes it.&quot;,
+    &quot;Not this one. Choosing the thickest patches makes every quadrat richer than the field &quot;
+    + &quot;average, so the scaled-up estimate comes out too high.&quot;);
+  choose(&quot;c5&quot;,
+    &quot;Right. The word about is doing real work: it says this is a sample scaled up, not a count. &quot;
+    + &quot;Saying how it was arrived at lets someone else judge it.&quot;,
+    &quot;Not this one. A number with no qualifier claims more than ten quadrats can support, and a &quot;
+    + &quot;range that narrow claims a precision the method does not have.&quot;);
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function(){ location.reload(); });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1100" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="conclusion"><div class="shead"><span class="num">Stage 6</span><span class="kind">Question &middot; A worked example, then one choice</span></div><h2>Choose the conclusion</h2><p class="blurb">What do the figures show? A conclusion from another investigation, with what makes it good, and then three conclusions for your own.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Choose the conclusion&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+  margin-top:12px}
+.panel[hidden]{display:none}
+.panel h2{font-size:12px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.setup{font-size:13.5px;color:var(--muted);margin:0 0 9px}
+.model{font-size:15px;line-height:1.62;margin:0;padding:11px 13px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:9px;counter-reset:st}
+.steps li{counter-increment:st;position:relative;font-size:14px;line-height:1.55;
+  background:var(--bg);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px 10px 44px}
+.steps li::before{content:counter(st);position:absolute;left:11px;top:10px;width:22px;
+  height:22px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
+  font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.steps b{display:block;color:var(--fg);font-weight:650;font-size:14.5px;margin-bottom:2px}
+.steps span{color:var(--muted)}
+.shape{font-size:13.5px;margin:11px 0 0;padding:9px 11px;border:1px solid var(--warn-line);
+  background:var(--warn-bg);color:var(--warn);border-radius:8px}
+.recap{font-size:14px;line-height:1.55;margin:0 0 11px;padding:10px 12px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.q{font-size:15px;font-weight:600;margin:0 0 10px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:11px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:14.5px;line-height:1.55;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.picked{border-color:var(--accent)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw{font-size:13.5px;line-height:1.5;margin:6px 0 0;padding:8px 11px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line)}
+.rw.good{border-color:var(--good-line);background:var(--good-bg)}
+.rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw b{font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Choose the conclusion&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;A conclusion says what the results show. It is not a summary of what you did.&lt;/p&gt;
+
+&lt;div class=&quot;panel&quot;&gt;
+&lt;h2&gt;How to write a conclusion&lt;/h2&gt;
+&lt;p class=&quot;setup&quot;&gt;Three steps, in this order. They are the same three whatever you
+  investigated.&lt;/p&gt;
+&lt;ol class=&quot;steps&quot;&gt;&lt;li&gt;&lt;b&gt;State the answer the question asked for.&lt;/b&gt;&lt;span&gt;Give the number, and its units if it has any. With a calculation the working usually comes first and the number follows it, but the number has to be there and has to be plainly the answer.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the data that evidences it.&lt;/b&gt;&lt;span&gt;Show the figures it came from and the steps between them, so a reader can check the arithmetic instead of trusting it.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Point out any exceptions.&lt;/b&gt;&lt;span&gt;Name any reading that does not fit the others and say what you did about it. An answer that is an estimate rather than a count, or that carries no units where a reader would expect some, belongs here too.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;p class=&quot;shape&quot;&gt;Now do those three things for your own figures. Only one of the three below does all of them, and it has to end in the number the question asked for.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;panel&quot;&gt;
+&lt;h2&gt;Now your own results&lt;/h2&gt;
+&lt;p class=&quot;recap&quot;&gt;You were asked how many of these plants are growing in the whole field. Your 10 quadrats held 6, 4, 7, 5, 6, 3, 7, 5, 8 and 9 plants, which is 60 between them and a mean of 6 per quadrat. Each quadrat covers 0.25 m&amp;sup2;, and the field is 800 m&amp;sup2;.&lt;/p&gt;
+&lt;p class=&quot;q&quot;&gt;Which of these is a conclusion, and one your own figures support?&lt;/p&gt;
+&lt;div class=&quot;opts&quot; id=&quot;opts&quot;&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Pick one. You get one go at it, and
+then all three are explained.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;panel&quot; id=&quot;after&quot; hidden&gt;
+&lt;h2&gt;The three steps again&lt;/h2&gt;
+&lt;ol class=&quot;steps&quot; id=&quot;afterlist&quot;&gt;&lt;li&gt;&lt;b&gt;State the answer the question asked for.&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the data that evidences it.&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Point out any exceptions.&lt;/b&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;conclusion-population&quot;;
+  var OPTS = [{&quot;text&quot;: &quot;The 10 quadrats gave a mean of 6 plants each, and 3,200 quadrats fit into 800 m&amp;sup2;, since one covers 0.25 m&amp;sup2;. So 3,200 &amp;times; 6 gives about 19,200 plants in the field. That figure is an estimate from a sample rather than a count of every plant that is growing in the field.&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;A conclusion, it answers the question that was asked, and every step of the arithmetic is there to be checked. It also calls the answer an estimate, which is what a sample can give you.&quot;}, {&quot;text&quot;: &quot;The 10 quadrats held 60 plants between them and the field is 800 m&amp;sup2;, so 60 &amp;times; 800 gives 48,000 plants in the field. That is how many plants are growing in the field, from the plants counted and the area they came from. That figure is an estimate from a sample, not a count.&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Two things go wrong in one sum. 60 is the total from 10 quadrats, not the number in one of them, so the mean of 6 belongs there. And 800 is an area in m&amp;sup2;, not a number of quadrats &amp;mdash; 800 m&amp;sup2; holds 3,200 quadrats, because each one covers 0.25 m&amp;sup2;.&quot;}, {&quot;text&quot;: &quot;The 10 quadrats held between 3 and 9 plants each, with a mean of 6 plants per quadrat. So the plants are spread unevenly across the field, and in some parts they grow much more thickly than in others. The figures do not show what is growing outside the quadrats.&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;The question asked how many plants are in the field, and this never gives a number. Ten quadrats cannot show how the plants are spread either, because nobody recorded where any of them was.&quot;}];
+  var LETTERS = &quot;ABC&quot;;
+  var box = document.getElementById(&quot;opts&quot;), msg = document.getElementById(&quot;msg&quot;);
+  var done = false;
+
+  // Fisher-Yates, so the accurate conclusion is in no fixed position.
+  var order = OPTS.map(function (o, i) { return i; });
+  for (var i = order.length - 1; i &gt; 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1)), t = order[i];
+    order[i] = order[j]; order[j] = t;
+  }
+
+  order.forEach(function (idx, pos) {
+    var o = OPTS[idx];
+    var b = document.createElement(&quot;button&quot;);
+    b.type = &quot;button&quot;;
+    b.className = &quot;opt&quot;;
+    b.dataset.i = idx;
+    b.innerHTML = &#x27;&lt;span class=&quot;ltr&quot;&gt;&#x27; + LETTERS[pos] + &#x27;&lt;/span&gt;&lt;span&gt;&#x27; + o.text + &#x27;&lt;/span&gt;&#x27;;
+    box.appendChild(b);
+    var r = document.createElement(&quot;p&quot;);
+    r.className = &quot;rw&quot;;
+    r.id = &quot;rw&quot; + idx;
+    r.hidden = true;
+    box.appendChild(r);
+  });
+
+  box.addEventListener(&quot;click&quot;, function (e) {
+    var b = e.target.closest(&quot;.opt&quot;);
+    if (!b || done) return;
+    done = true;
+    var chosen = +b.dataset.i;
+
+    OPTS.forEach(function (o, idx) {
+      var btn = box.querySelector(&#x27;.opt[data-i=&quot;&#x27; + idx + &#x27;&quot;]&#x27;);
+      btn.disabled = true;
+      btn.classList.add(o.ok ? &quot;right&quot; : &quot;wrong&quot;);
+      var r = document.getElementById(&quot;rw&quot; + idx);
+      r.hidden = false;
+      r.className = &quot;rw &quot; + (o.ok ? &quot;good&quot; : &quot;bad&quot;);
+      var head = o.ok ? &quot;The accurate one.&quot; : &quot;Not this one.&quot;;
+      if (idx === chosen) head = o.ok ? &quot;You picked this one, and it is the accurate one.&quot;
+                                      : &quot;You picked this one.&quot;;
+      r.innerHTML = &quot;&lt;b&gt;&quot; + head + &quot;&lt;/b&gt; &quot; + o.why;
+    });
+
+    var right = OPTS[chosen].ok;
+    msg.textContent = right
+      ? &quot;That is the one. Read the other two as well \u2014 each is wrong in a way that is &quot;
+        + &quot;easy to fall into.&quot;
+      : &quot;Not that one. The accurate conclusion is marked in green, and every option now says &quot;
+        + &quot;what is right or wrong with it.&quot;;
+    msg.className = &quot;msg &quot; + (right ? &quot;good&quot; : &quot;warn&quot;);
+    document.getElementById(&quot;after&quot;).hidden = false;
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1150" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="questions"><div class="shead"><span class="num">Stage 7</span><span class="kind">Questions &middot; Eight items</span></div><h2>Answer eight questions</h2><p class="blurb">On carrying the survey out, and on what its figures show.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Estimating a population with quadrats — questions&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.q h2{font-size:12px;margin:0 0 6px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.q .stem{margin:0 0 10px;font-weight:500}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;text-align:left;padding:9px 11px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.fb{margin-top:8px;font-size:13.5px;padding:8px 10px;border-radius:8px;display:none}
+.fb.on{display:block;background:var(--bg);border:1px solid var(--line)}
+.score{margin-top:14px;font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;&lt;h1&gt;Estimating a population with quadrats&lt;/h1&gt;&lt;p class=&quot;sub&quot;&gt;Eight questions on the survey and on what its figures show.&lt;/p&gt;&lt;div class=&quot;q&quot; data-qn=&quot;1&quot;&gt;&lt;h2&gt;Question 1 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A student is estimating how many plants of one species grow in a field, using ten quadrats. Why are the quadrats put down at coordinates taken from random numbers?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;So that the squares stand in for the whole field rather than for the parts somebody chose to walk to.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;So that the squares are spread out evenly, with none of them overlapping another.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;So that nobody has to measure where each square goes, which saves time in the field.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb1&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;2&quot;&gt;&lt;h2&gt;Question 2 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A pair of random numbers lands a quadrat on a patch of bare ground with none of the chosen species in it. What should the student record?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Zero, and move on to the next pair of random numbers.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Nothing, and draw another pair of numbers to replace it.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;The count from the nearest patch of that species.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb2&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;3&quot;&gt;&lt;h2&gt;Question 3 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;Ten quadrats in a field give counts of 6, 4, 7, 5, 6, 3, 7, 5, 8 and 9 plants. What is the mean number of plants per quadrat?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;6, from 60 plants shared between 10 quadrats.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;60, which is the number of plants that were counted altogether.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;5.5, halfway between the smallest count of 3 and the largest of 9.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb3&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;4&quot;&gt;&lt;h2&gt;Question 4 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;Each quadrat in a field survey is a square of side 0.5 m, and the field measures 800 m&amp;sup2;. How many quadrat areas fit into the field?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;3,200, because one quadrat covers 0.25 m&amp;sup2; of ground.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;1,600, because one quadrat covers 0.5 m&amp;sup2; of ground.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;800, because one quadrat covers 1 m&amp;sup2; of ground.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb4&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;5&quot;&gt;&lt;h2&gt;Question 5 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;Ten quadrats give a mean of 6 plants each, 3,200 quadrat areas fit into the field, and the student writes down 19,200 plants. How should that figure be described?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;As an estimate, worked out from a sample of the field.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;As the number of plants in the field, since it came from counting them.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;As the largest number of plants the field could hold.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb5&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;6&quot;&gt;&lt;h2&gt;Question 6 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A student puts all ten quadrats in the greenest part of a field, where the plants grow most thickly. Which way does the estimate go, and why?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Too high, because the sample holds more plants per square than the field does.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Too low, because the thickest patch leaves the rest of the field out of the sample.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;It stays about right, because the mean of ten squares is reliable however they were placed.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb6&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;7&quot;&gt;&lt;h2&gt;Question 7 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A student suggests using two quadrats instead of ten, since two counts still give a mean. What does the field lose by it?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;One unusual square moves a mean of two by far more than it moves a mean of ten.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Two quadrats cannot be placed at random, because two pairs of numbers is not enough.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Two quadrats give a mean that is too small to scale up to a field of 800 m&amp;sup2;.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb7&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;8&quot;&gt;&lt;h2&gt;Question 8 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;Two students survey the same field. One counts every plant inside the frame, the other counts only the chosen species. Whose estimate answers the question the survey asked, and why?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;The one who counted the chosen species, because that is the species the question asks about.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;The one who counted everything, because a fuller count is the safer record to have taken.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Both of them, because the two figures scale up to the field the same way.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb8&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;p class=&quot;score&quot; id=&quot;score&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_population-questions&quot;;
+  var EXPL = {&quot;1&quot;: &quot;Anyone choosing where to put a frame will tend to put it where there is something to count. Letting the numbers choose is what stops the sample being better than the field it came from.&quot;, &quot;2&quot;: &quot;Bare ground is part of the field, and a field with bare patches really does hold fewer plants. Every empty square thrown away lifts the estimate above the truth.&quot;, &quot;3&quot;: &quot;A mean is the total divided by how many readings there were. The ten counts add to 60, and 60 divided by 10 is 6 plants per quadrat.&quot;, &quot;4&quot;: &quot;A square of side 0.5 m covers 0.5 &amp;times; 0.5, which is 0.25 m&amp;sup2;. The field is 800 m&amp;sup2;, and 800 divided by 0.25 is 3,200.&quot;, &quot;5&quot;: &quot;Ten squares out of 3,200 were counted. Scaling up gives the best figure available from that sample, and calling it a count would claim a great deal more than was done.&quot;, &quot;6&quot;: &quot;The scaling up treats every part of the field as being like the squares that were counted. Squares from the thickest patch make the whole field look like the thickest patch, so the answer comes out above the truth.&quot;, &quot;7&quot;: &quot;Both means are real means. The difference is how far one odd reading can drag them: with two readings it moves the mean by half its own difference, with ten by a tenth.&quot;, &quot;8&quot;: &quot;The two students measured different things. Counting everything gives the number of plants of all kinds, which is a fine figure and not the one that was asked for.&quot;}, ERR = {&quot;1&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;random pairs can land close together, and often do&quot;, &quot;c&quot;: &quot;the coordinates have to be measured out either way&quot;}, &quot;2&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;replacing the empty squares keeps only the full ones&quot;, &quot;c&quot;: &quot;that is choosing where to count, which the numbers exist to stop&quot;}, &quot;3&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;gives the total rather than the mean&quot;, &quot;c&quot;: &quot;that is the middle of the range, which is a different figure&quot;}, &quot;4&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;uses the length of the side where the area belongs&quot;, &quot;c&quot;: &quot;treats a square of side 0.5 m as covering a whole square meter&quot;}, &quot;5&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;only the plants inside ten squares were counted&quot;, &quot;c&quot;: &quot;nothing in the method looks for a maximum&quot;}, &quot;6&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;gets the direction the wrong way round&quot;, &quot;c&quot;: &quot;ten squares are only as good as where they were put&quot;}, &quot;7&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;a pair of numbers is a pair of numbers however many are drawn&quot;, &quot;c&quot;: &quot;the scaling works from any mean at all&quot;}, &quot;8&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;a fuller count of the wrong thing does not answer the question&quot;, &quot;c&quot;: &quot;the scaling is the same, but the two figures mean different things&quot;}}, TOTAL = 8;
+  var done = {}, right = 0;
+  var score = document.getElementById(&quot;score&quot;);
+
+  // The JSON keeps every key at option a, because TimeBack randomises. This page does not, so
+  // without a shuffle here the key sits at A in all eight and is spotted by question three.
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;.opts&quot;), function (box) {
+    var kids = Array.prototype.slice.call(box.children);
+    for (var i = kids.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = kids[i];
+      kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k, n) {
+      box.appendChild(k);
+      k.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCD&quot;[n];
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;.opt&quot;), function (b) {
+    b.addEventListener(&quot;click&quot;, function () {
+      var qn = b.dataset.q;
+      if (done[qn]) return;
+      done[qn] = true;
+      var ok = b.dataset.ok === &quot;1&quot;;
+      if (ok) right++;
+      var q = document.querySelector(&#x27;.q[data-qn=&quot;&#x27; + qn + &#x27;&quot;]&#x27;);
+      Array.prototype.forEach.call(q.querySelectorAll(&quot;.opt&quot;), function (o) {
+        o.disabled = true;
+        if (o.dataset.ok === &quot;1&quot;) o.classList.add(&quot;right&quot;);
+      });
+      if (!ok) b.classList.add(&quot;wrong&quot;);
+      var fb = document.getElementById(&quot;fb&quot; + qn);
+      fb.className = &quot;fb on&quot;;
+      // the error paths are whole clauses, not verb phrases, so they lead the feedback
+      var why = ERR[qn][b.dataset.o];
+      fb.innerHTML = (ok ? &quot;&quot; : &quot;&lt;b&gt;&quot; + why.charAt(0).toUpperCase() + why.slice(1)
+                                + &quot;.&lt;/b&gt; &quot;) + EXPL[qn];
+      var n = Object.keys(done).length;
+      score.textContent = n + &quot; of &quot; + TOTAL + &quot; answered, &quot; + right + &quot; right.&quot;;
+      reportHeight();
+    });
+  });
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="3400" loading="lazy" title="Simulation"></iframe></div></section>
+<footer><p><strong>Nothing here is marked behind the scenes.</strong> TimeBack cannot see inside a simulation, so the simulations are the practical and what a student is assessed on is the eight questions at the end, together with the checkpoints in the lessons this practical belongs to.</p><p>The readings are the same for every student, because a marked question needs one right answer. The analysis skill this practical teaches is <strong>scaling a sample up to an estimate</strong>, and no two of the six practicals teach the same one.</p></footer></div>

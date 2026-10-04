@@ -1,0 +1,1258 @@
+<title>HS Biology: Comparing two forests</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#fbfaf8; --surface:#ffffff; --ink:#1b1e22; --muted:#6f6a63;
+  --line:#e7e2da; --rule:#d8d2c8; --accent:#0e6f66; --accent-soft:#e2efec;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+    --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+  --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1020px;margin:0 auto;padding-inline:20px;padding-block:44px 64px}
+
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6.4vw,44px);line-height:1.12;
+  letter-spacing:-.015em;margin:0 0 14px;text-wrap:balance}
+.lead{font-family:var(--serif);font-size:clamp(17px,2.4vw,20px);line-height:1.5;color:var(--ink);
+  margin:0 0 28px;max-width:56ch}
+.lead em{font-style:italic;color:var(--accent);font-weight:600}
+
+.design{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 40px}
+.design div{flex:1 1 205px;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:14px 16px}
+.design dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 5px}
+.design dd{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
+
+nav.jump{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin:0 0 44px;
+  scrollbar-width:thin}
+nav.jump a{flex:0 0 auto;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;background:var(--surface);white-space:nowrap}
+nav.jump a:hover,nav.jump a:focus-visible{color:var(--accent);border-color:var(--accent)}
+
+section.stage{border-top:1px solid var(--rule);padding-top:26px;margin-top:44px;
+  scroll-margin-top:24px}
+section.stage:first-of-type{margin-top:0}
+.shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+  letter-spacing:.08em}
+.kind{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(21px,3.6vw,27px);line-height:1.2;
+  margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.blurb{color:var(--muted);font-size:15.5px;margin:0 0 20px}
+
+.media{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+video{width:100%;display:block;background:#0b0d10}
+iframe{width:100%;border:0;display:block;background:var(--surface)}
+
+footer{border-top:1px solid var(--rule);margin-top:52px;padding-top:22px;color:var(--muted);
+  font-size:14.5px}
+footer p{margin:0 0 10px;max-width:62ch}
+footer strong{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<style>.waiting{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--muted);font-size:14px}.waiting code{font-size:12.5px}</style>
+
+<script>
+// Registered before the frames are parsed: a srcdoc frame runs its script during parsing and
+// would otherwise post its height into a page that is not listening yet.
+(function () {
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "sim-height") return;
+    var frames = document.querySelectorAll("iframe");
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].contentWindow === e.source) {
+        frames[i].style.height = e.data.height + "px";
+        return;
+      }
+    }
+  });
+}());
+</script>
+<div class="wrap">
+<p class="eyebrow">Required practical &middot; High School Biology</p>
+<h1>Comparing two forests</h1>
+<p class="lead">Two forests hold 200 trees of 5 species each. Which is the more biodiverse? Seven stages, in the order a student works through them &mdash; <em>watch, plan, survey, judge, conclude, answer</em>.</p>
+<dl class="design"><div><dt>What we count</dt><dd>Every tree on a set route, tallied against its species</dd></div><div><dt>How many</dt><dd>200 trees in each forest, the same number in both</dd></div><div><dt>What we compare</dt><dd>How many species, and how the trees are shared between them</dd></div></dl>
+<nav class="jump" aria-label="The seven stages"><a href="#method">1. Watch the method</a><a href="#plan">2. Plan the survey</a><a href="#collect">3. Collect the results</a><a href="#skillvideo">4. Watch how to judge a conclusion</a><a href="#skill">5. Judge the conclusions</a><a href="#conclusion">6. Choose the conclusion</a><a href="#questions">7. Answer eight questions</a></nav>
+<section class="stage" id="method"><div class="shead"><span class="num">Stage 1</span><span class="kind">Video &middot; 90 seconds</span></div><h2>Watch the method</h2><p class="blurb">The route, the identification key, and why the same number of trees is counted in each forest.</p><div class="media"><video controls preload="metadata" playsinline src="videos/biodiversity-method.mp4"></video></div></section>
+<section class="stage" id="plan"><div class="shead"><span class="num">Stage 2</span><span class="kind">Question &middot; Four decisions</span></div><h2>Plan the survey</h2><p class="blurb">Four things to settle before either forest is walked. One check, then all four are explained.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Plan the survey&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.dec{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;
+  margin-top:12px}
+.dec h2{font-size:12px;margin:0 0 4px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.dec .q{font-size:15.5px;font-weight:600;margin:0 0 10px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:10px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:14.5px;line-height:1.5;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt[aria-pressed=&quot;true&quot;]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw{font-size:13.5px;line-height:1.5;margin:6px 0 0;padding:8px 11px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line)}
+.rw.good{border-color:var(--good-line);background:var(--good-bg)}
+.rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw b{font-weight:650}
+.score{margin-top:14px;font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+  &lt;h1&gt;Plan the survey&lt;/h1&gt;
+  &lt;p class=&quot;sub&quot;&gt;Four decisions to make before either forest is walked. One check, then all four are explained.&lt;/p&gt;
+  &lt;div class=&quot;brief&quot;&gt;&lt;p&gt;&lt;b&gt;The problem.&lt;/b&gt; Two forests are to be compared, so the only thing that may differ between the two surveys is the forest itself.&lt;/p&gt;&lt;p&gt;Anything else that changes &amp;mdash; how many trees are counted, which way the route runs, who does the identifying &amp;mdash; turns up in the figures as if it were a difference between the forests, and nothing in the table would say otherwise.&lt;/p&gt;&lt;/div&gt;
+  &lt;div class=&quot;dec&quot; data-n=&quot;0&quot;&gt;&lt;h2&gt;Decision 1 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;How many trees are counted in each forest?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts0&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;1&quot;&gt;&lt;h2&gt;Decision 2 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;Which way does the route run?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts1&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;2&quot;&gt;&lt;h2&gt;Decision 3 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;You reach a tree you cannot name. What now?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts2&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;3&quot;&gt;&lt;h2&gt;Decision 4 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;Who does the identifying?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts3&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;actions&quot;&gt;
+    &lt;button id=&quot;check&quot; class=&quot;primary&quot; type=&quot;button&quot;&gt;Check the plan&lt;/button&gt;
+    &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Make all four decisions, then
+    check.&lt;/p&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_biodiversity-plan&quot;;
+  var Q = [[{&quot;text&quot;: &quot;The same number in both: 200 and 200&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;Two columns can only be set side by side if the same number went into each. It is also what makes the counts add to the same total, so the share taken by each species can be compared directly.&quot;}, {&quot;text&quot;: &quot;As many as there is time for in each&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;A forest with 200 trees counted and one with 50 would differ in the figures for that reason alone, whatever the forests are like.&quot;}, {&quot;text&quot;: &quot;Enough in each to find every species present&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Stopping when the last new species turns up means stopping at a different point in each forest, so the two totals end up different again.&quot;}], [{&quot;text&quot;: &quot;The same pattern through both forests&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;The route decides which trees are met. The same pattern in both means the forest is the only thing that has changed.&quot;}, {&quot;text&quot;: &quot;Wherever the trees look most varied&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Walking toward the variety finds variety. Both forests would come out looking more mixed than they are, and the one with more to find would gain most.&quot;}, {&quot;text&quot;: &quot;Straight to the middle of each forest and back&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;The middle of a forest is one part of it. A plantation and a mixed forest may differ most at their edges, and a there-and-back route never reaches them.&quot;}], [{&quot;text&quot;: &quot;Check it against the identification key before tallying it&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;A tally mark against the wrong species is worse than no tally mark, because nothing later in the survey can find it.&quot;}, {&quot;text&quot;: &quot;Put it down as whatever the tree beside it is&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Trees of one species do grow together, so this is right often enough to feel safe. It is exactly the assumption that would hide a rare species.&quot;}, {&quot;text&quot;: &quot;Leave it out and carry on&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Leaving out the ones that are hard to name loses the unusual trees first, and those are the ones a diversity survey is most interested in.&quot;}], [{&quot;text&quot;: &quot;One person, for both forests&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;Two people draw the line between similar species in slightly different places. One person draws it in the same place in both forests, so the difference that is left is the forest.&quot;}, {&quot;text&quot;: &quot;One person in each forest, so both can be done in a morning&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Whatever the two disagree about turns up in the figures as a difference between the forests, and no one reading the table could tell.&quot;}, {&quot;text&quot;: &quot;Whoever is nearest, tree by tree&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;That mixes the disagreement through both columns instead of into one, which makes it harder to find rather than smaller.&quot;}]];
+  var LETTERS = &quot;ABC&quot;;
+  var picked = Q.map(function () { return null; });
+  var locked = false;
+  var msg = document.getElementById(&quot;msg&quot;), check = document.getElementById(&quot;check&quot;);
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? &quot;msg &quot; + kind : &quot;msg&quot;; }
+
+  function lay() {
+    Q.forEach(function (opts, n) {
+      var box = document.getElementById(&quot;opts&quot; + n);
+      box.innerHTML = &quot;&quot;;
+      var order = opts.map(function (_, i) { return i; });
+      for (var i = order.length - 1; i &gt; 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1)), t = order[i];
+        order[i] = order[j]; order[j] = t;
+      }
+      order.forEach(function (idx, pos) {
+        var b = document.createElement(&quot;button&quot;);
+        b.type = &quot;button&quot;; b.className = &quot;opt&quot;; b.dataset.n = n; b.dataset.i = idx;
+        b.setAttribute(&quot;aria-pressed&quot;, &quot;false&quot;);
+        b.innerHTML = &#x27;&lt;span class=&quot;ltr&quot;&gt;&#x27; + LETTERS[pos] + &#x27;&lt;/span&gt;&lt;span&gt;&#x27;
+                    + opts[idx].text + &#x27;&lt;/span&gt;&#x27;;
+        box.appendChild(b);
+        var r = document.createElement(&quot;p&quot;);
+        r.className = &quot;rw&quot;; r.id = &quot;rw&quot; + n + &quot;_&quot; + idx; r.hidden = true;
+        box.appendChild(r);
+      });
+    });
+  }
+  lay();
+
+  document.addEventListener(&quot;click&quot;, function (e) {
+    var b = e.target.closest(&quot;.opt&quot;);
+    if (!b || locked) return;
+    var n = +b.dataset.n;
+    Array.prototype.forEach.call(document.querySelectorAll(&#x27;.opt[data-n=&quot;&#x27; + n + &#x27;&quot;]&#x27;),
+      function (o) { o.setAttribute(&quot;aria-pressed&quot;, &quot;false&quot;); });
+    b.setAttribute(&quot;aria-pressed&quot;, &quot;true&quot;);
+    picked[n] = +b.dataset.i;
+    var done = picked.filter(function (p) { return p !== null; }).length;
+    say(done + &quot; of &quot; + Q.length + &quot; decided.&quot;);
+  });
+
+  check.addEventListener(&quot;click&quot;, function () {
+    if (locked) return;
+    if (picked.indexOf(null) !== -1) {
+      say(&quot;Every decision needs an answer before the plan can be checked.&quot;, &quot;warn&quot;);
+      return;
+    }
+    locked = true;
+    var right = 0;
+    Q.forEach(function (opts, n) {
+      opts.forEach(function (o, idx) {
+        var b = document.querySelector(&#x27;.opt[data-n=&quot;&#x27; + n + &#x27;&quot;][data-i=&quot;&#x27; + idx + &#x27;&quot;]&#x27;);
+        b.disabled = true;
+        b.classList.add(o.ok ? &quot;right&quot; : &quot;wrong&quot;);
+        var r = document.getElementById(&quot;rw&quot; + n + &quot;_&quot; + idx);
+        r.hidden = false;
+        r.className = &quot;rw &quot; + (o.ok ? &quot;good&quot; : &quot;bad&quot;);
+        var head = o.ok ? &quot;This is the one.&quot; : &quot;Not this one.&quot;;
+        if (idx === picked[n]) {
+          head = o.ok ? &quot;You chose this, and it is the one.&quot; : &quot;You chose this.&quot;;
+        }
+        r.innerHTML = &quot;&lt;b&gt;&quot; + head + &quot;&lt;/b&gt; &quot; + o.why;
+      });
+      if (opts[picked[n]].ok) right++;
+    });
+    say(right + &quot; of &quot; + Q.length + &quot; decisions right. Read the others as well \u2014 each &quot;
+        + &quot;wrong one is something people really do, and the reason it costs you is the point.&quot;,
+        right === Q.length ? &quot;good&quot; : null);
+    check.disabled = true;
+    reportHeight();
+  });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    locked = false; picked = Q.map(function () { return null; });
+    check.disabled = false;
+    lay();
+    say(&quot;Make all four decisions, then check.&quot;);
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1500" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="collect"><div class="shead"><span class="num">Stage 3</span><span class="kind">Simulation &middot; Two forests, 200 trees each</span></div><h2>Collect the results</h2><p class="blurb">Walk the same route in each forest and watch the tally build against the five species.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Surveying the trees in two forests&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,340px);gap:12px;
+  align-items:stretch;margin-bottom:2px}
+@media (max-width:700px){.bench{grid-template-columns:1fr}}
+.results{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;display:flex;flex-direction:column;justify-content:center}
+.stage{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stage svg{flex:0 0 auto;max-width:100%;height:auto}
+.readouts{flex:1 1 140px;min-width:138px;display:grid;gap:6px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+    border-bottom:1px dotted var(--line);padding-bottom:4px}
+.ro&gt;span{color:var(--muted);font-size:12px}
+.ro b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:650}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:12px 0 0;padding:10px 12px 12px}
+legend{font-size:12px;font-weight:650;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em;padding:0 5px}
+.hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+.picks{display:flex;gap:6px;flex-wrap:wrap}
+.picks button{flex:1 1 56px;padding:9px 4px;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg);border-radius:8px;font:inherit;font-variant-numeric:tabular-nums;
+  cursor:pointer}
+.picks button[aria-pressed=&quot;true&quot;]{background:var(--accent);color:var(--accent-fg);
+  border-color:var(--accent);font-weight:650}
+.picks button:disabled{opacity:.5;cursor:not-allowed}
+.picks button .done{display:block;font-size:10px;color:var(--muted);line-height:1.2}
+.picks button[aria-pressed=&quot;true&quot;] .done{color:var(--accent-fg);opacity:.85}
+.fixedgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.fixed{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed b{font-size:15px;font-weight:650;color:var(--fg);padding:5px 0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:8px}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+th[scope=&quot;row&quot;]{text-align:left}
+td.empty{color:var(--muted)}
+.entry{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.entry input{width:92px;padding:8px 10px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted)}
+.entry button{padding:8px 13px;border:1px solid var(--accent);border-radius:8px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+tr.active th[scope=&quot;row&quot;]{color:var(--accent);font-weight:700}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+  &lt;h1&gt;Surveying the trees in two forests&lt;/h1&gt;
+  &lt;p class=&quot;sub&quot;&gt;Walk the same route in each forest, identify every tree it takes you past, and
+    tally it against its species. Each forest is surveyed once.&lt;/p&gt;
+
+  &lt;div class=&quot;bench&quot;&gt;
+    &lt;div class=&quot;stage&quot;&gt;
+      &lt;svg viewBox=&quot;0 0 220 310&quot; width=&quot;212&quot; id=&quot;plot&quot; role=&quot;img&quot; aria-label=&quot;A forest seen
+           from above, with the crowns of the trees drawn as circles. A route runs through it.&quot;&gt;
+        &lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;208&quot; height=&quot;208&quot; rx=&quot;6&quot; fill=&quot;var(--agar)&quot;
+              stroke=&quot;var(--ink)&quot; stroke-width=&quot;3&quot;/&gt;
+        &lt;g id=&quot;trees&quot;&gt;&lt;circle cx=&quot;205&quot; cy=&quot;19&quot; r=&quot;8.8&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;119&quot; cy=&quot;26&quot; r=&quot;7.2&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;26&quot; cy=&quot;27&quot; r=&quot;7.6&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;55&quot; cy=&quot;31&quot; r=&quot;8.3&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;27&quot; cy=&quot;32&quot; r=&quot;7.8&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;172&quot; cy=&quot;32&quot; r=&quot;8.7&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;43&quot; cy=&quot;33&quot; r=&quot;8.1&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;202&quot; cy=&quot;37&quot; r=&quot;8.3&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;174&quot; cy=&quot;37&quot; r=&quot;8.2&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;121&quot; cy=&quot;40&quot; r=&quot;8.3&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;74&quot; cy=&quot;42&quot; r=&quot;9.2&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;169&quot; cy=&quot;42&quot; r=&quot;9.5&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;76&quot; cy=&quot;43&quot; r=&quot;9.0&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;106&quot; cy=&quot;48&quot; r=&quot;9.4&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;174&quot; cy=&quot;49&quot; r=&quot;7.8&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;28&quot; cy=&quot;54&quot; r=&quot;8.1&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;173&quot; cy=&quot;55&quot; r=&quot;7.8&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;82&quot; cy=&quot;57&quot; r=&quot;8.6&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;77&quot; cy=&quot;57&quot; r=&quot;9.4&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;48&quot; cy=&quot;59&quot; r=&quot;7.7&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;148&quot; cy=&quot;61&quot; r=&quot;8.7&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;148&quot; cy=&quot;64&quot; r=&quot;8.1&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;180&quot; cy=&quot;67&quot; r=&quot;8.2&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;37&quot; cy=&quot;73&quot; r=&quot;9.4&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;104&quot; cy=&quot;79&quot; r=&quot;8.4&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;109&quot; cy=&quot;80&quot; r=&quot;8.3&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;79&quot; cy=&quot;81&quot; r=&quot;8.5&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;140&quot; cy=&quot;81&quot; r=&quot;8.6&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;195&quot; cy=&quot;82&quot; r=&quot;8.8&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;197&quot; cy=&quot;84&quot; r=&quot;7.7&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;94&quot; cy=&quot;85&quot; r=&quot;8.7&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;145&quot; cy=&quot;87&quot; r=&quot;7.7&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;69&quot; cy=&quot;88&quot; r=&quot;9.0&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;125&quot; cy=&quot;90&quot; r=&quot;9.9&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;89&quot; cy=&quot;91&quot; r=&quot;7.3&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;31&quot; cy=&quot;96&quot; r=&quot;9.5&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;198&quot; cy=&quot;100&quot; r=&quot;9.8&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;126&quot; cy=&quot;101&quot; r=&quot;7.9&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;166&quot; cy=&quot;105&quot; r=&quot;7.6&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;175&quot; cy=&quot;106&quot; r=&quot;9.0&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;43&quot; cy=&quot;108&quot; r=&quot;7.1&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;52&quot; cy=&quot;109&quot; r=&quot;9.2&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;147&quot; cy=&quot;113&quot; r=&quot;8.9&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;197&quot; cy=&quot;115&quot; r=&quot;7.4&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;109&quot; cy=&quot;116&quot; r=&quot;9.3&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;100&quot; cy=&quot;119&quot; r=&quot;9.7&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;34&quot; cy=&quot;124&quot; r=&quot;7.6&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;161&quot; cy=&quot;124&quot; r=&quot;9.6&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;35&quot; cy=&quot;129&quot; r=&quot;7.3&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;197&quot; cy=&quot;130&quot; r=&quot;8.4&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;196&quot; cy=&quot;135&quot; r=&quot;8.7&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;106&quot; cy=&quot;147&quot; r=&quot;8.5&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;26&quot; cy=&quot;149&quot; r=&quot;8.9&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;190&quot; cy=&quot;160&quot; r=&quot;7.9&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;110&quot; cy=&quot;161&quot; r=&quot;8.0&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;25&quot; cy=&quot;162&quot; r=&quot;7.4&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;18&quot; cy=&quot;167&quot; r=&quot;9.2&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;169&quot; cy=&quot;171&quot; r=&quot;9.2&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;102&quot; cy=&quot;181&quot; r=&quot;9.9&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;90&quot; cy=&quot;190&quot; r=&quot;8.5&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;115&quot; cy=&quot;193&quot; r=&quot;8.3&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;31&quot; cy=&quot;196&quot; r=&quot;9.2&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;91&quot; cy=&quot;196&quot; r=&quot;9.2&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;circle cx=&quot;177&quot; cy=&quot;205&quot; r=&quot;8.4&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;/g&gt;
+        &lt;path id=&quot;route&quot; d=&quot;M20,196 L60,150 L40,104 L92,70 L150,96 L128,150 L188,182
+                            L196,120 L160,40 L88,24&quot; fill=&quot;none&quot; stroke=&quot;var(--accent)&quot;
+              stroke-width=&quot;3&quot; stroke-dasharray=&quot;6 5&quot; opacity=&quot;0&quot;/&gt;
+        &lt;circle id=&quot;walker&quot; cx=&quot;20&quot; cy=&quot;196&quot; r=&quot;5&quot; fill=&quot;var(--accent)&quot; stroke=&quot;var(--bg)&quot;
+                stroke-width=&quot;2.2&quot; opacity=&quot;0&quot;/&gt;
+        &lt;g data-ann=&quot;1&quot;&gt;&lt;circle cx=&quot;13&quot; cy=&quot;232&quot; r=&quot;5&quot; fill=&quot;var(--good)&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;text x=&quot;24&quot; y=&quot;235.4&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;spruce&lt;/text&gt;&lt;circle cx=&quot;13&quot; cy=&quot;247&quot; r=&quot;5&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;text x=&quot;24&quot; y=&quot;250.4&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;ash&lt;/text&gt;&lt;circle cx=&quot;13&quot; cy=&quot;262&quot; r=&quot;5&quot; fill=&quot;var(--warn)&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;text x=&quot;24&quot; y=&quot;265.4&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;birch&lt;/text&gt;&lt;/g&gt;&lt;g data-ann=&quot;1&quot;&gt;&lt;circle cx=&quot;123&quot; cy=&quot;232&quot; r=&quot;5&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;text x=&quot;134&quot; y=&quot;235.4&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;hickory&lt;/text&gt;&lt;circle cx=&quot;123&quot; cy=&quot;247&quot; r=&quot;5&quot; fill=&quot;var(--water)&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;1.6&quot;/&gt;&lt;text x=&quot;134&quot; y=&quot;250.4&quot; font-size=&quot;10.5&quot; fill=&quot;var(--muted)&quot; font-family=&quot;system-ui, sans-serif&quot;&gt;maple&lt;/text&gt;&lt;/g&gt;
+      &lt;/svg&gt;
+      &lt;div class=&quot;readouts&quot;&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Forest&lt;/span&gt;&lt;b id=&quot;roF&quot;&gt;mixed&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Trees tallied&lt;/span&gt;&lt;b&gt;&lt;span id=&quot;roN&quot;&gt;0&lt;/span&gt; of 200&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Species so far&lt;/span&gt;&lt;b id=&quot;roS&quot;&gt;0&lt;/b&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;results&quot;&gt;
+      &lt;table&gt;
+        &lt;caption&gt;Number of trees of each species, in two forests of 200 trees.&lt;/caption&gt;
+        &lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Species&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Mixed forest&lt;/th&gt;
+          &lt;th scope=&quot;col&quot;&gt;Plantation&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+        &lt;tbody id=&quot;tbody&quot;&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;spruce&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;m0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;p0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;ash&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;m1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;p1&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;birch&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;m2&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;p2&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;hickory&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;m3&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;p3&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;maple&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;m4&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;p4&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+        &lt;tfoot&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Total&lt;/th&gt;&lt;td class=&quot;empty&quot; id=&quot;mT&quot;&gt;&amp;mdash;&lt;/td&gt;
+          &lt;td class=&quot;empty&quot; id=&quot;pT&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;What has to be the same in both forests&lt;/legend&gt;
+    &lt;p class=&quot;hint&quot;&gt;Only the forest may differ. Everything else about the survey is held still,
+      or the two columns cannot be set beside each other.&lt;/p&gt;
+    &lt;div class=&quot;fixedgrid&quot;&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Trees counted&lt;/span&gt;&lt;b&gt;200 in each&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Route&lt;/span&gt;&lt;b&gt;the same pattern in both&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Identification key&lt;/span&gt;&lt;b&gt;the same key&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Surveyor&lt;/span&gt;&lt;b&gt;the same person&lt;/b&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/fieldset&gt;
+
+  &lt;div class=&quot;actions&quot;&gt;
+    &lt;button id=&quot;mixed&quot; class=&quot;primary&quot; type=&quot;button&quot;&gt;Survey the mixed forest&lt;/button&gt;
+    &lt;button id=&quot;plant&quot; class=&quot;primary&quot; type=&quot;button&quot;&gt;Survey the plantation&lt;/button&gt;
+    &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Two forests to survey.&lt;/p&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_biodiversity-collect&quot;;
+  var SP = [&quot;spruce&quot;, &quot;ash&quot;, &quot;birch&quot;, &quot;hickory&quot;, &quot;maple&quot;], MIXED = [41, 39, 38, 42, 40], PLANT = [196, 1, 1, 1, 1];
+  var PLOTS = {&quot;mixed&quot;: &quot;&lt;circle cx=\&quot;205\&quot; cy=\&quot;19\&quot; r=\&quot;8.8\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;119\&quot; cy=\&quot;26\&quot; r=\&quot;7.2\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;26\&quot; cy=\&quot;27\&quot; r=\&quot;7.6\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;55\&quot; cy=\&quot;31\&quot; r=\&quot;8.3\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;27\&quot; cy=\&quot;32\&quot; r=\&quot;7.8\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;172\&quot; cy=\&quot;32\&quot; r=\&quot;8.7\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;43\&quot; cy=\&quot;33\&quot; r=\&quot;8.1\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;202\&quot; cy=\&quot;37\&quot; r=\&quot;8.3\&quot; fill=\&quot;var(--warn)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;174\&quot; cy=\&quot;37\&quot; r=\&quot;8.2\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;121\&quot; cy=\&quot;40\&quot; r=\&quot;8.3\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;74\&quot; cy=\&quot;42\&quot; r=\&quot;9.2\&quot; fill=\&quot;var(--warn)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;169\&quot; cy=\&quot;42\&quot; r=\&quot;9.5\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;76\&quot; cy=\&quot;43\&quot; r=\&quot;9.0\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;106\&quot; cy=\&quot;48\&quot; r=\&quot;9.4\&quot; fill=\&quot;var(--warn)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;174\&quot; cy=\&quot;49\&quot; r=\&quot;7.8\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;28\&quot; cy=\&quot;54\&quot; r=\&quot;8.1\&quot; fill=\&quot;var(--warn)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;173\&quot; cy=\&quot;55\&quot; r=\&quot;7.8\&quot; fill=\&quot;var(--warn)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;82\&quot; cy=\&quot;57\&quot; r=\&quot;8.6\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;77\&quot; cy=\&quot;57\&quot; r=\&quot;9.4\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;48\&quot; cy=\&quot;59\&quot; r=\&quot;7.7\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;148\&quot; cy=\&quot;61\&quot; r=\&quot;8.7\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;148\&quot; cy=\&quot;64\&quot; r=\&quot;8.1\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;180\&quot; cy=\&quot;67\&quot; r=\&quot;8.2\&quot; fill=\&quot;var(--warn)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;37\&quot; cy=\&quot;73\&quot; r=\&quot;9.4\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;104\&quot; cy=\&quot;79\&quot; r=\&quot;8.4\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;109\&quot; cy=\&quot;80\&quot; r=\&quot;8.3\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;79\&quot; cy=\&quot;81\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;140\&quot; cy=\&quot;81\&quot; r=\&quot;8.6\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;195\&quot; cy=\&quot;82\&quot; r=\&quot;8.8\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;197\&quot; cy=\&quot;84\&quot; r=\&quot;7.7\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;94\&quot; cy=\&quot;85\&quot; r=\&quot;8.7\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;145\&quot; cy=\&quot;87\&quot; r=\&quot;7.7\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;69\&quot; cy=\&quot;88\&quot; r=\&quot;9.0\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;125\&quot; cy=\&quot;90\&quot; r=\&quot;9.9\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;89\&quot; cy=\&quot;91\&quot; r=\&quot;7.3\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;31\&quot; cy=\&quot;96\&quot; r=\&quot;9.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;198\&quot; cy=\&quot;100\&quot; r=\&quot;9.8\&quot; fill=\&quot;var(--warn)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;126\&quot; cy=\&quot;101\&quot; r=\&quot;7.9\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;166\&quot; cy=\&quot;105\&quot; r=\&quot;7.6\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;175\&quot; cy=\&quot;106\&quot; r=\&quot;9.0\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;43\&quot; cy=\&quot;108\&quot; r=\&quot;7.1\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;52\&quot; cy=\&quot;109\&quot; r=\&quot;9.2\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;147\&quot; cy=\&quot;113\&quot; r=\&quot;8.9\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;197\&quot; cy=\&quot;115\&quot; r=\&quot;7.4\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;109\&quot; cy=\&quot;116\&quot; r=\&quot;9.3\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;100\&quot; cy=\&quot;119\&quot; r=\&quot;9.7\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;34\&quot; cy=\&quot;124\&quot; r=\&quot;7.6\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;161\&quot; cy=\&quot;124\&quot; r=\&quot;9.6\&quot; fill=\&quot;var(--warn)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;35\&quot; cy=\&quot;129\&quot; r=\&quot;7.3\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;197\&quot; cy=\&quot;130\&quot; r=\&quot;8.4\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;196\&quot; cy=\&quot;135\&quot; r=\&quot;8.7\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;106\&quot; cy=\&quot;147\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;26\&quot; cy=\&quot;149\&quot; r=\&quot;8.9\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;190\&quot; cy=\&quot;160\&quot; r=\&quot;7.9\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;110\&quot; cy=\&quot;161\&quot; r=\&quot;8.0\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;25\&quot; cy=\&quot;162\&quot; r=\&quot;7.4\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;18\&quot; cy=\&quot;167\&quot; r=\&quot;9.2\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;169\&quot; cy=\&quot;171\&quot; r=\&quot;9.2\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;102\&quot; cy=\&quot;181\&quot; r=\&quot;9.9\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;90\&quot; cy=\&quot;190\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;115\&quot; cy=\&quot;193\&quot; r=\&quot;8.3\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;31\&quot; cy=\&quot;196\&quot; r=\&quot;9.2\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;91\&quot; cy=\&quot;196\&quot; r=\&quot;9.2\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;177\&quot; cy=\&quot;205\&quot; r=\&quot;8.4\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&quot;, &quot;plantation&quot;: &quot;&lt;circle cx=\&quot;22\&quot; cy=\&quot;22\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;47\&quot; cy=\&quot;22\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;72\&quot; cy=\&quot;22\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;97\&quot; cy=\&quot;22\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;122\&quot; cy=\&quot;22\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;147\&quot; cy=\&quot;22\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;172\&quot; cy=\&quot;22\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;197\&quot; cy=\&quot;22\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;22\&quot; cy=\&quot;47\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;47\&quot; cy=\&quot;47\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;72\&quot; cy=\&quot;47\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;97\&quot; cy=\&quot;47\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;122\&quot; cy=\&quot;47\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;147\&quot; cy=\&quot;47\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;172\&quot; cy=\&quot;47\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;197\&quot; cy=\&quot;47\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;22\&quot; cy=\&quot;72\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;47\&quot; cy=\&quot;72\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;72\&quot; cy=\&quot;72\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;97\&quot; cy=\&quot;72\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;122\&quot; cy=\&quot;72\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;147\&quot; cy=\&quot;72\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;172\&quot; cy=\&quot;72\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;197\&quot; cy=\&quot;72\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;22\&quot; cy=\&quot;97\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;47\&quot; cy=\&quot;97\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;72\&quot; cy=\&quot;97\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--warn)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;97\&quot; cy=\&quot;97\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;122\&quot; cy=\&quot;97\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;147\&quot; cy=\&quot;97\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;172\&quot; cy=\&quot;97\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;197\&quot; cy=\&quot;97\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;22\&quot; cy=\&quot;122\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;47\&quot; cy=\&quot;122\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;72\&quot; cy=\&quot;122\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;97\&quot; cy=\&quot;122\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;122\&quot; cy=\&quot;122\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;147\&quot; cy=\&quot;122\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;172\&quot; cy=\&quot;122\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;197\&quot; cy=\&quot;122\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;22\&quot; cy=\&quot;147\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;47\&quot; cy=\&quot;147\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;72\&quot; cy=\&quot;147\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;97\&quot; cy=\&quot;147\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;122\&quot; cy=\&quot;147\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;147\&quot; cy=\&quot;147\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;172\&quot; cy=\&quot;147\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;197\&quot; cy=\&quot;147\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;22\&quot; cy=\&quot;172\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;47\&quot; cy=\&quot;172\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--water)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;72\&quot; cy=\&quot;172\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;97\&quot; cy=\&quot;172\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;122\&quot; cy=\&quot;172\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;147\&quot; cy=\&quot;172\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;172\&quot; cy=\&quot;172\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;197\&quot; cy=\&quot;172\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;22\&quot; cy=\&quot;197\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;47\&quot; cy=\&quot;197\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;72\&quot; cy=\&quot;197\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;97\&quot; cy=\&quot;197\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;122\&quot; cy=\&quot;197\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;147\&quot; cy=\&quot;197\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;172\&quot; cy=\&quot;197\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&lt;circle cx=\&quot;197\&quot; cy=\&quot;197\&quot; r=\&quot;8.5\&quot; fill=\&quot;var(--good)\&quot; stroke=\&quot;var(--ink)\&quot; stroke-width=\&quot;1.1\&quot;/&gt;&quot;};
+  var busy = false, done = { mixed: false, plantation: false };
+  var msg = document.getElementById(&quot;msg&quot;);
+  var bM = document.getElementById(&quot;mixed&quot;), bP = document.getElementById(&quot;plant&quot;);
+  var route = document.getElementById(&quot;route&quot;), walker = document.getElementById(&quot;walker&quot;);
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? &quot;msg &quot; + kind : &quot;msg&quot;; }
+
+  function survey(which) {
+    if (busy || done[which]) return;
+    busy = true; bM.disabled = true; bP.disabled = true;
+    document.getElementById(&quot;trees&quot;).innerHTML = PLOTS[which];
+    document.getElementById(&quot;roF&quot;).textContent = which;
+    route.setAttribute(&quot;opacity&quot;, 0.9);
+    walker.setAttribute(&quot;opacity&quot;, 1);
+
+    var counts = which === &quot;mixed&quot; ? MIXED : PLANT;
+    var pre = which === &quot;mixed&quot; ? &quot;m&quot; : &quot;p&quot;;
+    var running = counts.map(function () { return 0; });
+    var order = [];
+    counts.forEach(function (c, i) { for (var k = 0; k &lt; c; k++) order.push(i); });
+    for (var a = order.length - 1; a &gt; 0; a--) {
+      var b = Math.floor(Math.random() * (a + 1)), t = order[a];
+      order[a] = order[b]; order[b] = t;
+    }
+
+    var len = route.getTotalLength();
+    var seen = 0, t0 = Date.now(), DUR = 4200;
+    var timer = setInterval(function () {
+      var p = Math.min(1, (Date.now() - t0) / DUR);
+      var pt = route.getPointAtLength(p * len);
+      walker.setAttribute(&quot;cx&quot;, pt.x); walker.setAttribute(&quot;cy&quot;, pt.y);
+      var want = Math.round(p * order.length);
+      while (seen &lt; want) {
+        running[order[seen]]++; seen++;
+      }
+      document.getElementById(&quot;roN&quot;).textContent = seen;
+      var live = 0;
+      running.forEach(function (v, i) {
+        if (v) live++;
+        var cell = document.getElementById(pre + i);
+        cell.textContent = v; cell.classList.remove(&quot;empty&quot;);
+      });
+      document.getElementById(&quot;roS&quot;).textContent = live;
+      var tot = document.getElementById(pre + &quot;T&quot;);
+      tot.textContent = seen; tot.classList.remove(&quot;empty&quot;);
+      if (p &gt;= 1) {
+        clearInterval(timer);
+        // the tally has to land on the survey&#x27;s own figures, not on wherever the timer stopped
+        counts.forEach(function (v, i) {
+          document.getElementById(pre + i).textContent = v;
+        });
+        tot.textContent = counts.reduce(function (s, v) { return s + v; }, 0);
+        walker.setAttribute(&quot;opacity&quot;, 0);
+        done[which] = true; busy = false;
+        bM.disabled = done.mixed; bP.disabled = done.plantation;
+        if (done.mixed &amp;&amp; done.plantation) {
+          say(&quot;Both forests surveyed, 200 trees each. Which one the figures pick out, and on &quot;
+              + &quot;what measure, is the next stage.&quot;, &quot;good&quot;);
+        } else {
+          say(which + &quot; done. Now the other forest, the same way.&quot;);
+        }
+        reportHeight();
+      }
+    }, 40);
+  }
+
+  bM.addEventListener(&quot;click&quot;, function () { survey(&quot;mixed&quot;); });
+  bP.addEventListener(&quot;click&quot;, function () { survey(&quot;plantation&quot;); });
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    if (busy) return;
+    done = { mixed: false, plantation: false };
+    SP.forEach(function (_, i) {
+      [&quot;m&quot;, &quot;p&quot;].forEach(function (pre) {
+        var e = document.getElementById(pre + i);
+        e.textContent = &quot;\u2014&quot;; e.classList.add(&quot;empty&quot;);
+      });
+    });
+    [&quot;mT&quot;, &quot;pT&quot;].forEach(function (id) {
+      var e = document.getElementById(id);
+      e.textContent = &quot;\u2014&quot;; e.classList.add(&quot;empty&quot;);
+    });
+    document.getElementById(&quot;trees&quot;).innerHTML = PLOTS.mixed;
+    document.getElementById(&quot;roF&quot;).textContent = &quot;mixed&quot;;
+    document.getElementById(&quot;roN&quot;).textContent = &quot;0&quot;;
+    document.getElementById(&quot;roS&quot;).textContent = &quot;0&quot;;
+    route.setAttribute(&quot;opacity&quot;, 0);
+    bM.disabled = false; bP.disabled = false;
+    say(&quot;Two forests to survey.&quot;);
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="940" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="skillvideo"><div class="shead"><span class="num">Stage 4</span><span class="kind">Video &middot; 89 seconds</span></div><h2>Watch how to judge a conclusion</h2><p class="blurb">Why species richness cannot separate these two forests, what evenness adds, and two conclusions the data does not support.</p><div class="media"><video controls preload="metadata" playsinline src="videos/biodiversity-skill.mp4"></video></div></section>
+<section class="stage" id="skill"><div class="shead"><span class="num">Stage 5</span><span class="kind">Simulation &middot; Three conclusions, one supported</span></div><h2>Judge the conclusions</h2><p class="blurb">Three statements about the two forests. Decide which the survey supports, and say what is wrong with the others.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Writing a conclusion the data supports&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.step[hidden]{display:none}
+.step h2{font-size:12.5px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.step p.ask{margin:0 0 10px;font-size:15px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:6px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:14px}
+th{background:var(--card);font-weight:650}
+th[scope=row]{text-align:left}
+td.cell{cursor:pointer}
+td.cell:hover{background:var(--accent-soft)}
+td.cell:focus{outline:2px solid var(--accent);outline-offset:-2px}
+td.flagged{background:var(--warn-bg);color:var(--warn);font-weight:700;
+  box-shadow:inset 0 0 0 2px var(--warn-line)}
+td.mean{font-weight:650}
+td.dim{color:var(--muted)}
+.choices{display:grid;gap:8px}
+.choice{text-align:left;padding:10px 12px;border:2px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--fg);font:inherit;cursor:pointer;width:100%}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.calc{display:grid;gap:8px}
+.calcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.calcrow .lab{flex:1 1 200px;font-size:14.5px}
+.calcrow .work{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;
+  color:var(--muted)}
+.entry{display:flex;align-items:center;gap:6px}
+.entry input{width:88px;padding:7px 9px;border:2px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--fg);font:inherit;font-size:16px;font-weight:650;
+  text-align:right;font-variant-numeric:tabular-nums}
+.entry input:focus{outline:none;border-color:var(--accent)}
+.entry input:disabled{opacity:1;border-color:var(--good-line);background:var(--good-bg);
+  color:var(--good)}
+.entry input.miss{border-color:var(--bad-line);background:var(--bad-bg)}
+.entry .unit{font-size:13.5px;color:var(--muted);min-width:22px}
+.entry button{padding:7px 12px;border:1px solid var(--accent);border-radius:7px;
+  background:var(--accent);color:var(--accent-fg);font:inherit;font-weight:650;cursor:pointer}
+.entry button:disabled{opacity:.45;cursor:default}
+.calcrow.done{border-color:var(--good-line);background:var(--good-bg)}
+.calcrow.done .work{color:var(--good)}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.final{margin-top:12px;font-size:15px;background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:9px;padding:11px 13px}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Writing a conclusion the data supports&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;Two forests, 200 trees counted in each, the same five species in both.&lt;/p&gt;
+
+&lt;table&gt;&lt;caption&gt;Trees of each species, from a survey of 200 trees in each forest.&lt;/caption&gt;
+&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Woodland&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;spruce&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;ash&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;birch&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;hickory&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;maple&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Total&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Mixed&lt;/th&gt;&lt;td&gt;41&lt;/td&gt;&lt;td&gt;39&lt;/td&gt;&lt;td&gt;38&lt;/td&gt;&lt;td&gt;42&lt;/td&gt;&lt;td&gt;40&lt;/td&gt;&lt;td class=&quot;mean&quot;&gt;200&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Plantation&lt;/th&gt;&lt;td&gt;196&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td class=&quot;mean&quot;&gt;200&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s1&quot;&gt;
+&lt;h2&gt;Step 1 &amp;mdash; count the species&lt;/h2&gt;
+&lt;div class=&quot;calc&quot;&gt;&lt;div class=&quot;calcrow&quot; id=&quot;row-sp&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Species in the mixed forest&lt;/span&gt;&lt;span class=&quot;work&quot; id=&quot;work-sp&quot;&gt;count the species present&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-sp&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Species in the mixed forest&quot;&gt;&lt;span class=&quot;unit&quot;&gt;species&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;div class=&quot;calcrow&quot; id=&quot;row-sp2&quot;&gt;&lt;span class=&quot;lab&quot;&gt;Species in the plantation&lt;/span&gt;&lt;span class=&quot;work&quot; id=&quot;work-sp2&quot;&gt;count the species present&lt;/span&gt;&lt;span class=&quot;entry&quot; id=&quot;spin-sp2&quot;&gt;&lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; aria-label=&quot;Species in the plantation&quot;&gt;&lt;span class=&quot;unit&quot;&gt;species&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Check&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s2&quot; hidden&gt;
+&lt;h2&gt;Step 2 &amp;mdash; so which is more biodiverse?&lt;/h2&gt;
+&lt;div class=&quot;choices&quot; id=&quot;c2&quot;&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot;&gt;The mixed forest, because its 200 trees are
+shared far more evenly between the same five species.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Neither, because both forests hold five
+species and 200 trees.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;The plantation, because one species has grown
+there far more successfully than the rest.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;The mixed forest, because it holds more
+species than the plantation does.&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;step&quot; id=&quot;s3&quot; hidden&gt;
+&lt;h2&gt;Step 3 &amp;mdash; what this survey cannot tell you&lt;/h2&gt;
+&lt;p class=&quot;ask&quot;&gt;Which of these does the data &lt;b&gt;not&lt;/b&gt; support?&lt;/p&gt;
+&lt;div class=&quot;choices&quot; id=&quot;c3&quot;&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;1&quot;&gt;The mixed forest is healthier than the
+plantation.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Spruce is the most common tree in the
+plantation.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Both forests contain ash, birch, hickory
+and maple.&lt;/button&gt;
+&lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ok=&quot;0&quot;&gt;Four of the plantation&#x27;s species are rare
+within it.&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Start by counting the species.&lt;/p&gt;
+&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;skill-biodiversity-conclusion&quot;;
+  var msg = document.getElementById(&quot;msg&quot;), got = { sp: false, sp2: false };
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+
+  // DAN&#x27;S RULING, 1 OCTOBER: the student types the answer. This replaces a stepper, whose
+  // trouble was that it could be walked to the right number without ever working it out --
+  // nudge, look, nudge again. A box has to be filled in before anything happens.
+  //
+  // The cost of a box is that it can be given nonsense, so this one says what it wants rather
+  // than silently refusing, and the misses are graded: the first says only that it is wrong,
+  // the second names the operation, the third names the operation with the numbers in it. It
+  // never gives the answer, and there is no limit on tries.
+  function entry(host, opts) {
+    var input = host.querySelector(&quot;input&quot;), btn = host.querySelector(&quot;button&quot;);
+    var tries = 0, locked = false;
+
+    function submit() {
+      if (locked) return;
+      var raw = input.value.trim().replace(/,/g, &quot;&quot;).replace(/^[x\u00d7]/i, &quot;&quot;);
+      input.classList.remove(&quot;miss&quot;);
+      if (!raw) { opts.onbad(&quot;Type your answer in the box, then press Check.&quot;); return; }
+      // &quot;6 plants&quot; is a different mistake from &quot;abc&quot;, and saying so is the whole point of
+      // letting them type: a stepper could not tell you what you had got wrong.
+      if (!/^-?\d*\.?\d+$/.test(raw)) {
+        opts.onbad(/\d/.test(raw)
+          ? &quot;Just the number, without the units \u2014 they are already printed beside the box.&quot;
+          : &quot;That is not a number. Type digits, and a decimal point if you need one.&quot;);
+        input.classList.add(&quot;miss&quot;);
+        return;
+      }
+      var v = parseFloat(raw);
+      tries++;
+      if (Math.abs(v - opts.want) &lt; 1e-9) {
+        locked = true;
+        input.disabled = true; btn.disabled = true;
+        input.value = opts.fmt ? opts.fmt(v) : v;
+        opts.onright(v);
+      } else {
+        input.classList.add(&quot;miss&quot;);
+        input.select();
+        opts.onwrong(v, tries);
+      }
+    }
+
+    btn.addEventListener(&quot;click&quot;, submit);
+    input.addEventListener(&quot;keydown&quot;, function (e) {
+      if (e.key === &quot;Enter&quot;) { e.preventDefault(); submit(); }
+    });
+    input.addEventListener(&quot;input&quot;, function () { input.classList.remove(&quot;miss&quot;); });
+    return { focus: function () { input.focus(); } };
+  }
+
+  function counter(id, key) {
+    var row = document.getElementById(&quot;row-&quot; + id);
+    entry(document.getElementById(&quot;spin-&quot; + id), {
+      want: 5,
+      onbad: function (m) { say(m, &quot;warn&quot;); reportHeight(); },
+      onwrong: function (v, n) {
+        say(n === 1 ? v + &quot; is not the number of species in that column.&quot;
+          : &quot;Count the rows that have a tree in them. A species with only one tree still &quot;
+            + &quot;counts as a species present.&quot;, &quot;warn&quot;);
+        reportHeight();
+      },
+      onright: function () {
+        row.classList.add(&quot;done&quot;); got[key] = true;
+        if (got.sp &amp;&amp; got.sp2) {
+          document.getElementById(&quot;s2&quot;).hidden = false;
+          say(&quot;Both forests hold five species. Counting species alone cannot tell them apart, &quot;
+              + &quot;so it cannot be the whole of what biodiversity means.&quot;, &quot;good&quot;);
+        } else { say(&quot;Five. Now do the other one.&quot;); }
+        reportHeight();
+      } });
+  }
+  counter(&quot;sp&quot;, &quot;sp&quot;); counter(&quot;sp2&quot;, &quot;sp2&quot;);
+
+  function choose(id, good, bad, nextId) {
+    Array.prototype.forEach.call(document.querySelectorAll(&quot;#&quot; + id + &quot; .choice&quot;), function (b) {
+      b.addEventListener(&quot;click&quot;, function () {
+        Array.prototype.forEach.call(document.querySelectorAll(&quot;#&quot; + id + &quot; .choice&quot;),
+          function (o) { o.disabled = true; if (o.dataset.ok === &quot;1&quot;) o.classList.add(&quot;right&quot;); });
+        var ok = b.dataset.ok === &quot;1&quot;;
+        if (!ok) b.classList.add(&quot;wrong&quot;);
+        say(ok ? good : bad, ok ? &quot;good&quot; : &quot;warn&quot;);
+        if (ok &amp;&amp; nextId) document.getElementById(nextId).hidden = false;
+        reportHeight();
+      });
+    });
+  }
+  choose(&quot;c2&quot;,
+    &quot;Right. Both hold five species, so what separates them is how evenly the trees are spread &quot;
+    + &quot;between those species. In the plantation one species is almost everything.&quot;,
+    &quot;Not this one. Look at how the 200 trees are shared out. Both forests have five species, &quot;
+    + &quot;so the number of species is not what distinguishes them.&quot;, &quot;s3&quot;);
+  choose(&quot;c3&quot;,
+    &quot;Right. Nothing here measures health. The survey counted trees by species, so it supports &quot;
+    + &quot;claims about how many and how evenly, and nothing about how well either forest is &quot;
+    + &quot;doing.&quot;,
+    &quot;That one the data does support: it can be read straight off the table. Look for the claim &quot;
+    + &quot;that goes beyond what was actually counted.&quot;);
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function(){ location.reload(); });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1100" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="conclusion"><div class="shead"><span class="num">Stage 6</span><span class="kind">Question &middot; A worked example, then one choice</span></div><h2>Choose the conclusion</h2><p class="blurb">What does the survey show? A conclusion from another investigation, with what makes it good, and then three for your own.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Choose the conclusion&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+  margin-top:12px}
+.panel[hidden]{display:none}
+.panel h2{font-size:12px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.setup{font-size:13.5px;color:var(--muted);margin:0 0 9px}
+.model{font-size:15px;line-height:1.62;margin:0;padding:11px 13px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:9px;counter-reset:st}
+.steps li{counter-increment:st;position:relative;font-size:14px;line-height:1.55;
+  background:var(--bg);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px 10px 44px}
+.steps li::before{content:counter(st);position:absolute;left:11px;top:10px;width:22px;
+  height:22px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
+  font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.steps b{display:block;color:var(--fg);font-weight:650;font-size:14.5px;margin-bottom:2px}
+.steps span{color:var(--muted)}
+.shape{font-size:13.5px;margin:11px 0 0;padding:9px 11px;border:1px solid var(--warn-line);
+  background:var(--warn-bg);color:var(--warn);border-radius:8px}
+.recap{font-size:14px;line-height:1.55;margin:0 0 11px;padding:10px 12px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.q{font-size:15px;font-weight:600;margin:0 0 10px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:11px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:14.5px;line-height:1.55;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.picked{border-color:var(--accent)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw{font-size:13.5px;line-height:1.5;margin:6px 0 0;padding:8px 11px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line)}
+.rw.good{border-color:var(--good-line);background:var(--good-bg)}
+.rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw b{font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Choose the conclusion&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;A conclusion says what the results show. It is not a summary of what you did.&lt;/p&gt;
+
+&lt;div class=&quot;panel&quot;&gt;
+&lt;h2&gt;How to write a conclusion&lt;/h2&gt;
+&lt;p class=&quot;setup&quot;&gt;Three steps, in this order. They are the same three whatever you
+  investigated.&lt;/p&gt;
+&lt;ol class=&quot;steps&quot;&gt;&lt;li&gt;&lt;b&gt;State which one the survey picks out.&lt;/b&gt;&lt;span&gt;Say which of the two the figures favor, and on what measure. One sentence, and name the measure, because a reader cannot guess which one decided it.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the data that evidences it.&lt;/b&gt;&lt;span&gt;Quote figures from both of them, so the difference can be seen rather than taken on trust. Figures from one side only prove nothing about the other.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Point out any exceptions.&lt;/b&gt;&lt;span&gt;Name anything that does not fit, including any measure on which the two come out level. A measure that cannot separate them is part of the answer, not a hole in it.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;p class=&quot;shape&quot;&gt;Now do those three things for your own survey. Only one of the three below does all of them, using figures from both of the places you surveyed.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;panel&quot;&gt;
+&lt;h2&gt;Now your own results&lt;/h2&gt;
+&lt;p class=&quot;recap&quot;&gt;You were asked which of two forests is the more biodiverse. Your mixed forest held 41, 39, 38, 42 and 40 trees of its 5 species, and the plantation held 196, 1, 1, 1 and 1. Both forests hold 200 trees, and both have a species richness of 5.&lt;/p&gt;
+&lt;p class=&quot;q&quot;&gt;Which of these is a conclusion, and one your own survey supports?&lt;/p&gt;
+&lt;div class=&quot;opts&quot; id=&quot;opts&quot;&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Pick one. You get one go at it, and
+then all three are explained.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;panel&quot; id=&quot;after&quot; hidden&gt;
+&lt;h2&gt;The three steps again&lt;/h2&gt;
+&lt;ol class=&quot;steps&quot; id=&quot;afterlist&quot;&gt;&lt;li&gt;&lt;b&gt;State which one the survey picks out.&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the data that evidences it.&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Point out any exceptions.&lt;/b&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;conclusion-biodiversity&quot;;
+  var OPTS = [{&quot;text&quot;: &quot;Species richness is 5 in both forests and both hold 200 trees, so richness cannot separate them. They differ in evenness: the mixed forest runs from 38 to 42 trees of each species, while one species takes 196 of the plantation&#x27;s 200. The mixed forest is the more biodiverse, though the survey does not show which is healthier.&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;A conclusion, and it does what the comparison needs: it says why the first measure fails, names the second one that works, and quotes figures from both forests.&quot;}, {&quot;text&quot;: &quot;Species richness is 5 in both forests and both hold 200 trees, so the two are equally biodiverse. They differ in evenness: the mixed forest runs from 38 to 42 trees of each species, while one species takes 196 of the plantation&#x27;s 200. Neither is ahead, though the survey does not show which is healthier, because only the trees were counted.&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;Everything up to the last sentence is right, and then it stops one step short. Equal species richness does not make two forests equally biodiverse, and the evenness it has just described is the measure that separates them &amp;mdash; on that one the two forests are as far apart as 5 species can be.&quot;}, {&quot;text&quot;: &quot;One species takes 196 of the 200 trees in the plantation, and no species in the mixed forest passes 42 trees. So the plantation is the more biodiverse, since a species growing in numbers like that is plainly one the plantation suits. The survey does not show what it is about the plantation that suits that one species so well.&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;This has it the wrong way round. One species taking 196 of 200 is the lowest evenness five species could have, and it is evenness that separates the two forests. A forest that suits one tree is not a diverse forest.&quot;}];
+  var LETTERS = &quot;ABC&quot;;
+  var box = document.getElementById(&quot;opts&quot;), msg = document.getElementById(&quot;msg&quot;);
+  var done = false;
+
+  // Fisher-Yates, so the accurate conclusion is in no fixed position.
+  var order = OPTS.map(function (o, i) { return i; });
+  for (var i = order.length - 1; i &gt; 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1)), t = order[i];
+    order[i] = order[j]; order[j] = t;
+  }
+
+  order.forEach(function (idx, pos) {
+    var o = OPTS[idx];
+    var b = document.createElement(&quot;button&quot;);
+    b.type = &quot;button&quot;;
+    b.className = &quot;opt&quot;;
+    b.dataset.i = idx;
+    b.innerHTML = &#x27;&lt;span class=&quot;ltr&quot;&gt;&#x27; + LETTERS[pos] + &#x27;&lt;/span&gt;&lt;span&gt;&#x27; + o.text + &#x27;&lt;/span&gt;&#x27;;
+    box.appendChild(b);
+    var r = document.createElement(&quot;p&quot;);
+    r.className = &quot;rw&quot;;
+    r.id = &quot;rw&quot; + idx;
+    r.hidden = true;
+    box.appendChild(r);
+  });
+
+  box.addEventListener(&quot;click&quot;, function (e) {
+    var b = e.target.closest(&quot;.opt&quot;);
+    if (!b || done) return;
+    done = true;
+    var chosen = +b.dataset.i;
+
+    OPTS.forEach(function (o, idx) {
+      var btn = box.querySelector(&#x27;.opt[data-i=&quot;&#x27; + idx + &#x27;&quot;]&#x27;);
+      btn.disabled = true;
+      btn.classList.add(o.ok ? &quot;right&quot; : &quot;wrong&quot;);
+      var r = document.getElementById(&quot;rw&quot; + idx);
+      r.hidden = false;
+      r.className = &quot;rw &quot; + (o.ok ? &quot;good&quot; : &quot;bad&quot;);
+      var head = o.ok ? &quot;The accurate one.&quot; : &quot;Not this one.&quot;;
+      if (idx === chosen) head = o.ok ? &quot;You picked this one, and it is the accurate one.&quot;
+                                      : &quot;You picked this one.&quot;;
+      r.innerHTML = &quot;&lt;b&gt;&quot; + head + &quot;&lt;/b&gt; &quot; + o.why;
+    });
+
+    var right = OPTS[chosen].ok;
+    msg.textContent = right
+      ? &quot;That is the one. Read the other two as well \u2014 each is wrong in a way that is &quot;
+        + &quot;easy to fall into.&quot;
+      : &quot;Not that one. The accurate conclusion is marked in green, and every option now says &quot;
+        + &quot;what is right or wrong with it.&quot;;
+    msg.className = &quot;msg &quot; + (right ? &quot;good&quot; : &quot;warn&quot;);
+    document.getElementById(&quot;after&quot;).hidden = false;
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="1130" loading="lazy" title="Simulation"></iframe></div></section>
+<section class="stage" id="questions"><div class="shead"><span class="num">Stage 7</span><span class="kind">Questions &middot; Eight items</span></div><h2>Answer eight questions</h2><p class="blurb">On carrying the survey out, and on what its figures show.</p><div class="media"><iframe srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Comparing two forests — questions&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.q h2{font-size:12px;margin:0 0 6px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.q .stem{margin:0 0 10px;font-weight:500}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;text-align:left;padding:9px 11px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.fb{margin-top:8px;font-size:13.5px;padding:8px 10px;border-radius:8px;display:none}
+.fb.on{display:block;background:var(--bg);border:1px solid var(--line)}
+.score{margin-top:14px;font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;&lt;h1&gt;Comparing two forests&lt;/h1&gt;&lt;p class=&quot;sub&quot;&gt;Eight questions on the survey and on what its figures show.&lt;/p&gt;&lt;div class=&quot;q&quot; data-qn=&quot;1&quot;&gt;&lt;h2&gt;Question 1 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;Two forests are being compared for biodiversity, and 200 trees are counted in each one. Why is the same number counted in both?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;So that the two sets of figures can be set beside each other, with the forest as the only difference.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;So that neither of the two surveys takes any longer to finish than the other one does.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;So that every species in each of the forests is certain to turn up in the count.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb1&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;2&quot;&gt;&lt;h2&gt;Question 2 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A forest survey records 200 trees belonging to 5 species. What is the species richness of that forest?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;5, which is the number of different species found.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;200, which is the number of trees found.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;40, which is the number of trees per species.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb2&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;3&quot;&gt;&lt;h2&gt;Question 3 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A mixed forest holds 41, 39, 38, 42 and 40 trees of its 5 species. A plantation holds 196, 1, 1, 1 and 1. What does evenness tell you that species richness does not?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;How the 200 trees are shared out between the species that are there.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;How many species are present in each of the two forests.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Which of the two forests holds the rarer species.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb3&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;4&quot;&gt;&lt;h2&gt;Question 4 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A mixed forest and a plantation each hold 200 trees of 5 species. In the mixed forest the counts run from 38 to 42; in the plantation one species has 196. Which is the more biodiverse, and why?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;The mixed forest, because its trees are shared far more evenly between the same five species.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;The plantation, because one species is doing well enough there to reach 196 trees.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Neither, because the two forests hold the same number of species and the same number of trees.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb4&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;5&quot;&gt;&lt;h2&gt;Question 5 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A survey counts and identifies 200 trees in each of two forests and nothing else. Which of these can the survey not say?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Which of the two forests is the healthier.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Which forest has its trees shared more evenly between its species.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;How many species were found in each forest.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb5&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;6&quot;&gt;&lt;h2&gt;Question 6 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;During a forest survey a student meets a tree they cannot name. What should they do with it?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Check it against the identification key before adding a tally mark.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Tally it as whatever the tree next to it is, since trees of a kind grow together.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Leave it out of the survey and carry on to the next tree.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb6&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;7&quot;&gt;&lt;h2&gt;Question 7 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;Two forests are surveyed on the same day using the same identification key. Why does it matter that the key is the same one?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Two keys can draw the line between similar species in different places.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;A second key might leave out a species that grows in one of the forests.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Using one key throughout gets both surveys finished more quickly.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb7&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;8&quot;&gt;&lt;h2&gt;Question 8 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;In a plantation, four of the five species have just one tree each out of 200. A student says the plantation therefore has a species richness of 1. Why is that wrong?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Richness counts the species that are present, and a species with one tree is present.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Richness counts the species that are present, and four species with one tree each make a richness of 4.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Richness is worked out from the number of trees, so with 200 trees it cannot be 1.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb8&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;p class=&quot;score&quot; id=&quot;score&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;practical_biodiversity-questions&quot;;
+  var EXPL = {&quot;1&quot;: &quot;If 200 trees were counted in one forest and 50 in the other, the first would show more of everything for that reason alone. Equal totals leave the forest as the one thing that differs.&quot;, &quot;2&quot;: &quot;Species richness is a plain count of how many different species are present. How many trees each one has is a separate matter, and it is the evenness.&quot;, &quot;3&quot;: &quot;Both forests have a richness of 5, so richness cannot separate them. Evenness can: one forest shares its trees almost equally, and in the other a single species holds 196 of the 200.&quot;, &quot;4&quot;: &quot;Biodiversity takes in both how many species there are and how the individuals are shared between them. The richness is tied, so the evenness decides, and the mixed forest is far the more even.&quot;, &quot;5&quot;: &quot;Health would need something measured about the trees themselves &amp;mdash; growth, disease, the soil they stand in. This survey counted trees and named them, so what it can speak about is how many and how shared.&quot;, &quot;6&quot;: &quot;A tally mark against the wrong species cannot be found afterward by anyone reading the table. The key exists for exactly this moment, and using it costs a minute.&quot;, &quot;7&quot;: &quot;Everything that differs between the two surveys arrives in the figures looking like a difference between the forests. One key means one dividing line between species, applied the same way in both.&quot;, &quot;8&quot;: &quot;A single tree is still a tree of that species, so all five count and the richness is 5. What the four lone trees do change is the evenness, and that is where the difference between the two forests lives.&quot;}, ERR = {&quot;1&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;the time taken is not what the comparison rests on&quot;, &quot;c&quot;: &quot;counting 200 trees gives no such guarantee in either forest&quot;}, &quot;2&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;counts individuals where species are wanted&quot;, &quot;c&quot;: &quot;that is a share, not a count of species&quot;}, &quot;3&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;that is the richness, and it is 5 in both&quot;, &quot;c&quot;: &quot;the survey names the species but does not say which are rare&quot;}, &quot;4&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;one species doing well is the opposite of a diverse forest&quot;, &quot;c&quot;: &quot;richness is only half of what biodiversity means&quot;}, &quot;5&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;the counts show exactly that&quot;, &quot;c&quot;: &quot;the identifications give the richness directly&quot;}, &quot;6&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;often true, which is why it hides a rare species so well&quot;, &quot;c&quot;: &quot;loses the unusual trees first, and those matter most here&quot;}, &quot;7&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;a missing species is a different fault from an inconsistent one&quot;, &quot;c&quot;: &quot;speed is not what the comparison depends on&quot;}, &quot;8&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;leaves out the species with 196 trees&quot;, &quot;c&quot;: &quot;richness is not worked out from the number of trees at all&quot;}}, TOTAL = 8;
+  var done = {}, right = 0;
+  var score = document.getElementById(&quot;score&quot;);
+
+  // The JSON keeps every key at option a, because TimeBack randomises. This page does not, so
+  // without a shuffle here the key sits at A in all eight and is spotted by question three.
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;.opts&quot;), function (box) {
+    var kids = Array.prototype.slice.call(box.children);
+    for (var i = kids.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = kids[i];
+      kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k, n) {
+      box.appendChild(k);
+      k.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCD&quot;[n];
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;.opt&quot;), function (b) {
+    b.addEventListener(&quot;click&quot;, function () {
+      var qn = b.dataset.q;
+      if (done[qn]) return;
+      done[qn] = true;
+      var ok = b.dataset.ok === &quot;1&quot;;
+      if (ok) right++;
+      var q = document.querySelector(&#x27;.q[data-qn=&quot;&#x27; + qn + &#x27;&quot;]&#x27;);
+      Array.prototype.forEach.call(q.querySelectorAll(&quot;.opt&quot;), function (o) {
+        o.disabled = true;
+        if (o.dataset.ok === &quot;1&quot;) o.classList.add(&quot;right&quot;);
+      });
+      if (!ok) b.classList.add(&quot;wrong&quot;);
+      var fb = document.getElementById(&quot;fb&quot; + qn);
+      fb.className = &quot;fb on&quot;;
+      // the error paths are whole clauses, not verb phrases, so they lead the feedback
+      var why = ERR[qn][b.dataset.o];
+      fb.innerHTML = (ok ? &quot;&quot; : &quot;&lt;b&gt;&quot; + why.charAt(0).toUpperCase() + why.slice(1)
+                                + &quot;.&lt;/b&gt; &quot;) + EXPL[qn];
+      var n = Object.keys(done).length;
+      score.textContent = n + &quot; of &quot; + TOTAL + &quot; answered, &quot; + right + &quot; right.&quot;;
+      reportHeight();
+    });
+  });
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    location.reload();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" height="3400" loading="lazy" title="Simulation"></iframe></div></section>
+<footer><p><strong>Nothing here is marked behind the scenes.</strong> TimeBack cannot see inside a simulation, so the simulations are the practical and what a student is assessed on is the eight questions at the end, together with the checkpoints in the lessons this practical belongs to.</p><p>The readings are the same for every student, because a marked question needs one right answer. The analysis skill this practical teaches is <strong>forming a conclusion the data supports</strong>, and no two of the six practicals teach the same one.</p></footer></div>

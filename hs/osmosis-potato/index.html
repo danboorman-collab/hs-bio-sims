@@ -1,0 +1,1630 @@
+<title>HS Biology: Osmosis in potato</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#fbfaf8; --surface:#ffffff; --ink:#1b1e22; --muted:#6f6a63;
+  --line:#e7e2da; --rule:#d8d2c8; --accent:#0e6f66; --accent-soft:#e2efec;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+    --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#131519; --surface:#191c21; --ink:#e9e6e1; --muted:#9a948b;
+  --line:#2a2e35; --rule:#333942; --accent:#35caba; --accent-soft:#12312e;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1020px;margin:0 auto;padding-inline:20px;padding-block:44px 64px}
+
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6.4vw,44px);line-height:1.12;
+  letter-spacing:-.015em;margin:0 0 14px;text-wrap:balance}
+.lead{font-family:var(--serif);font-size:clamp(17px,2.4vw,20px);line-height:1.5;color:var(--ink);
+  margin:0 0 28px;max-width:56ch}
+.lead em{font-style:italic;color:var(--accent);font-weight:600}
+
+.design{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 40px}
+.design div{flex:1 1 205px;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:14px 16px}
+.design dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 5px}
+.design dd{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
+
+nav.jump{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin:0 0 44px;
+  scrollbar-width:thin}
+nav.jump a{flex:0 0 auto;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;background:var(--surface);white-space:nowrap}
+nav.jump a:hover,nav.jump a:focus-visible{color:var(--accent);border-color:var(--accent)}
+
+section.stage{border-top:1px solid var(--rule);padding-top:26px;margin-top:44px;
+  scroll-margin-top:24px}
+section.stage:first-of-type{margin-top:0}
+.shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+  letter-spacing:.08em}
+.kind{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(21px,3.6vw,27px);line-height:1.2;
+  margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.blurb{color:var(--muted);font-size:15.5px;margin:0 0 20px}
+
+.media{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+video{width:100%;display:block;background:#0b0d10}
+iframe{width:100%;border:0;display:block;background:var(--surface)}
+
+footer{border-top:1px solid var(--rule);margin-top:52px;padding-top:22px;color:var(--muted);
+  font-size:14.5px}
+footer p{margin:0 0 10px;max-width:62ch}
+footer strong{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+
+<script>
+// Registered before the frames are parsed: a srcdoc frame runs its script during parsing and
+// would otherwise post its height into a page that is not listening yet.
+(function () {
+  window.addEventListener("message", function (e) {
+    if (!e.data || e.data.type !== "sim-height") return;
+    var frames = document.querySelectorAll("iframe");
+    for (var i = 0; i < frames.length; i++) {
+      if (frames[i].contentWindow === e.source) {
+        frames[i].style.height = e.data.height + "px";
+        return;
+      }
+    }
+  });
+}());
+</script>
+<div class="wrap">
+<p class="eyebrow">Required practical &middot; High School Biology</p>
+<h1>Osmosis in potato</h1>
+<p class="lead">Does the concentration of the solution around a potato cylinder change its mass? Seven stages, in the order a student works through them &mdash; <em>watch, set up, measure, plot, conclude, answer</em>.</p>
+<dl class="design"><div><dt>What we change</dt><dd>The concentration of the sucrose solution: 0, 5, 10, 15 and 20%</dd></div><div><dt>What we measure</dt><dd>The mass of each cylinder, before and after</dd></div><div><dt>What we keep the same</dt><dd>The potato, the size of cylinder, the volume of solution, and the 30 minutes</dd></div></dl>
+<nav class="jump" aria-label="The seven stages"><a href="#method">1. Watch the method</a><a href="#equipment">2. Set out the equipment</a><a href="#collect">3. Collect the results</a><a href="#graph">4. Watch how to draw the graph</a><a href="#plot">5. Plot the results</a><a href="#conclusion">6. Choose the conclusion</a><a href="#questions">7. Answer eight questions</a></nav>
+<section class="stage" id="method"><div class="shead"><span class="num">Stage 1</span><span class="kind">Video &middot; 86 seconds</span></div><h2>Watch the method</h2><p class="blurb">How the cylinders are cut, blotted, weighed and left &mdash; and what is held the same while the concentration changes.</p><div class="media"><video controls preload="metadata" playsinline src="videos/osmosis-method.mp4"></video></div></section>
+<section class="stage" id="equipment"><div class="shead"><span class="num">Stage 2</span><span class="kind">Simulation &middot; Sixteen pieces on the bench</span></div><h2>Set out the equipment</h2><p class="blurb">Choose what the method needs. One submission, then every piece is marked and explained.</p><div class="media"><iframe title="Simulation" height="1200" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Set out the equipment&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.tray{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.tile{background:var(--card);border:2px solid var(--line);border-radius:10px;padding:6px 4px 4px;
+  cursor:pointer;font:inherit;color:var(--fg);display:flex;flex-direction:column;gap:2px;
+  align-items:center;text-align:center}
+.tile svg{width:100%;height:auto;max-width:86px;display:block}
+.tile .nm{font-size:12px;line-height:1.25;font-weight:600}
+.tile[aria-pressed=&quot;true&quot;]{border-color:var(--accent);background:var(--bg);
+  box-shadow:inset 0 0 0 2px var(--accent)}
+.tile .mk{font-size:11px;font-weight:700;min-height:14px}
+.tile.hit{border-color:var(--good-line);background:var(--good-bg)} .tile.hit .mk{color:var(--good)}
+.tile.miss{border-color:var(--bad-line);background:var(--bad-bg)} .tile.miss .mk{color:var(--bad)}
+.tile.over{border-color:var(--warn-line);background:var(--warn-bg)} .tile.over .mk{color:var(--warn)}
+.tile:disabled{cursor:default}
+.why{margin-top:14px;display:grid;gap:8px}
+.why h2{font-size:13px;margin:0;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.why ul{margin:0;padding-left:18px} .why li{font-size:13.5px;margin-bottom:5px}
+.why li b{font-weight:650}
+.rig{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px}
+.rig svg,.rig .rigphoto{width:100%;height:auto;display:block;border-radius:6px}
+.rig .cap{font-size:12.5px;color:var(--muted);padding-top:6px}
+.count{font-variant-numeric:tabular-nums}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+  &lt;h1&gt;Set out the equipment&lt;/h1&gt;
+  &lt;p class=&quot;sub&quot;&gt;Choose every piece of equipment this method needs, then check your set-up.&lt;/p&gt;
+  &lt;div class=&quot;brief&quot;&gt;
+&lt;p&gt;&lt;b&gt;The method.&lt;/b&gt; Cylinders of potato are cut from one potato with a cork borer and trimmed
+to the same length. Each is blotted dry and weighed, then left in a sucrose solution for
+30 minutes, blotted dry the same way, and weighed again.&lt;/p&gt;
+&lt;p&gt;Five solutions are used: 0, 5, 10, 15 and 20% sucrose, the same volume of each, one cylinder
+in each tube, all five left together for the same 30 minutes at room temperature.&lt;/p&gt;
+&lt;p&gt;What is worked out from the two weighings is the percentage change in the mass of each
+cylinder.&lt;/p&gt;
+&lt;/div&gt;
+  &lt;div class=&quot;tray&quot; id=&quot;tray&quot; role=&quot;group&quot; aria-label=&quot;Equipment on the bench&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;potato&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M24,74 C24,58 38,46 60,44 C82,42 100,52 102,68 C104,84 92,98 70,101
+         C46,104 24,92 24,74 Z&quot; fill=&quot;var(--potato)&quot; stroke=&quot;var(--potatoline)&quot;
+      stroke-width=&quot;2.4&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;g fill=&quot;none&quot; stroke=&quot;var(--potatoline)&quot; stroke-width=&quot;1.1&quot; opacity=&quot;0.45&quot;&gt;
+&lt;path d=&quot;M32,66 C42,60 52,58 62,60&quot;/&gt;&lt;path d=&quot;M46,92 C56,94 70,92 80,86&quot;/&gt;
+&lt;path d=&quot;M76,52 C86,54 93,60 97,68&quot;/&gt;
+&lt;/g&gt;
+&lt;g fill=&quot;var(--potatoline)&quot; opacity=&quot;0.8&quot;&gt;
+&lt;ellipse cx=&quot;46&quot; cy=&quot;62&quot; rx=&quot;4.2&quot; ry=&quot;2.8&quot; transform=&quot;rotate(-22 46 62)&quot;/&gt;
+&lt;ellipse cx=&quot;78&quot; cy=&quot;78&quot; rx=&quot;3.6&quot; ry=&quot;2.4&quot; transform=&quot;rotate(18 78 78)&quot;/&gt;
+&lt;ellipse cx=&quot;38&quot; cy=&quot;86&quot; rx=&quot;3&quot; ry=&quot;2&quot; transform=&quot;rotate(6 38 86)&quot;/&gt;
+&lt;ellipse cx=&quot;88&quot; cy=&quot;58&quot; rx=&quot;2.6&quot; ry=&quot;1.8&quot; transform=&quot;rotate(-10 88 58)&quot;/&gt;
+&lt;ellipse cx=&quot;62&quot; cy=&quot;52&quot; rx=&quot;2.8&quot; ry=&quot;1.9&quot; transform=&quot;rotate(30 62 52)&quot;/&gt;
+&lt;ellipse cx=&quot;56&quot; cy=&quot;94&quot; rx=&quot;2.4&quot; ry=&quot;1.6&quot; transform=&quot;rotate(-8 56 94)&quot;/&gt;
+&lt;/g&gt;
+&lt;g stroke=&quot;var(--potatoline)&quot; stroke-width=&quot;1.3&quot; opacity=&quot;0.7&quot; stroke-linecap=&quot;round&quot;&gt;
+&lt;path d=&quot;M43,59 L49,63 M75,76 L81,80 M35,84 L41,88&quot;/&gt;
+&lt;/g&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Potato&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;cork-borer&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M36,26 L84,26 L84,36 L66,36 L66,116 L54,116 L54,36 L36,36 Z&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;2.4&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M44,28 L44,34&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.7&quot;/&gt;
+&lt;path d=&quot;M57,44 L57,108&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot; opacity=&quot;0.7&quot;/&gt;
+&lt;path d=&quot;M54,112 L54,120 C54,124 66,124 66,120 L66,112&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;2.4&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;120&quot; rx=&quot;6&quot; ry=&quot;3.4&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+         stroke-width=&quot;1.6&quot;/&gt;
+&lt;path d=&quot;M54,116 L54,120 M66,116 L66,120&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.4&quot;
+      opacity=&quot;0.6&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Cork borer&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;white-tile&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M14,76 L60,54 L106,76 L60,98 Z&quot; fill=&quot;var(--tile)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;2.4&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M14,76 L14,86 L60,108 L106,86 L106,76 L60,98 Z&quot; fill=&quot;var(--tileside)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;2.4&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;g fill=&quot;var(--tileside)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;&gt;
+  &lt;ellipse cx=&quot;42&quot; cy=&quot;70&quot; rx=&quot;7.5&quot; ry=&quot;3.6&quot;/&gt;
+  &lt;ellipse cx=&quot;60&quot; cy=&quot;78&quot; rx=&quot;7.5&quot; ry=&quot;3.6&quot;/&gt;
+  &lt;ellipse cx=&quot;78&quot; cy=&quot;70&quot; rx=&quot;7.5&quot; ry=&quot;3.6&quot;/&gt;
+  &lt;ellipse cx=&quot;42&quot; cy=&quot;84&quot; rx=&quot;7.5&quot; ry=&quot;3.6&quot;/&gt;
+  &lt;ellipse cx=&quot;60&quot; cy=&quot;92&quot; rx=&quot;7.5&quot; ry=&quot;3.6&quot;/&gt;
+  &lt;ellipse cx=&quot;78&quot; cy=&quot;84&quot; rx=&quot;7.5&quot; ry=&quot;3.6&quot;/&gt;
+&lt;/g&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1&quot; opacity=&quot;0.3&quot; stroke-linecap=&quot;round&quot;&gt;
+  &lt;path d=&quot;M24,74 L34,69 M28,80 L36,76 M86,76 L94,80&quot;/&gt;
+&lt;/g&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;White tile&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;scalpel&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M14,70 L82,68 L82,84 L14,82 Z&quot; fill=&quot;var(--dark)&quot; fill-opacity=&quot;0.18&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.2&quot; opacity=&quot;0.6&quot;&gt;
+&lt;path d=&quot;M24,72 L24,80 M30,72 L30,80 M36,72 L36,80 M42,72 L42,80&quot;/&gt;
+&lt;/g&gt;
+&lt;path d=&quot;M82,68 L100,70 L110,80 L82,84 Z&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M82,84 L110,80&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2.8&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M86,73 L99,74&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1&quot; opacity=&quot;0.4&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Scalpel&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;paper-towel&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M60,24 L96,104 A42,42 0 0 1 24,104 Z&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;2.4&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M60,24 L60,118&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;
+      opacity=&quot;0.55&quot;/&gt;
+&lt;path d=&quot;M60,24 L40,110&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.4&quot;
+      opacity=&quot;0.35&quot;/&gt;
+&lt;path d=&quot;M60,24 L80,110&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.4&quot;
+      opacity=&quot;0.35&quot;/&gt;
+&lt;path d=&quot;M24,104 A42,42 0 0 0 96,104&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.4&quot;
+      opacity=&quot;0.5&quot;/&gt;
+&lt;path d=&quot;M60,24 L74,56 L60,62 L46,56 Z&quot; fill=&quot;var(--card)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Paper towel&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;balance&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M33,79 L87,79 L84,83 L36,83 Z&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;79&quot; rx=&quot;27&quot; ry=&quot;4.5&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;rect x=&quot;55&quot; y=&quot;83&quot; width=&quot;10&quot; height=&quot;7&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.8&quot;/&gt;
+&lt;path d=&quot;M16,89 L104,89 Q108,89 108,93 L108,120 Q108,124 104,124 L16,124
+         Q12,124 12,120 L12,93 Q12,89 16,89 Z&quot;
+      fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;60&quot; y=&quot;94&quot; width=&quot;42&quot; height=&quot;17&quot; rx=&quot;2&quot; fill=&quot;var(--dark)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;text x=&quot;81&quot; y=&quot;107&quot; font-size=&quot;11&quot; fill=&quot;var(--screen)&quot; text-anchor=&quot;middle&quot;
+      font-family=&quot;ui-monospace,Menlo,Consolas,monospace&quot;&gt;0.00 g&lt;/text&gt;
+&lt;rect x=&quot;19&quot; y=&quot;96&quot; width=&quot;17&quot; height=&quot;9&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;rect x=&quot;40&quot; y=&quot;96&quot; width=&quot;17&quot; height=&quot;9&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;text x=&quot;27.5&quot; y=&quot;102.8&quot; font-size=&quot;5.5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;ON&lt;/text&gt;
+&lt;text x=&quot;48.5&quot; y=&quot;102.8&quot; font-size=&quot;5.5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;TARE&lt;/text&gt;
+&lt;circle cx=&quot;30&quot; cy=&quot;115&quot; r=&quot;5&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.4&quot;/&gt;
+&lt;circle cx=&quot;30&quot; cy=&quot;115&quot; r=&quot;1.8&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;rect x=&quot;20&quot; y=&quot;124&quot; width=&quot;9&quot; height=&quot;6&quot; rx=&quot;1.5&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;rect x=&quot;91&quot; y=&quot;124&quot; width=&quot;9&quot; height=&quot;6&quot; rx=&quot;1.5&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Balance&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;measuring-cylinder&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M52,120 L38,140 L82,140 L68,120 Z&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M44,136 A16,3 0 0 0 76,136&quot; fill=&quot;none&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;1.2&quot;
+      opacity=&quot;0.55&quot;/&gt;
+&lt;path d=&quot;M52,28 L52,122 M68,28 L68,122&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot;/&gt;
+&lt;path d=&quot;M55,40 L55,112&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;1.8&quot; stroke-linecap=&quot;round&quot;
+      opacity=&quot;0.8&quot;/&gt;
+&lt;g stroke=&quot;var(--glass)&quot; stroke-width=&quot;1.5&quot; opacity=&quot;0.85&quot;&gt;
+&lt;path d=&quot;M52,44 L64,44 M52,52 L58,52 M52,60 L58,60 M52,68 L64,68 M52,76 L58,76
+         M52,84 L58,84 M52,92 L64,92 M52,100 L58,100 M52,108 L58,108&quot;/&gt;
+&lt;/g&gt;
+&lt;text x=&quot;71&quot; y=&quot;47&quot; font-size=&quot;8&quot; fill=&quot;var(--glass)&quot;&gt;80&lt;/text&gt;
+&lt;text x=&quot;71&quot; y=&quot;71&quot; font-size=&quot;8&quot; fill=&quot;var(--glass)&quot;&gt;50&lt;/text&gt;
+&lt;text x=&quot;71&quot; y=&quot;95&quot; font-size=&quot;8&quot; fill=&quot;var(--glass)&quot;&gt;20&lt;/text&gt;
+&lt;text x=&quot;50&quot; y=&quot;20&quot; font-size=&quot;8&quot; fill=&quot;var(--glass)&quot;&gt;cm&amp;#179;&lt;/text&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;28&quot; rx=&quot;8&quot; ry=&quot;2.6&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot;/&gt;
+&lt;path d=&quot;M55,25.6 L44,29 L55,32.4 Z&quot; fill=&quot;var(--bg)&quot; stroke=&quot;none&quot;/&gt;
+&lt;path d=&quot;M55,25.9 L44,29 L55,32.1&quot; fill=&quot;none&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;1.9&quot;
+      stroke-linejoin=&quot;round&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Measuring cylinder&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;test-tube&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M53,30 L53,116 A7,7 0 0 0 67,116 L67,30&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M53,116 A7,2.6 0 0 0 67,116&quot; fill=&quot;none&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;1.2&quot;
+      opacity=&quot;0.55&quot;/&gt;
+&lt;path d=&quot;M56.5,42 L56.5,104&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;
+      opacity=&quot;0.8&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;29&quot; rx=&quot;8.4&quot; ry=&quot;2.9&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Test tube&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;test-tube-rack&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M10,54 L22,46 L110,46 L98,54 Z&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--woodline)&quot;
+      stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;10&quot; y=&quot;54&quot; width=&quot;88&quot; height=&quot;11&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--woodline)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;g fill=&quot;var(--dark)&quot; stroke=&quot;var(--woodline)&quot; stroke-width=&quot;1.6&quot;&gt;
+&lt;ellipse cx=&quot;31&quot; cy=&quot;50&quot; rx=&quot;6.5&quot; ry=&quot;2.6&quot;/&gt;&lt;ellipse cx=&quot;51&quot; cy=&quot;50&quot; rx=&quot;6.5&quot; ry=&quot;2.6&quot;/&gt;
+&lt;ellipse cx=&quot;71&quot; cy=&quot;50&quot; rx=&quot;6.5&quot; ry=&quot;2.6&quot;/&gt;&lt;ellipse cx=&quot;91&quot; cy=&quot;50&quot; rx=&quot;6.5&quot; ry=&quot;2.6&quot;/&gt;
+&lt;/g&gt;
+&lt;rect x=&quot;14&quot; y=&quot;65&quot; width=&quot;9&quot; height=&quot;38&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--woodline)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;rect x=&quot;85&quot; y=&quot;65&quot; width=&quot;9&quot; height=&quot;38&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--woodline)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;path d=&quot;M10,103 L22,95 L110,95 L98,103 Z&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--woodline)&quot;
+      stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;10&quot; y=&quot;103&quot; width=&quot;88&quot; height=&quot;11&quot; fill=&quot;var(--wood)&quot; stroke=&quot;var(--woodline)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;g stroke=&quot;var(--woodline)&quot; stroke-width=&quot;1.4&quot; opacity=&quot;0.7&quot;&gt;
+&lt;path d=&quot;M31,99 L31,103 M51,99 L51,103 M71,99 L71,103 M91,99 L91,103&quot;/&gt;
+&lt;/g&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Test tube rack&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;stopwatch&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;6&quot; fill=&quot;none&quot; stroke=&quot;var(--metal)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;55&quot; y=&quot;46&quot; width=&quot;10&quot; height=&quot;11&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.4&quot;/&gt;
+&lt;rect x=&quot;82&quot; y=&quot;58&quot; width=&quot;9&quot; height=&quot;7&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.4&quot; transform=&quot;rotate(38 86 61)&quot;/&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;36&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;33&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;0.6&quot; opacity=&quot;0.75&quot;&gt;&lt;path d=&quot;M63.0,63.7 L63.2,61.2 M65.9,64.1 L66.4,61.7 M68.8,64.9 L69.6,62.5 M71.6,66.0 L72.6,63.7 M76.8,68.9 L78.2,66.9 M79.1,70.8 L80.7,69.0 M81.2,72.9 L83.0,71.3 M83.1,75.2 L85.1,73.8 M86.0,80.4 L88.3,79.4 M87.1,83.2 L89.5,82.4 M87.9,86.1 L90.3,85.6 M88.3,89.0 L90.8,88.8 M88.3,95.0 L90.8,95.2 M87.9,97.9 L90.3,98.4 M87.1,100.8 L89.5,101.6 M86.0,103.6 L88.3,104.6 M83.1,108.8 L85.1,110.2 M81.2,111.1 L83.0,112.7 M79.1,113.2 L80.7,115.0 M76.8,115.1 L78.2,117.1 M71.6,118.0 L72.6,120.3 M68.8,119.1 L69.6,121.5 M65.9,119.9 L66.4,122.3 M63.0,120.3 L63.2,122.8 M57.0,120.3 L56.8,122.8 M54.1,119.9 L53.6,122.3 M51.2,119.1 L50.4,121.5 M48.4,118.0 L47.4,120.3 M43.2,115.1 L41.8,117.1 M40.9,113.2 L39.3,115.0 M38.8,111.1 L37.0,112.7 M36.9,108.8 L34.9,110.2 M34.0,103.6 L31.7,104.6 M32.9,100.8 L30.5,101.6 M32.1,97.9 L29.7,98.4 M31.7,95.0 L29.2,95.2 M31.7,89.0 L29.2,88.8 M32.1,86.1 L29.7,85.6 M32.9,83.2 L30.5,82.4 M34.0,80.4 L31.7,79.4 M36.9,75.2 L34.9,73.8 M38.8,72.9 L37.0,71.3 M40.9,70.8 L39.3,69.0 M43.2,68.9 L41.8,66.9 M48.4,66.0 L47.4,63.7 M51.2,64.9 L50.4,62.5 M54.1,64.1 L53.6,61.7 M57.0,63.7 L56.8,61.2&quot;/&gt;&lt;/g&gt;&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.4&quot; stroke-linecap=&quot;round&quot;&gt;&lt;path d=&quot;M60.0,66.0 L60.0,61.0 M73.0,69.5 L75.5,65.2 M82.5,79.0 L86.8,76.5 M86.0,92.0 L91.0,92.0 M82.5,105.0 L86.8,107.5 M73.0,114.5 L75.5,118.8 M60.0,118.0 L60.0,123.0 M47.0,114.5 L44.5,118.8 M37.5,105.0 L33.2,107.5 M34.0,92.0 L29.0,92.0 M37.5,79.0 L33.2,76.5 M47.0,69.5 L44.5,65.2&quot;/&gt;&lt;/g&gt;&lt;text x=&quot;70.8&quot; y=&quot;75.2&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;5&lt;/text&gt;&lt;text x=&quot;78.6&quot; y=&quot;83.0&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;10&lt;/text&gt;&lt;text x=&quot;81.5&quot; y=&quot;93.8&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;15&lt;/text&gt;&lt;text x=&quot;78.6&quot; y=&quot;104.5&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;&lt;text x=&quot;70.8&quot; y=&quot;112.4&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;25&lt;/text&gt;&lt;text x=&quot;60.0&quot; y=&quot;115.3&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;30&lt;/text&gt;&lt;text x=&quot;49.2&quot; y=&quot;112.4&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;35&lt;/text&gt;&lt;text x=&quot;41.4&quot; y=&quot;104.5&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;40&lt;/text&gt;&lt;text x=&quot;38.5&quot; y=&quot;93.8&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;45&lt;/text&gt;&lt;text x=&quot;41.4&quot; y=&quot;83.0&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;50&lt;/text&gt;&lt;text x=&quot;49.2&quot; y=&quot;75.2&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;55&lt;/text&gt;&lt;text x=&quot;60.0&quot; y=&quot;72.3&quot; font-size=&quot;5&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;middle&quot;&gt;60&lt;/text&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;104&quot; r=&quot;6&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.1&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;0.8&quot; opacity=&quot;0.8&quot;&gt;
+&lt;path d=&quot;M60,99 L60,100.6 M65,104 L63.4,104 M60,109 L60,107.4 M55,104 L56.6,104&quot;/&gt;
+&lt;/g&gt;
+&lt;path d=&quot;M60,104 L62.6,101.4&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.1&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M53.2,93.8 L88.0,84.5&quot; stroke=&quot;var(--warm)&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;60&quot; cy=&quot;92&quot; r=&quot;2.6&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Stopwatch&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;hotplate&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;rect x=&quot;18&quot; y=&quot;72&quot; width=&quot;84&quot; height=&quot;12&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;path d=&quot;M22,84 L22,116 Q22,120 26,120 L94,120 Q98,120 98,116 L98,84 Z&quot;
+      fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;76&quot; cy=&quot;101&quot; r=&quot;8&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;path d=&quot;M76,101 L70.5,96.5&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;g stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.3&quot; stroke-linecap=&quot;round&quot; opacity=&quot;0.85&quot;&gt;
+&lt;path d=&quot;M64.5,107 L62.5,109 M63,97.5 L60.6,96 M68.5,90.5 L67,88.2 M76,88 L76,85.3
+         M83.5,90.5 L85,88.2 M89,97.5 L91.4,96 M87.5,107 L89.5,109&quot;/&gt;
+&lt;/g&gt;
+&lt;text x=&quot;60&quot; y=&quot;118&quot; font-size=&quot;7&quot; fill=&quot;var(--ink)&quot; text-anchor=&quot;end&quot;&gt;&amp;#176;C&lt;/text&gt;
+&lt;circle cx=&quot;36&quot; cy=&quot;101&quot; r=&quot;4.5&quot; fill=&quot;var(--warm)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;rect x=&quot;28&quot; y=&quot;120&quot; width=&quot;12&quot; height=&quot;5&quot; rx=&quot;1.5&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;rect x=&quot;80&quot; y=&quot;120&quot; width=&quot;12&quot; height=&quot;5&quot; rx=&quot;1.5&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;path d=&quot;M98,110 C110,110 114,120 116,132&quot; fill=&quot;none&quot; stroke=&quot;var(--dark)&quot; stroke-width=&quot;3&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Hotplate&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;microscope&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M16,136 L104,136 L98,123 L42,123 Q28,123 22,130 Z&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M96,129 C111,113 109,72 84,55 L76,65 C95,76 97,111 84,123 Z&quot;
+      fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;24&quot; y=&quot;92&quot; width=&quot;76&quot; height=&quot;7&quot; rx=&quot;1.5&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;ellipse cx=&quot;59&quot; cy=&quot;95.5&quot; rx=&quot;7&quot; ry=&quot;2.6&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.4&quot;/&gt;
+&lt;path d=&quot;M42,92 L42,88 Q42,86 45,86 L51,86&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.8&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M76,92 L76,88 Q76,86 73,86 L67,86&quot; fill=&quot;none&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.8&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;97&quot; cy=&quot;106&quot; r=&quot;9&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;circle cx=&quot;97&quot; cy=&quot;106&quot; r=&quot;4.5&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.8&quot;/&gt;
+&lt;rect x=&quot;66&quot; y=&quot;54&quot; width=&quot;20&quot; height=&quot;11&quot; rx=&quot;2&quot; fill=&quot;var(--metal)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;rect x=&quot;48&quot; y=&quot;28&quot; width=&quot;22&quot; height=&quot;30&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;rect x=&quot;52&quot; y=&quot;14&quot; width=&quot;14&quot; height=&quot;16&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;path d=&quot;M53,70 L65,70 L62,82 L56,82 Z&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.8&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M68,70 L78,70 L76,80 L70,80 Z&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.8&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M47,58 L71,58 L79,70 L39,70 Z&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M51,100 L67,100 L63,111 L55,111 Z&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot;
+      stroke-width=&quot;1.8&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M62,104 L72,102&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;73.5&quot; cy=&quot;101.6&quot; r=&quot;2.4&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;path d=&quot;M50,124 L50,114 M68,124 L68,114&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2.2&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;ellipse cx=&quot;59&quot; cy=&quot;112&quot; rx=&quot;10&quot; ry=&quot;4&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot;
+         stroke-width=&quot;1.8&quot; transform=&quot;rotate(-42 59 112)&quot;/&gt;
+&lt;circle cx=&quot;50&quot; cy=&quot;114&quot; r=&quot;2&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;circle cx=&quot;68&quot; cy=&quot;114&quot; r=&quot;2&quot; fill=&quot;var(--ink)&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Microscope&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;funnel&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M27,44 L93,44 L65,101 L55,101 Z&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M55,101 L55,130 M65,101 L65,130&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot;/&gt;
+&lt;path d=&quot;M55,101 L65,101&quot; stroke=&quot;var(--glass-fill)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;130&quot; rx=&quot;5&quot; ry=&quot;2.4&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.2&quot;/&gt;
+&lt;path d=&quot;M55.4,129 A5,2.4 0 0 1 64.6,129&quot; fill=&quot;none&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;1&quot;
+      opacity=&quot;0.5&quot;/&gt;
+&lt;path d=&quot;M45,54 L58,80&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;
+      opacity=&quot;0.8&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;44&quot; rx=&quot;33&quot; ry=&quot;6.5&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Funnel&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;conical-flask&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M25,132 L46,74 Q50,64 51,56 L51,38 L69,38 L69,56 Q70,64 74,74 L95,132 Z&quot;
+      fill=&quot;var(--glass-fill)&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;path d=&quot;M29,128 A31,5 0 0 0 91,128&quot; fill=&quot;none&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;1.2&quot;
+      opacity=&quot;0.55&quot;/&gt;
+&lt;path d=&quot;M45,86 L36,122&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;
+      opacity=&quot;0.8&quot;/&gt;
+&lt;g stroke=&quot;var(--glass)&quot; stroke-width=&quot;1.4&quot; opacity=&quot;0.8&quot;&gt;
+&lt;path d=&quot;M34,109 L48,109 M31,118 L45,118&quot;/&gt;
+&lt;/g&gt;
+&lt;text x=&quot;51&quot; y=&quot;111.5&quot; font-size=&quot;7.5&quot; fill=&quot;var(--glass)&quot;&gt;150&lt;/text&gt;
+&lt;text x=&quot;48&quot; y=&quot;121&quot; font-size=&quot;7.5&quot; fill=&quot;var(--glass)&quot;&gt;100 cm&amp;#179;&lt;/text&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;34&quot; rx=&quot;9.5&quot; ry=&quot;2.8&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Conical flask&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;petri-dish&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M23,95 L23,106 A37,6.5 0 0 0 97,106 L97,95&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.2&quot;/&gt;
+&lt;path d=&quot;M26,101 L26,105 A34,5 0 0 0 94,105 L94,101&quot; fill=&quot;var(--agar)&quot;/&gt;
+&lt;path d=&quot;M26,101 A34,5 0 0 0 94,101&quot; fill=&quot;var(--agar)&quot; opacity=&quot;0.9&quot;/&gt;
+&lt;path d=&quot;M20,88 L20,93 A40,7 0 0 0 100,93 L100,88&quot; fill=&quot;var(--glass-fill)&quot; fill-opacity=&quot;0.45&quot;
+      stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot;/&gt;
+&lt;ellipse cx=&quot;60&quot; cy=&quot;88&quot; rx=&quot;40&quot; ry=&quot;7&quot; fill=&quot;var(--glass-fill)&quot; fill-opacity=&quot;0.45&quot;
+         stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.4&quot;/&gt;
+&lt;path d=&quot;M32,84 A40,7 0 0 0 46,91&quot; fill=&quot;none&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.2&quot;
+      stroke-linecap=&quot;round&quot; opacity=&quot;0.85&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;Petri dish&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;tile&quot; data-id=&quot;ph-meter&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg viewBox=&quot;0 0 120 150&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M10,84 L62,84 Q66,84 66,88 L66,124 Q66,128 62,128 L10,128
+         Q6,128 6,124 L6,88 Q6,84 10,84 Z&quot;
+      fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;rect x=&quot;11&quot; y=&quot;88&quot; width=&quot;46&quot; height=&quot;17&quot; rx=&quot;2&quot; fill=&quot;var(--dark)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.6&quot;/&gt;
+&lt;text x=&quot;34&quot; y=&quot;101&quot; font-size=&quot;11.5&quot; fill=&quot;var(--screen)&quot; text-anchor=&quot;middle&quot;
+      font-family=&quot;ui-monospace,Menlo,Consolas,monospace&quot;&gt;7.00&lt;/text&gt;
+&lt;text x=&quot;14&quot; y=&quot;120&quot; font-size=&quot;8.5&quot; fill=&quot;var(--ink)&quot;&gt;pH&lt;/text&gt;
+&lt;rect x=&quot;30&quot; y=&quot;111&quot; width=&quot;12&quot; height=&quot;8&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.5&quot;/&gt;
+&lt;rect x=&quot;46&quot; y=&quot;111&quot; width=&quot;12&quot; height=&quot;8&quot; rx=&quot;2&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.5&quot;/&gt;
+&lt;circle cx=&quot;66&quot; cy=&quot;92&quot; r=&quot;3.2&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.5&quot;/&gt;
+&lt;path d=&quot;M69,92 C82,80 86,58 90,44&quot; fill=&quot;none&quot; stroke=&quot;var(--dark)&quot; stroke-width=&quot;3&quot;/&gt;
+&lt;rect x=&quot;84&quot; y=&quot;42&quot; width=&quot;13&quot; height=&quot;22&quot; rx=&quot;3&quot; fill=&quot;var(--bg)&quot;
+      stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;path d=&quot;M86,64 L95,64 L95,104 L86,104 Z&quot; fill=&quot;var(--glass-fill)&quot;
+      stroke=&quot;var(--glass)&quot; stroke-width=&quot;2&quot; stroke-linejoin=&quot;round&quot;/&gt;
+&lt;circle cx=&quot;90.5&quot; cy=&quot;110&quot; r=&quot;6&quot; fill=&quot;var(--glass-fill)&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;2&quot;/&gt;
+&lt;path d=&quot;M88,107 A3,3 0 0 1 90.5,106&quot; fill=&quot;none&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;1.6&quot;
+      stroke-linecap=&quot;round&quot;/&gt;
+&lt;path d=&quot;M86,96 L95,96&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;1.3&quot; opacity=&quot;0.8&quot;/&gt;
+&lt;path d=&quot;M88,72 L88,92&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;1.6&quot; stroke-linecap=&quot;round&quot; opacity=&quot;0.8&quot;/&gt;
+&lt;/svg&gt;&lt;span class=&quot;nm&quot;&gt;pH meter&lt;/span&gt;&lt;span class=&quot;mk&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;
+  &lt;div class=&quot;actions&quot;&gt;
+    &lt;button id=&quot;check&quot; class=&quot;primary&quot; type=&quot;button&quot;&gt;Check my set-up&lt;/button&gt;
+    &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Nothing chosen yet.&lt;/p&gt;
+  &lt;div class=&quot;why&quot; id=&quot;why&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;rig&quot; id=&quot;rig&quot; hidden&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;bio2-210_equipment-setup&quot;;
+  var ITEMS = [{&quot;id&quot;: &quot;potato&quot;, &quot;name&quot;: &quot;Potato&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;The tissue being tested. Every cylinder is cut from this one potato, so the tissue is the same in all five tubes.&quot;}, {&quot;id&quot;: &quot;cork-borer&quot;, &quot;name&quot;: &quot;Cork borer&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Cuts cylinders that are all the same width.&quot;}, {&quot;id&quot;: &quot;white-tile&quot;, &quot;name&quot;: &quot;White tile&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;The surface the cylinders are cut and trimmed on.&quot;}, {&quot;id&quot;: &quot;scalpel&quot;, &quot;name&quot;: &quot;Scalpel&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Trims every cylinder to the same length. Cut away from your fingers.&quot;}, {&quot;id&quot;: &quot;paper-towel&quot;, &quot;name&quot;: &quot;Paper towel&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Blots each cylinder dry before it is weighed. Water left on the surface would be weighed as though it were inside the potato.&quot;}, {&quot;id&quot;: &quot;balance&quot;, &quot;name&quot;: &quot;Balance&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Weighs each cylinder before it goes in and after it comes out. This is the measurement the whole practical rests on.&quot;}, {&quot;id&quot;: &quot;measuring-cylinder&quot;, &quot;name&quot;: &quot;Measuring cylinder&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Measures the same volume of solution into every tube.&quot;}, {&quot;id&quot;: &quot;test-tube&quot;, &quot;name&quot;: &quot;Test tube&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Holds one solution and one cylinder of potato. Five are needed, one for each concentration.&quot;}, {&quot;id&quot;: &quot;test-tube-rack&quot;, &quot;name&quot;: &quot;Test tube rack&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Holds all five tubes upright and together, so every cylinder is in its solution for the same length of time.&quot;}, {&quot;id&quot;: &quot;stopwatch&quot;, &quot;name&quot;: &quot;Stopwatch&quot;, &quot;needed&quot;: true, &quot;why&quot;: &quot;Times the thirty minutes the cylinders spend in the solutions.&quot;}, {&quot;id&quot;: &quot;hotplate&quot;, &quot;name&quot;: &quot;Hotplate&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is heated. Every tube stays at the same room temperature, which is one of the things being held the same.&quot;}, {&quot;id&quot;: &quot;microscope&quot;, &quot;name&quot;: &quot;Microscope&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is viewed under magnification. What is measured is mass.&quot;}, {&quot;id&quot;: &quot;funnel&quot;, &quot;name&quot;: &quot;Funnel&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is filtered, and nothing is poured into a narrow neck.&quot;}, {&quot;id&quot;: &quot;conical-flask&quot;, &quot;name&quot;: &quot;Conical flask&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;The solutions go into test tubes, one cylinder to each, so that every cylinder gets its own concentration.&quot;}, {&quot;id&quot;: &quot;petri-dish&quot;, &quot;name&quot;: &quot;Petri dish&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;Nothing is grown. A Petri dish holds a culture, and there is no culture in this method.&quot;}, {&quot;id&quot;: &quot;ph-meter&quot;, &quot;name&quot;: &quot;pH meter&quot;, &quot;needed&quot;: false, &quot;why&quot;: &quot;pH is not what this experiment changes. The concentration of the sucrose solution is.&quot;}];
+  var RIG = &quot;\n&lt;svg viewBox=\&quot;0 0 400 240\&quot; xmlns=\&quot;http://www.w3.org/2000/svg\&quot; role=\&quot;img\&quot;\n     aria-label=\&quot;Five test tubes standing in a rack, labelled 0, 5, 10, 15 and 20 percent sucrose, each holding a cylinder of potato in its solution.\&quot;&gt;\n&lt;rect x=\&quot;18\&quot; y=\&quot;74\&quot; width=\&quot;364\&quot; height=\&quot;15\&quot; rx=\&quot;3\&quot; fill=\&quot;var(--wood)\&quot;\n      stroke=\&quot;var(--woodline)\&quot; stroke-width=\&quot;2\&quot;/&gt;\n&lt;rect x=\&quot;18\&quot; y=\&quot;186\&quot; width=\&quot;364\&quot; height=\&quot;15\&quot; rx=\&quot;3\&quot; fill=\&quot;var(--wood)\&quot;\n      stroke=\&quot;var(--woodline)\&quot; stroke-width=\&quot;2\&quot;/&gt;\n&lt;rect x=\&quot;24\&quot; y=\&quot;89\&quot; width=\&quot;11\&quot; height=\&quot;97\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--woodline)\&quot; stroke-width=\&quot;2\&quot;/&gt;\n&lt;rect x=\&quot;365\&quot; y=\&quot;89\&quot; width=\&quot;11\&quot; height=\&quot;97\&quot; fill=\&quot;var(--wood)\&quot; stroke=\&quot;var(--woodline)\&quot; stroke-width=\&quot;2\&quot;/&gt;\n&lt;path d=\&quot;M59,44 L59,168 A17,17 0 0 0 93,168 L93,44\&quot; fill=\&quot;var(--glass-fill)\&quot; stroke=\&quot;var(--glass)\&quot; stroke-width=\&quot;2.4\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;&lt;path d=\&quot;M59,96 L59,168 A17,17 0 0 0 93,168 L93,96 Z\&quot; fill=\&quot;var(--water)\&quot; opacity=\&quot;0.85\&quot;/&gt;&lt;ellipse cx=\&quot;76\&quot; cy=\&quot;96\&quot; rx=\&quot;17\&quot; ry=\&quot;4\&quot; fill=\&quot;var(--water)\&quot;/&gt;&lt;rect x=\&quot;65\&quot; y=\&quot;142.8\&quot; width=\&quot;22\&quot; height=\&quot;42.2\&quot; rx=\&quot;5\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--potatoline)\&quot; stroke-width=\&quot;2\&quot;/&gt;&lt;ellipse cx=\&quot;76\&quot; cy=\&quot;44\&quot; rx=\&quot;17\&quot; ry=\&quot;4.4\&quot; fill=\&quot;var(--bg)\&quot; stroke=\&quot;var(--glass)\&quot; stroke-width=\&quot;2.4\&quot;/&gt;&lt;text x=\&quot;76\&quot; y=\&quot;216\&quot; font-size=\&quot;13\&quot; fill=\&quot;var(--fg)\&quot; text-anchor=\&quot;middle\&quot; font-weight=\&quot;650\&quot;&gt;0%&lt;/text&gt;&lt;path d=\&quot;M121,44 L121,168 A17,17 0 0 0 155,168 L155,44\&quot; fill=\&quot;var(--glass-fill)\&quot; stroke=\&quot;var(--glass)\&quot; stroke-width=\&quot;2.4\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;&lt;path d=\&quot;M121,96 L121,168 A17,17 0 0 0 155,168 L155,96 Z\&quot; fill=\&quot;var(--water)\&quot; opacity=\&quot;0.85\&quot;/&gt;&lt;ellipse cx=\&quot;138\&quot; cy=\&quot;96\&quot; rx=\&quot;17\&quot; ry=\&quot;4\&quot; fill=\&quot;var(--water)\&quot;/&gt;&lt;rect x=\&quot;127\&quot; y=\&quot;146.9\&quot; width=\&quot;22\&quot; height=\&quot;38.1\&quot; rx=\&quot;5\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--potatoline)\&quot; stroke-width=\&quot;2\&quot;/&gt;&lt;ellipse cx=\&quot;138\&quot; cy=\&quot;44\&quot; rx=\&quot;17\&quot; ry=\&quot;4.4\&quot; fill=\&quot;var(--bg)\&quot; stroke=\&quot;var(--glass)\&quot; stroke-width=\&quot;2.4\&quot;/&gt;&lt;text x=\&quot;138\&quot; y=\&quot;216\&quot; font-size=\&quot;13\&quot; fill=\&quot;var(--fg)\&quot; text-anchor=\&quot;middle\&quot; font-weight=\&quot;650\&quot;&gt;5%&lt;/text&gt;&lt;path d=\&quot;M183,44 L183,168 A17,17 0 0 0 217,168 L217,44\&quot; fill=\&quot;var(--glass-fill)\&quot; stroke=\&quot;var(--glass)\&quot; stroke-width=\&quot;2.4\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;&lt;path d=\&quot;M183,96 L183,168 A17,17 0 0 0 217,168 L217,96 Z\&quot; fill=\&quot;var(--water)\&quot; opacity=\&quot;0.85\&quot;/&gt;&lt;ellipse cx=\&quot;200\&quot; cy=\&quot;96\&quot; rx=\&quot;17\&quot; ry=\&quot;4\&quot; fill=\&quot;var(--water)\&quot;/&gt;&lt;rect x=\&quot;189\&quot; y=\&quot;150.7\&quot; width=\&quot;22\&quot; height=\&quot;34.3\&quot; rx=\&quot;5\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--potatoline)\&quot; stroke-width=\&quot;2\&quot;/&gt;&lt;ellipse cx=\&quot;200\&quot; cy=\&quot;44\&quot; rx=\&quot;17\&quot; ry=\&quot;4.4\&quot; fill=\&quot;var(--bg)\&quot; stroke=\&quot;var(--glass)\&quot; stroke-width=\&quot;2.4\&quot;/&gt;&lt;text x=\&quot;200\&quot; y=\&quot;216\&quot; font-size=\&quot;13\&quot; fill=\&quot;var(--fg)\&quot; text-anchor=\&quot;middle\&quot; font-weight=\&quot;650\&quot;&gt;10%&lt;/text&gt;&lt;path d=\&quot;M245,44 L245,168 A17,17 0 0 0 279,168 L279,44\&quot; fill=\&quot;var(--glass-fill)\&quot; stroke=\&quot;var(--glass)\&quot; stroke-width=\&quot;2.4\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;&lt;path d=\&quot;M245,96 L245,168 A17,17 0 0 0 279,168 L279,96 Z\&quot; fill=\&quot;var(--water)\&quot; opacity=\&quot;0.85\&quot;/&gt;&lt;ellipse cx=\&quot;262\&quot; cy=\&quot;96\&quot; rx=\&quot;17\&quot; ry=\&quot;4\&quot; fill=\&quot;var(--water)\&quot;/&gt;&lt;rect x=\&quot;251\&quot; y=\&quot;154.7\&quot; width=\&quot;22\&quot; height=\&quot;30.3\&quot; rx=\&quot;5\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--potatoline)\&quot; stroke-width=\&quot;2\&quot;/&gt;&lt;ellipse cx=\&quot;262\&quot; cy=\&quot;44\&quot; rx=\&quot;17\&quot; ry=\&quot;4.4\&quot; fill=\&quot;var(--bg)\&quot; stroke=\&quot;var(--glass)\&quot; stroke-width=\&quot;2.4\&quot;/&gt;&lt;text x=\&quot;262\&quot; y=\&quot;216\&quot; font-size=\&quot;13\&quot; fill=\&quot;var(--fg)\&quot; text-anchor=\&quot;middle\&quot; font-weight=\&quot;650\&quot;&gt;15%&lt;/text&gt;&lt;path d=\&quot;M307,44 L307,168 A17,17 0 0 0 341,168 L341,44\&quot; fill=\&quot;var(--glass-fill)\&quot; stroke=\&quot;var(--glass)\&quot; stroke-width=\&quot;2.4\&quot; stroke-linejoin=\&quot;round\&quot;/&gt;&lt;path d=\&quot;M307,96 L307,168 A17,17 0 0 0 341,168 L341,96 Z\&quot; fill=\&quot;var(--water)\&quot; opacity=\&quot;0.85\&quot;/&gt;&lt;ellipse cx=\&quot;324\&quot; cy=\&quot;96\&quot; rx=\&quot;17\&quot; ry=\&quot;4\&quot; fill=\&quot;var(--water)\&quot;/&gt;&lt;rect x=\&quot;313\&quot; y=\&quot;157.8\&quot; width=\&quot;22\&quot; height=\&quot;27.2\&quot; rx=\&quot;5\&quot; fill=\&quot;var(--potato)\&quot; stroke=\&quot;var(--potatoline)\&quot; stroke-width=\&quot;2\&quot;/&gt;&lt;ellipse cx=\&quot;324\&quot; cy=\&quot;44\&quot; rx=\&quot;17\&quot; ry=\&quot;4.4\&quot; fill=\&quot;var(--bg)\&quot; stroke=\&quot;var(--glass)\&quot; stroke-width=\&quot;2.4\&quot;/&gt;&lt;text x=\&quot;324\&quot; y=\&quot;216\&quot; font-size=\&quot;13\&quot; fill=\&quot;var(--fg)\&quot; text-anchor=\&quot;middle\&quot; font-weight=\&quot;650\&quot;&gt;20%&lt;/text&gt;\n&lt;/svg&gt;\n&quot;;
+  var byId = {};
+  ITEMS.forEach(function (it) { byId[it.id] = it; });
+
+  var tray = document.getElementById(&quot;tray&quot;), msg = document.getElementById(&quot;msg&quot;);
+
+  // The bench is laid out differently every time, so the answer cannot be learned as a set
+  // of positions. Marking is keyed on each tile&#x27;s id, so the order never affects it.
+  function shuffleTray() {
+    var kids = Array.prototype.slice.call(tray.children);
+    for (var i = kids.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = kids[i]; kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k) { tray.appendChild(k); });
+  }
+  shuffleTray();
+  var why = document.getElementById(&quot;why&quot;), rig = document.getElementById(&quot;rig&quot;);
+  var elCheck = document.getElementById(&quot;check&quot;), elReset = document.getElementById(&quot;reset&quot;);
+  var tiles = Array.prototype.slice.call(tray.querySelectorAll(&quot;.tile&quot;));
+  var locked = false;
+
+  function chosen() {
+    return tiles.filter(function (t) { return t.getAttribute(&quot;aria-pressed&quot;) === &quot;true&quot;; })
+                .map(function (t) { return t.dataset.id; });
+  }
+
+  tiles.forEach(function (t) {
+    t.addEventListener(&quot;click&quot;, function () {
+      if (locked) return;
+      var on = t.getAttribute(&quot;aria-pressed&quot;) === &quot;true&quot;;
+      t.setAttribute(&quot;aria-pressed&quot;, on ? &quot;false&quot; : &quot;true&quot;);
+      var n = chosen().length;
+      say(n === 0 ? &quot;Nothing chosen yet.&quot;
+                  : n + (n === 1 ? &quot; piece chosen.&quot; : &quot; pieces chosen.&quot;));
+    });
+  });
+
+  function say(text, kind) {
+    msg.textContent = text;
+    msg.className = kind ? &quot;msg &quot; + kind : &quot;msg&quot;;
+  }
+
+  // One check, then the tray locks. Marking every tile at once and explaining each one is
+  // worth more than letting a student click until the colours come out right.
+  function check() {
+    if (locked) return;
+    var picked = chosen();
+    if (!picked.length) { say(&quot;Choose the equipment first, then check your set-up.&quot;); return; }
+    locked = true;
+    var hits = [], missed = [], over = [];
+    tiles.forEach(function (t) {
+      var it = byId[t.dataset.id], on = picked.indexOf(it.id) !== -1;
+      t.disabled = true;
+      var mk = t.querySelector(&quot;.mk&quot;);
+      if (it.needed &amp;&amp; on) { t.classList.add(&quot;hit&quot;); mk.textContent = &quot;needed&quot;; hits.push(it); }
+      else if (it.needed &amp;&amp; !on) { t.classList.add(&quot;miss&quot;); mk.textContent = &quot;missed&quot;; missed.push(it); }
+      else if (!it.needed &amp;&amp; on) { t.classList.add(&quot;over&quot;); mk.textContent = &quot;not needed&quot;; over.push(it); }
+      else { mk.textContent = &quot;&quot;; }
+    });
+
+    var need = ITEMS.filter(function (i) { return i.needed; }).length;
+    var parts = [&quot;You chose &quot; + hits.length + &quot; of the &quot; + need + &quot; pieces this method needs&quot;];
+    if (over.length) parts.push(&quot;and &quot; + over.length + &quot; it does not&quot;);
+    say(parts.join(&quot;, &quot;) + &quot;.&quot;, (hits.length === need &amp;&amp; !over.length) ? &quot;good&quot; : null);
+
+    var out = &quot;&quot;;
+    if (missed.length) {
+      out += &quot;&lt;h2&gt;Missed&lt;/h2&gt;&lt;ul&gt;&quot; + missed.map(function (i) {
+        return &quot;&lt;li&gt;&lt;b&gt;&quot; + i.name + &quot;&lt;/b&gt; &amp;mdash; &quot; + i.why + &quot;&lt;/li&gt;&quot;; }).join(&quot;&quot;) + &quot;&lt;/ul&gt;&quot;;
+    }
+    if (over.length) {
+      out += &quot;&lt;h2&gt;Chosen, but not needed&lt;/h2&gt;&lt;ul&gt;&quot; + over.map(function (i) {
+        return &quot;&lt;li&gt;&lt;b&gt;&quot; + i.name + &quot;&lt;/b&gt; &amp;mdash; &quot; + i.why + &quot;&lt;/li&gt;&quot;; }).join(&quot;&quot;) + &quot;&lt;/ul&gt;&quot;;
+    }
+    out += &quot;&lt;h2&gt;What each piece is for&lt;/h2&gt;&lt;ul&gt;&quot; + ITEMS.filter(function (i) { return i.needed; })
+      .map(function (i) { return &quot;&lt;li&gt;&lt;b&gt;&quot; + i.name + &quot;&lt;/b&gt; &amp;mdash; &quot; + i.why + &quot;&lt;/li&gt;&quot;; })
+      .join(&quot;&quot;) + &quot;&lt;/ul&gt;&quot;;
+    why.innerHTML = out;
+
+    rig.hidden = false;
+    rig.innerHTML = RIG + &#x27;&lt;div class=&quot;cap&quot;&gt;The apparatus set up. All five tubes are left &#x27;
+      + &#x27;together, so every cylinder spends the same 30 minutes at the same room temperature &#x27;
+      + &#x27;and only the concentration differs between them.&lt;/div&gt;&#x27;;
+    elCheck.disabled = true;
+    reportHeight();
+  }
+
+  elCheck.addEventListener(&quot;click&quot;, check);
+  elReset.addEventListener(&quot;click&quot;, function () {
+    locked = false;
+    tiles.forEach(function (t) {
+      t.disabled = false;
+      t.setAttribute(&quot;aria-pressed&quot;, &quot;false&quot;);
+      t.classList.remove(&quot;hit&quot;, &quot;miss&quot;, &quot;over&quot;);
+      t.querySelector(&quot;.mk&quot;).textContent = &quot;&quot;;
+    });
+    why.innerHTML = &quot;&quot;; rig.hidden = true; rig.innerHTML = &quot;&quot;;
+    elCheck.disabled = false;
+    shuffleTray();
+    say(&quot;Nothing chosen yet.&quot;);
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe></div></section>
+<section class="stage" id="collect"><div class="shead"><span class="num">Stage 3</span><span class="kind">Simulation &middot; Five concentrations, weighed twice</span></div><h2>Collect the results</h2><p class="blurb">Weigh the cylinder, leave it thirty minutes, weigh it again. One collection at each concentration, and then it locks.</p><div class="media"><iframe title="Simulation" height="860" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Potato and sugar solution&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,380px);gap:12px;
+  align-items:stretch;margin-bottom:2px}
+@media (max-width:700px){.bench{grid-template-columns:1fr}}
+.results{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+  display:flex;flex-direction:column;justify-content:center}
+.results table{margin-top:0} .results caption{padding-bottom:8px}
+.stage{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.stage svg{flex:0 0 auto;max-width:100%;height:auto}
+.readouts{flex:1 1 150px;min-width:146px;display:grid;gap:6px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+    border-bottom:1px dotted var(--line);padding-bottom:4px}
+.ro&gt;span{color:var(--muted);font-size:12px}
+.ro b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:650}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:12px 0 0;padding:10px 12px 12px}
+legend{font-size:12px;font-weight:650;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em;padding:0 5px}
+.hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+.concs{display:flex;gap:6px;flex-wrap:wrap}
+.concs button{flex:1 1 60px;padding:9px 4px;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg);border-radius:8px;font:inherit;font-variant-numeric:tabular-nums;cursor:pointer}
+.concs button[aria-pressed=&quot;true&quot;]{background:var(--accent);color:var(--accent-fg);
+  border-color:var(--accent);font-weight:650}
+.concs button .done{display:block;font-size:10px;color:var(--muted);line-height:1.2}
+.concs button[aria-pressed=&quot;true&quot;] .done{color:var(--accent-fg);opacity:.85}
+.fixedgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.fixed{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.fixed b{font-size:15px;font-weight:650;color:var(--fg);padding:5px 0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted)}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+th[scope=&quot;row&quot;]{text-align:left}
+td.empty{color:var(--muted)}
+tr.active th[scope=&quot;row&quot;]{color:var(--accent);font-weight:700}
+td.pc{font-weight:650}
+td.gain{color:var(--good)} td.loss{color:var(--bad)}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+  &lt;h1&gt;Potato and sugar solution&lt;/h1&gt;
+  &lt;p class=&quot;sub&quot;&gt;Put a cylinder of potato in each solution, leave it 30 minutes, and
+    weigh it again. Each concentration can be collected once.&lt;/p&gt;
+
+  &lt;div class=&quot;bench&quot;&gt;
+    &lt;div class=&quot;stage&quot;&gt;
+&lt;svg viewBox=&quot;0 0 250 250&quot; width=&quot;250&quot; role=&quot;img&quot; aria-label=&quot;A test tube in a rack holding
+     sucrose solution, with a cylinder of potato standing in the solution.&quot;&gt;
+  &lt;rect x=&quot;26&quot; y=&quot;150&quot; width=&quot;198&quot; height=&quot;9&quot; rx=&quot;2.5&quot; fill=&quot;var(--metal)&quot;
+        stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+  &lt;rect x=&quot;26&quot; y=&quot;214&quot; width=&quot;198&quot; height=&quot;9&quot; rx=&quot;2.5&quot; fill=&quot;var(--metal)&quot;
+        stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+  &lt;rect x=&quot;34&quot; y=&quot;159&quot; width=&quot;8&quot; height=&quot;55&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+  &lt;rect x=&quot;208&quot; y=&quot;159&quot; width=&quot;8&quot; height=&quot;55&quot; fill=&quot;var(--metal)&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;2&quot;/&gt;
+  &lt;path d=&quot;M100,30 L100,186 A25,25 0 0 0 150,186 L150,30&quot; fill=&quot;var(--glass-fill)&quot;
+        stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.6&quot; stroke-linejoin=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M100,76 L100,186 A25,25 0 0 0 150,186 L150,76 Z&quot; fill=&quot;var(--water)&quot; opacity=&quot;0.9&quot;/&gt;
+  &lt;ellipse cx=&quot;125&quot; cy=&quot;76&quot; rx=&quot;25&quot; ry=&quot;5&quot; fill=&quot;var(--water)&quot;/&gt;
+  &lt;rect id=&quot;spud&quot; x=&quot;110&quot; y=&quot;130&quot; width=&quot;30&quot; height=&quot;55&quot; rx=&quot;7&quot; fill=&quot;var(--potato)&quot;
+        stroke=&quot;var(--potatoline)&quot; stroke-width=&quot;2&quot;/&gt;
+  &lt;ellipse cx=&quot;125&quot; cy=&quot;30&quot; rx=&quot;25&quot; ry=&quot;6&quot; fill=&quot;var(--bg)&quot; stroke=&quot;var(--glass)&quot; stroke-width=&quot;2.6&quot;/&gt;
+  &lt;path d=&quot;M105,90 L105,170&quot; stroke=&quot;var(--bg)&quot; stroke-width=&quot;2.6&quot; stroke-linecap=&quot;round&quot;
+        opacity=&quot;0.7&quot;/&gt;
+&lt;/svg&gt;
+
+      &lt;div class=&quot;readouts&quot;&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Sucrose&lt;/span&gt;&lt;b&gt;&lt;span id=&quot;roC&quot;&gt;0&lt;/span&gt;%&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Time&lt;/span&gt;&lt;b&gt;&lt;span id=&quot;roT&quot;&gt;0&lt;/span&gt; min&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;ro&quot;&gt;&lt;span&gt;Mass&lt;/span&gt;&lt;b&gt;&lt;span id=&quot;roM&quot;&gt;4.00&lt;/span&gt; g&lt;/b&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;results&quot;&gt;
+      &lt;table&gt;
+        &lt;caption&gt;Mass of each potato cylinder, before and after 30 minutes.&lt;/caption&gt;
+        &lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Sucrose (%)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Start (g)&lt;/th&gt;
+          &lt;th scope=&quot;col&quot;&gt;End (g)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Change (%)&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+        &lt;tbody id=&quot;tbody&quot;&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;0&lt;/th&gt;&lt;td&gt;4.00&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;end0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;pc0&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;5&lt;/th&gt;&lt;td&gt;4.00&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;end5&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;pc5&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;10&lt;/th&gt;&lt;td&gt;4.00&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;end10&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;pc10&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;15&lt;/th&gt;&lt;td&gt;4.00&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;end15&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;pc15&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;20&lt;/th&gt;&lt;td&gt;4.00&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;end20&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;td class=&quot;empty&quot; id=&quot;pc20&quot;&gt;&amp;mdash;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;Independent variable &amp;mdash; what we change&lt;/legend&gt;
+    &lt;p class=&quot;hint&quot;&gt;The concentration of the sucrose solution.&lt;/p&gt;
+    &lt;div class=&quot;concs&quot; id=&quot;concs&quot; role=&quot;group&quot; aria-label=&quot;Concentration of the sucrose solution&quot;&gt;&lt;button type=&quot;button&quot; data-c=&quot;0&quot; aria-pressed=&quot;true&quot;&gt;0%&lt;span class=&quot;done&quot; data-done=&quot;0&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; data-c=&quot;5&quot; aria-pressed=&quot;false&quot;&gt;5%&lt;span class=&quot;done&quot; data-done=&quot;5&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; data-c=&quot;10&quot; aria-pressed=&quot;false&quot;&gt;10%&lt;span class=&quot;done&quot; data-done=&quot;10&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; data-c=&quot;15&quot; aria-pressed=&quot;false&quot;&gt;15%&lt;span class=&quot;done&quot; data-done=&quot;15&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; data-c=&quot;20&quot; aria-pressed=&quot;false&quot;&gt;20%&lt;span class=&quot;done&quot; data-done=&quot;20&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;
+  &lt;/fieldset&gt;
+
+  &lt;fieldset&gt;
+    &lt;legend&gt;Control variables &amp;mdash; what we keep the same&lt;/legend&gt;
+    &lt;p class=&quot;hint&quot;&gt;The design sets these once and holds them there. Every cylinder is cut from
+      the same potato with the same cork borer, and blotted dry the same way before each weighing.&lt;/p&gt;
+    &lt;div class=&quot;fixedgrid&quot;&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Mass of each cylinder at the start&lt;/span&gt;&lt;b&gt;4.00 g&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Volume of solution&lt;/span&gt;&lt;b&gt;20 cm&amp;sup3;&lt;/b&gt;&lt;/div&gt;
+      &lt;div class=&quot;fixed&quot;&gt;&lt;span&gt;Time in the solution&lt;/span&gt;&lt;b&gt;30 min&lt;/b&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/fieldset&gt;
+
+  &lt;div class=&quot;actions&quot;&gt;
+    &lt;button id=&quot;run&quot; class=&quot;primary&quot; type=&quot;button&quot;&gt;Collect the result at 0% sucrose&lt;/button&gt;
+    &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start the whole experiment again&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Choose a concentration, then collect
+    the result.&lt;/p&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;bio2-210_osmosis-collect&quot;;
+  var DATA = [[0, 4.96], [5, 4.48], [10, 4.04], [15, 3.56], [20, 3.2]], START = 4.0, TMIN = 30;
+  var CONCS = DATA.map(function (d) { return d[0]; });
+  var FINAL = {}; DATA.forEach(function (d) { FINAL[d[0]] = d[1]; });
+  var state = { c: CONCS[0], done: {}, running: false };
+
+  var $ = function (i) { return document.getElementById(i); };
+  var msg = $(&quot;msg&quot;), elRun = $(&quot;run&quot;), elReset = $(&quot;reset&quot;), concs = $(&quot;concs&quot;);
+  var roC = $(&quot;roC&quot;), roT = $(&quot;roT&quot;), roM = $(&quot;roM&quot;), spud = $(&quot;spud&quot;);
+  var SPUD_Y = 130, SPUD_H = 55;      // the cylinder&#x27;s drawn size at its starting mass
+
+  function say(t, kind) { msg.textContent = t; msg.className = kind ? &quot;msg &quot; + kind : &quot;msg&quot;; }
+  function pct(m) { return Math.round((m - START) / START * 1000) / 10; }
+
+  // A cylinder that takes water in gets longer; one that loses water gets shorter. Drawn in
+  // proportion to its mass, so the picture and the number never disagree.
+  function drawMass(m) {
+    var h = SPUD_H * (m / START);
+    spud.setAttribute(&quot;height&quot;, h.toFixed(1));
+    spud.setAttribute(&quot;y&quot;, (SPUD_Y + (SPUD_H - h)).toFixed(1));
+  }
+
+  Array.prototype.forEach.call(concs.children, function (b) {
+    b.addEventListener(&quot;click&quot;, function () {
+      if (state.running) return;
+      state.c = +b.dataset.c;
+      render();
+      say(state.done[state.c]
+        ? state.c + &quot;% sucrose has already been collected. Its result is in the table.&quot;
+        : &quot;Solution set to &quot; + state.c + &quot;% sucrose.&quot;);
+    });
+  });
+
+  function collect() {
+    if (state.running || state.done[state.c]) {
+      if (state.done[state.c]) {
+        say(state.c + &quot;% sucrose has already been collected. Choose one that has not, or start &quot;
+            + &quot;the whole experiment again.&quot;);
+      }
+      return;
+    }
+    state.running = true;
+    setEnabled(false);
+    var end = FINAL[state.c], c = state.c;
+    var reduced = window.matchMedia &amp;&amp;
+                  window.matchMedia(&quot;(prefers-reduced-motion: reduce)&quot;).matches;
+    var DUR = reduced ? 250 : 4200;
+    var t0 = Date.now(), timer;
+
+    function tick() {
+      var p = Math.min(1, (Date.now() - t0) / DUR);
+      roT.textContent = Math.round(p * TMIN);
+      var m = START + (end - START) * p;
+      roM.textContent = m.toFixed(2);
+      drawMass(m);
+      if (p &gt;= 1) {
+        clearInterval(timer);
+        state.done[c] = end;
+        state.running = false;
+        setEnabled(true);
+        render();
+        var d = pct(end);
+        say(c + &quot;% sucrose: the cylinder went from &quot; + START.toFixed(2) + &quot; g to &quot;
+            + end.toFixed(2) + &quot; g, a change of &quot; + (d &gt; 0 ? &quot;+&quot; : &quot;&quot;) + d + &quot;%.&quot;
+            + (Object.keys(state.done).length === CONCS.length
+                ? &quot; Every concentration has now been collected.&quot;
+                : &quot; Choose another concentration.&quot;),
+            Object.keys(state.done).length === CONCS.length ? &quot;good&quot; : null);
+      }
+    }
+    timer = setInterval(tick, 33);
+    tick();
+  }
+
+  function setEnabled(on) {
+    elRun.disabled = !on; elReset.disabled = !on;
+    Array.prototype.forEach.call(concs.children, function (b) { b.disabled = !on; });
+  }
+
+  function render() {
+    roC.textContent = state.c;
+    Array.prototype.forEach.call(concs.children, function (b) {
+      var c = +b.dataset.c;
+      b.setAttribute(&quot;aria-pressed&quot;, c === state.c ? &quot;true&quot; : &quot;false&quot;);
+      b.querySelector(&quot;[data-done]&quot;).textContent = state.done[c] ? &quot;collected&quot; : &quot;&quot;;
+    });
+    CONCS.forEach(function (c) {
+      var e = $(&quot;end&quot; + c), p = $(&quot;pc&quot; + c);
+      var tr = e.parentNode;
+      tr.className = (c === state.c) ? &quot;active&quot; : &quot;&quot;;
+      if (state.done[c]) {
+        var d = pct(state.done[c]);
+        e.textContent = state.done[c].toFixed(2); e.className = &quot;&quot;;
+        p.textContent = (d &gt; 0 ? &quot;+&quot; : &quot;&quot;) + d;
+        p.className = &quot;pc &quot; + (d &gt; 0 ? &quot;gain&quot; : (d &lt; 0 ? &quot;loss&quot; : &quot;&quot;));
+      } else {
+        e.textContent = &quot;\u2014&quot;; e.className = &quot;empty&quot;;
+        p.textContent = &quot;\u2014&quot;; p.className = &quot;empty&quot;;
+      }
+    });
+    elRun.innerHTML = state.done[state.c]
+      ? &quot;Collected at &quot; + state.c + &quot;% sucrose&quot;
+      : &quot;Collect the result at &quot; + state.c + &quot;% sucrose&quot;;
+    if (!state.running) elRun.disabled = !!state.done[state.c];
+    elReset.disabled = state.running || Object.keys(state.done).length === 0;
+    if (!state.running) { drawMass(state.done[state.c] || START); }
+    roM.textContent = (state.done[state.c] || START).toFixed(2);
+    roT.textContent = state.done[state.c] ? TMIN : 0;
+    reportHeight();
+  }
+
+  elRun.addEventListener(&quot;click&quot;, collect);
+  elReset.addEventListener(&quot;click&quot;, function () {
+    state.done = {}; state.c = CONCS[0];
+    render();
+    say(&quot;Everything cleared. Choose a concentration, then collect the result.&quot;);
+  });
+
+  render();
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe></div></section>
+<section class="stage" id="graph"><div class="shead"><span class="num">Stage 4</span><span class="kind">Video &middot; 86 seconds</span></div><h2>Watch how to draw the graph</h2><p class="blurb">Where the axes go when results fall below zero, and why this graph takes a straight line rather than a curve.</p><div class="media"><video controls preload="metadata" playsinline src="videos/osmosis-graph.mp4"></video></div></section>
+<section class="stage" id="plot"><div class="shead"><span class="num">Stage 5</span><span class="kind">Simulation &middot; Axes, five points, one line</span></div><h2>Plot the results</h2><p class="blurb">Then read off the concentration where the line crosses zero &mdash; the answer the practical exists to find.</p><div class="media"><iframe title="Simulation" height="420" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Plot the results&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.stage{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.stage[hidden]{display:none}
+.stage h2{font-size:13px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.choices{display:grid;gap:8px}
+.choice{display:flex;gap:10px;align-items:center;text-align:left;padding:10px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;cursor:pointer;width:100%}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good-line);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.choice svg{flex:0 0 auto;width:104px;height:auto;border:1px solid var(--line);
+  border-radius:5px;background:var(--bg)}
+.paper{background:var(--bg);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.paper svg{width:100%;height:auto;display:block;touch-action:manipulation}
+.tick{font-size:11px;fill:var(--muted);font-family:inherit}
+.axis-t{font-size:12px;fill:var(--fg);font-family:inherit;font-weight:600}
+svg text{user-select:none}
+.col{fill:transparent;cursor:crosshair}
+.col:focus{outline:none;fill:var(--accent);fill-opacity:.07}
+table{border-collapse:collapse;width:100%;margin-top:10px;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:5px}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:center;font-size:13.5px}
+th{background:var(--card);font-weight:650}
+td.done{color:var(--good);font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+  &lt;h1&gt;Plot the results&lt;/h1&gt;
+  &lt;p class=&quot;sub&quot;&gt;Some of these values are below zero, so this graph is built a little
+    differently from one where everything is positive.&lt;/p&gt;
+
+  &lt;div class=&quot;stage&quot; id=&quot;s1&quot;&gt;
+    &lt;h2&gt;Step 1 &amp;mdash; where does the horizontal axis go?&lt;/h2&gt;
+    &lt;div class=&quot;choices&quot;&gt;
+      &lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ax=&quot;a&quot;&gt;Across the middle of the paper, so there
+        is room for the values below zero as well as the ones above it.&lt;/button&gt;
+      &lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ax=&quot;b&quot;&gt;Along the bottom of the paper, as it
+        would be if every value were above zero.&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;stage&quot; id=&quot;s2&quot; hidden&gt;
+    &lt;h2&gt;Step 2 &amp;mdash; plot the five results&lt;/h2&gt;
+    &lt;p class=&quot;sub&quot; style=&quot;margin:0 0 8px&quot;&gt;Click the graph at the height of each result. Or use
+      the Tab key to reach a concentration, the arrow keys to move, and Enter to plot.&lt;/p&gt;
+    &lt;div class=&quot;paper&quot;&gt;
+      &lt;svg id=&quot;paper&quot; viewBox=&quot;0 0 380 340&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;
+           role=&quot;application&quot; aria-label=&quot;Graph paper. Sucrose concentration across, percentage
+           change in mass up, with zero across the middle.&quot;&gt;
+        &lt;g&gt;&lt;path d=&quot;M56,298.0 L356,298.0&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M56,292.8 L356,292.8&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,287.6 L356,287.6&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,282.4 L356,282.4&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,277.2 L356,277.2&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,272.0 L356,272.0&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M56,266.8 L356,266.8&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,261.6 L356,261.6&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,256.4 L356,256.4&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,251.2 L356,251.2&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,246.0 L356,246.0&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M56,240.8 L356,240.8&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,235.6 L356,235.6&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,230.4 L356,230.4&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,225.2 L356,225.2&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,220.0 L356,220.0&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M56,214.8 L356,214.8&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,209.6 L356,209.6&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,204.4 L356,204.4&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,199.2 L356,199.2&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,194.0 L356,194.0&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M56,188.8 L356,188.8&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,183.6 L356,183.6&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,178.4 L356,178.4&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,173.2 L356,173.2&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,168.0 L356,168.0&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M56,162.8 L356,162.8&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,157.6 L356,157.6&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,152.4 L356,152.4&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,147.2 L356,147.2&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,142.0 L356,142.0&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M56,136.8 L356,136.8&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,131.6 L356,131.6&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,126.4 L356,126.4&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,121.2 L356,121.2&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,116.0 L356,116.0&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M56,110.8 L356,110.8&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,105.6 L356,105.6&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,100.4 L356,100.4&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,95.2 L356,95.2&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,90.0 L356,90.0&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M56,84.8 L356,84.8&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,79.6 L356,79.6&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,74.4 L356,74.4&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,69.2 L356,69.2&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,64.0 L356,64.0&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M56,58.8 L356,58.8&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,53.6 L356,53.6&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,48.4 L356,48.4&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,43.2 L356,43.2&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M56,38.0 L356,38.0&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M56.0,38 L56.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M68.0,38 L68.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M80.0,38 L80.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M92.0,38 L92.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M104.0,38 L104.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M116.0,38 L116.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M128.0,38 L128.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M140.0,38 L140.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M152.0,38 L152.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M164.0,38 L164.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M176.0,38 L176.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M188.0,38 L188.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M200.0,38 L200.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M212.0,38 L212.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M224.0,38 L224.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M236.0,38 L236.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M248.0,38 L248.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M260.0,38 L260.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M272.0,38 L272.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M284.0,38 L284.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M296.0,38 L296.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;path d=&quot;M308.0,38 L308.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M320.0,38 L320.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M332.0,38 L332.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M344.0,38 L344.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;0.5&quot;/&gt;&lt;path d=&quot;M356.0,38 L356.0,298&quot; stroke=&quot;var(--grid)&quot; stroke-width=&quot;1.1&quot;/&gt;&lt;text x=&quot;56.0&quot; y=&quot;314&quot; class=&quot;tick&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;&lt;text x=&quot;116.0&quot; y=&quot;314&quot; class=&quot;tick&quot; text-anchor=&quot;middle&quot;&gt;5&lt;/text&gt;&lt;text x=&quot;176.0&quot; y=&quot;314&quot; class=&quot;tick&quot; text-anchor=&quot;middle&quot;&gt;10&lt;/text&gt;&lt;text x=&quot;236.0&quot; y=&quot;314&quot; class=&quot;tick&quot; text-anchor=&quot;middle&quot;&gt;15&lt;/text&gt;&lt;text x=&quot;296.0&quot; y=&quot;314&quot; class=&quot;tick&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;&lt;text x=&quot;356.0&quot; y=&quot;314&quot; class=&quot;tick&quot; text-anchor=&quot;middle&quot;&gt;25&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;302.0&quot; class=&quot;tick&quot; text-anchor=&quot;end&quot;&gt;-25&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;276.0&quot; class=&quot;tick&quot; text-anchor=&quot;end&quot;&gt;-20&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;250.0&quot; class=&quot;tick&quot; text-anchor=&quot;end&quot;&gt;-15&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;224.0&quot; class=&quot;tick&quot; text-anchor=&quot;end&quot;&gt;-10&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;198.0&quot; class=&quot;tick&quot; text-anchor=&quot;end&quot;&gt;-5&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;146.0&quot; class=&quot;tick&quot; text-anchor=&quot;end&quot;&gt;+5&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;120.0&quot; class=&quot;tick&quot; text-anchor=&quot;end&quot;&gt;+10&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;94.0&quot; class=&quot;tick&quot; text-anchor=&quot;end&quot;&gt;+15&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;68.0&quot; class=&quot;tick&quot; text-anchor=&quot;end&quot;&gt;+20&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;42.0&quot; class=&quot;tick&quot; text-anchor=&quot;end&quot;&gt;+25&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;172.0&quot; class=&quot;tick&quot; text-anchor=&quot;end&quot;&gt;0&lt;/text&gt;&lt;/g&gt;
+        &lt;path d=&quot;M56,38 L56,298&quot; fill=&quot;none&quot; stroke=&quot;var(--fg)&quot;
+              stroke-width=&quot;2.2&quot;/&gt;
+        &lt;path d=&quot;M56,168 L356,168&quot; fill=&quot;none&quot; stroke=&quot;var(--fg)&quot;
+              stroke-width=&quot;2.2&quot;/&gt;
+        &lt;text x=&quot;206&quot; y=&quot;336&quot; class=&quot;axis-t&quot; text-anchor=&quot;middle&quot;&gt;Sucrose concentration (%)&lt;/text&gt;
+        &lt;text x=&quot;14&quot; y=&quot;168&quot; class=&quot;axis-t&quot; text-anchor=&quot;middle&quot;
+              transform=&quot;rotate(-90 14 168)&quot;&gt;Change in mass (%)&lt;/text&gt;
+        &lt;g id=&quot;marks&quot;&gt;&lt;/g&gt;&lt;g id=&quot;line&quot;&gt;&lt;/g&gt;&lt;g id=&quot;cross&quot;&gt;&lt;/g&gt;&lt;g id=&quot;cols&quot;&gt;&lt;/g&gt;
+      &lt;/svg&gt;
+    &lt;/div&gt;
+    &lt;table&gt;
+      &lt;caption&gt;The results you collected.&lt;/caption&gt;
+      &lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Sucrose (%)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;Change in mass (%)&lt;/th&gt;
+        &lt;th scope=&quot;col&quot;&gt;On the graph&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+      &lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;0&lt;/th&gt;&lt;td&gt;+24&lt;/td&gt;&lt;td id=&quot;s0&quot;&gt;not plotted&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;5&lt;/th&gt;&lt;td&gt;+12&lt;/td&gt;&lt;td id=&quot;s5&quot;&gt;not plotted&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;10&lt;/th&gt;&lt;td&gt;+1&lt;/td&gt;&lt;td id=&quot;s10&quot;&gt;not plotted&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;15&lt;/th&gt;&lt;td&gt;-11&lt;/td&gt;&lt;td id=&quot;s15&quot;&gt;not plotted&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;20&lt;/th&gt;&lt;td&gt;-20&lt;/td&gt;&lt;td id=&quot;s20&quot;&gt;not plotted&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;stage&quot; id=&quot;s3&quot; hidden&gt;
+    &lt;h2&gt;Step 3 &amp;mdash; which line goes through the points?&lt;/h2&gt;
+    &lt;div class=&quot;choices&quot;&gt;
+      &lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ln=&quot;fit&quot;&gt;&lt;svg viewBox=&quot;40 20 330 300&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M56,38.0 L56,298.0 M56,168.0 L356.0,168.0&quot; fill=&quot;none&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;2&quot;/&gt;&lt;path d=&quot;M56.0,46.3 L317.6,298.0&quot; fill=&quot;none&quot; stroke=&quot;var(--accent)&quot; stroke-width=&quot;3.4&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/&gt;&lt;path d=&quot;M52.0,39.2 l8,8 M60.0,39.2 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M112.0,101.6 l8,8 M120.0,101.6 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M172.0,158.8 l8,8 M180.0,158.8 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M232.0,221.2 l8,8 M240.0,221.2 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M292.0,268.0 l8,8 M300.0,268.0 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;/svg&gt;
+        &lt;span&gt;One straight ruled line of best fit through the points.&lt;/span&gt;&lt;/button&gt;
+      &lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ln=&quot;curve&quot;&gt;&lt;svg viewBox=&quot;40 20 330 300&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M56,38.0 L56,298.0 M56,168.0 L356.0,168.0&quot; fill=&quot;none&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;2&quot;/&gt;&lt;path d=&quot;M56.0,43.2 C65.0,52.6 98.0,87.7 116.0,105.6 C134.0,123.5 158.0,144.9 176.0,162.8 C194.0,180.7 218.0,208.8 236.0,225.2 C254.0,241.6 287.0,265.0 296.0,272.0&quot; fill=&quot;none&quot; stroke=&quot;var(--accent)&quot; stroke-width=&quot;3.4&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/&gt;&lt;path d=&quot;M52.0,39.2 l8,8 M60.0,39.2 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M112.0,101.6 l8,8 M120.0,101.6 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M172.0,158.8 l8,8 M180.0,158.8 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M232.0,221.2 l8,8 M240.0,221.2 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M292.0,268.0 l8,8 M300.0,268.0 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;/svg&gt;
+        &lt;span&gt;One smooth curve bending through every point.&lt;/span&gt;&lt;/button&gt;
+      &lt;button type=&quot;button&quot; class=&quot;choice&quot; data-ln=&quot;dots&quot;&gt;&lt;svg viewBox=&quot;40 20 330 300&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M56,38.0 L56,298.0 M56,168.0 L356.0,168.0&quot; fill=&quot;none&quot; stroke=&quot;var(--muted)&quot; stroke-width=&quot;2&quot;/&gt;&lt;path d=&quot;M56.0,43.2 L116.0,105.6 L176.0,162.8 L236.0,225.2 L296.0,272.0&quot; fill=&quot;none&quot; stroke=&quot;var(--accent)&quot; stroke-width=&quot;3.4&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/&gt;&lt;path d=&quot;M52.0,39.2 l8,8 M60.0,39.2 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M112.0,101.6 l8,8 M120.0,101.6 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M172.0,158.8 l8,8 M180.0,158.8 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M232.0,221.2 l8,8 M240.0,221.2 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;path d=&quot;M292.0,268.0 l8,8 M300.0,268.0 l-8,8&quot; stroke=&quot;var(--fg)&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;/svg&gt;
+        &lt;span&gt;Straight lines joining each point to the next one.&lt;/span&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;stage&quot; id=&quot;s4&quot; hidden&gt;
+    &lt;h2&gt;Step 4 &amp;mdash; where does the line cross zero?&lt;/h2&gt;
+    &lt;p class=&quot;sub&quot; style=&quot;margin:0 0 8px&quot;&gt;Click the graph where your line crosses the horizontal
+      axis. At that concentration the potato neither gains nor loses water.&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Start with the axes.&lt;/p&gt;
+  &lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;bio2-210_osmosis-plot&quot;;
+  var PCTS = [[0, 24.0], [5, 12.0], [10, 1.0], [15, -11.0], [20, -20.0]], FIT = &quot;M56.0,46.3 L317.6,298.0&quot;, CROSSING = 10.5;
+  var X0 = 56, YMID = 168, PX = 12.0, PY = 5.2, YMAX = 25, XMAX = 25;
+  var msg = document.getElementById(&quot;msg&quot;);
+  var marks = document.getElementById(&quot;marks&quot;), lineG = document.getElementById(&quot;line&quot;);
+  var crossG = document.getElementById(&quot;cross&quot;), cols = document.getElementById(&quot;cols&quot;);
+  var paper = document.getElementById(&quot;paper&quot;);
+  var plotted = {}, pending = {}, stage = 1;
+
+  function say(t, k) { msg.textContent = t; msg.className = k ? &quot;msg &quot; + k : &quot;msg&quot;; }
+  function sx(c) { return X0 + c * PX; }
+  function sy(v) { return YMID - v * PY; }
+  function cross(x, y, w, col) {
+    return &#x27;&lt;path d=&quot;M&#x27; + (x-5) + &#x27;,&#x27; + (y-5) + &#x27; l10,10 M&#x27; + (x+5) + &#x27;,&#x27; + (y-5) +
+           &#x27; l-10,10&quot; stroke=&quot;&#x27; + col + &#x27;&quot; stroke-width=&quot;&#x27; + w +
+           &#x27;&quot; stroke-linecap=&quot;round&quot;/&gt;&#x27;;
+  }
+
+  PCTS.forEach(function (d) {
+    var r = document.createElementNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;rect&quot;);
+    r.setAttribute(&quot;x&quot;, sx(d[0]) - 2.5 * PX); r.setAttribute(&quot;y&quot;, sy(YMAX));
+    r.setAttribute(&quot;width&quot;, 5 * PX); r.setAttribute(&quot;height&quot;, sy(-YMAX) - sy(YMAX));
+    r.setAttribute(&quot;class&quot;, &quot;col&quot;); r.setAttribute(&quot;tabindex&quot;, &quot;0&quot;);
+    r.setAttribute(&quot;role&quot;, &quot;spinbutton&quot;);
+    r.setAttribute(&quot;aria-label&quot;, d[0] + &quot; percent sucrose&quot;);
+    r.dataset.c = d[0];
+    pending[d[0]] = 0;
+    r.addEventListener(&quot;keydown&quot;, function (e) {
+      var step = (e.key === &quot;ArrowUp&quot;) ? 1 : (e.key === &quot;ArrowDown&quot;) ? -1 : 0;
+      if (step) {
+        e.preventDefault();
+        pending[d[0]] = Math.max(-YMAX, Math.min(YMAX, pending[d[0]] + step));
+        r.setAttribute(&quot;aria-valuenow&quot;, String(pending[d[0]]));
+        ghost(d[0], pending[d[0]]);
+        say(d[0] + &quot;% sucrose: &quot; + pending[d[0]] + &quot;% change. Press Enter to plot it.&quot;);
+      } else if (e.key === &quot;Enter&quot; || e.key === &quot; &quot;) {
+        e.preventDefault(); place(d[0], pending[d[0]]);
+      }
+    });
+    cols.appendChild(r);
+  });
+
+  function svgPoint(e) {
+    var pt = paper.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+    return pt.matrixTransform(paper.getScreenCTM().inverse());
+  }
+
+  paper.addEventListener(&quot;pointerdown&quot;, function (e) {
+    var p = svgPoint(e);
+    if (stage === 2) {
+      var best = null, bd = 1e9;
+      PCTS.forEach(function (d) {
+        var dist = Math.abs(p.x - sx(d[0]));
+        if (dist &lt; bd) { bd = dist; best = d[0]; }
+      });
+      if (bd &gt; 2.5 * PX) { say(&quot;Click above one of the five concentrations.&quot;); return; }
+      place(best, Math.max(-YMAX, Math.min(YMAX, Math.round((YMID - p.y) / PY))));
+    } else if (stage === 4) {
+      var c = Math.round(((p.x - X0) / PX) * 2) / 2;
+      if (Math.abs(p.y - sy(0)) &gt; 3.2 * PY) {
+        say(&quot;Click on the horizontal axis itself, where your line crosses it.&quot;);
+        return;
+      }
+      readCrossing(c);
+    }
+  });
+
+  function ghost(c, v) {
+    var id = &quot;g&quot; + c, old = document.getElementById(id);
+    if (old) old.remove();
+    var g = document.createElementNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;g&quot;);
+    g.setAttribute(&quot;id&quot;, id);
+    g.innerHTML = cross(sx(c), sy(v), 2, &quot;var(--muted)&quot;);
+    g.setAttribute(&quot;opacity&quot;, &quot;0.55&quot;);
+    marks.appendChild(g);
+  }
+
+  function place(c, v) {
+    if (stage !== 2 || plotted[c] !== undefined) return;
+    var want = null;
+    PCTS.forEach(function (d) { if (d[0] === c) want = d[1]; });
+    if (v !== want) {
+      say(&quot;The change in mass at &quot; + c + &quot;% sucrose is not &quot; + v + &quot;%. Read that row of your &quot;
+          + &quot;table again, then plot it.&quot;, &quot;warn&quot;);
+      return;
+    }
+    var old = document.getElementById(&quot;g&quot; + c); if (old) old.remove();
+    plotted[c] = v;
+    var g = document.createElementNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;g&quot;);
+    g.innerHTML = cross(sx(c), sy(v), 2.6, &quot;var(--fg)&quot;);
+    marks.appendChild(g);
+    var cell = document.getElementById(&quot;s&quot; + c);
+    cell.textContent = &quot;plotted&quot;; cell.className = &quot;done&quot;;
+    var n = Object.keys(plotted).length;
+    if (n === PCTS.length) {
+      stage = 3;
+      document.getElementById(&quot;s3&quot;).hidden = false;
+      say(&quot;All five are plotted. Now choose the line that goes through them.&quot;, &quot;good&quot;);
+      reportHeight();
+    } else {
+      say(c + &quot;% sucrose plotted at &quot; + (v &gt; 0 ? &quot;+&quot; : &quot;&quot;) + v + &quot;%. &quot; + (PCTS.length - n)
+          + &quot; to go.&quot;);
+    }
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;[data-ax]&quot;), function (b) {
+    b.addEventListener(&quot;click&quot;, function () {
+      if (stage !== 1) return;
+      var ok = b.dataset.ax === &quot;a&quot;;
+      Array.prototype.forEach.call(document.querySelectorAll(&quot;[data-ax]&quot;), function (o) {
+        o.disabled = true;
+      });
+      b.classList.add(ok ? &quot;right&quot; : &quot;wrong&quot;);
+      if (!ok) document.querySelector(&#x27;[data-ax=&quot;a&quot;]&#x27;).classList.add(&quot;right&quot;);
+      stage = 2;
+      document.getElementById(&quot;s2&quot;).hidden = false;
+      say(ok ? &quot;Right. Two of the five results are below zero, so the horizontal axis goes &quot;
+             + &quot;across the middle and the vertical axis runs from minus 25 to plus 25.&quot;
+             : &quot;Not this one. Two results are below zero, and an axis along the bottom leaves &quot;
+             + &quot;nowhere to put them. It goes across the middle.&quot;, ok ? &quot;good&quot; : &quot;warn&quot;);
+      reportHeight();
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;[data-ln]&quot;), function (b) {
+    b.addEventListener(&quot;click&quot;, function () {
+      if (stage !== 3) return;
+      var kind = b.dataset.ln, ok = kind === &quot;fit&quot;;
+      Array.prototype.forEach.call(document.querySelectorAll(&quot;[data-ln]&quot;), function (o) {
+        o.disabled = true;
+      });
+      b.classList.add(ok ? &quot;right&quot; : &quot;wrong&quot;);
+      if (!ok) document.querySelector(&#x27;[data-ln=&quot;fit&quot;]&#x27;).classList.add(&quot;right&quot;);
+      var p = document.createElementNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;path&quot;);
+      p.setAttribute(&quot;d&quot;, FIT); p.setAttribute(&quot;fill&quot;, &quot;none&quot;);
+      p.setAttribute(&quot;stroke&quot;, &quot;var(--accent)&quot;); p.setAttribute(&quot;stroke-width&quot;, &quot;2.6&quot;);
+      p.setAttribute(&quot;stroke-linecap&quot;, &quot;round&quot;);
+      lineG.appendChild(p);
+      stage = 4;
+      document.getElementById(&quot;s4&quot;).hidden = false;
+      say(ok ? &quot;Right. These points fall close to a straight line, so one ruled line of best &quot;
+             + &quot;fit describes them. Now read off where it crosses zero.&quot;
+             : (kind === &quot;curve&quot;
+                 ? &quot;Not this one. A curve bent through every point treats each reading as exact, &quot;
+                 + &quot;and they are not. A straight line of best fit fits these points.&quot;
+                 : &quot;Not this one. Joining point to point says the change jumps at each reading. &quot;
+                 + &quot;A straight line of best fit fits these points.&quot;),
+          ok ? &quot;good&quot; : &quot;warn&quot;);
+      reportHeight();
+    });
+  });
+
+  function readCrossing(c) {
+    if (stage !== 4) return;
+    if (Math.abs(c - CROSSING) &gt; 1.0) {
+      say(&quot;Not quite. Follow your line down to the horizontal axis and click where it meets it.&quot;,
+          &quot;warn&quot;);
+      return;
+    }
+    stage = 5;
+    var g = document.createElementNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;g&quot;);
+    g.innerHTML = &#x27;&lt;circle cx=&quot;&#x27; + sx(CROSSING) + &#x27;&quot; cy=&quot;&#x27; + sy(0) +
+                  &#x27;&quot; r=&quot;6&quot; fill=&quot;none&quot; stroke=&quot;var(--accent)&quot; stroke-width=&quot;2.4&quot;/&gt;&#x27;;
+    crossG.appendChild(g);
+    say(&quot;That is it: about &quot; + CROSSING + &quot;% sucrose. At that concentration the solution outside &quot;
+        + &quot;the potato matches the solution inside its cells, so water moves into the cells and &quot;
+        + &quot;out of them at the same rate and the mass does not change.&quot;, &quot;good&quot;);
+    reportHeight();
+  }
+
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () { location.reload(); });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe></div></section>
+<section class="stage" id="conclusion"><div class="shead"><span class="num">Stage 6</span><span class="kind">Question &middot; A worked example, then one choice</span></div><h2>Choose the conclusion</h2><p class="blurb">What do the results show? A conclusion from another investigation, with what makes it good, and then three conclusions for your own results.</p><div class="media"><iframe title="Simulation" height="1130" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Choose the conclusion&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+  margin-top:12px}
+.panel[hidden]{display:none}
+.panel h2{font-size:12px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.setup{font-size:13.5px;color:var(--muted);margin:0 0 9px}
+.model{font-size:15px;line-height:1.62;margin:0;padding:11px 13px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:9px;counter-reset:st}
+.steps li{counter-increment:st;position:relative;font-size:14px;line-height:1.55;
+  background:var(--bg);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px 10px 44px}
+.steps li::before{content:counter(st);position:absolute;left:11px;top:10px;width:22px;
+  height:22px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
+  font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.steps b{display:block;color:var(--fg);font-weight:650;font-size:14.5px;margin-bottom:2px}
+.steps span{color:var(--muted)}
+.shape{font-size:13.5px;margin:11px 0 0;padding:9px 11px;border:1px solid var(--warn-line);
+  background:var(--warn-bg);color:var(--warn);border-radius:8px}
+.recap{font-size:14px;line-height:1.55;margin:0 0 11px;padding:10px 12px;background:var(--bg);
+  border:1px solid var(--line);border-radius:8px}
+.q{font-size:15px;font-weight:600;margin:0 0 10px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:11px 12px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:14.5px;line-height:1.55;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted);flex:0 0 auto}
+.opt.picked{border-color:var(--accent)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw{font-size:13.5px;line-height:1.5;margin:6px 0 0;padding:8px 11px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line)}
+.rw.good{border-color:var(--good-line);background:var(--good-bg)}
+.rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
+.rw b{font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;
+&lt;h1&gt;Choose the conclusion&lt;/h1&gt;
+&lt;p class=&quot;sub&quot;&gt;A conclusion says what the results show. It is not a summary of what you did.&lt;/p&gt;
+
+&lt;div class=&quot;panel&quot;&gt;
+&lt;h2&gt;How to write a conclusion&lt;/h2&gt;
+&lt;p class=&quot;setup&quot;&gt;Three steps, in this order. They are the same three whatever you
+  investigated.&lt;/p&gt;
+&lt;ol class=&quot;steps&quot;&gt;&lt;li&gt;&lt;b&gt;State the overall trend.&lt;/b&gt;&lt;span&gt;Say what happened to the thing you measured as the thing you changed went up. One sentence, in plain words, and covering the whole range rather than the start of it.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the data that evidences it.&lt;/b&gt;&lt;span&gt;Quote figures from your own results, usually one from each end of the range. A direction with no numbers behind it is an opinion, and a reader cannot check it.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Point out any exceptions.&lt;/b&gt;&lt;span&gt;Name any reading that does not follow the trend, say where it is, and say what it does instead. An exception left out quietly is the one thing a reader cannot forgive.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;p class=&quot;shape&quot;&gt;Now do those three things for your own results. Only one of the three below does all of them, and it has to fit every reading you took.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;panel&quot;&gt;
+&lt;h2&gt;Now your own results&lt;/h2&gt;
+&lt;p class=&quot;recap&quot;&gt;Your cylinders gained 24% in pure water, gained 12% in 5% sucrose, gained 1% in 10% sucrose, lost 11% in 15% sucrose and lost 20% in 20% sucrose. Your line of best fit crossed zero at about 10.5% sucrose.&lt;/p&gt;
+&lt;p class=&quot;q&quot;&gt;Which of these is a conclusion, and one your own results support?&lt;/p&gt;
+&lt;div class=&quot;opts&quot; id=&quot;opts&quot;&gt;&lt;/div&gt;
+&lt;p class=&quot;msg&quot; id=&quot;msg&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Pick one. You get one go at it, and
+then all three are explained.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;panel&quot; id=&quot;after&quot; hidden&gt;
+&lt;h2&gt;The three steps again&lt;/h2&gt;
+&lt;ol class=&quot;steps&quot; id=&quot;afterlist&quot;&gt;&lt;li&gt;&lt;b&gt;State the overall trend.&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Give the data that evidences it.&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Point out any exceptions.&lt;/b&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;bio2-210_conclusion&quot;;
+  var OPTS = [{&quot;text&quot;: &quot;Cylinders in the weaker solutions gained mass and those in the stronger ones lost it, from +24% in pure water to &amp;minus;20% in 20% sucrose. The line crosses zero at about 10.5% sucrose, so a solution of that strength is about as concentrated as the solution inside the potato cells. Nothing above 20% sucrose was tested.&quot;, &quot;ok&quot;: true, &quot;why&quot;: &quot;A conclusion, and your own line is what it rests on. It gives the direction, the crossing point the graph was drawn to find, and the edge of what you tested.&quot;}, {&quot;text&quot;: &quot;Cylinders in the weaker solutions gained mass and those in the stronger ones lost it, from +24% in pure water to &amp;minus;20% in 20% sucrose. So sucrose solution draws mass out of potato tissue, the stronger the more. The results do not show what happens above 20% sucrose, because no stronger solution was tested.&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;The first sentence is right and the second does not follow from it. Your cylinder in 5% sucrose &lt;i&gt;gained&lt;/i&gt; 12% and the one in 10% gained 1%, so those solutions put mass in rather than taking it out. Only solutions stronger than about 10.5% drew mass out of the tissue.&quot;}, {&quot;text&quot;: &quot;Five cylinders were cut to the same size, blotted dry, weighed, and left for 30 minutes in sucrose solutions of 0, 5, 10, 15 and 20%. Each was then blotted and weighed again, and the change in mass worked out as a percentage of its starting mass. No solution stronger than 20% sucrose went anywhere near a cylinder.&quot;, &quot;ok&quot;: false, &quot;why&quot;: &quot;This is your method, written out accurately, and the last sentence is true as well. None of it says what the results show, which is the one thing a conclusion is for.&quot;}];
+  var LETTERS = &quot;ABC&quot;;
+  var box = document.getElementById(&quot;opts&quot;), msg = document.getElementById(&quot;msg&quot;);
+  var done = false;
+
+  // Fisher-Yates, so the accurate conclusion is in no fixed position.
+  var order = OPTS.map(function (o, i) { return i; });
+  for (var i = order.length - 1; i &gt; 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1)), t = order[i];
+    order[i] = order[j]; order[j] = t;
+  }
+
+  order.forEach(function (idx, pos) {
+    var o = OPTS[idx];
+    var b = document.createElement(&quot;button&quot;);
+    b.type = &quot;button&quot;;
+    b.className = &quot;opt&quot;;
+    b.dataset.i = idx;
+    b.innerHTML = &#x27;&lt;span class=&quot;ltr&quot;&gt;&#x27; + LETTERS[pos] + &#x27;&lt;/span&gt;&lt;span&gt;&#x27; + o.text + &#x27;&lt;/span&gt;&#x27;;
+    box.appendChild(b);
+    var r = document.createElement(&quot;p&quot;);
+    r.className = &quot;rw&quot;;
+    r.id = &quot;rw&quot; + idx;
+    r.hidden = true;
+    box.appendChild(r);
+  });
+
+  box.addEventListener(&quot;click&quot;, function (e) {
+    var b = e.target.closest(&quot;.opt&quot;);
+    if (!b || done) return;
+    done = true;
+    var chosen = +b.dataset.i;
+
+    OPTS.forEach(function (o, idx) {
+      var btn = box.querySelector(&#x27;.opt[data-i=&quot;&#x27; + idx + &#x27;&quot;]&#x27;);
+      btn.disabled = true;
+      btn.classList.add(o.ok ? &quot;right&quot; : &quot;wrong&quot;);
+      var r = document.getElementById(&quot;rw&quot; + idx);
+      r.hidden = false;
+      r.className = &quot;rw &quot; + (o.ok ? &quot;good&quot; : &quot;bad&quot;);
+      var head = o.ok ? &quot;The accurate one.&quot; : &quot;Not this one.&quot;;
+      if (idx === chosen) head = o.ok ? &quot;You picked this one, and it is the accurate one.&quot;
+                                      : &quot;You picked this one.&quot;;
+      r.innerHTML = &quot;&lt;b&gt;&quot; + head + &quot;&lt;/b&gt; &quot; + o.why;
+    });
+
+    var right = OPTS[chosen].ok;
+    msg.textContent = right
+      ? &quot;That is the one. Read the other two as well \u2014 each is wrong in a way that is &quot;
+        + &quot;easy to fall into.&quot;
+      : &quot;Not that one. The accurate conclusion is marked in green, and every option now says &quot;
+        + &quot;what is right or wrong with it.&quot;;
+    msg.className = &quot;msg &quot; + (right ? &quot;good&quot; : &quot;warn&quot;);
+    document.getElementById(&quot;after&quot;).hidden = false;
+    reportHeight();
+  });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe></div></section>
+<section class="stage" id="questions"><div class="shead"><span class="num">Stage 7</span><span class="kind">Questions &middot; Eight items</span></div><h2>Answer eight questions</h2><p class="blurb">On carrying the practical out, and on what its results show.</p><div class="media"><iframe title="Simulation" height="3800" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Osmosis — questions&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#0f766e;
+  --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
+  --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
+  --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
+  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
+  --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
+  --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
+  --potato:#efe3bd; --potatoline:#c9b98a; --tile:#f4f4f2; --tileside:#dedcd6;
+  --wood:#d8bd93; --woodline:#a98a5e;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#2a2f3a; --accent:#2dd4bf;
+    --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
+    --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
+    --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
+    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
+    --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
+    --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
+    --potato:#4a4327; --potatoline:#6b6137; --tile:#2a2e35; --tileside:#20242a;
+    --wood:#4a3d2a; --woodline:#6b5a3e;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);padding:14px;
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif}
+.sim{max-width:680px;margin:0 auto}
+h1{font-size:17px;margin:0 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-size:13.5px;margin:0 0 14px}
+.brief p{margin:0 0 6px} .brief p:last-child{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.actions button{padding:10px 14px;border-radius:8px;font:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.actions button.primary{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-fg);font-weight:650}
+.actions button:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;font-size:13.5px;min-height:20px}
+.msg.warn{color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 10px}
+.msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
+  border-radius:8px;padding:8px 10px}
+
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;
+  margin-top:12px}
+.q h2{font-size:12px;margin:0 0 6px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.04em}
+.q .stem{margin:0 0 10px;font-weight:500}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:9px;align-items:flex-start;text-align:left;padding:9px 11px;
+  border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);
+  font:inherit;cursor:pointer;width:100%}
+.opt:disabled{cursor:default}
+.opt .ltr{font-weight:700;color:var(--muted)}
+.opt.right{border-color:var(--good-line);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad-line);background:var(--bad-bg)}
+.fb{margin-top:8px;font-size:13.5px;padding:8px 10px;border-radius:8px;display:none}
+.fb.on{display:block;background:var(--bg);border:1px solid var(--line)}
+.score{margin-top:14px;font-weight:650}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;sim&quot;&gt;&lt;h1&gt;Osmosis: potato and sugar solution&lt;/h1&gt;&lt;p class=&quot;sub&quot;&gt;Eight questions on the practical and on what its results show.&lt;/p&gt;&lt;div class=&quot;q&quot; data-qn=&quot;1&quot;&gt;&lt;h2&gt;Question 1 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A student leaves a cylinder of potato in each of five sucrose solutions for 30 minutes and works out how much mass each one gained or lost. Which variable belongs on the horizontal axis of the graph?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;The concentration of the solution, because it is the one the student changed.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;The change in mass of the cylinder, because it is what the student worked out.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;The time each cylinder spent in its solution, because it was the same for all five.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;1&quot; data-o=&quot;d&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;D&lt;/span&gt;&lt;span&gt;The mass of each cylinder at the start, because every one began at the same mass.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb1&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;2&quot;&gt;&lt;h2&gt;Question 2 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;Every cylinder is blotted dry on a paper towel before it is weighed, both at the start and at the end. Why does that matter?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Water clinging to the outside would be weighed as though it were inside the potato.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Water clinging to the outside would carry on moving into the potato while it was weighed.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Water clinging to the outside would make the balance read less than the true mass.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;2&quot; data-o=&quot;d&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;D&lt;/span&gt;&lt;span&gt;Water clinging to the outside would dilute the next solution the cylinder went into.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb2&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;3&quot;&gt;&lt;h2&gt;Question 3 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;All five cylinders are cut from the same potato with the same cork borer and trimmed to the same length. Why must they be the same size as each other?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;A bigger cylinder would take in more water, so size could explain the result instead of the solution.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;A bigger cylinder would need longer than the 30 minutes allowed to settle.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;A bigger cylinder would not fit into a test tube beside the volume of solution used.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;3&quot; data-o=&quot;d&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;D&lt;/span&gt;&lt;span&gt;A bigger cylinder would float rather than stay fully under the surface of its solution.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb3&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;4&quot;&gt;&lt;h2&gt;Question 4 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A cylinder left in pure water gains mass. What has moved, and which way?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Water has moved into the cells, because the solution inside them is the more concentrated.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Water has moved into the cells, because the pure water outside is the more concentrated.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Sucrose has moved into the cells from the water surrounding the cylinder.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;4&quot; data-o=&quot;d&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;D&lt;/span&gt;&lt;span&gt;Water has been pulled into the cells using energy released by their mitochondria.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb4&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;5&quot;&gt;&lt;h2&gt;Question 5 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A cylinder left in 20% sucrose loses mass. What has happened to it?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Water has moved out of its cells, because the solution outside is the more concentrated.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Sucrose has moved into its cells, because the solution outside is the more concentrated.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;Water has moved out of its cells, because the solution outside is the more dilute.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;5&quot; data-o=&quot;d&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;D&lt;/span&gt;&lt;span&gt;Sucrose has moved out of its cells and taken water with it as it went.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb5&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;6&quot;&gt;&lt;h2&gt;Question 6 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;A graph of the results is a straight line that crosses zero at about 10% sucrose. What does that concentration tell you about the potato?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;It is as concentrated as the solution inside the cells themselves.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;It is the concentration at which the membrane stops letting water through.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;It is the concentration at which the cells have taken in all the water they can hold.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;6&quot; data-o=&quot;d&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;D&lt;/span&gt;&lt;span&gt;It is the concentration at which sucrose starts to cross into the cells.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb6&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;7&quot;&gt;&lt;h2&gt;Question 7 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;Using that same graph, which crosses zero at about 10% sucrose, what would happen to a cylinder left in 5% sucrose?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;It would gain mass, because water would move into its cells.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;It would lose mass, because water would move out of its cells.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;It would keep the same mass, because 5% is fairly close to where the line crosses zero.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;7&quot; data-o=&quot;d&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;D&lt;/span&gt;&lt;span&gt;It would gain mass, because sucrose would move into its cells from the solution.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb7&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;q&quot; data-qn=&quot;8&quot;&gt;&lt;h2&gt;Question 8 of 8&lt;/h2&gt;&lt;div class=&quot;stem&quot;&gt;&lt;p&gt;The results are worked out as a percentage change in mass rather than as a change in grams. What does using a percentage allow?&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;opts&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;a&quot; data-ok=&quot;1&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;A&lt;/span&gt;&lt;span&gt;Cylinders that did not start at exactly the same mass can still be compared fairly.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;b&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;B&lt;/span&gt;&lt;span&gt;Cylinders that were left in their solutions for different times can still be compared.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;c&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;C&lt;/span&gt;&lt;span&gt;The change can be worked out without weighing each cylinder at the start.&lt;/span&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;opt&quot; data-q=&quot;8&quot; data-o=&quot;d&quot; data-ok=&quot;0&quot;&gt;&lt;span class=&quot;ltr&quot;&gt;D&lt;/span&gt;&lt;span&gt;The change can be read off the balance directly, with no working out needed.&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;fb&quot; id=&quot;fb8&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;p class=&quot;score&quot; id=&quot;score&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;&lt;div class=&quot;actions&quot;&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  &quot;use strict&quot;;
+
+  var SIM_ID = &quot;bio2-210_practical-questions&quot;;
+  var EXPL = {&quot;1&quot;: &quot;The variable you deliberately change is the independent variable, and it goes on the horizontal axis. Here that is the concentration of the solution.&quot;, &quot;2&quot;: &quot;The balance weighs everything on the pan. Surface water is counted as part of the cylinder, so a cylinder that was not blotted looks heavier than it is.&quot;, &quot;3&quot;: &quot;If the cylinders differed in size as well as in the solution they sat in, the result could not tell you which of the two caused the change.&quot;, &quot;4&quot;: &quot;Water moves from where it is more dilute to where it is more concentrated. Pure water is more dilute than the solution inside the cells, so water moves in.&quot;, &quot;5&quot;: &quot;The solution outside is more concentrated than the solution inside the cells, so water moves out of the cells and the cylinder loses mass.&quot;, &quot;6&quot;: &quot;Where the line crosses zero the cylinder neither gained nor lost mass, so water was moving in and out at the same rate. That happens when the two solutions are equally concentrated.&quot;, &quot;7&quot;: &quot;5% is more dilute than the solution inside the cells, so water moves into them and the cylinder gains mass. Every concentration below the crossing point does the same.&quot;, &quot;8&quot;: &quot;A gain of 0.5 g means much more for a small cylinder than for a large one. Turning each change into a percentage of its own starting mass puts all five on the same footing.&quot;}, ERR = {&quot;1&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;that is the dependent variable, and it goes on the vertical axis&quot;, &quot;c&quot;: &quot;a control variable is not plotted at all&quot;, &quot;d&quot;: &quot;that was held the same, so it is a control variable&quot;}, &quot;2&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;the reason is what the balance reads, not what the water does next&quot;, &quot;c&quot;: &quot;extra water on a cylinder makes the reading larger, not smaller&quot;, &quot;d&quot;: &quot;each cylinder goes into one solution only, and this is about the weighing&quot;}, &quot;3&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;all five are left for the same time, whatever their size&quot;, &quot;c&quot;: &quot;the tube is not what decides this; two things changing at once is&quot;, &quot;d&quot;: &quot;potato sinks in these solutions, and floating is not the problem&quot;}, &quot;4&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;pure water is the most dilute thing in the experiment&quot;, &quot;c&quot;: &quot;there is no sucrose in pure water for anything to move&quot;, &quot;d&quot;: &quot;that is active transport, and osmosis needs no energy&quot;}, &quot;5&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;the membrane lets water through but holds the sucrose back&quot;, &quot;c&quot;: &quot;20% sucrose is the most concentrated solution in the experiment&quot;, &quot;d&quot;: &quot;the sucrose outside is more concentrated, and it cannot cross the membrane anyway&quot;}, &quot;6&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;water keeps crossing; what stops is any net change in mass&quot;, &quot;c&quot;: &quot;at that point the cylinder has neither gained nor lost mass&quot;, &quot;d&quot;: &quot;sucrose does not cross the membrane at any of these concentrations&quot;}, &quot;7&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;5% is more dilute than the inside of the cells, so water moves the other way&quot;, &quot;c&quot;: &quot;close is not the same; only the crossing point gives no change&quot;, &quot;d&quot;: &quot;what moves is water; the sucrose stays outside&quot;}, &quot;8&quot;: {&quot;a&quot;: &quot;&quot;, &quot;b&quot;: &quot;all five are left for the same 30 minutes, so there is nothing to correct for&quot;, &quot;c&quot;: &quot;a percentage change needs the starting mass more than a change in grams does&quot;, &quot;d&quot;: &quot;a percentage always has to be calculated from two readings&quot;}}, TOTAL = 8;
+  var done = {}, right = 0;
+  var score = document.getElementById(&quot;score&quot;);
+
+  // The atom JSON keeps every key at option a, because TimeBack randomises the order it serves
+  // them in. THIS PAGE DOES NOT -- it renders them as written, so without a shuffle here the
+  // key sits at A in all eight items and a student spots it by question three. Shuffle on load,
+  // and relabel, so the letters still read A, B, C, D down the list.
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;.opts&quot;), function (box) {
+    var kids = Array.prototype.slice.call(box.children);
+    for (var i = kids.length - 1; i &gt; 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = kids[i];
+      kids[i] = kids[j]; kids[j] = t;
+    }
+    kids.forEach(function (k, n) {
+      box.appendChild(k);
+      k.querySelector(&quot;.ltr&quot;).textContent = &quot;ABCD&quot;[n];
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(&quot;.opt&quot;), function (b) {
+    b.addEventListener(&quot;click&quot;, function () {
+      var qn = b.dataset.q;
+      if (done[qn]) return;
+      done[qn] = true;
+      var ok = b.dataset.ok === &quot;1&quot;;
+      if (ok) right++;
+      var q = document.querySelector(&#x27;.q[data-qn=&quot;&#x27; + qn + &#x27;&quot;]&#x27;);
+      Array.prototype.forEach.call(q.querySelectorAll(&quot;.opt&quot;), function (o) {
+        o.disabled = true;
+        if (o.dataset.ok === &quot;1&quot;) o.classList.add(&quot;right&quot;);
+      });
+      if (!ok) b.classList.add(&quot;wrong&quot;);
+      var fb = document.getElementById(&quot;fb&quot; + qn);
+      fb.className = &quot;fb on&quot;;
+      fb.innerHTML = (ok ? &quot;&quot; : &quot;&lt;b&gt;&quot; + ERR[qn][b.dataset.o] + &quot;.&lt;/b&gt; &quot;) + EXPL[qn];
+      var n = Object.keys(done).length;
+      score.textContent = n + &quot; of &quot; + TOTAL + &quot; answered, &quot; + right + &quot; right.&quot;;
+      reportHeight();
+    });
+  });
+  document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () { location.reload(); });
+
+
+  var lastH = 0;
+  // documentElement.scrollHeight is never smaller than the frame it sits in, so reporting it
+  // lets a frame grow and never shrink -- which is where the dead white space came from.
+  // Measure the content itself instead.
+  function contentHeight() {
+    var el = document.querySelector(&quot;.sim&quot;) || document.body;
+    var pad = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
+    return Math.ceil(el.getBoundingClientRect().bottom + (window.scrollY || 0) + pad);
+  }
+  function reportHeight() {
+    var h = contentHeight();
+    if (h === lastH || h &lt; 40) return;
+    lastH = h;
+    try { parent.postMessage({ type:&quot;sim-height&quot;, sim:SIM_ID, height:h }, &quot;*&quot;); } catch (e) {}
+  }
+  window.addEventListener(&quot;resize&quot;, reportHeight);
+  // A srcdoc frame runs before the page around it has registered its listener, so the first
+  // message can be dropped. Say it again, and clear the dedupe so the repeat is not swallowed.
+  function reportAgain() { lastH = 0; reportHeight(); }
+  window.addEventListener(&quot;load&quot;, reportAgain);
+  setTimeout(reportAgain, 80);
+  setTimeout(reportAgain, 500);
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
+
+}());
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe></div></section>
+<footer><p><strong>Nothing here is marked behind the scenes.</strong> The simulations are the practical; what a student is assessed on is the eight questions at the end.</p><p><strong>This practical's data was designed, not taken from a lesson.</strong> Unit 2 teaches osmosis across four lessons but none of them sets out an experiment or prints results, so these numbers were written for the practical and are now the source for the collecting stage, the plotting stage, the graph video and two of the questions.</p></footer></div>

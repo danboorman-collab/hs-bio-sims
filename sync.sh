@@ -38,10 +38,19 @@ done
 # videos are copied only once they exist; a missing one leaves a waiting card and the
 # lesson page still works
 mkdir -p "$HERE/ap/videos"
-# Parked renders (-ATTEMPT-n, -STUCK-nnh) are kept beside the masters as a record of what
-# a prompt change altered. They are not part of the site, so they are not copied.
+# Parked renders are kept beside the masters as a record of what a prompt change altered,
+# or of a submission that had to be abandoned. They are not part of the site, so they are
+# not copied. The list is every suffix in use, not just the two that were in use when this
+# was written: -ABSTRACT alone was 58 MB of video on the site that no page ever linked to.
+#   -ATTEMPT-n   a render replaced after a fault was found in it
+#   -STUCK-nnh   a submission that never finished
+#   -STALLED-nh  a submission cancelled and sent again
+#   -ABSTRACT    an alternate treatment of a skill video, not the one that ships
+#   -SETTLE      a render made before the "settle" rule, kept for comparison
 for v in "$AP/videos/"*.mp4; do
-    case "$(basename "$v")" in *-ATTEMPT-*|*-STUCK-*) continue ;; esac
+    case "$(basename "$v")" in
+        *-ATTEMPT-*|*-STUCK-*|*-STALLED-*|*-ABSTRACT*|*-SETTLE*) continue ;;
+    esac
     cp "$v" "$HERE/ap/videos/" 2>/dev/null || true
 done
 

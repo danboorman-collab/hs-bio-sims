@@ -53,6 +53,24 @@ h1{font-size:17px;margin:0 0 2px}
 .msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
   border-radius:8px;padding:8px 10px}
 
+.recall{margin:0 0 12px}
+.recall p.note{font-size:13.5px;color:var(--muted);margin:0 0 9px}
+.recall table{border-collapse:collapse;width:100%;margin:0 0 11px;
+  font-variant-numeric:tabular-nums}
+.recall caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:5px}
+.recall th,.recall td{border:1px solid var(--line);padding:5px 8px;text-align:center;
+  font-size:13.5px}
+.recall th{background:var(--card);font-weight:650}
+.recall th[scope=row]{text-align:left}
+.recall td.odd{color:var(--warn);font-weight:650}
+.recall figure{margin:0}
+.recall .paper{background:var(--bg);border:1px solid var(--line);border-radius:8px;
+  overflow:hidden}
+.recall .paper svg{width:100%;height:auto;display:block}
+.recall figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+.recall .tick{font-size:11px;fill:var(--muted);font-family:inherit}
+.recall .axis-t{font-size:12px;fill:var(--fg);font-family:inherit;font-weight:600}
+
 .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
   margin-top:12px}
 .panel[hidden]{display:none}
@@ -108,6 +126,7 @@ h1{font-size:17px;margin:0 0 2px}
 <div class="panel">
 <h2>Now your own results</h2>
 <p class="recap">You were asked how many of these plants are growing in the whole field. Your 10 quadrats held 6, 4, 7, 5, 6, 3, 7, 5, 8 and 9 plants, which is 60 between them and a mean of 6 per quadrat. Each quadrat covers 0.25 m&sup2;, and the field is 800 m&sup2;.</p>
+<div class="recall"><p class="note">Your results, so you can check each conclusion against them rather than remember them.</p><table><caption>Plants counted in each of the 10 quadrats. Each quadrat covers 0.25 m&sup2; and the field covers 800 m&sup2;.</caption><thead><tr><th scope="col">Quadrat</th><th scope="col">1</th><th scope="col">2</th><th scope="col">3</th><th scope="col">4</th><th scope="col">5</th><th scope="col">6</th><th scope="col">7</th><th scope="col">8</th><th scope="col">9</th><th scope="col">10</th><th scope="col">Total</th><th scope="col">Mean</th></tr></thead><tbody><tr><th scope="row">Plants counted</th><td>6</td><td>4</td><td>7</td><td>5</td><td>6</td><td>3</td><td>7</td><td>5</td><td>8</td><td>9</td><td><b>60</b></td><td><b>6</b></td></tr></tbody></table></div>
 <p class="q">Which of these is a conclusion, and one your own figures support?</p>
 <div class="opts" id="opts"></div>
 <p class="msg" id="msg" role="status" aria-live="polite">Pick one. You get one go at it, and

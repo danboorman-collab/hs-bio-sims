@@ -53,6 +53,24 @@ h1{font-size:17px;margin:0 0 2px}
 .msg.good{color:var(--good);background:var(--good-bg);border:1px solid var(--good-line);
   border-radius:8px;padding:8px 10px}
 
+.recall{margin:0 0 12px}
+.recall p.note{font-size:13.5px;color:var(--muted);margin:0 0 9px}
+.recall table{border-collapse:collapse;width:100%;margin:0 0 11px;
+  font-variant-numeric:tabular-nums}
+.recall caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:5px}
+.recall th,.recall td{border:1px solid var(--line);padding:5px 8px;text-align:center;
+  font-size:13.5px}
+.recall th{background:var(--card);font-weight:650}
+.recall th[scope=row]{text-align:left}
+.recall td.odd{color:var(--warn);font-weight:650}
+.recall figure{margin:0}
+.recall .paper{background:var(--bg);border:1px solid var(--line);border-radius:8px;
+  overflow:hidden}
+.recall .paper svg{width:100%;height:auto;display:block}
+.recall figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+.recall .tick{font-size:11px;fill:var(--muted);font-family:inherit}
+.recall .axis-t{font-size:12px;fill:var(--fg);font-family:inherit;font-weight:600}
+
 .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
   margin-top:12px}
 .panel[hidden]{display:none}
@@ -108,6 +126,7 @@ h1{font-size:17px;margin:0 0 2px}
 <div class="panel">
 <h2>Now your own results</h2>
 <p class="recap">You were asked which of two forests is the more biodiverse. Your mixed forest held 41, 39, 38, 42 and 40 trees of its 5 species, and the plantation held 196, 1, 1, 1 and 1. Both forests hold 200 trees, and both have a species richness of 5.</p>
+<div class="recall"><p class="note">Your results, so you can check each conclusion against them rather than remember them.</p><table><caption>Trees of each species counted in the two forests.</caption><thead><tr><th scope="col">Species</th><th scope="col">Mixed forest</th><th scope="col">Plantation</th></tr></thead><tbody><tr><th scope="row">Spruce</th><td>41</td><td>196</td></tr><tr><th scope="row">Ash</th><td>39</td><td>1</td></tr><tr><th scope="row">Birch</th><td>38</td><td>1</td></tr><tr><th scope="row">Hickory</th><td>42</td><td>1</td></tr><tr><th scope="row">Maple</th><td>40</td><td>1</td></tr><tr><th scope="row"><b>Total</b></th><td><b>200</b></td><td><b>200</b></td></tr></tbody></table></div>
 <p class="q">Which of these is a conclusion, and one your own survey supports?</p>
 <div class="opts" id="opts"></div>
 <p class="msg" id="msg" role="status" aria-live="polite">Pick one. You get one go at it, and

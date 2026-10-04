@@ -38,6 +38,11 @@ done
 # videos are copied only once they exist; a missing one leaves a waiting card and the
 # lesson page still works
 mkdir -p "$HERE/ap/videos"
-cp "$AP/videos/"*.mp4 "$HERE/ap/videos/" 2>/dev/null || true
+# Parked renders (-ATTEMPT-n, -STUCK-nnh) are kept beside the masters as a record of what
+# a prompt change altered. They are not part of the site, so they are not copied.
+for v in "$AP/videos/"*.mp4; do
+    case "$(basename "$v")" in *-ATTEMPT-*|*-STUCK-*) continue ;; esac
+    cp "$v" "$HERE/ap/videos/" 2>/dev/null || true
+done
 
 echo "synced $(find "$HERE" -name '*.html' | wc -l | tr -d ' ') pages"

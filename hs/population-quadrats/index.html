@@ -109,7 +109,7 @@ footer strong{color:var(--ink);font-weight:600}
   --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
   --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
   --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
-  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
   --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
   --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
   --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
@@ -122,7 +122,7 @@ footer strong{color:var(--ink);font-weight:600}
     --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
     --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
     --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
-    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
     --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
     --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
     --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
@@ -173,14 +173,23 @@ h1{font-size:17px;margin:0 0 2px}
 .rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
 .rw b{font-weight:650}
 .score{margin-top:14px;font-weight:650}
+
+.scen{background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:8px;padding:12px 14px;margin:0 0 14px;font-size:14px}
+.scen h2{font-size:12px;margin:0 0 7px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.scen p{margin:0}
+.dec .label{font-size:15px;font-weight:650;margin:0 0 5px}
+.dec .hint{font-size:13px;color:var(--muted);margin:0 0 10px;font-style:italic}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;div class=&quot;sim&quot;&gt;
   &lt;h1&gt;Plan the survey&lt;/h1&gt;
   &lt;p class=&quot;sub&quot;&gt;Four decisions to make before anyone walks into the field. One check, then all four are explained.&lt;/p&gt;
+  &lt;div class=&quot;scen&quot;&gt;&lt;h2&gt;What this experiment is about&lt;/h2&gt;&lt;p&gt;Counting every plant of one species in a whole field is impossible, so instead you count them inside a few small squares and scale the answer up. That only works if the squares stand in fairly for the field. &lt;b&gt;The goal:&lt;/b&gt; estimate how many plants of one species the field holds, and know how far the estimate can be trusted.&lt;/p&gt;&lt;/div&gt;
   &lt;div class=&quot;brief&quot;&gt;&lt;p&gt;&lt;b&gt;The problem.&lt;/b&gt; The field holds far more plants of this species than anyone could count one at a time. So a sample is counted instead: a few small squares of known area, scaled up to the whole field.&lt;/p&gt;&lt;p&gt;That only works if the squares stand in fairly for the field. Every decision below is about whether they do.&lt;/p&gt;&lt;/div&gt;
-  &lt;div class=&quot;dec&quot; data-n=&quot;0&quot;&gt;&lt;h2&gt;Decision 1 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;Where does each quadrat go?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts0&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;1&quot;&gt;&lt;h2&gt;Decision 2 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;A pair of numbers lands the quadrat on bare ground. What now?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts1&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;2&quot;&gt;&lt;h2&gt;Decision 3 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;Which plants inside the frame get counted?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts2&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;3&quot;&gt;&lt;h2&gt;Decision 4 of 4&lt;/h2&gt;&lt;p class=&quot;q&quot;&gt;How many quadrats, and where?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts3&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;dec&quot; data-n=&quot;0&quot;&gt;&lt;h2&gt;Decision 1 of 4&lt;/h2&gt;&lt;p class=&quot;label&quot;&gt;Sampling method &amp;mdash; avoiding bias&lt;/p&gt;&lt;p class=&quot;hint&quot;&gt;Bias is anything that lets the person doing the survey, rather than chance, decide which parts of the field get counted.&lt;/p&gt;&lt;p class=&quot;q&quot;&gt;Where does each quadrat go?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts0&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;1&quot;&gt;&lt;h2&gt;Decision 2 of 4&lt;/h2&gt;&lt;p class=&quot;label&quot;&gt;Sampling method &amp;mdash; following the rule&lt;/p&gt;&lt;p class=&quot;hint&quot;&gt;A sampling rule only works if it is kept to even when it gives an answer you did not want. Moving the frame is the person choosing again.&lt;/p&gt;&lt;p class=&quot;q&quot;&gt;A pair of numbers lands the quadrat on bare ground. What now?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts1&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;2&quot;&gt;&lt;h2&gt;Decision 3 of 4&lt;/h2&gt;&lt;p class=&quot;label&quot;&gt;Controlled variables &amp;mdash; a consistent rule&lt;/p&gt;&lt;p class=&quot;hint&quot;&gt;Every quadrat has to be counted the same way. A rule that changes from square to square makes the squares uncomparable.&lt;/p&gt;&lt;p class=&quot;q&quot;&gt;Which plants inside the frame get counted?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts2&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;dec&quot; data-n=&quot;3&quot;&gt;&lt;h2&gt;Decision 4 of 4&lt;/h2&gt;&lt;p class=&quot;label&quot;&gt;Replicates and sample size&lt;/p&gt;&lt;p class=&quot;hint&quot;&gt;A replicate here is one more quadrat. More of them spread over the whole field make the mean per square a better stand-in for the field.&lt;/p&gt;&lt;p class=&quot;q&quot;&gt;How many quadrats, and where?&lt;/p&gt;&lt;div class=&quot;opts&quot; id=&quot;opts3&quot;&gt;&lt;/div&gt;&lt;/div&gt;
   &lt;div class=&quot;actions&quot;&gt;
     &lt;button id=&quot;check&quot; class=&quot;primary&quot; type=&quot;button&quot;&gt;Check the plan&lt;/button&gt;
     &lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;Start again&lt;/button&gt;

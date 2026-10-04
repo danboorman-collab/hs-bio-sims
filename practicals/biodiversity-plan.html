@@ -10,7 +10,7 @@
   --accent-fg:#ffffff; --card:#f9fafb; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fcd34d;
   --good:#15803d; --good-bg:#f0fdf4; --good-line:#86efac;
   --bad:#b91c1c; --bad-bg:#fef2f2; --bad-line:#fecaca;
-  --glass:#64748b; --glass-fill:#f1f5f9; --water:#bfdbfe; --liquid:#e2e8f0;
+  --glass:#64748b; --glass-fill:#f1f5f9; --body:#475569; --water:#bfdbfe; --liquid:#e2e8f0;
   --warm:#dc2626; --metal:#cbd5e1; --ink:#334155; --dark:#334155; --screen:#94a3b8;
   --lens:#e0f2fe; --bubble:#ffffff; --mixture:#dbeafe; --agar:#f3ecd2;
   --ice-top:#e0f2fe; --ice-left:#bae6fd; --ice-right:#7dd3fc; --grid:#dbe2ea;
@@ -23,7 +23,7 @@
     --accent-fg:#06221f; --card:#161a21; --warn:#fbbf24; --warn-bg:#2b2310; --warn-line:#6b5313;
     --good:#4ade80; --good-bg:#10261a; --good-line:#1f6b3a;
     --bad:#f87171; --bad-bg:#2a1414; --bad-line:#7f2323;
-    --glass:#94a3b8; --glass-fill:#1e242e; --water:#1e3a5f; --liquid:#273244;
+    --glass:#94a3b8; --glass-fill:#1e242e; --body:#64748b; --water:#1e3a5f; --liquid:#273244;
     --warm:#ef4444; --metal:#475569; --ink:#94a3b8; --dark:#0b0e13; --screen:#64748b;
     --lens:#0c2a3d; --bubble:#cbd5e1; --mixture:#24384f; --agar:#3e3a2a;
     --ice-top:#1e3a5f; --ice-left:#17304f; --ice-right:#0f2440; --grid:#252b36;
@@ -74,14 +74,23 @@ h1{font-size:17px;margin:0 0 2px}
 .rw.bad{border-color:var(--bad-line);background:var(--bad-bg)}
 .rw b{font-weight:650}
 .score{margin-top:14px;font-weight:650}
+
+.scen{background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:8px;padding:12px 14px;margin:0 0 14px;font-size:14px}
+.scen h2{font-size:12px;margin:0 0 7px;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.045em}
+.scen p{margin:0}
+.dec .label{font-size:15px;font-weight:650;margin:0 0 5px}
+.dec .hint{font-size:13px;color:var(--muted);margin:0 0 10px;font-style:italic}
 </style>
 </head>
 <body>
 <div class="sim">
   <h1>Plan the survey</h1>
   <p class="sub">Four decisions to make before either forest is walked. One check, then all four are explained.</p>
+  <div class="scen"><h2>What this experiment is about</h2><p>Two woodlands can hold the same number of trees and still be very different places: one may be nearly all a single species, the other an even mixture of several. Biodiversity is a way of putting a number on that difference. <b>The goal:</b> survey both forests the same way and decide which is the more biodiverse.</p></div>
   <div class="brief"><p><b>The problem.</b> Two forests are to be compared, so the only thing that may differ between the two surveys is the forest itself.</p><p>Anything else that changes &mdash; how many trees are counted, which way the route runs, who does the identifying &mdash; turns up in the figures as if it were a difference between the forests, and nothing in the table would say otherwise.</p></div>
-  <div class="dec" data-n="0"><h2>Decision 1 of 4</h2><p class="q">How many trees are counted in each forest?</p><div class="opts" id="opts0"></div></div><div class="dec" data-n="1"><h2>Decision 2 of 4</h2><p class="q">Which way does the route run?</p><div class="opts" id="opts1"></div></div><div class="dec" data-n="2"><h2>Decision 3 of 4</h2><p class="q">You reach a tree you cannot name. What now?</p><div class="opts" id="opts2"></div></div><div class="dec" data-n="3"><h2>Decision 4 of 4</h2><p class="q">Who does the identifying?</p><div class="opts" id="opts3"></div></div>
+  <div class="dec" data-n="0"><h2>Decision 1 of 4</h2><p class="label">Controlled variables &mdash; fair testing</p><p class="hint">Two places can only be compared if everything about how they were surveyed is the same. The only thing allowed to differ is the forest itself.</p><p class="q">How many trees are counted in each forest?</p><div class="opts" id="opts0"></div></div><div class="dec" data-n="1"><h2>Decision 2 of 4</h2><p class="label">Sampling method &mdash; avoiding bias</p><p class="hint">Bias is anything that lets the surveyor choose what gets counted. A route picked by eye is such a choice.</p><p class="q">Which way does the route run?</p><div class="opts" id="opts1"></div></div><div class="dec" data-n="2"><h2>Decision 3 of 4</h2><p class="label">Reducing measurement error</p><p class="hint">Measurement error here is a tree recorded as the wrong species, or left out. Either one changes the number of species the survey finds.</p><p class="q">You reach a tree you cannot name. What now?</p><div class="opts" id="opts2"></div></div><div class="dec" data-n="3"><h2>Decision 4 of 4</h2><p class="label">Controlled variables &mdash; avoiding bias</p><p class="hint">Two people do not identify trees identically. If a different person surveys each forest, the person differs as well as the forest.</p><p class="q">Who does the identifying?</p><div class="opts" id="opts3"></div></div>
   <div class="actions">
     <button id="check" class="primary" type="button">Check the plan</button>
     <button id="reset" type="button">Start again</button>

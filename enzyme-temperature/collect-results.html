@@ -426,7 +426,7 @@ td.mean.bad{font-weight:500;color:var(--warn);font-size:12px}
   window.addEventListener("load", reportAgain);
   setTimeout(reportAgain, 80);
   setTimeout(reportAgain, 500);
-  // The frame can be laid out at one width and settle at another without a window resize
+  // The frame can be laid out at one width and end at another without a window resize
   // event, and the height a lesson needs depends on that width.
   if (window.ResizeObserver) new ResizeObserver(reportHeight).observe(document.body);
 

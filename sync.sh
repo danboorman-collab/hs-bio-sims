@@ -81,4 +81,10 @@ hs_page microscope-magnification "Practicals/microscope-magnification/lesson.htm
 hs_page population-quadrats      "Practicals/population-quadrats/lesson.html"
 hs_page biodiversity-forests     "Practicals/biodiversity-forests/lesson.html"
 
+# The end-of-unit test's review page. `rm -rf hs` above wipes anything not copied here, so a
+# page dropped into hs/ by hand survives exactly until the next sync -- which is how the
+# review page came to 404 after being announced as live. It is copied, so it cannot.
+mkdir -p "$HERE/hs/test-review"
+cp "$SRC/Practicals/_test/practicals-test-review.html" "$HERE/hs/test-review/index.html"
+
 echo "synced $(find "$HERE" -name '*.html' | wc -l | tr -d ' ') pages"
